@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, TextInput, Text, StyleSheet } from 'react-native';
+import { View, TextInput, Text, StyleSheet } from 'react-native'
+import { styles } from './Style';
 
 interface InputProps {
   label?: string;
@@ -10,6 +11,7 @@ interface InputProps {
   error?: string;
   keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad';
   style?: object;
+  autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
 }
 
 const Input: React.FC<InputProps> = ({
@@ -21,6 +23,7 @@ const Input: React.FC<InputProps> = ({
   error,
   keyboardType = 'default',
   style,
+  autoCapitalize = 'sentences',
 }) => {
   return (
     <View style={[styles.container, style]}>
@@ -32,39 +35,11 @@ const Input: React.FC<InputProps> = ({
         onChangeText={onChangeText}
         secureTextEntry={secureTextEntry}
         keyboardType={keyboardType}
+        autoCapitalize={autoCapitalize}
       />
       {error && <Text style={styles.errorText}>{error}</Text>}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    marginBottom: 16,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#374151',
-    marginBottom: 4,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#D1D5DB',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    backgroundColor: '#FFFFFF',
-  },
-  errorInput: {
-    borderColor: '#EF4444',
-  },
-  errorText: {
-    fontSize: 12,
-    color: '#EF4444',
-    marginTop: 4,
-  },
-});
 
 export default Input;
