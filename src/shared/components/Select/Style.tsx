@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { COLORS } from '../../theme/colors';
 
 export const styles = StyleSheet.create({
   container: {
@@ -7,8 +8,8 @@ export const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    color: '#4A5568',
-    marginBottom: 4,
+    color: COLORS.gray600,
+    marginBottom: 6,
     fontWeight: '500',
   },
   selectContainer: {
@@ -16,23 +17,34 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.gray300,
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     minHeight: 48,
+  },
+  selectContainerFocused: {
+    borderColor: COLORS.primary,
+    shadowColor: COLORS.primary,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   selectedText: {
     flex: 1,
     fontSize: 16,
-    color: '#1A202C',
+    color: COLORS.gray800,
+  },
+  placeholderText: {
+    color: COLORS.gray400,
   },
   errorInput: {
-    borderColor: '#E53E3E',
+    borderColor: COLORS.error,
   },
   errorText: {
-    color: '#E53E3E',
+    color: COLORS.error,
     fontSize: 12,
     marginTop: 4,
     marginLeft: 4,
@@ -44,14 +56,14 @@ export const styles = StyleSheet.create({
     padding: 20,
   },
   dropdown: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 8,
     maxHeight: 300,
     elevation: 5,
-    shadowColor: '#000',
+    shadowColor: COLORS.gray900,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   item: {
     paddingVertical: 12,

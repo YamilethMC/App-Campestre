@@ -24,6 +24,9 @@ const styles = StyleSheet.create({
       fontSize: 16,
       backgroundColor: COLORS.white,
     },
+    inputPlaceholder: {
+      color: COLORS.gray400,
+    },
     loginButton: {
       backgroundColor: COLORS.primaryExtraDark,
       padding: 16,

@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { COLORS } from '../../theme/colors';
 
 export const styles = StyleSheet.create({
     button: {
@@ -9,28 +10,29 @@ export const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     primaryButton: {
-      backgroundColor: '#4A90E2',
+      backgroundColor: COLORS.primary,
     },
     secondaryButton: {
-      backgroundColor: '#E5E7EB',
+      backgroundColor: COLORS.gray200,
     },
     dangerButton: {
-      backgroundColor: '#EF4444',
+      backgroundColor: COLORS.error,
     },
     disabledButton: {
       opacity: 0.6,
+      backgroundColor: COLORS.gray400,
     },
     buttonText: {
       fontSize: 16,
-      fontWeight: 'bold',
+      fontWeight: '600',
     },
     primaryButtonText: {
-      color: '#FFFFFF',
+      color: COLORS.white,
     },
     secondaryButtonText: {
-      color: '#374151',
+      color: COLORS.gray800,
     },
     dangerButtonText: {
-      color: '#FFFFFF',
+      color: COLORS.white,
     },
   });

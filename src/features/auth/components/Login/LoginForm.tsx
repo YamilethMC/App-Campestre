@@ -37,6 +37,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           value={email}
           onChangeText={onEmailChange}
           placeholder={messages.LOGIN.EXAMPLE_EMAIL}
+          placeholderTextColor={styles.inputPlaceholder.color}
           keyboardType="email-address"
           autoCapitalize="none"
         />
@@ -49,6 +50,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           value={password}
           onChangeText={onPasswordChange}
           placeholder={messages.LOGIN.EXAMPLE_PASSWORD}
+          placeholderTextColor={styles.inputPlaceholder.color}
           secureTextEntry
         />
       </View>

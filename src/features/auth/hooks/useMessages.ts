@@ -15,9 +15,9 @@ const useMessages = () => {
         PASSWORD: t('auth.login.password'),
         BUTTON: t('auth.login.loginButton'),
         FORGOT_PASSWORD: t('auth.login.forgotPassword'),
-        LOADING: t('auth.login.loading'),
-        EXAMPLE_EMAIL: t('auth.common.exampleEmail'),
-        EXAMPLE_PASSWORD: t('auth.common.examplePassword'),
+        LOADING: t('common.loading'),
+        EXAMPLE_EMAIL: t('common.exampleEmail'),
+        EXAMPLE_PASSWORD: t('common.examplePassword'),
       }
     };
   

@@ -31,6 +31,7 @@ const Input: React.FC<InputProps> = ({
       <TextInput
         style={[styles.input, error && styles.errorInput]}
         placeholder={placeholder}
+        placeholderTextColor={styles.inputPlaceholder.color}
         value={value}
         onChangeText={onChangeText}
         secureTextEntry={secureTextEntry}
