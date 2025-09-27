@@ -18,16 +18,10 @@ export const styles = StyleSheet.create({
   },
   searchContainerFocused: {
     borderColor: COLORS.primary,
-    backgroundColor: COLORS.white,
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    backgroundColor: COLORS.white
   },
   icon: {
-    marginRight: 8,
-    color: COLORS.gray400,
+    marginRight: 8
   },
   input: {
     flex: 1,
@@ -35,16 +29,8 @@ export const styles = StyleSheet.create({
     color: COLORS.gray800,
     fontSize: 16,
     padding: 0,
-    fontFamily: 'System',
   },
   clearButton: {
     padding: 4,
-    color: COLORS.gray400,
-  },
-  clearButtonActive: {
-    color: COLORS.gray600,
-  },
-  loadingIndicator: {
-    marginLeft: 8,
-  },
+  }
 });

@@ -1,8 +1,9 @@
 import { StyleSheet, Dimensions } from 'react-native';
+import { COLORS } from '../../theme/colors';
 
 const { width } = Dimensions.get('window');
 
-// Valores de espaciado temporal
+// Valores de espaciado
 const spacing = {
   xs: 4,
   sm: 8,
@@ -12,12 +13,13 @@ const spacing = {
   xxl: 24,
 };
 
-// Estilos tipográficos temporales
+// Estilos tipográficos
 const typography = {
   h3: {
     fontSize: 20,
     fontWeight: '500' as const,
     lineHeight: 28,
+    color: COLORS.gray900,
   },
   button: {
     fontSize: 14,
@@ -36,10 +38,10 @@ export const styles = StyleSheet.create({
   },
   container: {
     width: width - spacing.xl * 2,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderRadius: 12,
     padding: spacing.lg,
-    shadowColor: '#000000',
+    shadowColor: COLORS.gray900,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -50,7 +52,6 @@ export const styles = StyleSheet.create({
   },
   title: {
     ...typography.h3,
-    color: '#212121',
     marginBottom: spacing.md,
     textAlign: 'center',
   },
@@ -66,21 +67,24 @@ export const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.lg,
     borderRadius: 8,
+    minWidth: 100,
+    alignItems: 'center',
   },
   cancelButton: {
-    backgroundColor: '#EEEEEE',
+    backgroundColor: COLORS.gray200,
   },
   confirmButton: {
-    backgroundColor: '#1E88E5',
+    backgroundColor: COLORS.primary,
   },
   disabledButton: {
-    backgroundColor: '#BDBDBD',
+    backgroundColor: COLORS.gray400,
+    opacity: 0.7,
   },
   buttonText: {
     ...typography.button,
-    color: '#FFFFFF',
+    color: COLORS.white,
   },
   cancelButtonText: {
-    color: '#757575',
+    color: COLORS.gray700,
   },
 });
