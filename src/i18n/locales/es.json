@@ -14,6 +14,11 @@
       "password": "Contraseña",
       "loginButton": "Iniciar Sesión",
       "forgotPassword": "¿Olvidaste tu contraseña?"
+    },
+    "alert": {
+      "title": "Error",
+      "message": "Invalid email or password",
+      "requiredFields": "Email and password are required"
     }
   },
   "profile": {

@@ -18,10 +18,17 @@ const useMessages = () => {
         LOADING: t('common.loading'),
         EXAMPLE_EMAIL: t('common.exampleEmail'),
         EXAMPLE_PASSWORD: t('common.examplePassword'),
+      }, 
+      ALERTS: {
+        TITLE: t('auth.alert.title'),
+        MESSAGE: t('auth.alert.message'),
+        REQUIRED_FIELDS: t('auth.alert.requiredFields'),
+        ERROR: t('auth.common.error'),
+        OK: t('common.ok')
       }
     };
   
     return { messages };
   };
-  
-  export default useMessages;
+
+export default useMessages;

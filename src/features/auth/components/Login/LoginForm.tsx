@@ -14,7 +14,7 @@ type LoginFormProps = {
   password: string;
   onEmailChange: (text: string) => void;
   onPasswordChange: (text: string) => void;
-  onSubmit: () => void;
+  onSubmit: (email: string, password: string) => void;
   isLoading: boolean;
 };
 
@@ -57,7 +57,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
       <TouchableOpacity 
         style={styles.loginButton} 
-        onPress={onSubmit}
+        onPress={() => onSubmit(email, password)}
         disabled={isLoading}
       >
         <Text style={styles.buttonText}>

@@ -10,19 +10,13 @@ import Logo from '../components/Logo/Logo';
 
 // Hooks
 import { useLogin } from '../hooks/useLogin';
-
-// Messages
 import useMessages from '../hooks/useMessages';
 
 const LoginContainer = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { isLoading, handleLogin: handleLoginSubmit } = useLogin();
+  const { handleLogin, isLoading } = useLogin();
   const { messages } = useMessages();
-
-  const handleLogin = () => {
-    handleLoginSubmit(email, password);
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -39,5 +33,4 @@ const LoginContainer = () => {
     </SafeAreaView>
   );
 };
-
 export default LoginContainer;
