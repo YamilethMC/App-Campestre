@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 import { UserProfile } from '../../auth/services/authService';
 
 interface ProfileState {
@@ -33,8 +33,6 @@ export const useProfileStore = create<ProfileState>()(
               id: state.profile.id,
               name: state.profile.name,
               email: state.profile.email,
-              role: state.profile.role,
-              avatar: state.profile.avatar
             } 
           : null
       })

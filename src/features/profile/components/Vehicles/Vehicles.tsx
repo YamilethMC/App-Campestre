@@ -1,27 +1,18 @@
 import React from 'react';
-import { View, Text, FlatList, ListRenderItem, ViewStyle } from 'react-native';
+import { FlatList, ListRenderItem, Text, View } from 'react-native';
 import { styles } from './Style';
-import { COLORS } from '../../../../shared/theme/colors';
 
-interface Vehicle {
-  id: string | number;
-  plate: string;
-  model: string;
-  isActive: boolean;
-}
-
-interface VehiclesProps {
-  vehicles: Vehicle[];
-  onAddVehicle?: () => void;
-  style?: ViewStyle;
-}
+//Interfaces
+import { VehiclesProps, vehicle } from '../../interfaces/interfaces';
 
 const Vehicles: React.FC<VehiclesProps> = ({
-  vehicles = [],
+  vehicles,
   onAddVehicle,
   style,
 }) => {
-  const renderItem: ListRenderItem<Vehicle> = ({ item }) => (
+  // Ensure vehicles is always an array
+  const vehicleList = vehicles || [];
+  const renderItem: ListRenderItem<vehicle> = ({ item }) => (
     <View style={styles.vehicleItem}>
       <View style={styles.vehicleInfo}>
         <Text style={styles.vehiclePlate}>{item.plate}</Text>
@@ -44,7 +35,7 @@ const Vehicles: React.FC<VehiclesProps> = ({
   return (
     <View style={[styles.container, style]}>
       <FlatList
-        data={vehicles}
+        data={vehicleList}
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
         ListEmptyComponent={
@@ -53,6 +44,7 @@ const Vehicles: React.FC<VehiclesProps> = ({
           </View>
         }
         contentContainerStyle={styles.listContent}
+        showsVerticalScrollIndicator={false}
       />
       {onAddVehicle && (
         <View style={styles.addButtonContainer}>

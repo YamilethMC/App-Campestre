@@ -41,7 +41,7 @@ const mockUsers: UserProfile[] = [
   {
     id: '1',
     name: 'Juan Pérez',
-    email: 'juan.perez@clubtampico.com',
+    email: 'juan@clubtampico.com',
     token: 'mock-jwt-token-admin-123',
     refreshToken: 'mock-jwt-refresh-token-admin-123',
     expiresAt: new Date('2025-05-15'),

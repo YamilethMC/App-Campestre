@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, Text, FlatList, ListRenderItem, ViewStyle } from 'react-native';
+import { FlatList, ListRenderItem, Text, View, ViewStyle } from 'react-native';
 import { styles } from './Style';
-import { COLORS } from '../../../../shared/theme/colors';
 
 interface FamilyMember {
   id: string | number;
