@@ -1,5 +1,19 @@
 {
   "welcome": "Bienvenido",
+  "home": {
+    "title": "Inicio",
+    "welcome": "Bienvenido",
+    "subtitle": "al Club Campestre Tampico",
+    "quickActions": "Acciones Rápidas"
+  },
+  "settings": {
+    "title": "Configuración",
+    "appearance": "Apariencia",
+    "darkMode": "Modo Oscuro",
+    "notifications": "Notificaciones",
+    "enableNotifications": "Activar Notificaciones",
+    "language": "Idioma"
+  },
   "auth": {
     "container": {
       "title": "Inicio de Sesión"
@@ -75,6 +89,9 @@
     "question3": "¿Algún otro comentario?",
     "submit": "Enviar Encuesta",
     "thankYou": "¡Gracias por su retroalimentación!"
+  },
+  "more": {
+    "title": "Más"
   },
   "common": {
     "cancel": "Cancelar",

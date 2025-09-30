@@ -1,5 +1,19 @@
 {
   "welcome": "Welcome",
+  "home": {
+    "title": "Home",
+    "welcome": "Welcome",
+    "subtitle": "to Club Campestre Tampico",
+    "quickActions": "Quick Actions"
+  },
+  "settings": {
+    "title": "Settings",
+    "appearance": "Appearance",
+    "darkMode": "Dark Mode",
+    "notifications": "Notifications",
+    "enableNotifications": "Enable Notifications",
+    "language": "Language"
+  },
   "auth": {
     "container": {
       "title": "Member Login"
@@ -75,6 +89,9 @@
     "question3": "Any other comments?",
     "submit": "Submit Survey",
     "thankYou": "Thank you for your feedback!"
+  },
+  "more": {
+    "title": "More"
   },
   "common": {
     "cancel": "Cancel",
