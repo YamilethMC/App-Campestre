@@ -1,8 +1,9 @@
 import { useAuthStore, type AuthState } from '../features/auth/store/useAuthStore';
 import { useProfileStore } from '../features/profile/store/useProfileStore';
+import { useMenusStore } from '../features/menus/store/useMenusStore';
 
 // Re-export store hooks
-export { useAuthStore, useProfileStore };
+export { useAuthStore, useProfileStore, useMenusStore };
 
 // Common types
 export interface SurveyResponse {
@@ -15,6 +16,7 @@ export interface SurveyResponse {
 export const useStore = () => {
   const authStore = useAuthStore();
   const profileStore = useProfileStore();
+  const menusStore = useMenusStore();
   
   return {
     // Auth store
@@ -27,6 +29,13 @@ export const useStore = () => {
     profile: profileStore.profile,
     updateProfile: profileStore.updateProfile,
     clearProfile: profileStore.clearProfile,
+    
+    // Menus store
+    menus: menusStore.menus,
+    setMenus: menusStore.setMenus,
+    addMenu: menusStore.addMenu,
+    updateMenu: menusStore.updateMenu,
+    deleteMenu: menusStore.deleteMenu,
     
     // For backward compatibility
     currentUser: profileStore.profile, // Alias for profile

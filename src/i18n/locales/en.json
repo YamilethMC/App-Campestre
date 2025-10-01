@@ -66,10 +66,14 @@
   },
   "menus": {
     "title": "Menus",
-    "dailyMenu": "Daily Menu",
-    "weeklyMenu": "Weekly Menu",
-    "specialMenu": "Special Menu",
-    "viewMenu": "View Menu"
+    "selectMenuType": "Select menu type",
+    "noMenusAvailable": "No menus available at the moment",
+    "noMenusForType": "No menus available for this category",
+    "types": {
+      "daily": "Daily Menu",
+      "weekly": "Weekly Menu",
+      "special": "Special Menu"
+    }
   },
   "events": {
     "title": "Events & Reservations",
