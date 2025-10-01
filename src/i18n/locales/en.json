@@ -64,6 +64,15 @@
       "emergencyContact": "Emergency Contact"
     }
   },
+  "restaurant": {
+    "title": "Restaurant",
+    "headerText": "Restaurant - order from your table",
+    "openingHours": "Hours: 8:00 AM - 10:00 PM",
+    "searchPlaceholder": "Search dishes...",
+    "noDishesAvailable": "No dishes available at the moment",
+    "dishAdded": "Dish added to cart",
+    "dishRemoved": "Dish removed from cart"
+  },
   "menus": {
     "title": "Menus",
     "selectMenuType": "Select menu type",

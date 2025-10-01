@@ -64,6 +64,15 @@
       "emergencyContact": "Contacto de Emergencia"
     }
   },
+  "restaurant": {
+    "title": "Restaurante",
+    "headerText": "Restaurante - ordena desde tu mesa",
+    "openingHours": "Horario: 8:00 AM - 10:00 PM",
+    "searchPlaceholder": "Buscar platillos...",
+    "noDishesAvailable": "No hay platillos disponibles en este momento",
+    "dishAdded": "Platillo agregado al carrito",
+    "dishRemoved": "Platillo eliminado del carrito"
+  },
   "menus": {
     "title": "Menús",
     "selectMenuType": "Selecciona el tipo de menú",

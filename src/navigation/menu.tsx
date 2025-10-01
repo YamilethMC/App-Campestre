@@ -160,10 +160,10 @@ const MainTabs: React.FC = () => {
         }} 
       />
       <Tab.Screen 
-        name="Menus" 
+        name="Restaurant" 
         component={MenusScreen} 
         options={{
-          title: t('menus.title'),
+          title: t('restaurant.title'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="restaurant-outline" size={size} color={color} />
           )

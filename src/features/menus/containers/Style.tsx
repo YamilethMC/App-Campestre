@@ -1,24 +1,25 @@
-// src/features/menus/containers/styles.ts
 import { StyleSheet } from 'react-native';
+import { COLORS } from '../../../shared/theme/colors';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F7FA',
-  },
-  scrollView: {
-    flex: 1,
-    padding: 16,
+    backgroundColor: COLORS.background,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    textAlign: 'center',
+    color: COLORS.text,
     marginBottom: 20,
-    color: '#1F2937',
+    paddingHorizontal: 15,
   },
   loadingContainer: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  scrollView: {
+    flex: 1,
+    backgroundColor: COLORS.background,
   },
 });

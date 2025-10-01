@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useMenusStore } from '../store/useMenusStore';
+import { Dish } from '../interfaces/dishInterface';
 
 export const useMenus = () => {
   const { t } = useTranslation('menus');
@@ -21,6 +22,27 @@ export const useMenus = () => {
     deleteMenu,
     getMenuById,
     getMenusByType,
+    t
+  };
+};
+
+// Nuevo hook para el restaurante
+export const useRestaurant = () => {
+  const { t } = useTranslation('restaurant');
+  
+  // Función para filtrar platos por búsqueda
+  const filterDishes = (dishes: Dish[], searchQuery: string) => {
+    if (!searchQuery.trim()) return dishes;
+    
+    return dishes.filter(dish => 
+      dish.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      dish.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      dish.category.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  };
+
+  return {
+    filterDishes,
     t
   };
 };
