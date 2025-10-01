@@ -1,14 +1,14 @@
 // src/features/menus/containers/RestaurantContainer.tsx
-import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TextInput, StyleSheet } from 'react-native';
-import { useTranslation } from 'react-i18next';
-import { Dish } from '../interfaces/dishInterface';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { COLORS } from '../../../shared/theme/colors';
 import RestaurantDishCard from '../components/RestaurantDishCard';
 import StickyCart from '../components/StickyCart';
-import { COLORS } from '../../../shared/theme/colors';
+import useMessages from '../hooks/useRestaurantMessages';
+import { Dish } from '../interfaces/dishInterface';
 
 const RestaurantContainer: React.FC = () => {
-  const { t } = useTranslation('restaurant');
+  const { messages } = useMessages();
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredDishes, setFilteredDishes] = useState<Dish[]>([]);
   
@@ -96,15 +96,15 @@ const RestaurantContainer: React.FC = () => {
     <View style={styles.container}>
       {/* Header with restaurant name and opening hours */}
       <View style={styles.header}>
-        <Text style={styles.headerText}>{t('headerText')}</Text>
-        <Text style={styles.openingHours}>{t('openingHours')}</Text>
+        <Text style={styles.headerText}>{messages.CONTAINER.HEADER_TEXT}</Text>
+        <Text style={styles.openingHours}>{messages.CONTAINER.OPENING_HOURS}</Text>
       </View>
 
       {/* Search Bar */}
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
-          placeholder={t('searchPlaceholder')}
+          placeholder={messages.CONTAINER.SEARCH_PLACEHOLDER}
           placeholderTextColor={COLORS.gray500}
           value={searchQuery}
           onChangeText={setSearchQuery}
@@ -122,7 +122,7 @@ const RestaurantContainer: React.FC = () => {
           ))
         ) : (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>{t('noDishesAvailable')}</Text>
+            <Text style={styles.emptyText}>{messages.CONTAINER.NO_DISHES_AVAILABLE}</Text>
           </View>
         )}
       </ScrollView>

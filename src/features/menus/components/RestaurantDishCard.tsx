@@ -1,17 +1,17 @@
 // src/features/menus/components/RestaurantDishCard.tsx
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { COLORS } from '../../../shared/theme/colors';
+import useMessages from '../hooks/useRestaurantMessages';
 import { Dish } from '../interfaces/dishInterface';
 import { useCartStore } from '../store/useCartStore';
-import { COLORS } from '../../../shared/theme/colors';
-import { useTranslation } from 'react-i18next';
 
 interface RestaurantDishCardProps {
   dish: Dish;
 }
 
 const RestaurantDishCard: React.FC<RestaurantDishCardProps> = ({ dish }) => {
-  const { t } = useTranslation('restaurant');
+  const { messages } = useMessages();
   const { items, addItem, updateQuantity, removeItem } = useCartStore();
   const [quantity, setQuantity] = useState(0);
   const [isInCart, setIsInCart] = useState(false);
@@ -79,23 +79,23 @@ const RestaurantDishCard: React.FC<RestaurantDishCardProps> = ({ dish }) => {
           <Text style={styles.category}>{dish.category}</Text>
           <Text style={styles.preparationTime}>⏱️ {dish.preparationTime}</Text>
           <View style={styles.ratingContainer}>
-            <Text style={styles.rating}>⭐ {dish.rating}</Text>
+            <Text style={styles.rating}> ⭐ {dish.rating}</Text>
           </View>
         </View>
 
         {/* Dish tags (popular, spicy, vegetarian, gluten-free) */}
         <View style={styles.tagsContainer}>
-          {dish.isPopular && <Text style={styles.tag}>⭐ Popular</Text>}
-          {dish.isSpicy && <Text style={styles.tag}>🌶️ Picante</Text>}
-          {dish.isVegetarian && <Text style={styles.tag}>🥦 Vegetariano</Text>}
-          {dish.isGlutenFree && <Text style={styles.tag}>🌾🚫 Libre de Gluten</Text>}
+          {dish.isPopular && <Text style={styles.tag}>⭐ {messages.TAGS.POPULAR}</Text>}
+          {dish.isSpicy && <Text style={styles.tag}>🌶️ {messages.TAGS.SPICY}</Text>}
+          {dish.isVegetarian && <Text style={styles.tag}>🥦 {messages.TAGS.VEGETARIAN}</Text>}
+          {dish.isGlutenFree && <Text style={styles.tag}>🌾🚫 {messages.TAGS.GLUTEN_FREE}</Text>}
         </View>
 
         {/* Add to cart or quantity controls */}
         <View style={styles.actionsContainer}>
           {!isInCart ? (
             <TouchableOpacity style={styles.addButton} onPress={handleAddToCart}>
-              <Text style={styles.addButtonText}>(+) Agregar</Text>
+              <Text style={styles.addButtonText}>(+) {messages.CONTAINER.ADD}</Text>
             </TouchableOpacity>
           ) : (
             <View style={styles.quantityControls}>

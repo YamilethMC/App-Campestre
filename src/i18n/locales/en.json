@@ -71,7 +71,30 @@
     "searchPlaceholder": "Search dishes...",
     "noDishesAvailable": "No dishes available at the moment",
     "dishAdded": "Dish added to cart",
-    "dishRemoved": "Dish removed from cart"
+    "dishRemoved": "Dish removed from cart",
+    "add": "Add",
+    "carrito": {
+      "see": "View Cart",
+      "title": "Shopping Cart",
+      "empty": "Your cart is empty",
+      "items": "item",
+      "subtotal": "Subtotal",
+      "tax": "Tax",
+      "total": "Total",
+      "continueShopping": "Continue Shopping",
+      "payment": "Proceed to Payment",
+      "checkout": "Pay",
+      "clearCart": "Clear Cart",
+      "confirmClear": "Are you sure you want to clear the cart?",
+      "cancel": "Cancel",
+      "ok": "OK"
+    },
+    "tags": {
+      "popular": "Popular",
+      "spicy": "Spicy",
+      "vegetarian": "Vegetarian",
+      "glutenFree": "Gluten Free"
+    }
   },
   "menus": {
     "title": "Menus",

@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS } from '../../../shared/theme/colors';
+import useMessages from '../hooks/useRestaurantMessages';
 import { useCartStore } from '../store/useCartStore';
 import CartModal from './CartModal';
 
 const StickyCart: React.FC = () => {
+  const { messages } = useMessages();
   const { t } = useTranslation('restaurant');
   const totalItems = useCartStore(state => state.totalItems);
   const totalPrice = useCartStore(state => state.totalPrice);
@@ -29,12 +31,12 @@ const StickyCart: React.FC = () => {
         <TouchableOpacity style={styles.cartButton} onPress={handleViewCart}>
           <View style={styles.buttonContent}>
             <Text style={styles.cartIcon}>🛒</Text>
-            <Text style={styles.cartText}>Ver carrito</Text>
+            <Text style={styles.cartText}>{messages.CARRITO.SEE}</Text>
           </View>
         </TouchableOpacity>
         
         <View style={styles.totalContainer}>
-          <Text style={styles.totalItems}>{totalItems} {totalItems === 1 ? 'producto' : 'productos'}</Text>
+          <Text style={styles.totalItems}>{totalItems} {totalItems === 1 ? messages.CARRITO.ITEMS : messages.CARRITO.ITEMS + 's'}</Text>
           <Text style={styles.totalPrice}>${totalPrice.toFixed(2)}</Text>
         </View>
       </View>

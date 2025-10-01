@@ -1,8 +1,8 @@
 // src/features/menus/components/CartModal.tsx
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Alert, Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS } from '../../../shared/theme/colors';
+import useMessages from '../hooks/useRestaurantMessages';
 import { CartItem } from '../interfaces/dishInterface';
 import { useCartStore } from '../store/useCartStore';
 
@@ -12,7 +12,7 @@ interface CartModalProps {
 }
 
 const CartModal: React.FC<CartModalProps> = ({ visible, onClose }) => {
-  const { t } = useTranslation('restaurant');
+  const { messages } = useMessages();
   const { items, removeItem, updateQuantity, getTotalPrice, getTotalItems, clearCart } = useCartStore();
   const totalItems = useCartStore(state => state.totalItems);
   const [ivaRate] = useState(0.16); // 16% IVA
@@ -23,7 +23,7 @@ const CartModal: React.FC<CartModalProps> = ({ visible, onClose }) => {
 
   const handleRemoveItem = (itemId: string) => {
     removeItem(itemId);
-    Alert.alert(t('dishRemoved'));
+    Alert.alert(messages.CONTAINER.DISH_REMOVED);
   };
 
   const handleIncrement = (itemId: string) => {
@@ -40,7 +40,7 @@ const CartModal: React.FC<CartModalProps> = ({ visible, onClose }) => {
     } else if (item && item.quantity === 1) {
       // Si la cantidad es 1 y se decrementa, eliminar del carrito
       removeItem(itemId);
-      Alert.alert(t('dishRemoved'));
+      Alert.alert(messages.CONTAINER.DISH_REMOVED);
     }
   };
 
@@ -67,8 +67,8 @@ const CartModal: React.FC<CartModalProps> = ({ visible, onClose }) => {
           </TouchableOpacity>
           <View style={styles.headerContent}>
             <Text style={styles.headerIcon}>🛒</Text>
-            <Text style={styles.headerTitle}>Carrito de compras</Text>
-            <Text style={styles.headerSubtitle}>{totalItems} {totalItems === 1 ? 'producto' : 'productos'}</Text>
+            <Text style={styles.headerTitle}>{messages.CARRITO.TITLE}</Text>
+            <Text style={styles.headerSubtitle}>{totalItems} {totalItems === 1 ? messages.CARRITO.ITEMS : messages.CARRITO.ITEMS + 's'}</Text>
           </View>
         </View>
 
@@ -76,7 +76,7 @@ const CartModal: React.FC<CartModalProps> = ({ visible, onClose }) => {
         <ScrollView style={styles.content}>
           {items.length === 0 ? (
             <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>Tu carrito está vacío</Text>
+              <Text style={styles.emptyText}>{messages.CARRITO.EMPTY_CART}</Text>
             </View>
           ) : (
             items.map((item: CartItem) => (
@@ -128,15 +128,15 @@ const CartModal: React.FC<CartModalProps> = ({ visible, onClose }) => {
         {items.length > 0 && (
           <View style={styles.summaryContainer}>
             <View style={styles.summaryRow}>
-              <Text style={styles.summaryLabel}>Subtotal</Text>
+              <Text style={styles.summaryLabel}>{messages.CARRITO.SUBTOTAL}</Text>
               <Text style={styles.summaryValue}>${subtotal.toFixed(2)}</Text>
             </View>
             <View style={styles.summaryRow}>
-              <Text style={styles.summaryLabel}>IVA ({(ivaRate * 100).toFixed(0)}%)</Text>
+              <Text style={styles.summaryLabel}>{messages.CARRITO.TAX} ({(ivaRate * 100).toFixed(0)}%)</Text>
               <Text style={styles.summaryValue}>${iva.toFixed(2)}</Text>
             </View>
             <View style={styles.totalRow}>
-              <Text style={styles.totalLabel}>Total</Text>
+              <Text style={styles.totalLabel}>{messages.CARRITO.TOTAL}</Text>
               <Text style={styles.totalValue}>${total.toFixed(2)}</Text>
             </View>
             
@@ -145,14 +145,14 @@ const CartModal: React.FC<CartModalProps> = ({ visible, onClose }) => {
                 style={styles.continueButton} 
                 onPress={handleContinueShopping}
               >
-                <Text style={styles.continueButtonText}>Continuar comprando</Text>
+                <Text style={styles.continueButtonText}>{messages.CARRITO.CONTINUE_SHOPPING}</Text>
               </TouchableOpacity>
               
               <TouchableOpacity 
                 style={styles.payButton} 
                 onPress={handleProceedToPayment}
               >
-                <Text style={styles.payButtonText}>Proceder al pago</Text>
+                <Text style={styles.payButtonText}>{messages.CARRITO.PAYMENT}</Text>
               </TouchableOpacity>
             </View>
           </View>

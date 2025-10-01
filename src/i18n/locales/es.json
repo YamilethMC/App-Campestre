@@ -71,7 +71,30 @@
     "searchPlaceholder": "Buscar platillos...",
     "noDishesAvailable": "No hay platillos disponibles en este momento",
     "dishAdded": "Platillo agregado al carrito",
-    "dishRemoved": "Platillo eliminado del carrito"
+    "dishRemoved": "Platillo eliminado del carrito",
+    "add": "Agregar",
+    "carrito": {
+      "see": "Ver Carrito",
+      "title": "Carrito de Compras",
+      "empty": "Tu carrito está vacío",
+      "items": "producto",
+      "subtotal": "Subtotal",
+      "tax": "IVA",
+      "total": "Total",
+      "continueShopping": "Continuar Comprando",
+      "payment": "Proceder al Pago",
+      "checkout": "Pagar",
+      "clearCart": "Vaciar Carrito",
+      "confirmClear": "¿Estás seguro de que deseas vaciar el carrito?",
+      "cancel": "Cancelar",
+      "ok": "Aceptar"
+    },
+    "tags": {
+      "popular": "Popular",
+      "spicy": "Picante",
+      "vegetarian": "Vegetariano",
+      "glutenFree": "Sin Gluten"
+    }
   },
   "menus": {
     "title": "Menús",
