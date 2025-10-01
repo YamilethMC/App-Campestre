@@ -1,35 +1,30 @@
+// src/features/menus/containers/index.tsx
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, SafeAreaView, ActivityIndicator, ScrollView } from 'react-native';
-import { useStore } from '../../../store';
+import { View, Text, ActivityIndicator, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import styles from './Style';
+import { useMenus } from '../hooks/useMenus';
+import MenuTypeTabs from '../components/MenuTypeTabs';
+import MenuList from '../components/MenuList';
+import { styles } from './Style';
+import useMessages from '../hooks/useMessages';
 
-const index = () => {
-  const { menus, setMenus } = useStore();
-  const { t } = useTranslation();
+const MenusContainer: React.FC = () => {
+  const { t } = useTranslation('menus');
+  const { messages } = useMessages();
   const [selectedMenuType, setSelectedMenuType] = useState<'daily' | 'weekly' | 'special'>('daily');
   const [isLoading, setIsLoading] = useState(true);
+  
+  const { menus, getMenusByType } = useMenus();
+  const filteredMenus = getMenusByType(selectedMenuType);
 
-  // Cargar menús al montar el componente
   useEffect(() => {
-    // Aquí podrías hacer una llamada a tu API para cargar los menús
-    // Por ahora, usamos los datos de ejemplo del store
-    setIsLoading(false);
+    // Simular carga de datos
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
   }, []);
-
-  // Filtrar menús por tipo
-  const filteredMenus = (menus || []).filter(menu => menu.type === selectedMenuType);
-
-  const renderMenuItem = ({ item }: { item: any }) => (
-    <View style={styles.menuItem}>
-      <View style={styles.menuItemHeader}>
-        <Text style={styles.itemName}>{item.name}</Text>
-        <Text style={styles.itemPrice}>${item.price}</Text>
-      </View>
-      <Text style={styles.itemDescription}>{item.description}</Text>
-      <Text style={styles.itemCategory}>{item.category}</Text>
-    </View>
-  );
 
   if (isLoading) {
     return (
@@ -39,107 +34,29 @@ const index = () => {
     );
   }
 
+  const handleMenuPress = (menu: any) => {
+    // Navegar al detalle del menú
+    console.log('Menu seleccionado:', menu);
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>{t('menus.title')}</Text>
+    <View style={styles.container}>
+      <ScrollView style={styles.scrollView}>
+        <Text style={styles.title}>{messages.CONTAINER.TITLE}</Text>
         
-        {filteredMenus.length === 0 && (
-          <Text style={styles.noMenusText}>
-            {t('menus.noMenusAvailable')}
-          </Text>
-        )}
-
-        {/* Menu Type Selector */}
-        <View style={styles.tabContainer}>
-          <Text style={styles.sectionTitle}>
-            {t('menus.selectMenuType')}
-          </Text>
-          <TouchableOpacity
-            style={[
-              styles.tab,
-              selectedMenuType === 'daily' && styles.activeTab,
-            ]}
-            onPress={() => setSelectedMenuType('daily')}
-          >
-            <Text
-              style={[
-                styles.tabText,
-                selectedMenuType === 'daily' && styles.activeTabText,
-              ]}
-            >
-              {t('menus.dailyMenu')}
-            </Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity
-            style={[
-              styles.tab,
-              selectedMenuType === 'weekly' && styles.activeTab,
-            ]}
-            onPress={() => setSelectedMenuType('weekly')}
-          >
-            <Text
-              style={[
-                styles.tabText,
-                selectedMenuType === 'weekly' && styles.activeTabText,
-              ]}
-            >
-              {t('menus.weeklyMenu')}
-            </Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity
-            style={[
-              styles.tab,
-              selectedMenuType === 'special' && styles.activeTab,
-            ]}
-            onPress={() => setSelectedMenuType('special')}
-          >
-            <Text
-              style={[
-                styles.tabText,
-                selectedMenuType === 'special' && styles.activeTabText,
-              ]}
-            >
-              {t('menus.specialMenu')}
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Menu List */}
-        <ScrollView style={styles.menuList}>
-          {filteredMenus.length > 0 ? (
-            filteredMenus.map(menu => (
-              <View key={menu.id} style={styles.menuCard}>
-                <Text style={styles.menuTitle}>{menu.name}</Text>
-                <Text style={styles.menuDate}>
-                  {new Date(menu.date).toLocaleDateString()}
-                </Text>
-                {menu.items.map((item: any) => (
-                  <View key={item.id} style={styles.menuItem}>
-                    <View style={styles.menuItemHeader}>
-                      <Text style={styles.itemName}>{item.name}</Text>
-                      <Text style={styles.itemPrice}>${item.price}</Text>
-                    </View>
-                    <Text style={styles.itemDescription}>{item.description}</Text>
-                    <Text style={styles.itemCategory}>{item.category}</Text>
-                  </View>
-                ))}
-              </View>
-            ))
-          ) : (
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>
-                {t('menus.dailyMenu')} no disponible
-              </Text>
-            </View>
-          )}
-        </ScrollView>
-      </View>
-    </SafeAreaView>
+        <MenuTypeTabs
+          selectedType={selectedMenuType}
+          onSelectType={setSelectedMenuType}
+        />
+        
+        <MenuList
+          menus={filteredMenus}
+          onPressItem={handleMenuPress}
+          emptyMessage={messages.CONTAINER.NO_MENUS_FOR_TYPE}
+        />
+      </ScrollView>
+    </View>
   );
 };
 
-
-export default index;
+export default MenusContainer;

@@ -1,61 +1,12 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-
-interface MenuItem {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  category: string;
-}
-
-interface Menu {
-  id: string;
-  name: string;
-  date: string;
-  type: 'daily' | 'weekly' | 'special';
-  items: MenuItem[];
-}
-
-interface MenusState {
-  menus: Menu[];
-  setMenus: (menus: Menu[]) => void;
-  addMenu: (menu: Omit<Menu, 'id'>) => void;
-  updateMenu: (id: string, updates: Partial<Menu>) => void;
-  deleteMenu: (id: string) => void;
-}
-
-// Datos de ejemplo para el menú
-const sampleMenus: Menu[] = [
-  {
-    id: '1',
-    name: 'Menú del Día - Lunes',
-    date: new Date().toISOString(),
-    type: 'daily',
-    items: [
-      {
-        id: '1-1',
-        name: 'Sopa del Día',
-        description: 'Sopa casera preparada con ingredientes frescos',
-        price: 45,
-        category: 'Entrada'
-      },
-      {
-        id: '1-2',
-        name: 'Pollo a la Parrilla',
-        description: 'Pechuga de pollo a la parrilla con vegetales al vapor',
-        price: 120,
-        category: 'Plato Fuerte'
-      }
-    ]
-  },
-  // Agrega más menús de ejemplo según sea necesario
-];
+import { Menu, MenusState } from '../interfaces/menuInterface';
+import { menuService } from '../services/menuService';
 
 export const useMenusStore = create<MenusState>()(
   devtools(
     (set) => ({
-      menus: sampleMenus,
+      menus: menuService.getSampleMenus(),
       setMenus: (menus) => set({ menus }),
       addMenu: (menu) => 
         set((state) => ({
