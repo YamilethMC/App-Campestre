@@ -1,15 +1,10 @@
 // src/features/restaurante/components/CartModal/index.tsx
 import React, { useState } from 'react';
 import { Alert, Image, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { styles } from './Style';
 import useMessages from '../../hooks/useRestaurantMessages';
-import { CartItem } from '../../interfaces/dishInterface';
+import { CartItem, CartModalProps } from '../../interfaces/dishInterface';
 import { useCartStore } from '../../store/useCartStore';
-
-interface CartModalProps {
-  visible: boolean;
-  onClose: () => void;
-}
+import { styles } from './Style';
 
 const CartModal: React.FC<CartModalProps> = ({ visible, onClose }) => {
   const { messages } = useMessages();

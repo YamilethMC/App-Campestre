@@ -28,3 +28,12 @@ export interface CartState {
   getTotalPrice: () => number;
   getItemsCount: () => number;
 }
+
+export interface CartModalProps {
+  visible: boolean;
+  onClose: () => void;
+}
+
+export interface RestaurantDishCardProps {
+  dish: Dish;
+}

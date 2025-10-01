@@ -2,13 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import useMessages from '../../hooks/useRestaurantMessages';
-import { Dish } from '../../interfaces/dishInterface';
+import { RestaurantDishCardProps } from '../../interfaces/dishInterface';
 import { useCartStore } from '../../store/useCartStore';
 import { styles } from './Style';
-
-interface RestaurantDishCardProps {
-  dish: Dish;
-}
 
 const RestaurantDishCard: React.FC<RestaurantDishCardProps> = ({ dish }) => {
   const { messages } = useMessages();
