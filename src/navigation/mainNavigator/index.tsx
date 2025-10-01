@@ -10,16 +10,16 @@ import {
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { COLORS } from '../../../theme/colors';
-import MainHeader from '../../MainHeader/Container';
+import MainHeader from '../../shared/components/MainHeader/Container';
+import { COLORS } from '../../shared/theme/colors';
 
 // Screens
-import EventsScreen from '../../../../features/events/containers/EventsContainer';
-import HomeScreen from '../../../../features/home';
-import MenusScreen from '../../../../features/menus/containers/MenusContainer';
-import ProfileScreen from '../../../../features/profile/containers';
-import SettingsScreen from '../../../../features/settings';
-import SurveysScreen from '../../../../features/surveys/containers/SurveysContainer';
+import EventsScreen from '../../features/events/containers/EventsContainer';
+import HomeScreen from '../../features/home';
+import MenusScreen from '../../features/menus/containers/MenusContainer';
+import ProfileScreen from '../../features/profile/containers';
+import SettingsScreen from '../../features/settings';
+import SurveysScreen from '../../features/surveys/containers/SurveysContainer';
 
 // Types
 
@@ -89,6 +89,10 @@ const MoreStack: React.FC = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="MoreHome" component={MoreHomeScreen} />
       <Stack.Screen name="ProfileStack" component={ProfileScreen} />
+      <Stack.Screen name="MenusStack" component={MenusScreen} />
+      <Stack.Screen name="SurveysStack" component={SurveysScreen} />
+      <Stack.Screen name="EventsStack" component={EventsScreen} />
+      <Stack.Screen name="HomeStack" component={HomeScreen} />
       <Stack.Screen name="SettingsStack" component={SettingsScreen} />
     </Stack.Navigator>
   );
@@ -132,7 +136,6 @@ const MainTabs: React.FC = () => {
           return (
             <MainHeader 
               title={titleMap[route.name] || route.name}
-              showMenu={route.name !== 'Home'}
             />
           );
         },

@@ -1,45 +1,40 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from '../store';
 
-// Import feature containers
-import LoginScreen from '../features/auth';
+// Import screens
+import ProtectedTabNavigator from './mainNavigator';
+import AuthScreen from './stacksScreens/authScreen';
 
-import ProtectedTabNavigator from '../shared/components/AppMenu/Container';
-
-// Create stack navigators
+// Create stack navigator
 const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
 
-
-
-// Main navigator (without NavigationContainer since Expo Router provides it)
+// Main navigator
 const MainNavigator = () => {
   const { isAuthenticated } = useStore();
   const { t } = useTranslation();
   
   return (
     <Stack.Navigator
-      initialRouteName={isAuthenticated ? 'MainTabs' : 'Login'}
+      initialRouteName={isAuthenticated ? 'MainTabs' : 'Auth'}
       screenOptions={{
         headerShown: false,
       }}
     >
       {!isAuthenticated ? (
         <Stack.Screen 
-          name="Login" 
-          component={LoginScreen} 
-          options={{ title: t('login.title') }}
+          name="Auth" 
+          component={AuthScreen} 
+          options={{ headerShown: false }}
         />
-      ) : null}
-      
-      <Stack.Screen 
-        name="MainTabs" 
-        component={ProtectedTabNavigator}
-        options={{ headerShown: false }}
-      />
+      ) : (
+        <Stack.Screen 
+          name="MainTabs" 
+          component={ProtectedTabNavigator} 
+          options={{ headerShown: false }}
+        />
+      )}
     </Stack.Navigator>
   );
 };
