@@ -1,6 +1,6 @@
 // src/features/menus/components/MenuItem/index.tsx
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { Menu } from '../../interfaces/menuInterface';
 import { styles } from './Style';
 

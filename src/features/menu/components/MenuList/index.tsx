@@ -1,10 +1,10 @@
 // src/features/menus/components/MenuList/index.tsx
 import React from 'react';
-import { View, Text, FlatList } from 'react-native';
-import { Menu } from '../../interfaces/menuInterface'
+import { FlatList, Text, View } from 'react-native';
+import useMessages from '../../hooks/useMessages';
+import { Menu } from '../../interfaces/menuInterface';
 import MenuItem from '../MenuItem';
 import { styles } from './Style';
-import useMessages from '../../hooks/useMessages';
 
 interface MenuListProps {
   menus: Menu[];

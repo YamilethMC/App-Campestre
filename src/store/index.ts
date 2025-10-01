@@ -1,9 +1,9 @@
-import { useAuthStore, type AuthState } from '../features/auth/store/useAuthStore';
+import { useAuthStore } from '../features/auth/store/useAuthStore';
 import { useProfileStore } from '../features/profile/store/useProfileStore';
-import { useMenusStore } from '../features/menus/store/useMenusStore';
+import { useMenusStore } from '../features/restaurante/store/useMenuStore';
 
 // Re-export store hooks
-export { useAuthStore, useProfileStore, useMenusStore };
+export { useAuthStore, useMenusStore, useProfileStore };
 
 // Common types
 export interface SurveyResponse {

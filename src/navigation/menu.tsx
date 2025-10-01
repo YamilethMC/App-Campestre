@@ -15,8 +15,8 @@ import { COLORS } from '../shared/theme/colors';
 // Screens
 import EventsScreen from '../features/events/containers/EventsContainer';
 import HomeScreen from '../features/home';
-import MenusScreen from '../features/menus/containers/index';
 import ProfileScreen from '../features/profile/containers/ProfileContainer';
+import RestauranteScreen from '../features/restaurante/containers/index';
 import SettingsScreen from '../features/settings';
 import SurveysScreen from '../features/surveys/containers/SurveysContainer';
 
@@ -161,7 +161,7 @@ const MainTabs: React.FC = () => {
       />
       <Tab.Screen 
         name="Restaurant" 
-        component={MenusScreen} 
+        component={RestauranteScreen} 
         options={{
           title: t('restaurant.title'),
           tabBarIcon: ({ color, size }) => (

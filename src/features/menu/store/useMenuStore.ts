@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { Menu, MenusState } from '../interfaces/menuInterface';
+import { MenusState } from '../interfaces/menuInterface';
 import { menuService } from '../services/menuService';
 
 export const useMenusStore = create<MenusState>()(
