@@ -92,6 +92,9 @@ export const styles = StyleSheet.create({
     marginBottom: 4,
   },
   itemName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1F2937',
     flex: 1,
   },
   itemPrice: {
@@ -107,17 +110,21 @@ export const styles = StyleSheet.create({
   itemCategory: {
     fontSize: 12,
     color: '#9CA3AF',
-    fontStyle: 'italic',
+    backgroundColor: '#F3F4F6',
+    paddingVertical: 2,
+    paddingHorizontal: 6,
+    borderRadius: 4,
+    alignSelf: 'flex-start',
   },
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    paddingVertical: 40,
   },
   emptyText: {
     fontSize: 16,
-    color: '#6B7280',
+    color: '#9CA3AF',
     textAlign: 'center',
   },
   loadingContainer: {
@@ -137,7 +144,7 @@ export const styles = StyleSheet.create({
     color: '#374151',
     marginBottom: 12,
     textAlign: 'center',
-  },
+  }
 });
 
 export default styles;
