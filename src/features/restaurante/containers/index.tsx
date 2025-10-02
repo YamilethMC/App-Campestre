@@ -7,6 +7,7 @@ import StickyCart from '../components/StickyCart';
 import useMessages from '../hooks/useRestaurantMessages';
 import { Dish } from '../interfaces/dishInterface';
 import { styles } from './Style';
+import Search from '@/src/shared/components/Search/Search';
 
 const RestaurantContainer: React.FC = () => {
   const { messages } = useMessages();
@@ -103,12 +104,18 @@ const RestaurantContainer: React.FC = () => {
 
       {/* Search Bar */}
       <View style={styles.searchContainer}>
-        <TextInput
+        {/*<TextInput
           style={styles.searchInput}
           placeholder={` 🔍  ${messages.CONTAINER.SEARCH_PLACEHOLDER}`}
           placeholderTextColor={COLORS.gray500}
           value={searchQuery}
           onChangeText={setSearchQuery}
+        />*/}
+        <Search
+          placeholder={messages.CONTAINER.SEARCH_PLACEHOLDER}
+          onSearch={setSearchQuery}
+          iconColor={COLORS.gray500}
+          inputStyle={styles.searchInput}
         />
       </View>
 
