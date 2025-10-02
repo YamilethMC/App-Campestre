@@ -48,6 +48,22 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
           />
         )}
       />
+      <DrawerContentScrollView {...props}>
+        <DrawerItem
+          label={t('menus.title')}
+          onPress={() => {
+            props.navigation.navigate('MenusDrawer');
+            props.navigation.closeDrawer();
+          }}
+          icon={({ focused, size }) => (
+            <Ionicons
+              name={focused ? 'restaurant' : 'restaurant-outline'}
+              size={size}
+              color={focused ? COLORS.primary : COLORS.gray600}
+            />
+          )}
+        />
+      </DrawerContentScrollView>
       <DrawerItem
         label={t('settings.title')}
         onPress={() => {
@@ -115,6 +131,39 @@ const SettingsStack: React.FC = () => {
     </Stack.Navigator>
   );
 };
+
+const MenusStack: React.FC = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Menus" component={MenusScreen} />
+    </Stack.Navigator>
+  );
+};
+
+const SurveysStack: React.FC = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Surveys" component={SurveysScreen} />
+    </Stack.Navigator>
+  );
+};
+
+const EventsStack: React.FC = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Events" component={EventsScreen} />
+    </Stack.Navigator>
+  );
+};
+
+const HomeStack: React.FC = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Home" component={HomeScreen} />
+    </Stack.Navigator>
+  );
+};
+
 // Navegador de pestañas principal
 const MainTabs: React.FC = () => {
   const { t } = useTranslation();
@@ -214,6 +263,8 @@ const MainTabs: React.FC = () => {
   );
 };
 
+// export default MainTabs;
+
 // Navegador principal con Drawer
 const ProtectedTabNavigator: React.FC = () => {
   return (
@@ -271,6 +322,47 @@ const ProtectedTabNavigator: React.FC = () => {
           drawerItemStyle: { display: 'none' },
         }}
       />
+      <Drawer.Screen 
+        name="MenusDrawer" 
+        component={MenusStack}
+        options={{
+          title: 'Menus',
+          drawerItemStyle: { display: 'none' },
+        }}
+      />
+      <Drawer.Screen 
+        name="SurveysDrawer" 
+        component={SurveysStack}
+        options={{
+          title: 'Surveys',
+          drawerItemStyle: { display: 'none' },
+        }}
+      />
+      <Drawer.Screen 
+        name="EventsDrawer" 
+        component={EventsStack}
+        options={{
+          title: 'Events',
+          drawerItemStyle: { display: 'none' },
+        }}
+      />
+      <Drawer.Screen 
+        name="HomeDrawer" 
+        component={HomeStack}
+        options={{
+          title: 'Home',
+          drawerItemStyle: { display: 'none' },
+        }}
+      />
+      <Drawer.Screen 
+        name="MoreDrawer" 
+        component={MoreStack}
+        options={{
+          title: 'More',
+          drawerItemStyle: { display: 'none' },
+        }}
+      />
+      
     </Drawer.Navigator>
   );
 };

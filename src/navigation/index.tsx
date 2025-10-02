@@ -1,11 +1,12 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { useStore } from '../store';
 
 // Import screens
-import ProtectedTabNavigator from './mainNavigator';
+import MainTabs from './MainTabs';
 import AuthScreen from './stacksScreens/authScreen';
+import ProfileScreen from '../features/profile/containers';
+import MoreOptionsScreen from '../features/moreOptions';
 
 // Create stack navigator
 const Stack = createNativeStackNavigator();
@@ -13,7 +14,6 @@ const Stack = createNativeStackNavigator();
 // Main navigator
 const MainNavigator = () => {
   const { isAuthenticated } = useStore();
-  const { t } = useTranslation();
   
   return (
     <Stack.Navigator
@@ -29,11 +29,23 @@ const MainNavigator = () => {
           options={{ headerShown: false }}
         />
       ) : (
-        <Stack.Screen 
-          name="MainTabs" 
-          component={ProtectedTabNavigator} 
-          options={{ headerShown: false }}
-        />
+        <>
+          <Stack.Screen 
+            name="MainTabs" 
+            component={MainTabs} 
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen 
+            name="Profile" 
+            component={ProfileScreen}
+            options={{ title: 'Perfil' }}
+          />
+          <Stack.Screen 
+            name="MoreOptions" 
+            component={MoreOptionsScreen} 
+            options={{ title: 'Más opciones' }}
+          />
+        </>
       )}
     </Stack.Navigator>
   );
