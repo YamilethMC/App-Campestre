@@ -3,8 +3,8 @@ import React from 'react';
 import { useStore } from '../store';
 
 // Import screens
-import MainTabs from './MainTabs';
-import AuthScreen from './stacksScreens/authScreen';
+import AuthScreen from './authScreen';
+import MainTabs from './mainTabs';
 
 // Types
 import { RootStackParamList } from './types';

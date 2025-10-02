@@ -16,32 +16,26 @@ const Tab = createBottomTabNavigator();
 const MainTabs = () => {
   const { t } = useTranslation();
   
-  const screenOptions = (route: any) => {
-    return {
-      header: (props: any) => {
-        const title = props.options?.title || route.name;
-        return (
-          <MainHeader 
-            title={title}
-            onBack={props.navigation?.canGoBack?.() ? props.navigation.goBack : undefined}
-            showNotifications={route.name !== 'Auth'}
-          />
-        );
-      },
-      headerShown: true,
-      headerStyle: {
-        backgroundColor: 'transparent',
-        elevation: 0,
-        shadowOpacity: 0,
-      },
-      headerTitleAlign: 'center' as const,
-    };
-  };
+  const headerOptions = (title: string) => ({
+    header: (props: any) => (
+      <MainHeader 
+        title={title}
+        onBack={props.navigation?.canGoBack?.() ? props.navigation.goBack : undefined}
+        showNotifications={true}
+      />
+    ),
+    headerShown: true,
+    headerStyle: {
+      backgroundColor: 'transparent',
+      elevation: 0,
+      shadowOpacity: 0,
+    },
+    headerTitleAlign: 'center' as const,
+  });
 
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        ...screenOptions(route),
+      screenOptions={{
         tabBarActiveTintColor: COLORS.primary,
         tabBarInactiveTintColor: COLORS.gray500,
         tabBarStyle: {
@@ -61,7 +55,7 @@ const MainTabs = () => {
           marginBottom: 4,
           fontFamily: 'System',
         },
-      })}
+      }}
     >
       <Tab.Screen 
         name="Home" 
@@ -71,6 +65,7 @@ const MainTabs = () => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home-outline" size={size} color={color} />
           ),
+          ...headerOptions(t('home.title')),
         }} 
       />
       <Tab.Screen 
@@ -81,6 +76,7 @@ const MainTabs = () => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="calendar-outline" size={size} color={color} />
           ),
+          ...headerOptions(t('events.title')),
         }} 
       />
       <Tab.Screen 
@@ -91,6 +87,7 @@ const MainTabs = () => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="restaurant-outline" size={size} color={color} />
           ),
+          ...headerOptions(t('restaurant.title')),
         }} 
       />
       <Tab.Screen 
@@ -101,6 +98,7 @@ const MainTabs = () => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="chatbubble-ellipses-outline" size={size} color={color} />
           ),
+          ...headerOptions(t('surveys.title')),
         }} 
       />
       <Tab.Screen 
@@ -111,6 +109,7 @@ const MainTabs = () => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="ellipsis-horizontal" size={size} color={color} />
           ),
+          ...headerOptions(t('more.title')),
         }} 
       />
     </Tab.Navigator>

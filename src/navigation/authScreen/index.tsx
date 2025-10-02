@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import LoginScreen from '../../../features/auth';
+import LoginScreen from '../../features/auth';
 
 const AuthScreen = () => {
   const { t } = useTranslation();
