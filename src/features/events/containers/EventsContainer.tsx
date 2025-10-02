@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView, Alert } from 'react-native';
-import { useStore } from '../../../store';
 import { useTranslation } from 'react-i18next';
+import { Alert, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useStore } from '../../../store';
 
 const EventsContainer = () => {
   const { events, addReservation } = useStore();

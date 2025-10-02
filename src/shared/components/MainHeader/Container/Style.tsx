@@ -25,6 +25,12 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'flex-end',
     },
+    iconContainer: {
+      width: 40,
+      height: 40,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
     titleContainer: {
       flex: 1,
       height: '100%',
@@ -35,6 +41,16 @@ const styles = StyleSheet.create({
       fontSize: 18,
       fontWeight: '600',
       color: COLORS.white,
+    },
+    backButton: {
+      position: 'absolute',
+      left: 16,
+      top: 40,
+      width: 40,
+      height: 40,
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 1,
     },
     iconButton: {
       width: 40,
