@@ -19,16 +19,16 @@ export const styles = StyleSheet.create({
     top: 40,
     zIndex: 1,
   },
-  closeButtonText: {
-    fontSize: 20,
-    color: 'white',
+  closeButton: {
+    position: 'absolute',
+    right: 15,
+    top: 40,
+    zIndex: 1,
   },
   headerContent: {
     alignItems: 'center',
   },
   headerIcon: {
-    fontSize: 24,
-    color: 'white',
     marginBottom: 5,
   },
   headerTitle: {

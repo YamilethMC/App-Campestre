@@ -1,6 +1,7 @@
 // src/features/restaurante/components/CartModal/index.tsx
 import React, { useState } from 'react';
-import { Alert, Image, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import useMessages from '../../hooks/useRestaurantMessages';
 import { CartItem, CartModalProps } from '../../interfaces/dishInterface';
 import { useCartStore } from '../../store/useCartStore';
@@ -58,10 +59,10 @@ const CartModal: React.FC<CartModalProps> = ({ visible, onClose }) => {
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Text style={styles.closeButtonText}>✕</Text>
+            <Ionicons name="close" size={20} color="white" />
           </TouchableOpacity>
           <View style={styles.headerContent}>
-            <Text style={styles.headerIcon}>🛒</Text>
+            <Ionicons name="cart-outline" size={24} color="white" style={styles.headerIcon} />
             <Text style={styles.headerTitle}>{messages.CARRITO.TITLE}</Text>
             <Text style={styles.headerSubtitle}>{totalItems} {totalItems === 1 ? messages.CARRITO.ITEMS : messages.CARRITO.ITEMS + 's'}</Text>
           </View>
@@ -78,10 +79,12 @@ const CartModal: React.FC<CartModalProps> = ({ visible, onClose }) => {
               <View key={item.id} style={styles.itemContainer}>
                 <View style={styles.itemImageContainer}>
                   {item.image ? (
-                    <Image source={{ uri: item.image }} style={styles.itemImage} />
+                    <View style={styles.placeholderImage}>
+                      <Text style={styles.placeholderText}>Platillo</Text>
+                    </View>
                   ) : (
                     <View style={styles.placeholderImage}>
-                      <Text style={styles.placeholderText}>🍽️</Text>
+                      <Ionicons name="restaurant-outline" size={20} color={styles.placeholderText.color} />
                     </View>
                   )}
                 </View>
@@ -112,7 +115,7 @@ const CartModal: React.FC<CartModalProps> = ({ visible, onClose }) => {
                   style={styles.removeItemButton} 
                   onPress={() => handleRemoveItem(item.id)}
                 >
-                  <Text style={styles.removeItemText}>🗑️</Text>
+                  <Ionicons name="trash-outline" size={20} color="#EF4444" />
                 </TouchableOpacity>
               </View>
             ))
@@ -161,15 +164,15 @@ const CartModal: React.FC<CartModalProps> = ({ visible, onClose }) => {
 const getCategoryIcon = (category: string) => {
   const categoryLower = category.toLowerCase();
   if (categoryLower.includes('ropa') || categoryLower.includes('camisa') || categoryLower.includes('pantalon')) {
-    return '👕';
+    return <Ionicons name="shirt-outline" size={14} color="#6B7280" />;
   } else if (categoryLower.includes('accesorio') || categoryLower.includes('anillo') || categoryLower.includes('collar')) {
-    return '🎒';
+    return <Ionicons name="bag-handle-outline" size={14} color="#6B7280" />;
   } else if (categoryLower.includes('evento') || categoryLower.includes('boleto') || categoryLower.includes('entrada')) {
-    return '🎟️';
+    return <Ionicons name="ticket-outline" size={14} color="#6B7280" />;
   } else if (categoryLower.includes('deporte') || categoryLower.includes('balon') || categoryLower.includes('raqueta')) {
-    return '⚽';
+    return <Ionicons name="football-outline" size={14} color="#6B7280" />;
   } else {
-    return '🍽️'; // Default for restaurant items
+    return <Ionicons name="restaurant-outline" size={14} color="#6B7280" />; // Default for restaurant items
   }
 };
 

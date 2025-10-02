@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: 4,  
   },
   imageContainer: {
     height: 120,
@@ -68,12 +68,23 @@ export const styles = StyleSheet.create({
     color: COLORS.gray500,
     flex: 1,
   },
+  timeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  timeIcon: {
+    marginRight: 2,
+  },
   preparationTime: {
     fontSize: 12,
     color: COLORS.gray500,
   },
   ratingContainer: {
-    alignItems: 'flex-end',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  starIcon: {
+    marginRight: 2,
   },
   rating: {
     fontSize: 12,
@@ -84,7 +95,9 @@ export const styles = StyleSheet.create({
     flexWrap: 'wrap',
     marginBottom: 10,
   },
-  tag: {
+  tagContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: COLORS.gray100,
     paddingHorizontal: 6,
     paddingVertical: 3,
@@ -93,6 +106,10 @@ export const styles = StyleSheet.create({
     color: COLORS.gray700,
     marginRight: 5,
     marginBottom: 3,
+  },
+  tag: {
+    fontSize: 10,
+    color: COLORS.gray700,
   },
   actionsContainer: {
     alignItems: 'flex-end',

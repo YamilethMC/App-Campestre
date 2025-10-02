@@ -13,7 +13,11 @@ export interface ModalProps {
   /**
    * Contenido principal del modal
    */
-  children: ReactNode;
+  children?: ReactNode;
+  /**
+   * Texto del cuerpo del modal (alternativa a children)
+   */
+  message?: string;
   /**
    * Texto del botón de confirmación
    * @default 'Aceptar'
@@ -43,6 +47,10 @@ export interface ModalProps {
    * Estilos personalizados para el contenido
    */
   contentStyle?: ViewStyle;
+  /**
+   * Estilos personalizados para el cuerpo del mensaje
+   */
+  messageStyle?: TextStyle;
   /**
    * Estilos personalizados para el contenedor de botones
    */

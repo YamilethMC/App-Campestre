@@ -58,9 +58,16 @@ export const styles = StyleSheet.create({
   content: {
     marginBottom: spacing.lg,
   },
+  message: {
+    textAlign: 'center',
+    color: COLORS.gray700,
+    fontSize: 16,
+    lineHeight: 24,
+    marginBottom: spacing.lg,
+  },
   buttonsContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     gap: spacing.sm,
   },
   button: {

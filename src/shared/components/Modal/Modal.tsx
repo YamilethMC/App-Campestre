@@ -10,6 +10,7 @@ const Modal: React.FC<ModalProps> = ({
   visible,
   title,
   children,
+  message,
   confirmText = 'Aceptar',
   cancelText = 'Cancelar',
   onConfirm,
@@ -17,6 +18,7 @@ const Modal: React.FC<ModalProps> = ({
   containerStyle,
   titleStyle,
   contentStyle,
+  messageStyle,
   buttonsContainerStyle,
   showCancelButton = true,
   disableConfirmButton = false,
@@ -48,6 +50,11 @@ const Modal: React.FC<ModalProps> = ({
           
           <View style={[styles.content, contentStyle]}>
             {children}
+            {message && !children && (
+              <Text style={[styles.message, messageStyle]}>
+                {message}
+              </Text>
+            )}
           </View>
 
           <View style={[styles.buttonsContainer, buttonsContainerStyle]}>

@@ -25,7 +25,9 @@ const ProfileContainer = () => {
     isEditingContactEmergency,
     formData,
     currentUser,
+    emergencyContactFormData,
     handleInputChange,
+    handleEmergencyContactChange,
     handleSave,
     handleSaveContactEmergency,
     handleEdit,
@@ -144,14 +146,14 @@ const ProfileContainer = () => {
           }
           >
           <EmergencyContact 
-            name={currentUser?.emergencyContact?.name || messages.CONTAINER.NO_SPECIFIED}
-            relationship={currentUser?.emergencyContact?.relationship || messages.CONTAINER.NO_SPECIFIED}
-            phone={currentUser?.emergencyContact?.phone || messages.CONTAINER.NO_SPECIFIED}
+            name={emergencyContactFormData.name}
+            relationship={emergencyContactFormData.relationship}
+            phone={emergencyContactFormData.phone}
 
             isEditingContactEmergency={isEditingContactEmergency}
-            onNameChange={(text) => handleInputChange('name', text)}
-            onRelationshipChange={(text) => handleInputChange('relationship', text)}
-            onPhoneChange={(text) => handleInputChange('phone', text)}
+            onNameChange={(text) => handleEmergencyContactChange('name', text)}
+            onRelationshipChange={(text) => handleEmergencyContactChange('relationship', text)}
+            onPhoneChange={(text) => handleEmergencyContactChange('phone', text)}
           />
           { isEditingContactEmergency && (
             <View style={styles.editActions}>

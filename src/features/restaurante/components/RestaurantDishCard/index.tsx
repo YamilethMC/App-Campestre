@@ -1,6 +1,8 @@
 // src/features/restaurante/components/RestaurantDishCard/index.tsx
 import React, { useEffect, useState } from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import Card from '../../../../shared/components/Card';
 import useMessages from '../../hooks/useRestaurantMessages';
 import { RestaurantDishCardProps } from '../../interfaces/dishInterface';
 import { useCartStore } from '../../store/useCartStore';
@@ -50,11 +52,13 @@ const RestaurantDishCard: React.FC<RestaurantDishCardProps> = ({ dish }) => {
   };
 
   return (
-    <View style={styles.card}>
+    <Card style={styles.card}>
       {/* Dish Image - Space reserved even if image is not available */}
       <View style={styles.imageContainer}>
         {dish.image ? (
-          <Image source={{ uri: dish.image }} style={styles.image} />
+          <View style={styles.placeholderImage}>
+            <Text style={styles.placeholderText}>Imagen</Text>
+          </View>
         ) : (
           <View style={styles.placeholderImage}>
             <Text style={styles.placeholderText}>Imagen</Text>
@@ -73,18 +77,42 @@ const RestaurantDishCard: React.FC<RestaurantDishCardProps> = ({ dish }) => {
 
         <View style={styles.metaRow}>
           <Text style={styles.category}>{dish.category}</Text>
-          <Text style={styles.preparationTime}>⏱️ {dish.preparationTime}</Text>
+          <View style={styles.timeContainer}>
+            <Ionicons name="time-outline" size={14} color="#6B7280" style={styles.timeIcon} />
+            <Text style={styles.preparationTime}> {dish.preparationTime}</Text>
+          </View>
           <View style={styles.ratingContainer}>
-            <Text style={styles.rating}> ⭐ {dish.rating}</Text>
+            <Ionicons name="star" size={14} color="#FBBF24" style={styles.starIcon} />
+            <Text style={styles.rating}> {dish.rating}</Text>
           </View>
         </View>
 
         {/* Dish tags (popular, spicy, vegetarian, gluten-free) */}
         <View style={styles.tagsContainer}>
-          {dish.isPopular && <Text style={styles.tag}>⭐ {messages.TAGS.POPULAR}</Text>}
-          {dish.isSpicy && <Text style={styles.tag}>🌶️ {messages.TAGS.SPICY}</Text>}
-          {dish.isVegetarian && <Text style={styles.tag}>🥦 {messages.TAGS.VEGETARIAN}</Text>}
-          {dish.isGlutenFree && <Text style={styles.tag}>🌾🚫 {messages.TAGS.GLUTEN_FREE}</Text>}
+          {dish.isPopular && (
+            <View style={styles.tagContainer}>
+              <Ionicons name="star" size={12} color="#FBBF24" />
+              <Text style={styles.tag}> {messages.TAGS.POPULAR}</Text>
+            </View>
+          )}
+          {dish.isSpicy && (
+            <View style={styles.tagContainer}>
+              <Ionicons name="flame-outline" size={12} color="#EF4444" />
+              <Text style={styles.tag}> {messages.TAGS.SPICY}</Text>
+            </View>
+          )}
+          {dish.isVegetarian && (
+            <View style={styles.tagContainer}>
+              <Ionicons name="leaf-outline" size={12} color="#10B981" />
+              <Text style={styles.tag}> {messages.TAGS.VEGETARIAN}</Text>
+            </View>
+          )}
+          {dish.isGlutenFree && (
+            <View style={styles.tagContainer}>
+              <Ionicons name="nutrition-outline" size={12} color="#8B5CF6" />
+              <Text style={styles.tag}> {messages.TAGS.GLUTEN_FREE}</Text>
+            </View>
+          )}
         </View>
 
         {/* Add to cart or quantity controls */}
@@ -106,7 +134,7 @@ const RestaurantDishCard: React.FC<RestaurantDishCardProps> = ({ dish }) => {
           )}
         </View>
       </View>
-    </View>
+    </Card>
   );
 };
 

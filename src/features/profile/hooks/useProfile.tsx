@@ -47,9 +47,27 @@ export const useProfile = () => {
     }
   }, [currentUser, formData, updateProfile]);
 
+  const handleEmergencyContactChange = useCallback((field: string, value: string) => {
+    setEmergencyContactFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  }, []);
+
   const handleSaveContactEmergency = useCallback(() => {
+    if (currentUser) {
+      const updatedProfile = {
+        ...currentUser,
+        emergencyContact: {
+          name: emergencyContactFormData.name,
+          relationship: emergencyContactFormData.relationship,
+          phone: emergencyContactFormData.phone,
+        }
+      };
+      updateProfile(updatedProfile);
       setIsEditingContactEmergency(false);
-    }, []);
+    }
+  }, [currentUser, emergencyContactFormData, updateProfile]);
 
   const handleEdit = useCallback(() => {
     setIsEditing(true);
@@ -105,9 +123,11 @@ export const useProfile = () => {
     formData,
     currentUser,
     isEditingContactEmergency,
+    emergencyContactFormData,
     
     // Handlers
     handleInputChange,
+    handleEmergencyContactChange,
     handleSave,
     handleSaveContactEmergency,
     handleEdit,

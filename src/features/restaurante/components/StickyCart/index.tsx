@@ -1,4 +1,5 @@
 // src/features/restaurante/components/StickyCart/index.tsx
+import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import useMessages from '../../hooks/useRestaurantMessages';
@@ -27,7 +28,7 @@ const StickyCart: React.FC = () => {
       <View style={styles.container}>
         <TouchableOpacity style={styles.cartButton} onPress={handleViewCart}>
           <View style={styles.buttonContent}>
-            <Text style={styles.cartIcon}>🛒</Text>
+            <Ionicons name="cart-outline" size={20} color="gray" style={styles.cartIcon} />
             <Text style={styles.cartText}>{messages.CARRITO.SEE}</Text>
           </View>
         </TouchableOpacity>

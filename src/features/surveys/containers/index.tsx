@@ -1,19 +1,101 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
+import Modal from '../../../shared/components/Modal/Modal';
+import FilterSection from '../components/FilterSection';
+import HeaderWithStats from '../components/HeaderWithStats';
+import SurveyCard from '../components/SurveyCard';
+import { useSurveyActions } from '../hooks/useSurveyActions';
+import { SurveyCategory } from '../interfaces';
+import { useSurveyStore } from '../store';
 
-export const index: React.FC = () => {
+const SurveysIndex: React.FC = () => {
+  const {
+    activeSurveys,
+    completedSurveys,
+    averageRating,
+    currentFilter,
+    surveys,
+    getFilteredSurveys,
+    setFilter,
+    fetchSurveys,
+  } = useSurveyStore();
+
+  const { 
+    handleSurveyResponse, 
+    confirmSurveyResponse, 
+    cancelSurveyResponse,
+    modalVisible 
+  } = useSurveyActions();
+
+  useEffect(() => {
+    fetchSurveys();
+  }, []);
+
+  const handleCategoryChange = (category: SurveyCategory) => {
+    setFilter({
+      ...currentFilter,
+      category,
+    });
+  };
+
+  const handleStatusChange = (status: 'activas' | 'completadas') => {
+    setFilter({
+      ...currentFilter,
+      status,
+    });
+  };
+
+  const handleCardPress = (surveyId: string) => {
+    handleSurveyResponse(surveyId);
+  };
+
+  const filteredSurveys = getFilteredSurveys();
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={{ padding: 16 }}>
-        <View style={{ marginBottom: 20 }}>
-          <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 10 }}>Surveys</Text>
-          <Text>Welcome to the Surveys section. Here you can participate in various surveys and provide your feedback.</Text>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#F9FAFB' }}>
+      <ScrollView>
+        {/* Header with Stats */}
+        <HeaderWithStats
+          activeSurveys={activeSurveys}
+          completedSurveys={completedSurveys}
+          averageRating={averageRating}
+        />
+
+        {/* Filter Section */}
+        <FilterSection
+          selectedCategory={currentFilter.category}
+          selectedStatus={currentFilter.status}
+          onCategoryChange={handleCategoryChange}
+          onStatusChange={handleStatusChange}
+        />
+
+        {/* Surveys List */}
+        <View>
+          {filteredSurveys.map((survey) => (
+            <SurveyCard
+              key={survey.id}
+              survey={survey}
+              onPress={handleCardPress}
+              surveyId={survey.id}
+            />
+          ))}
         </View>
-        {/* Additional survey-related components can be added here */}
+
+        {/* Confirmation Modal */}
+        <Modal
+          visible={!!modalVisible}
+          title="Responder Encuesta"
+          message="¿Estás seguro de que deseas responder esta encuesta?"
+          confirmText="Aceptar"
+          cancelText="Cancelar"
+          onConfirm={() => modalVisible && confirmSurveyResponse(modalVisible)}
+          onCancel={cancelSurveyResponse}
+        />
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-export default index;
+export { SurveysIndex as index };
+
+export default SurveysIndex;
