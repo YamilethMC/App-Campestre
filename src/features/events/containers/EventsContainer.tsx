@@ -1,137 +1,326 @@
-import React from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  View
+} from 'react-native';
+import Button from '../../../shared/components/Button/Button';
+import MainLayout from '../../../shared/components/MainLayout';
+import Search from '../../../shared/components/Search/Search';
+import { COLORS } from '../../../shared/theme/colors';
 import { useStore } from '../../../store';
+import EventCard from '../components/EventCard';
+import FilterSection from '../components/FilterSection';
 
 const EventsContainer = () => {
-  const { events, addReservation } = useStore();
+  const { 
+    events, 
+    registeredEvents, 
+    fetchEvents, 
+    registerForEvent, 
+    unregisterFromEvent, 
+    toggleReminder 
+  } = useStore();
+  
   const { t } = useTranslation();
+  
+  // Current month and year state
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  
+  // Filters
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedEventType, setSelectedEventType] = useState<'Todos' | 'Deportivo' | 'Social' | 'Familiar' | 'Fitness'>('Todos');
+  
+  // Event types filter options
+  const eventTypes = ['Todos', 'Deportivo', 'Social', 'Familiar', 'Fitness'];
+  
+  // Format month and year display
+  const monthNames = [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+  ];
+  
+  const displayMonth = `${monthNames[currentMonth]} de ${currentYear}`;
+  
+  // Filter and sort events by date
+  const filteredEvents = events
+    .filter(event => {
+      const eventDate = new Date(event.date);
+      const eventMonth = eventDate.getMonth();
+      const eventYear = eventDate.getFullYear();
+      
+      // Filter by month and year
+      const isCurrentMonth = eventMonth === currentMonth && eventYear === currentYear;
+      
+      // Filter by search query
+      const matchesSearch = 
+        event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        event.description.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      // Filter by event type
+      const matchesType = 
+        selectedEventType === 'Todos' || event.eventType === selectedEventType;
+      
+      // Filter out past events (events that occurred before today)
+      const isNotPast = eventDate >= new Date();
+      
+      return isCurrentMonth && matchesSearch && matchesType && isNotPast;
+    })
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-  const handleReservation = (eventId: string) => {
-    addReservation(eventId);
-    Alert.alert(t('common.success'), t('events.bookEvent'));
+  // Check if there are events for the current month
+  const hasEventsThisMonth = events.some(event => {
+    const eventDate = new Date(event.date);
+    return eventDate.getMonth() === currentMonth && eventDate.getFullYear() === currentYear;
+  });
+
+  // Check if there are events after current month
+  const hasFutureMonths = events.some(event => {
+    const eventDate = new Date(event.date);
+    return (eventDate.getFullYear() > currentYear) || 
+           (eventDate.getFullYear() === currentYear && eventDate.getMonth() > currentMonth);
+  });
+
+  // Check if current displayed month is after the actual current month
+  const isAfterCurrentMonth = (currentYear > new Date().getFullYear()) || 
+                             (currentYear === new Date().getFullYear() && currentMonth > new Date().getMonth());
+
+  // Navigation functions
+  const goToPreviousMonth = () => {
+    const prevDate = new Date(currentYear, currentMonth - 1, 1);
+    setCurrentMonth(prevDate.getMonth());
+    setCurrentYear(prevDate.getFullYear());
   };
 
-  const renderEvent = ({ item }: { item: any }) => (
-    <View style={styles.eventCard}>
-      <View style={styles.eventHeader}>
-        <Text style={styles.eventName}>{item.name}</Text>
-        <Text style={styles.eventDate}>
-          {new Date(item.date).toLocaleDateString()} - {item.time}
-        </Text>
-      </View>
-      <Text style={styles.eventDescription}>{item.description}</Text>
-      <View style={styles.eventFooter}>
-        <Text style={styles.availableSpots}>
-          {t('events.availableSpots')}: {item.availableSpots}
-        </Text>
-        <TouchableOpacity
-          style={styles.reserveButton}
-          onPress={() => handleReservation(item.id)}
-          disabled={item.availableSpots <= 0}
-        >
-          <Text style={styles.reserveButtonText}>
-            {item.availableSpots > 0 ? t('events.bookEvent') : 'Full'}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
+  const goToNextMonth = () => {
+    const nextDate = new Date(currentYear, currentMonth + 1, 1);
+    setCurrentMonth(nextDate.getMonth());
+    setCurrentYear(nextDate.getFullYear());
+  };
+
+  // Handler functions for registration
+  const handleRegister = (eventId: string) => {
+    registerForEvent(eventId);
+  };
+
+  const handleUnregister = (eventId: string) => {
+    unregisterFromEvent(eventId);
+  };
+
+  const handleToggleReminder = (eventId: string) => {
+    toggleReminder(eventId);
+  };
+
+  // Effect to fetch events on mount
+  useEffect(() => {
+    fetchEvents();
+  }, [fetchEvents]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>{t('events.title')}</Text>
-        <Text style={styles.subtitle}>{t('events.upcomingEvents')}</Text>
+    <MainLayout title="Calendario de Eventos">
+      <View style={styles.container}>
+        <View style={styles.headerSection}>
+          <View style={styles.headerIcon}>
+            <Ionicons name="calendar-outline" size={32} color={COLORS.primary} />
+          </View>
+          <Text style={styles.headerTitle}>Calendario de Eventos</Text>
+          <Text style={styles.headerDescription}>
+            Descubre y regístrate a nuestras actividades
+          </Text>
+        </View>
 
-        <FlatList
-          data={events}
-          renderItem={renderEvent}
-          keyExtractor={item => item.id}
-          contentContainerStyle={styles.eventsList}
-          showsVerticalScrollIndicator={false}
+        <Search
+          placeholder="Buscar eventos..."
+          onSearch={setSearchQuery}
         />
+
+        <FilterSection
+          selectedEventType={selectedEventType}
+          onEventTypeChange={setSelectedEventType}
+        />
+
+        <View style={styles.monthSelectorContainer}>
+          <Button
+            variant="icon"
+            onPress={goToPreviousMonth}
+            disabled={!isAfterCurrentMonth}
+            style={styles.navButton}
+            icon={
+              <Ionicons 
+                name="chevron-back-outline" 
+                size={9.5} 
+                color={isAfterCurrentMonth ? COLORS.black : COLORS.gray400} 
+              />
+            }
+          />
+          
+          <Text style={styles.monthDisplay}>{displayMonth}</Text>
+          
+          <Button
+            variant="icon"
+            onPress={goToNextMonth}
+            disabled={!hasFutureMonths}
+            style={styles.navButton}
+            icon={
+              <Ionicons 
+                name="chevron-forward-outline" 
+                size={9.5} 
+                color={hasFutureMonths ? COLORS.black : COLORS.gray400} 
+              />
+            }
+          />
+        </View>
+
+        <View style={styles.eventsHeader}>
+          <Text style={styles.eventsTitle}>Próximos Eventos</Text>
+          <Text style={styles.eventsCount}>{filteredEvents.length} eventos</Text>
+        </View>
+
+        {hasEventsThisMonth ? (
+          <FlatList
+            data={filteredEvents}
+            renderItem={({ item }) => (
+              <EventCard
+                event={item}
+                isRegistered={registeredEvents.includes(item.id)}
+                onRegister={handleRegister}
+                onUnregister={handleUnregister}
+                onToggleReminder={handleToggleReminder}
+              />
+            )}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.eventsList}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              <View style={styles.noEventsContainer}>
+                <Text style={styles.noEventsText}>No hay eventos registrados todavía</Text>
+              </View>
+            }
+          />
+        ) : (
+          <View style={styles.noEventsContainer}>
+            <Text style={styles.noEventsText}>No hay eventos registrados todavía</Text>
+          </View>
+        )}
       </View>
-    </SafeAreaView>
+    </MainLayout>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F7FA',
+    backgroundColor: COLORS.white,
+    paddingBottom: 20,
   },
-  content: {
-    flex: 1,
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 8,
-    color: '#1F2937',
-  },
-  subtitle: {
-    fontSize: 16,
-    textAlign: 'center',
+  headerSection: {
+    alignItems: 'center',
     marginBottom: 20,
-    color: '#6B7280',
+    paddingHorizontal: 16,
+  },
+  headerIcon: {
+    marginBottom: 8,
+  },
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: COLORS.gray800,
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  headerDescription: {
+    fontSize: 16,
+    color: COLORS.gray600,
+    textAlign: 'center',
+    paddingHorizontal: 20,
+  },
+  filterButton: {
+    marginHorizontal: 4,
+    marginVertical: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  activeFilterText: {
+    color: COLORS.white,
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  inactiveFilterText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  monthSelectorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    marginBottom: 20,
+    backgroundColor: COLORS.white,
+    paddingVertical: 12,
+    borderRadius: 12,
+    marginHorizontal: 16,
+    shadowColor: COLORS.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  navButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 48,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: COLORS.white,
+    borderWidth: 1,
+    shadowColor: COLORS.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  monthDisplay: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: COLORS.gray800,
+    textAlign: 'center',
+    flex: 1,
+    marginHorizontal: 10,
+  },
+  eventsHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    marginBottom: 15,
+  },
+  eventsTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: COLORS.gray800,
+  },
+  eventsCount: {
+    fontSize: 16,
+    color: COLORS.gray600,
   },
   eventsList: {
     paddingBottom: 20,
   },
-  eventCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  eventHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  eventName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#1F2937',
+  noEventsContainer: {
     flex: 1,
-  },
-  eventDate: {
-    fontSize: 14,
-    color: '#6B7280',
-    marginLeft: 10,
-  },
-  eventDescription: {
-    fontSize: 14,
-    color: '#4B5563',
-    marginBottom: 12,
-    lineHeight: 20,
-  },
-  eventFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
+    paddingTop: 60,
   },
-  availableSpots: {
-    fontSize: 14,
-    color: '#6B7280',
-    fontWeight: '500',
-  },
-  reserveButton: {
-    backgroundColor: '#4A90E2',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+  noEventsText: {
+    fontSize: 18,
+    color: COLORS.gray500,
+    textAlign: 'center',
+paddingVertical: 8,
     borderRadius: 6,
   },
   reserveButtonText: {

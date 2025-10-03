@@ -1,9 +1,10 @@
 import { useAuthStore } from '../features/auth/store/useAuthStore';
 import { useProfileStore } from '../features/profile/store/useProfileStore';
 import { useMenusStore } from '../features/restaurante/store/useMenuStore';
+import { useEventStore } from '../features/events/store/useEventStore';
 
 // Re-export store hooks
-export { useAuthStore, useMenusStore, useProfileStore };
+export { useAuthStore, useMenusStore, useProfileStore, useEventStore };
 
 // Common types
 export interface SurveyResponse {
@@ -17,6 +18,7 @@ export const useStore = () => {
   const authStore = useAuthStore();
   const profileStore = useProfileStore();
   const menusStore = useMenusStore();
+  const eventStore = useEventStore();
   
   return {
     // Auth store
@@ -36,6 +38,15 @@ export const useStore = () => {
     addMenu: menusStore.addMenu,
     updateMenu: menusStore.updateMenu,
     deleteMenu: menusStore.deleteMenu,
+    
+    // Events store
+    events: eventStore.events,
+    registeredEvents: eventStore.registeredEvents,
+    fetchEvents: eventStore.fetchEvents,
+    registerForEvent: eventStore.registerForEvent,
+    unregisterFromEvent: eventStore.unregisterFromEvent,
+    toggleReminder: eventStore.toggleReminder,
+    addReservation: eventStore.registerForEvent, // Alias for backward compatibility
     
     // For backward compatibility
     currentUser: profileStore.profile, // Alias for profile

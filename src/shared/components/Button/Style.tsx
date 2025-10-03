@@ -10,6 +10,11 @@ export const styles = StyleSheet.create({
       justifyContent: 'center',
       borderWidth: 1,
     },
+    buttonContent: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
     primaryButton: {
       backgroundColor: COLORS.primaryDark,
       borderColor: COLORS.primaryDark,
@@ -25,6 +30,11 @@ export const styles = StyleSheet.create({
     outlineButton: {
       backgroundColor: COLORS.white,
       borderColor: COLORS.primary,
+    },
+    iconButton: {
+      backgroundColor: 'transparent',
+      borderColor: 'transparent',
+      padding: 8,
     },
     dangerButton: {
       backgroundColor: COLORS.error,
@@ -50,6 +60,9 @@ export const styles = StyleSheet.create({
     },
     outlineButtonText: {
       color: COLORS.primary,
+    },
+    iconButtonText: {
+      color: COLORS.gray600,
     },
     dangerButtonText: {
       color: COLORS.white,
