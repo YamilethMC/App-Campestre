@@ -30,6 +30,11 @@ const MoreOptionsScreen = () => {
       onPress: () => navigation.navigate('Profile')
     },
     { 
+      title: t('reservations.title'), 
+      icon: 'calendar-outline' as const,
+      onPress: () => navigation.navigate('Reservations')
+    },
+    { 
       title: t('settings.title'), 
       icon: 'settings-outline' as const,
       onPress: () => navigation.navigate('Settings')

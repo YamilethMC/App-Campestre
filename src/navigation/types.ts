@@ -26,6 +26,7 @@ export type MoreStackParamList = {
   Profile: undefined;
   Settings: undefined;
   Help: undefined;
+  Reservations: undefined;
 };
 
 export type RootStackNavigationProp = NavigationProp<RootStackParamList>;
