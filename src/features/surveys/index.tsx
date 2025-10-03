@@ -1,1 +1,2 @@
-export { index } from './containers';
+export { default } from './containers';
+

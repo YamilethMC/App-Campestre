@@ -1,13 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { BottomTabHeaderProps } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import EventsScreen from '../../features/events/containers/EventsContainer';
 import HomeScreen from '../../features/home';
 import MoreOptionsScreen from '../../features/moreOptions';
 import RestauranteScreen from '../../features/restaurante';
-import SurveysScreen from '../../features/surveys/containers/SurveysContainer';
+import SurveysScreen from '../../features/surveys';
 import MainHeader from '../../shared/components/MainHeader/Container';
 import { COLORS } from '../../shared/theme/colors';
 

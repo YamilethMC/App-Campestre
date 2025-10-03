@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { SafeAreaView, ScrollView, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView, View } from 'react-native';
 import Modal from '../../../shared/components/Modal/Modal';
 import FilterSection from '../components/FilterSection';
 import HeaderWithStats from '../components/HeaderWithStats';
@@ -8,7 +8,7 @@ import { useSurveyActions } from '../hooks/useSurveyActions';
 import { SurveyCategory } from '../interfaces';
 import { useSurveyStore } from '../store';
 
-const SurveysIndex: React.FC = () => {
+const Surveys: React.FC = () => {
   const {
     activeSurveys,
     completedSurveys,
@@ -96,6 +96,5 @@ const SurveysIndex: React.FC = () => {
   );
 };
 
-export { SurveysIndex as index };
 
-export default SurveysIndex;
+export default Surveys;
