@@ -1,33 +1,31 @@
 import { useState } from 'react';
-import { Alert } from 'react-native';
 import { useSurveyStore } from '../store';
 
 export const useSurveyActions = () => {
-  const { incrementCompletedSurveys } = useSurveyStore();
-  const [modalVisible, setModalVisible] = useState<string | null>(null);
+  const [selectedSurveyId, setSelectedSurveyId] = useState<string | null>(null);
+  const [showSurveyForm, setShowSurveyForm] = useState(false);
 
   const handleSurveyResponse = (surveyId: string) => {
-    setModalVisible(surveyId);
+    setSelectedSurveyId(surveyId);
+    setShowSurveyForm(true);
   };
 
   const confirmSurveyResponse = (surveyId: string) => {
-    // In a real app, this would navigate to the survey form
-    // For now, we'll just show an alert
-    Alert.alert('Funcionalidad no disponible', 'El formulario de encuesta aún no está implementado.');
-    
-    // Update the store to reflect the completion of the survey
-    incrementCompletedSurveys(surveyId);
-    setModalVisible(null);
+    setSelectedSurveyId(surveyId);
+    setShowSurveyForm(true);
   };
 
   const cancelSurveyResponse = () => {
-    setModalVisible(null);
+    setSelectedSurveyId(null);
+    setShowSurveyForm(false);
   };
 
   return {
     handleSurveyResponse,
     confirmSurveyResponse,
     cancelSurveyResponse,
-    modalVisible,
+    selectedSurveyId,
+    showSurveyForm,
+    setShowSurveyForm,
   };
 };
