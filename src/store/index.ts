@@ -2,9 +2,10 @@ import { useAuthStore } from '../features/auth/store/useAuthStore';
 import { useProfileStore } from '../features/profile/store/useProfileStore';
 import { useMenusStore } from '../features/restaurante/store/useMenuStore';
 import { useEventStore } from '../features/events/store/useEventStore';
+import { useReservationStore } from '../features/reservations/store';
 
 // Re-export store hooks
-export { useAuthStore, useMenusStore, useProfileStore, useEventStore };
+export { useAuthStore, useMenusStore, useProfileStore, useEventStore, useReservationStore };
 
 // Common types
 export interface SurveyResponse {
@@ -19,6 +20,7 @@ export const useStore = () => {
   const profileStore = useProfileStore();
   const menusStore = useMenusStore();
   const eventStore = useEventStore();
+  const reservationStore = useReservationStore();
   
   return {
     // Auth store
@@ -46,7 +48,13 @@ export const useStore = () => {
     registerForEvent: eventStore.registerForEvent,
     unregisterFromEvent: eventStore.unregisterFromEvent,
     toggleReminder: eventStore.toggleReminder,
-    addReservation: eventStore.registerForEvent, // Alias for backward compatibility
+    
+    // Reservations store
+    reservations: reservationStore.reservations,
+    addReservation: reservationStore.addReservation,
+    updateReservation: reservationStore.updateReservation,
+    deleteReservation: reservationStore.deleteReservation,
+    getUserReservations: reservationStore.getUserReservations,
     
     // For backward compatibility
     currentUser: profileStore.profile, // Alias for profile
