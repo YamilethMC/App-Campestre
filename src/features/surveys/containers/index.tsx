@@ -256,7 +256,8 @@ const Surveys: React.FC = () => {
               variant="outline"
               onPress={goToPreviousQuestion}
               disabled={currentQuestionIndex === 0}
-              style={styles.navButton}
+              style={currentQuestionIndex === 0 ? [styles.navButton, styles.disabledNavButton] : styles.navButton}
+              titleStyle={currentQuestionIndex === 0 ? styles.disabledNavButtonText : undefined}
             />
             
             {currentQuestionIndex < questions.length - 1 ? (
@@ -395,6 +396,7 @@ const TextQuestion: React.FC<{
     <View style={styles.textInputContainer}>
       <TextInput
         placeholder="Escribe tu respuesta aquí..."
+        placeholderTextColor={COLORS.gray400} // More visible placeholder color
         value={answer}
         onChangeText={onAnswerChange}
         multiline
@@ -594,6 +596,12 @@ const styles = StyleSheet.create({
   navButton: {
     flex: 1,
     marginHorizontal: 8,
+  },
+  disabledNavButton: {
+    opacity: 0.6,
+  },
+  disabledNavButtonText: {
+    color: COLORS.gray500, // Gray color that will be visible on the disabled button
   },
 });
 

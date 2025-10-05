@@ -66,10 +66,7 @@ const EmergencyContact: React.FC<emergencyContact> = ({
             </View>
           ) : (
             <View style={styles.detailValue}>
-              <Text style={styles.detailLabel}>{messages.EMERGENCY.RELATIONSHIP}:</Text>
-              <Text style={[styles.detailValue, styles.detailValueEditing]}>
-                {relationship || messages.CONTAINER.NO_SPECIFIED}
-              </Text>
+              <Text style={styles.detailValueEditing}>{relationship || messages.CONTAINER.NO_SPECIFIED} • {phone || messages.CONTAINER.NO_SPECIFIED}</Text>
             </View>
           )}
         </View>
@@ -86,12 +83,7 @@ const EmergencyContact: React.FC<emergencyContact> = ({
             />
             </View>
           ) : (
-            <View style={styles.detailValue}>
-              <Text style={styles.detailLabel}>{messages.EMERGENCY.PHONE}:</Text>
-              <Text style={[styles.detailValue, styles.phone, styles.detailValueEditing]}>
-                {phone || messages.CONTAINER.NO_SPECIFIED}
-              </Text>
-            </View>
+            null
           )}
         </View>
       </View>

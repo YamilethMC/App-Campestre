@@ -1,5 +1,6 @@
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Alert } from 'react-native';
 
 type RootStackParamList = {
     Notifications: undefined;
@@ -14,8 +15,17 @@ export const useHeader = () => {
   };
 
   const handleNotifications = () => {
-    // Navegar a la pantalla de notificaciones
-    navigation.navigate('Notifications');
+    // Show alert that the update is not available yet
+    Alert.alert(
+      'Actualización no disponible',
+      'Lo sentimos, esta actualización aún no está disponible. ¡Pronto estará disponible!',
+      [
+        {
+          text: 'Aceptar',
+          style: 'default'
+        }
+      ]
+    );
   };
 
   return {  

@@ -115,7 +115,7 @@
     }
   },
   "events": {
-    "title": "Events & Reservations",
+    "title": "Events",
     "upcomingEvents": "Upcoming Events",
     "makeReservation": "Make Reservation",
     "eventName": "Event Name",
@@ -123,6 +123,9 @@
     "eventTime": "Event Time",
     "availableSpots": "Available Spots",
     "bookEvent": "Book Event"
+  },
+  "reservation": {
+    "title": "Reservaciones"
   },
   "surveys": {
     "title": "Voice of the Member",

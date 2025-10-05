@@ -145,24 +145,6 @@ const ReservationsContainer = () => {
   if (!selectedService) {
     return (
       <SafeAreaView style={styles.safeArea}>
-        <View style={styles.header}>
-          <View style={styles.headerContent}>
-            <View style={styles.leftContainer}>
-              <TouchableOpacity onPress={() => {}} style={styles.backButton}>
-                <Ionicons name="arrow-back" size={24} color={COLORS.white} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.titleContainer}>
-              <Text style={styles.title} numberOfLines={1}>
-                Reservas
-              </Text>
-              <Text style={styles.subtitle} numberOfLines={1}>
-                Selecciona un servicio
-              </Text>
-            </View>
-            <View style={styles.rightContainer} />
-          </View>
-        </View>
         <View style={styles.container}>
           <Text style={styles.questionText}>¿Qué deseas reservar?</Text>
           <ScrollView contentContainerStyle={styles.servicesContainer}>

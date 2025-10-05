@@ -16,28 +16,16 @@ const HeaderWithStats: React.FC<HeaderWithStatsProps> = ({
 }) => {
   return (
     <View style={styles.container}>
-      {/* Title and Description */}
-      <View style={styles.headerContent}>
-        <View style={styles.titleContainer}>
-          <Ionicons name="chatbubble-ellipses-outline" size={24} color={COLORS.white} />
-          <Text style={styles.title}>Encuestas</Text>
-        </View>
-        <Text style={styles.subtitle}>Tu opinión nos ayuda a mejorar</Text>
+      <View style={styles.iconContainer}>
+        <Ionicons name="chatbubble-ellipses-outline" size={40} color={COLORS.primary} />
       </View>
-
-      {/* Stats */}
-      <View style={styles.statsContainer}>
-        <View style={styles.statBox}>
-          <Text style={styles.statValue}>{activeSurveys}</Text>
-          <Text style={styles.statLabel}>Activas</Text>
-        </View>
-        <View style={styles.statBox}>
-          <Text style={styles.statValue}>{completedSurveys}</Text>
-          <Text style={styles.statLabel}>Completadas</Text>
-        </View>
-        <View style={styles.statBox}>
-          <Text style={styles.statValue}>{averageRating.toFixed(1)}</Text>
-          <Text style={styles.statLabel}>Promedio</Text>
+      <View style={styles.textContainer}>
+        <Text style={styles.title}>Encuestas</Text>
+        <Text style={styles.description}>Tu opinión nos ayuda a mejorar</Text>
+        <View style={styles.statsRow}>
+          <Text style={styles.statText}>{activeSurveys} activas</Text>
+          <Text style={styles.statText}>• {completedSurveys} completadas</Text>
+          <Text style={styles.statText}>• {averageRating.toFixed(1)} promedio</Text>
         </View>
       </View>
     </View>
@@ -46,49 +34,53 @@ const HeaderWithStats: React.FC<HeaderWithStatsProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.white,
+    borderRadius: 12,
     padding: 16,
-  },
-  headerContent: {
     marginBottom: 16,
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    marginBottom: 4,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: COLORS.white,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: COLORS.white,
-    opacity: 0.9,
-  },
-  statsContainer: {
+    marginTop: 16,
+    marginHorizontal: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 12,
-    padding: 12,
+    alignItems: 'center',
+    elevation: 3,
+    shadowColor: COLORS.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
-  statBox: {
+  headerContent: {
+    flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
   },
-  statValue: {
+  iconContainer: {
+    marginRight: 12,
+  },
+  textContainer: {
+    flex: 1,
+  },
+  title: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: COLORS.white,
+    color: COLORS.gray900,
+    marginBottom: 4,
   },
-  statLabel: {
-    fontSize: 12,
-    color: COLORS.white,
-    marginTop: 4,
-    textAlign: 'center',
+  description: {
+    fontSize: 14,
+    color: COLORS.gray600,
+    marginBottom: 4,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
+  statText: {
+    fontSize: 14,
+    color: COLORS.primary,
+    fontWeight: '600',
+    marginRight: 8,
   },
 });
 

@@ -29,10 +29,15 @@ const MoreOptionsScreen = () => {
       icon: 'person-outline' as const,
       onPress: () => navigation.navigate('Profile')
     },
-    { 
+    /*{ 
       title: t('reservations.title'), 
-      icon: 'calendar-outline' as const,
+      icon: 'chatbubble-ellipses-outline' as const,
       onPress: () => navigation.navigate('Reservations')
+    },*/
+    { 
+      title: t('surveys.title'), 
+      icon: 'chatbubble-ellipses-outline' as const,
+      onPress: () => navigation.navigate('Surveys')
     },
     { 
       title: t('menus.title'), 

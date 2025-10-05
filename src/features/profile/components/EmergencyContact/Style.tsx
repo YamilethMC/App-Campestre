@@ -17,6 +17,11 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 12,
   },
+  detailText: {
+    fontSize: 14,
+    color: COLORS.gray600,
+    marginRight: 8,
+  },
   contactName: {
     fontSize: 18,
     fontWeight: '600',

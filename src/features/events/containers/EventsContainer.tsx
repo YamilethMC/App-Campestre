@@ -8,7 +8,6 @@ import {
   View
 } from 'react-native';
 import Button from '../../../shared/components/Button/Button';
-import MainLayout from '../../../shared/components/MainLayout';
 import Search from '../../../shared/components/Search/Search';
 import { COLORS } from '../../../shared/theme/colors';
 import { useStore } from '../../../store';
@@ -121,93 +120,93 @@ const EventsContainer = () => {
   }, [fetchEvents]);
 
   return (
-    <MainLayout title="Calendario de Eventos">
-      <View style={styles.container}>
-        <View style={styles.headerSection}>
-          <View style={styles.headerIcon}>
-            <Ionicons name="calendar-outline" size={32} color={COLORS.primary} />
-          </View>
-          <Text style={styles.headerTitle}>Calendario de Eventos</Text>
-          <Text style={styles.headerDescription}>
-            Descubre y regístrate a nuestras actividades
-          </Text>
+    <View style={styles.container}>
+      {/*<View style={styles.headerSection}>
+        <View style={styles.headerIcon}>
+          <Ionicons name="calendar-outline" size={32} color={COLORS.primary} />
         </View>
-
+        <Text style={styles.headerTitle}>Calendario de Eventos</Text>
+        <Text style={styles.headerDescription}>
+          Descubre y regístrate a nuestras actividades
+        </Text>
+      </View>*/}
+      <View style={styles.searchContainer}>
         <Search
           placeholder="Buscar eventos..."
           onSearch={setSearchQuery}
+          inputStyle={styles.searchInput}
         />
-
-        <FilterSection
-          selectedEventType={selectedEventType}
-          onEventTypeChange={setSelectedEventType}
-        />
-
-        <View style={styles.monthSelectorContainer}>
-          <Button
-            variant="icon"
-            onPress={goToPreviousMonth}
-            disabled={!isAfterCurrentMonth}
-            style={styles.navButton}
-            icon={
-              <Ionicons 
-                name="chevron-back-outline" 
-                size={9.5} 
-                color={isAfterCurrentMonth ? COLORS.black : COLORS.gray400} 
-              />
-            }
-          />
-          
-          <Text style={styles.monthDisplay}>{displayMonth}</Text>
-          
-          <Button
-            variant="icon"
-            onPress={goToNextMonth}
-            disabled={!hasFutureMonths}
-            style={styles.navButton}
-            icon={
-              <Ionicons 
-                name="chevron-forward-outline" 
-                size={9.5} 
-                color={hasFutureMonths ? COLORS.black : COLORS.gray400} 
-              />
-            }
-          />
-        </View>
-
-        <View style={styles.eventsHeader}>
-          <Text style={styles.eventsTitle}>Próximos Eventos</Text>
-          <Text style={styles.eventsCount}>{filteredEvents.length} eventos</Text>
-        </View>
-
-        {hasEventsThisMonth ? (
-          <FlatList
-            data={filteredEvents}
-            renderItem={({ item }) => (
-              <EventCard
-                event={item}
-                isRegistered={registeredEvents.includes(item.id)}
-                onRegister={handleRegister}
-                onUnregister={handleUnregister}
-                onToggleReminder={handleToggleReminder}
-              />
-            )}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={styles.eventsList}
-            showsVerticalScrollIndicator={false}
-            ListEmptyComponent={
-              <View style={styles.noEventsContainer}>
-                <Text style={styles.noEventsText}>No hay eventos registrados todavía</Text>
-              </View>
-            }
-          />
-        ) : (
-          <View style={styles.noEventsContainer}>
-            <Text style={styles.noEventsText}>No hay eventos registrados todavía</Text>
-          </View>
-        )}
       </View>
-    </MainLayout>
+
+      <FilterSection
+        selectedEventType={selectedEventType}
+        onEventTypeChange={setSelectedEventType}
+      />
+
+      <View style={styles.monthSelectorContainer}>
+        <Button
+          variant="icon"
+          onPress={goToPreviousMonth}
+          disabled={!isAfterCurrentMonth}
+          style={styles.navButton}
+          icon={
+            <Ionicons 
+              name="chevron-back-outline" 
+              size={9.5} 
+              color={isAfterCurrentMonth ? COLORS.black : COLORS.gray400} 
+            />
+          }
+        />
+        
+        <Text style={styles.monthDisplay}>{displayMonth}</Text>
+        
+        <Button
+          variant="icon"
+          onPress={goToNextMonth}
+          disabled={!hasFutureMonths}
+          style={styles.navButton}
+          icon={
+            <Ionicons 
+              name="chevron-forward-outline" 
+              size={9.5} 
+              color={hasFutureMonths ? COLORS.black : COLORS.gray400} 
+            />
+          }
+        />
+      </View>
+
+      <View style={styles.eventsHeader}>
+        <Text style={styles.eventsTitle}>Próximos Eventos</Text>
+        <Text style={styles.eventsCount}>{filteredEvents.length} {filteredEvents.length === 1 ? "evento" : "eventos"}</Text>
+      </View>
+
+      {hasEventsThisMonth ? (
+        <FlatList
+          data={filteredEvents}
+          renderItem={({ item }) => (
+            <EventCard
+              event={item}
+              isRegistered={registeredEvents.includes(item.id)}
+              onRegister={handleRegister}
+              onUnregister={handleUnregister}
+              onToggleReminder={handleToggleReminder}
+            />
+          )}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.eventsList}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={
+            <View style={styles.noEventsContainer}>
+              <Text style={styles.noEventsText}>No hay eventos registrados todavía</Text>
+            </View>
+          }
+        />
+      ) : (
+        <View style={styles.noEventsContainer}>
+          <Text style={styles.noEventsText}>No hay eventos registrados todavía</Text>
+        </View>
+      )}
+    </View>
   );
 };
 
@@ -216,6 +215,22 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.white,
     paddingBottom: 20,
+  },
+  searchInput: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 12,
+    fontSize: 16,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  searchContainer: {
+    margin: 15,
+    marginBottom: 10,
   },
   headerSection: {
     alignItems: 'center',

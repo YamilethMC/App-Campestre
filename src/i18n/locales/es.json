@@ -115,7 +115,7 @@
     }
   },
   "events": {
-    "title": "Eventos y Reservas",
+    "title": "Eventos",
     "upcomingEvents": "Próximos Eventos",
     "makeReservation": "Hacer Reserva",
     "eventName": "Nombre del Evento",
@@ -132,6 +132,9 @@
     "question3": "¿Algún otro comentario?",
     "submit": "Enviar Encuesta",
     "thankYou": "¡Gracias por su retroalimentación!"
+  },
+  "reservation": {
+    "title": "Reservaciones"
   },
   "more": {
     "title": "Más"

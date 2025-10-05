@@ -48,11 +48,21 @@ const RestaurantStack = () => (
   </Stack.Navigator>
 );
 
-const SurveysStack = () => (
+/*const SurveysStack = () => (
   <Stack.Navigator>
     <Stack.Screen 
       name="Surveys" 
       component={SurveysScreen} 
+      options={{ headerShown: false }}
+    />
+  </Stack.Navigator>
+);*/
+
+const ReservationStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen 
+      name="ReservationScreen" 
+      component={ReservationScreen} 
       options={{ headerShown: false }}
     />
   </Stack.Navigator>
@@ -71,9 +81,14 @@ const MoreStack = () => (
       component={ProfileScreen} 
       options={{ headerShown: false }}
     />
-    <Stack.Screen 
+    {/*<Stack.Screen 
       name="Reservations" 
       component={ReservationScreen} 
+      options={{ headerShown: false }}
+    />*/}
+    <Stack.Screen 
+      name="Surveys" 
+      component={SurveysScreen} 
       options={{ headerShown: false }}
     />
     <Stack.Screen 
@@ -158,7 +173,7 @@ const MainTabs = () => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="calendar-outline" size={size} color={color} />
           ),
-          ...headerOptions(t('events.title'), ''),
+          ...headerOptions(t('events.title'), 'Descubre y regístrate a nuestras actividades'),
         }} 
       />
       <Tab.Screen 
@@ -172,7 +187,7 @@ const MainTabs = () => {
           ...headerOptions(t('restaurant.title'), t('restaurant.openingHours')),
         }} 
       />
-      <Tab.Screen 
+      {/*<Tab.Screen 
         name="Surveys" 
         component={SurveysStack} 
         options={{
@@ -181,6 +196,18 @@ const MainTabs = () => {
             <Ionicons name="chatbubble-ellipses-outline" size={size} color={color} />
           ),
           ...headerOptions(t('surveys.title'), ''),
+        }} 
+      />*/}
+
+      <Tab.Screen 
+        name="Reservation" 
+        component={ReservationStack} 
+        options={{
+          title: t('reservation.title'),
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="calendar-outline" size={size} color={color} />
+          ),
+          ...headerOptions(t('reservation.title'), 'Selecciona tu servicio'),
         }} 
       />
       <Tab.Screen 

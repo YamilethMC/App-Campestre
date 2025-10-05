@@ -28,6 +28,7 @@ export type MoreStackParamList = {
   Help: undefined;
   Reservations: undefined;
   Menu: undefined;
+  Surveys: undefined;
 };
 
 export type RootStackNavigationProp = NavigationProp<RootStackParamList>;

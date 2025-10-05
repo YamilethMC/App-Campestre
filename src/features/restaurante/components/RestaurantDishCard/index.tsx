@@ -119,7 +119,7 @@ const RestaurantDishCard: React.FC<RestaurantDishCardProps> = ({ dish }) => {
         <View style={styles.actionsContainer}>
           {!isInCart ? (
             <TouchableOpacity style={styles.addButton} onPress={handleAddToCart}>
-              <Text style={styles.addButtonText}>(+) {messages.CONTAINER.ADD}</Text>
+              <Text style={styles.addButtonText}>+ {messages.CONTAINER.ADD}</Text>
             </TouchableOpacity>
           ) : (
             <View style={styles.quantityControls}>
