@@ -40,7 +40,7 @@ const useMessages = () => {
         PEOPLE: t('reservation.summaryCard.people'),
     },
     TABLESELECTOR: {
-        PERS: t('reservation.tableSelector.pers'),
+        PERS: t('reservation.tableSelector.people'),
     },
     TIMESLOTS: {
         TITLE: t('reservation.timeSlots.title'),
