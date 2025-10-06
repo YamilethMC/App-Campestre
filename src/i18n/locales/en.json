@@ -112,10 +112,40 @@
       "daily": "Daily Menu",
       "weekly": "Weekly Menu",
       "special": "Special Menu"
+    },
+    "searchPlaceholder": "Search menus...",
+    "allMenus": "All Menus",
+    "menuCard": {
+      "featured": "Featured",
+      "download": "Download"
+    },
+    "menuHeader": {
+      "menu": "menu",
+      "RestaurantClub": "Club Restaurant",
+      "allDownload": "Download All"
+    },
+    "restaurantHours": {
+      "title": "Restaurant Hours",
+      "breakfast": "Breakfast:",
+      "lunch": "Lunch:",
+      "dinner": "Dinner:",
+      "text": "Menus are updated weekly. For reservations call 555-1234 or book through the app."
     }
   },
   "events": {
     "title": "Events",
+    "titleSingular": "event",
+    "noEvents": "No events available at the moment",
+    "noEventsRegistered": "No events registered yet",
+    "placeholderSearch": "Search events...",
+    "eventCard": {
+      "registered": "registered of",
+      "busy": "busy",
+      "successRegistered": "You have successfully registered!",
+      "cancelRegistration": "Cancel registration",
+      "activateReminder": "Enable reminder",
+      "register": "Register"
+    },
     "upcomingEvents": "Upcoming Events",
     "makeReservation": "Make Reservation",
     "eventName": "Event Name",

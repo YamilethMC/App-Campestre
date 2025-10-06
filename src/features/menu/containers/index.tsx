@@ -8,6 +8,7 @@ import MenuCard from '../components/MenuCard';
 import MenuFilter from '../components/MenuFilter';
 import MenuHeader from '../components/MenuHeader';
 import RestaurantHours from '../components/RestaurantHours';
+import useMessages from '../hooks/useMessages';
 import { styles } from './Style';
 
 interface Menu {
@@ -24,6 +25,8 @@ interface Menu {
 
 const MenuContainer: React.FC = () => {
   const { t } = useTranslation();
+
+  const { messages } = useMessages();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
   
@@ -172,7 +175,7 @@ const MenuContainer: React.FC = () => {
         
         {/* Search */}
         <Search
-          placeholder={t('menu.searchPlaceholder', 'Buscar menús')}
+          placeholder={messages.CONTAINER.PLACEHOLDER}
           onSearch={setSearchQuery}
           iconColor={COLORS.gray500}
           inputStyle={styles.searchInput}
@@ -187,7 +190,7 @@ const MenuContainer: React.FC = () => {
         
         {/* All Menus - including featured ones with tags */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{t('menu.allTitle', 'Todos los menús')}</Text>
+          <Text style={styles.sectionTitle}>{messages.CONTAINER.ALLMENUS}</Text>
           {filteredMenus.length > 0 ? (
             filteredMenus.map(menu => (
               <MenuCard 
@@ -205,7 +208,7 @@ const MenuContainer: React.FC = () => {
             ))
           ) : (
             <View style={styles.noResultsContainer}>
-              <Text style={styles.noResultsText}>{t('menu.noResults', 'No hay menús por el momento')}</Text>
+              <Text style={styles.noResultsText}>{messages.CONTAINER.NOMENUSAVAILABLE}</Text>
             </View>
           )}
         </View>

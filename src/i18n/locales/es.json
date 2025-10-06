@@ -112,6 +112,24 @@
       "daily": "Menú Diario",
       "weekly": "Menú Semanal",
       "special": "Menú Especial"
+    },
+    "searchPlaceholder": "Buscar menús...",
+    "allMenus": "Todos los Menús",
+    "menuCard":{
+        "featured": "Destacado",
+        "download": "Descargar"
+    },
+    "menuHeader": {
+        "menu": "menú",
+        "RestaurantClub": "Restaurante del Club",
+        "allDownload": "Descargar Todo"
+    },
+    "restaurantHours": {
+        "title": "Horario del restaurante",
+        "breakfast": "Desayuno:",
+        "lunch": "Almuerzo:",
+        "dinner": "Cena:",
+        "text": "Los menús se actualizan semanalmente. Para reservaciones llama al 555-1234 o reserva desde la app."
     }
   },
   "events": {

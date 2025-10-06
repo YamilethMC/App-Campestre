@@ -31,3 +31,8 @@ export interface MenuFilterProps {
   onSelectFilter: (filter: string) => void;
   counts: FilterCounts;
 }
+
+export interface MenuHeaderProps {
+  menuCount: number;
+  onDownloadPress: () => void;
+}

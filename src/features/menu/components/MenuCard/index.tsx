@@ -4,12 +4,12 @@ import { Image, Text, TouchableOpacity, View } from 'react-native';
 import Button from '../../../../shared/components/Button';
 import Card from '../../../../shared/components/Card';
 import { COLORS } from '../../../../shared/theme/colors';
-//import useMessages from '../../hooks/useMessages';
+import useMessages from '../../hooks/useMessages';
 import { MenuCardProps } from '../../interfaces/menuInterfaces';
 import styles from './Style';
 
 const MenuCard: React.FC<MenuCardProps> = ({ menu, onDownloadPress, onViewPress }) => {
-  //const { messages } = useMessages();
+  const { messages } = useMessages();
   return (
     <Card style={styles.card}>
       <View style={styles.cardContent}>
@@ -39,7 +39,7 @@ const MenuCard: React.FC<MenuCardProps> = ({ menu, onDownloadPress, onViewPress 
             {menu.isFeatured && (
               <View style={styles.featuredTag}>
                 <Ionicons name="star" size={12} color={COLORS.white} />
-                <Text style={styles.featuredText}>Destacado</Text>
+                <Text style={styles.featuredText}>{messages.MENUCARD.FEATURED}</Text>
               </View>
             )}
           </View>
@@ -65,7 +65,7 @@ const MenuCard: React.FC<MenuCardProps> = ({ menu, onDownloadPress, onViewPress 
           
           <View style={styles.buttonContainer}>
             <Button
-              text="Descargar"
+              text={messages.MENUCARD.DOWNLOAD}
               onPress={onDownloadPress}
               icon={<Ionicons name="download-outline" size={16} color={COLORS.white} />}
               style={styles.downloadButton}
