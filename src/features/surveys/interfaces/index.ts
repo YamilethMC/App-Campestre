@@ -42,3 +42,22 @@ export interface SurveyFilter {
   category: SurveyCategory;
   status: 'activas' | 'completadas';
 }
+
+export interface SurveyCardProps {
+  survey: Survey;
+  onPress: (surveyId: string) => void;
+  surveyId: string;
+}
+
+export interface HeaderWithStatsProps {
+  activeSurveys: number;
+  completedSurveys: number;
+  averageRating: number;
+}
+
+export interface FilterSectionProps {
+  selectedCategory: SurveyCategory;
+  selectedStatus: 'activas' | 'completadas';
+  onCategoryChange: (category: SurveyCategory) => void;
+  onStatusChange: (status: 'activas' | 'completadas') => void;
+}

@@ -160,11 +160,35 @@
   "surveys": {
     "title": "Voz del Socio",
     "subtitle": "Ayúdanos a mejorar nuestros servicios",
-    "question1": "¿Qué tan satisfecho está con nuestros servicios del club?",
-    "question2": "¿Qué mejoras le gustaría ver?",
-    "question3": "¿Algún otro comentario?",
-    "submit": "Enviar Encuesta",
-    "thankYou": "¡Gracias por su retroalimentación!"
+    "loading": "Cargando encuesta...",
+    "question": "Pregunta",
+    "of": "de",
+    "required": "Obligatorio",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "submit": "Enviar",
+    "thankYou": "¡Gracias por responder!",
+    "textInformation": "Tu encuesta ha sido enviada exitosamente.",
+    "backToSurveys": "Volver a encuestas",
+    "answerSurvey": "Responder Encuesta",
+    "message": "¿Estás seguro de que deseas responder esta encuesta?",
+    "confirm": "Aceptar",
+    "cancel": "Cancelar",
+    "placeholder": "Escribe tu respuesta aquí...",
+    "yes": "Sí",
+    "no": "No",
+    "headerWithStats":{
+      "title": "Encuestas",
+      "text": "Tu opinión nos ayuda a mejorar",
+      "active": "Activas",
+      "completed": "Completadas",
+      "average": "Promedio"
+    },
+    "surveyCard": {
+      "people": "personas",
+      "questions": "preguntas",
+      "start": "Responder"
+    }
   },
   "reservation": {
     "title": "Reservaciones",

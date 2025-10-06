@@ -197,13 +197,37 @@
     }
   },
   "surveys": {
-    "title": "Voice of the Member",
+    "title": "Member’s Voice",
     "subtitle": "Help us improve our services",
-    "question1": "How satisfied are you with our club services?",
-    "question2": "What improvements would you like to see?",
-    "question3": "Any other comments?",
-    "submit": "Submit Survey",
-    "thankYou": "Thank you for your feedback!"
+    "loading": "Loading survey...",
+    "question": "Question",
+    "of": "of",
+    "required": "Required",
+    "previous": "Previous",
+    "next": "Next",
+    "submit": "Submit",
+    "thankYou": "Thank you for your response!",
+    "textInformation": "Your survey has been successfully submitted.",
+    "backToSurveys": "Back to surveys",
+    "answerSurvey": "Answer Survey",
+    "message": "Are you sure you want to answer this survey?",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "placeholder": "Write your answer here...",
+    "yes": "Yes",
+    "no": "No",
+    "headerWithStats": {
+      "title": "Surveys",
+      "text": "Your feedback helps us improve",
+      "active": "Active",
+      "completed": "Completed",
+      "average": "Average"
+    },
+    "surveyCard": {
+      "people": "people",
+      "questions": "questions",
+      "start": "Start"
+    }
   },
   "more": {
     "title": "More"

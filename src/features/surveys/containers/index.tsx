@@ -1,26 +1,26 @@
+import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
-import { 
-  SafeAreaView, 
-  ScrollView, 
-  View, 
-  Text, 
-  StyleSheet,
+import {
+  Alert,
+  SafeAreaView,
+  ScrollView,
+  Text,
   TextInput,
-  Alert 
+  View
 } from 'react-native';
-import { router } from 'expo-router';
+import Button from '../../../shared/components/Button';
+import Card from '../../../shared/components/Card/Card';
 import Modal from '../../../shared/components/Modal/Modal';
-import FilterSection from '../components/FilterSection';
-import HeaderWithStats from '../components/HeaderWithStats';
-import SurveyCard from '../components/SurveyCard';
+import { COLORS } from '../../../shared/theme/colors';
+import FilterSection from '../components/FilterSection/FilterSection';
+import HeaderWithStats from '../components/HeaderWithStats/HeaderWithStats';
+import SurveyCard from '../components/SurveyCard/SurveyCard';
+import useMessages from '../hooks/useMessage';
 import { useSurveyActions } from '../hooks/useSurveyActions';
 import { SurveyCategory, SurveyQuestion } from '../interfaces';
-import { useSurveyStore } from '../store';
 import { surveyService } from '../services';
-import Card from '../../../shared/components/Card/Card';
-import Button from '../../../shared/components/Button';
-import { COLORS } from '../../../shared/theme/colors';
-import { Ionicons } from '@expo/vector-icons';
+import { useSurveyStore } from '../store';
+import styles from './Style';
 
 const Surveys: React.FC = () => {
   const {
@@ -154,6 +154,7 @@ const Surveys: React.FC = () => {
     setModalVisible(surveyId);
   };
 
+  const { messages } = useMessages();
   const filteredSurveys = getFilteredSurveys();
 
   const currentQuestion = questions[currentQuestionIndex];
@@ -165,7 +166,7 @@ const Surveys: React.FC = () => {
       return (
         <SafeAreaView style={styles.container}>
           <View style={styles.centerContainer}>
-            <Text>Cargando encuesta...</Text>
+            <Text>{messages.CONTAINER.LOADING}</Text>
           </View>
         </SafeAreaView>
       );
@@ -186,7 +187,7 @@ const Surveys: React.FC = () => {
           <View style={styles.progressContainer}>
             <View style={styles.progressHeader}>
               <Text style={styles.progressText}>
-                Pregunta {currentQuestionIndex + 1} de {questions.length}
+                {messages.CONTAINER.QUESTION} {currentQuestionIndex + 1} {messages.CONTAINER.OF} {questions.length}
               </Text>
             </View>
             <View style={styles.progressBarContainer}>
@@ -207,7 +208,7 @@ const Surveys: React.FC = () => {
                   <Text style={styles.questionText}>{currentQuestion.question}</Text>
                   {currentQuestion.required && (
                     <View style={styles.requiredIndicator}>
-                      <Text style={styles.requiredText}>Obligatorio</Text>
+                      <Text style={styles.requiredText}>{messages.CONTAINER.REQUIRED}</Text>
                     </View>
                   )}
                 </View>
@@ -252,7 +253,7 @@ const Surveys: React.FC = () => {
           {/* Navigation Buttons */}
           <View style={styles.navigationContainer}>
             <Button 
-              text="Anterior" 
+              text={messages.CONTAINER.PREVIOUS} 
               variant="outline"
               onPress={goToPreviousQuestion}
               disabled={currentQuestionIndex === 0}
@@ -262,13 +263,13 @@ const Surveys: React.FC = () => {
             
             {currentQuestionIndex < questions.length - 1 ? (
               <Button 
-                text="Siguiente" 
+                text={messages.CONTAINER.NEXT}
                 onPress={goToNextQuestion}
                 style={styles.navButton}
               />
             ) : (
               <Button 
-                text="Enviar" 
+                text={messages.CONTAINER.SUBMIT}
                 onPress={handleSubmit}
                 style={styles.navButton}
               />
@@ -286,10 +287,10 @@ const Surveys: React.FC = () => {
         <View style={styles.centerContainer}>
           <View style={styles.successContent}>
             <Ionicons name="checkmark-circle" size={80} color={COLORS.success} style={styles.successIcon} />
-            <Text style={styles.successTitle}>¡Gracias por responder!</Text>
-            <Text style={styles.successMessage}>Tu encuesta ha sido enviada exitosamente.</Text>
+            <Text style={styles.successTitle}>{messages.CONTAINER.THANK_YOU}</Text>
+            <Text style={styles.successMessage}>{messages.CONTAINER.TEXT_INFORMATION}</Text>
             <Button 
-              text="Volver a encuestas" 
+              text={messages.CONTAINER.BACK_TO_SURVEYS}
               onPress={handleFormClose}
               style={styles.successButton}
             />
@@ -333,10 +334,10 @@ const Surveys: React.FC = () => {
         {/* Confirmation Modal */}
         <Modal
           visible={!!modalVisible}
-          title="Responder Encuesta"
-          message="¿Estás seguro de que deseas responder esta encuesta?"
-          confirmText="Aceptar"
-          cancelText="Cancelar"
+          title={messages.CONTAINER.ANSWER_SURVERY}
+          message={messages.CONTAINER.MESSAGE}
+          confirmText={messages.CONTAINER.CONFIRM}
+          cancelText={messages.CONTAINER.CANCEL}
           onConfirm={() => modalVisible && confirmSurveyResponse(modalVisible as string)}
           onCancel={cancelSurveyResponse}
         />
@@ -392,10 +393,11 @@ const TextQuestion: React.FC<{
   answer: string;
   onAnswerChange: (value: string) => void;
 }> = ({ question, answer, onAnswerChange }) => {
+  const { messages } = useMessages();
   return (
     <View style={styles.textInputContainer}>
       <TextInput
-        placeholder="Escribe tu respuesta aquí..."
+        placeholder={messages.CONTAINER.PLACEHOLDER}
         placeholderTextColor={COLORS.gray400} // More visible placeholder color
         value={answer}
         onChangeText={onAnswerChange}
@@ -412,16 +414,17 @@ const YesNoQuestion: React.FC<{
   answer: string;
   onAnswerChange: (value: string) => void;
 }> = ({ question, answer, onAnswerChange }) => {
+  const { messages } = useMessages();
   return (
     <View style={styles.yesNoContainer}>
       <Button
-        text="Sí"
+        text={messages.CONTAINER.YES}
         variant={answer === 'Sí' ? 'filled' : 'outline'}
         onPress={() => onAnswerChange('Sí')}
         style={styles.yesNoButton}
       />
       <Button
-        text="No"
+        text={messages.CONTAINER.NO}
         variant={answer === 'No' ? 'filled' : 'outline'}
         onPress={() => onAnswerChange('No')}
         style={styles.yesNoButton}
@@ -429,180 +432,5 @@ const YesNoQuestion: React.FC<{
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.gray50,
-  },
-  scrollContainer: {
-    padding: 16,
-    paddingBottom: 120, // Extra space for navigation buttons
-  },
-  centerContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  successContent: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  successIcon: {
-    marginBottom: 16,
-  },
-  successTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: COLORS.gray900,
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  successMessage: {
-    fontSize: 16,
-    color: COLORS.gray700,
-    textAlign: 'center',
-    marginBottom: 24,
-    lineHeight: 22,
-  },
-  successButton: {
-    width: '100%',
-  },
-  headerSection: {
-    marginBottom: 16,
-  },
-  surveyCard: {
-    padding: 16,
-    backgroundColor: COLORS.white,
-  },
-  surveyTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: COLORS.gray900,
-    marginBottom: 8,
-  },
-  surveyDescription: {
-    fontSize: 14,
-    color: COLORS.gray600,
-    lineHeight: 20,
-  },
-  progressContainer: {
-    marginBottom: 16,
-  },
-  progressHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  progressText: {
-    fontSize: 14,
-    color: COLORS.gray700,
-    fontWeight: '500',
-  },
-  progressBarContainer: {
-    height: 8,
-    backgroundColor: COLORS.gray200,
-    borderRadius: 4,
-    overflow: 'hidden',
-  },
-  progressBarFill: {
-    height: '100%',
-    backgroundColor: COLORS.primary,
-  },
-  questionSection: {
-    marginBottom: 16,
-  },
-  questionCard: {
-    padding: 16,
-    backgroundColor: COLORS.white,
-  },
-  questionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 16,
-  },
-  questionText: {
-    flex: 1,
-    fontSize: 16,
-    fontWeight: '600',
-    color: COLORS.gray800,
-    lineHeight: 24,
-  },
-  requiredIndicator: {
-    backgroundColor: COLORS.primary,
-    borderRadius: 12,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    marginLeft: 8,
-  },
-  requiredText: {
-    fontSize: 10,
-    color: COLORS.white,
-    fontWeight: 'bold',
-  },
-  answerContainer: {
-    marginTop: 8,
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 8,
-  },
-  starIcon: {
-    marginHorizontal: 4,
-  },
-  textInputContainer: {
-    marginTop: 8,
-  },
-  textInput: {
-    borderWidth: 1,
-    borderColor: COLORS.gray300,
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    color: COLORS.gray800,
-    textAlignVertical: 'top',
-  },
-  yesNoContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 8,
-  },
-  yesNoButton: {
-    flex: 1,
-    marginHorizontal: 4,
-  },
-  multipleChoiceButton: {
-    marginBottom: 8,
-  },
-  navigationContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 16,
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: COLORS.white,
-    elevation: 8,
-    shadowColor: COLORS.gray800,
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-  },
-  navButton: {
-    flex: 1,
-    marginHorizontal: 8,
-  },
-  disabledNavButton: {
-    opacity: 0.6,
-  },
-  disabledNavButtonText: {
-    color: COLORS.gray500, // Gray color that will be visible on the disabled button
-  },
-});
 
 export default Surveys;
