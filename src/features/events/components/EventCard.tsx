@@ -4,15 +4,8 @@ import { Alert, StyleSheet, Text, View } from 'react-native';
 import Button from '../../../shared/components/Button/Button';
 import Card from '../../../shared/components/Card/Card';
 import { COLORS } from '../../../shared/theme/colors';
-import { Event } from '../interfaces/event.interface';
+import { EventCardProps } from '../interfaces/eventInterface';
 
-interface EventCardProps {
-  event: Event;
-  isRegistered: boolean;
-  onRegister: (eventId: string) => void;
-  onUnregister: (eventId: string) => void;
-  onToggleReminder: (eventId: string) => void;
-}
 
 const getEventTypeColor = (eventType: string) => {
   switch (eventType) {

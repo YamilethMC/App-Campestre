@@ -1,11 +1,7 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS } from '../../../shared/theme/colors';
-
-interface FilterSectionProps {
-  selectedEventType: 'Todos' | 'Deportivo' | 'Social' | 'Familiar' | 'Fitness';
-  onEventTypeChange: (type: 'Todos' | 'Deportivo' | 'Social' | 'Familiar' | 'Fitness') => void;
-}
+import { FilterSectionProps } from '../interfaces/eventInterface';
 
 const FilterSection: React.FC<FilterSectionProps> = ({
   selectedEventType,

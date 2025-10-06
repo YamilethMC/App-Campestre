@@ -20,3 +20,16 @@ export interface EventState {
   unregisterFromEvent: (eventId: string) => void;
   toggleReminder: (eventId: string) => void;
 }
+
+export interface EventCardProps {
+  event: Event;
+  isRegistered: boolean;
+  onRegister: (eventId: string) => void;
+  onUnregister: (eventId: string) => void;
+  onToggleReminder: (eventId: string) => void;
+}
+
+export interface FilterSectionProps {
+  selectedEventType: 'Todos' | 'Deportivo' | 'Social' | 'Familiar' | 'Fitness';
+  onEventTypeChange: (type: 'Todos' | 'Deportivo' | 'Social' | 'Familiar' | 'Fitness') => void;
+}

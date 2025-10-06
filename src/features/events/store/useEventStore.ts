@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Event, EventState } from '../interfaces/event.interface';
+import { Event, EventState } from '../interfaces/eventInterface';
 
 // Mock data for events across multiple months
 const mockEvents: Event[] = [
