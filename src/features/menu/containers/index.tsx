@@ -1,12 +1,12 @@
 // src/features/menu/containers/index.tsx
 import React, { useState } from 'react';
-import { ScrollView, View, Text, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { COLORS } from '../../../shared/theme/colors';
+import { Alert, ScrollView, Text, View } from 'react-native';
 import Search from '../../../shared/components/Search/Search';
-import MenuHeader from '../components/MenuHeader';
-import MenuFilter from '../components/MenuFilter';
+import { COLORS } from '../../../shared/theme/colors';
 import MenuCard from '../components/MenuCard';
+import MenuFilter from '../components/MenuFilter';
+import MenuHeader from '../components/MenuHeader';
 import RestaurantHours from '../components/RestaurantHours';
 import { styles } from './Style';
 
