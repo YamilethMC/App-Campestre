@@ -91,7 +91,8 @@
       "clearCart": "Clear Cart",
       "confirmClear": "Are you sure you want to clear the cart?",
       "cancel": "Cancel",
-      "ok": "OK"
+      "ok": "OK",
+      "dish": "Dish"
     },
     "tags": {
       "popular": "Popular",

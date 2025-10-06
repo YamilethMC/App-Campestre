@@ -94,7 +94,8 @@
       "clearCart": "Vaciar Carrito",
       "confirmClear": "¿Estás seguro de que deseas vaciar el carrito?",
       "cancel": "Cancelar",
-      "ok": "Aceptar"
+      "ok": "Aceptar",
+      "dish": "Platillo"
     },
     "tags": {
       "popular": "Popular",

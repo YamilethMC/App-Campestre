@@ -28,6 +28,7 @@ const useRestaurantMessages = () => {
       CONFIRM: t('restaurant.carrito.ok'),
       CONTINUE_SHOPPING: t('restaurant.carrito.continueShopping'),
       PAYMENT: t('restaurant.carrito.payment'),
+      DISH: t('restaurant.carrito.dish'),
     },
     TAGS: {
       POPULAR: t('restaurant.tags.popular'),

@@ -1,7 +1,7 @@
 // src/features/restaurante/components/CartModal/index.tsx
+import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { Alert, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import useMessages from '../../hooks/useRestaurantMessages';
 import { CartItem, CartModalProps } from '../../interfaces/dishInterface';
 import { useCartStore } from '../../store/useCartStore';
@@ -80,7 +80,7 @@ const CartModal: React.FC<CartModalProps> = ({ visible, onClose }) => {
                 <View style={styles.itemImageContainer}>
                   {item.image ? (
                     <View style={styles.placeholderImage}>
-                      <Text style={styles.placeholderText}>Platillo</Text>
+                      <Text style={styles.placeholderText}>{messages.CARRITO.DISH}</Text>
                     </View>
                   ) : (
                     <View style={styles.placeholderImage}>
