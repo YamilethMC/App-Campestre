@@ -7,7 +7,11 @@ const HomeScreen = () => {
   const { t } = useTranslation();
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView 
+      style={styles.scrollView}
+      contentContainerStyle={styles.scrollContent}
+      showsVerticalScrollIndicator={false}
+      >
       <View style={styles.header}>
         <Text style={styles.title}>{t('home.welcome')}</Text>
         <Text style={styles.subtitle}>{t('home.subtitle')}</Text>

@@ -11,6 +11,13 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
     paddingBottom: 30,
   },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    padding: 16,
+    paddingBottom: 40,
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',

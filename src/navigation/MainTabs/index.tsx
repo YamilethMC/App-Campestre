@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import EventsScreen from '../../features/events/containers';
+import EventsScreen from '../../features/events/container';
 import HomeScreen from '../../features/home';
 import MenuScreen from '../../features/menu/containers/';
 import ProfileScreen from '../../features/profile/containers';
