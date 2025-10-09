@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import EventsScreen from '../../features/events/container';
+import EventsScreen from '../../features/events/containers';
 import HomeScreen from '../../features/home';
 import MenuScreen from '../../features/menu/containers/';
 import ProfileScreen from '../../features/profile/containers';
@@ -13,6 +13,7 @@ import SurveysScreen from '../../features/surveys';
 import MainHeader from '../../shared/components/MainHeader/Container';
 import { COLORS } from '../../shared/theme/colors';
 import MoreOptionsScreen from '../moreOptions';
+import UserHeader from './UserHeader';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -130,13 +131,27 @@ const MainTabs = () => {
     headerTitleAlign: 'center' as const,
   });
 
+  const homeHeaderOptions = () => ({
+    header: (props: any) => (
+      <UserHeader 
+        navigation={props.navigation}
+      />
+    ),
+    headerShown: true,
+    headerStyle: {
+      backgroundColor: 'transparent',
+      elevation: 0,
+      shadowOpacity: 0,
+    },
+  });
+
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: COLORS.primary,
         tabBarInactiveTintColor: COLORS.gray500,
         tabBarStyle: {
-          height: 60,
+          height: 82,
           paddingBottom: 8,
           paddingTop: 8,
           backgroundColor: COLORS.white,
@@ -147,7 +162,6 @@ const MainTabs = () => {
           shadowOpacity: 0.1,
           shadowRadius: 8,
           position: 'absolute',
-          bottom: 20,
           borderTopLeftRadius: 15,
           borderTopRightRadius: 15,
         },
@@ -166,7 +180,7 @@ const MainTabs = () => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home-outline" size={size} color={color} />
           ),
-          ...headerOptions(t('home.title'), ''),
+          ...homeHeaderOptions(),
         }} 
       />
       <Tab.Screen 
