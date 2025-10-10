@@ -5,10 +5,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.gray50,
+    paddingBottom: 200,
   },
   scrollContainer: {
     padding: 16,
-    paddingBottom: 120, // Extra space for navigation buttons
+    paddingBottom: 200, // Extra space for navigation buttons
   },
   centerContainer: {
     flex: 1,

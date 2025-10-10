@@ -6,10 +6,11 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.gray50,
+    paddingBottom: 100,
   },
   content: {
     padding: 16,
-    paddingBottom: 30,
+    paddingBottom: 100,
   },
   searchInput: {
     backgroundColor: COLORS.white,

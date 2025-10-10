@@ -5,6 +5,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: COLORS.white,
+    paddingBottom: 100,
   },
   container: {
     flex: 1,
