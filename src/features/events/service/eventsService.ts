@@ -260,6 +260,7 @@ export const eventsService = {
   /**
    * Obtener todos los eventos
    */
+  
   async fetchEvents(): Promise<Event[]> {
     await simulateNetworkDelay();
     return [...mockEvents];
