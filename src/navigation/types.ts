@@ -17,6 +17,7 @@ export type MainTabsParamList = {
   Events: undefined;
   Restaurant: undefined;
   Surveys: undefined;
+  AccountStatements: undefined;
   More: undefined;
 };
 
@@ -29,6 +30,7 @@ export type MoreStackParamList = {
   Reservations: undefined;
   Menu: undefined;
   Surveys: undefined;
+  AccountStatements: undefined;
 };
 
 export type RootStackNavigationProp = NavigationProp<RootStackParamList>;

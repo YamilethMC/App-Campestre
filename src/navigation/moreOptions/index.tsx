@@ -35,6 +35,11 @@ const MoreOptionsScreen = () => {
       onPress: () => navigation.navigate('Surveys')
     },
     { 
+      title: t('accountStatements.title'), 
+      icon: 'document-text-outline' as const,
+      onPress: () => navigation.navigate('AccountStatements')
+    },
+    { 
       title: t('menus.title'), 
       icon: 'cafe-outline' as const,
       onPress: () => navigation.navigate('Menu')

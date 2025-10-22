@@ -10,6 +10,7 @@ import ProfileScreen from '../../features/profile/containers';
 import ReservationScreen from '../../features/reservations';
 import RestauranteScreen from '../../features/restaurante';
 import SurveysScreen from '../../features/surveys';
+import AccountStatementsScreen from '../../features/account-statements/containers';
 import MainHeader from '../../shared/components/MainHeader/Container';
 import { COLORS } from '../../shared/theme/colors';
 import MoreOptionsScreen from '../moreOptions';
@@ -103,6 +104,14 @@ const MoreStack = () => (
       options={{ headerShown: false }} 
       // options={({ navigation }) => ({
       //   ...headerOptions('Encuestas', 'Responde nuestras encuestas', true),
+      // })}
+    />
+    <Stack.Screen 
+      name="AccountStatements" 
+      component={AccountStatementsScreen} 
+      options={{ headerShown: false }} 
+      // options={({ navigation }) => ({
+      //   ...headerOptions('Menú', 'Nuestro menú del día', true),
       // })}
     />
     <Stack.Screen 

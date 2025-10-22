@@ -236,6 +236,9 @@
       "unavailableMessage": "No hay horarios disponibles"
     }
   },
+  "accountStatements": {
+    "title": "Estados de cuentas"
+  },
   "more": {
     "title": "Más"
   },
