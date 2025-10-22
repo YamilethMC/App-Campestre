@@ -14,12 +14,17 @@ export interface Survey {
   dateCompleted?: string;
 }
 
+export interface OptionType {
+  value: string;
+  label: string;
+}
+
 export interface SurveyQuestion {
   id: string;
   surveyId: string;
   question: string;
   type: 'multiple-choice' | 'rating' | 'text' | 'yes-no';
-  options?: string[]; // For multiple-choice questions
+  options?: OptionType[] | string[]; // For multiple-choice questions
   required: boolean;
 }
 

@@ -4,18 +4,18 @@ import { userProfile } from "../interfaces";
 // Base de datos mock de usuarios
 const mockUsers: userProfile[] = [
   {
-    id: '1',
-    name: 'Juan Pérez',
-    email: 'juan@clubtampico.com',
+    id: '22308',
+    name: 'Mariana Landy Jimenez',
+    email: 'mariana@clubtampico.com',
     phone: '555-123-4567',
-    address: 'Calle 123, Colonia 456, Ciudad 789',
+    address: 'Privada Jazmin No. 101 Col. Montealegre',
     token: 'mock-jwt-token-admin-123',
     refreshToken: 'mock-jwt-refresh-token-admin-123',
     expiresAt: new Date('2025-05-15'),
     memberSince: new Date('2020-05-15'),
     membershipType: 'Premium',
     familyMembers: [
-      { id: 1, name: 'María López', relationship: 'Esposa', age: 35, isActive: true },
+      { id: 1, name: 'Marío López', relationship: 'Esposa', age: 35, isActive: true },
       { id: 2, name: 'Carlos Pérez', relationship: 'Hijo', age: 12, isActive: true },
       { id: 3, name: 'Ana Pérez', relationship: 'Hija', age: 8, isActive: true },
     ],
@@ -24,7 +24,7 @@ const mockUsers: userProfile[] = [
       { id: 2, plate: 'XYZ-5678', model: 'Honda Civic 2020', isActive: false },
     ],
     emergencyContact: {
-      name: 'Juan Pérez',
+      name: 'Juan Jimenez',
       relationship: 'Hermano',
       phone: '555-123-4567',
     },

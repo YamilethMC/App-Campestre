@@ -1,83 +1,16 @@
+
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../../../shared/theme/colors';
+import { COLORS } from '../../../../shared/theme/colors';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.gray50,
   },
-  // Header styles
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: COLORS.white,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.gray200,
-    elevation: 2,
-    shadowColor: COLORS.gray800,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  backButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 8,
-    marginRight: 12,
-  },
-  backIcon: {
-    marginRight: 8,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: COLORS.gray900,
-  },
   scrollContent: {
     flexGrow: 1,
     padding: 16,
-    paddingBottom: 100, // Extra space for bottom padding
-  },
-  contentContainer: {
-    flex: 1,
-  },
-  surveysList: {
-    marginTop: 16,
-    gap: 12,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  centerContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  successContent: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  successIcon: {
-    marginBottom: 16,
-  },
-  successTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: COLORS.gray900,
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  successMessage: {
-    fontSize: 16,
-    color: COLORS.gray700,
-    textAlign: 'center',
-    marginBottom: 24,
-    lineHeight: 22,
-  },
-  successButton: {
-    width: '100%',
+    paddingBottom: 100,
   },
   headerSection: {
     marginBottom: 16,
@@ -156,61 +89,17 @@ const styles = StyleSheet.create({
   answerContainer: {
     marginTop: 8,
   },
-  ratingContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 8,
-  },
-  starIcon: {
-    marginHorizontal: 4,
-  },
-  textInputContainer: {
-    marginTop: 8,
-  },
-  textInput: {
-    borderWidth: 1,
-    borderColor: COLORS.gray300,
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    color: COLORS.gray800,
-    textAlignVertical: 'top',
-  },
-  yesNoContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 8,
-  },
-  yesNoButton: {
-    flex: 1,
-    marginHorizontal: 4,
-  },
-  multipleChoiceButton: {
-    marginBottom: 8,
-  },
   navigationContainer: {
     paddingTop: 20,
     position: 'relative',
     bottom: 0,
     left: 0,
     right: 0,
-    elevation: 8,
-    shadowColor: COLORS.gray800,
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
   },
   navButtonsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 12,
-  },
-  buttonContainer: {
-    padding: 16,
-    backgroundColor: COLORS.white,
-    borderTopWidth: 1,
-    borderTopColor: COLORS.gray200,
-    marginBottom: 80, // Add bottom margin to ensure button is above tab bar
   },
   navButton: {
     flex: 1,
@@ -233,6 +122,9 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 8,
     borderWidth: 1,
+  },
+  backIcon: {
+    marginRight: 8,
   },
 });
 

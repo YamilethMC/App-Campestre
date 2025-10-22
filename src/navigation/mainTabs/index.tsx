@@ -8,7 +8,6 @@ import HomeScreen from '../../features/home';
 import MenuScreen from '../../features/menu/containers/';
 import ProfileScreen from '../../features/profile/containers';
 import ReservationScreen from '../../features/reservations';
-import RestauranteScreen from '../../features/restaurante';
 import SurveysScreen from '../../features/surveys';
 import MainHeader from '../../shared/components/MainHeader/Container';
 import { COLORS } from '../../shared/theme/colors';
@@ -62,15 +61,25 @@ const EventsStack = () => (
   </Stack.Navigator>
 );
 
-const RestaurantStack = () => (
+const SurveysStack = () => (
   <Stack.Navigator>
     <Stack.Screen 
-      name="RestaurantScreen" 
-      component={RestauranteScreen} 
-      options={{ headerShown: false }}
+      name="SurveysScreen" 
+      component={SurveysScreen} 
+      options={{ headerShown: false }} 
     />
   </Stack.Navigator>
 );
+
+// const RestaurantStack = () => (
+//   <Stack.Navigator>
+//     <Stack.Screen 
+//       name="RestaurantScreen" 
+//       component={RestauranteScreen} 
+//       options={{ headerShown: false }}
+//     />
+//   </Stack.Navigator>
+// );
 
 const ReservationStack = () => (
   <Stack.Navigator>
@@ -194,6 +203,17 @@ const MainTabs = () => {
         }} 
       />
       <Tab.Screen 
+        name="Surveys" 
+        component={SurveysStack} 
+        options={{
+          title: t('surveys.title'),
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="document-text-outline" size={size} color={color} />
+          ),
+          ...headerOptions(t('surveys.title') || 'Encuestas', t('surveys.subtitle') || 'Tu opinión nos ayuda a mejorar'),
+        }} 
+      />
+      {/* <Tab.Screen 
         name="Restaurant" 
         component={RestaurantStack} 
         options={{
@@ -203,7 +223,7 @@ const MainTabs = () => {
           ),
           ...headerOptions(t('restaurant.title'), t('restaurant.openingHours')),
         }} 
-      />
+      /> */}
       <Tab.Screen 
         name="More" 
         component={MoreStack}

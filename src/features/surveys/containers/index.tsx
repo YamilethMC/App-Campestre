@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import Button from '../../../shared/components/Button';
 import Card from '../../../shared/components/Card/Card';
-import Modal from '../../../shared/components/Modal/Modal';
 import { COLORS } from '../../../shared/theme/colors';
 import FilterSection from '../components/FilterSection/FilterSection';
 import HeaderWithStats from '../components/HeaderWithStats/HeaderWithStats';
@@ -22,7 +21,7 @@ import { surveyService } from '../services';
 import { useSurveyStore } from '../store';
 import styles from './Style';
 
-const Surveys: React.FC = () => {
+const SurveysScreen: React.FC = () => {
   const {
     activeSurveys,
     completedSurveys,
@@ -151,7 +150,7 @@ const Surveys: React.FC = () => {
   };
 
   const handleCardPress = (surveyId: string) => {
-    setModalVisible(surveyId);
+    handleSurveyResponse(surveyId);
   };
 
   const { messages } = useMessages();
@@ -174,7 +173,7 @@ const Surveys: React.FC = () => {
 
     return (
       <SafeAreaView style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <ScrollView contentContainerStyle={styles.scrollContent} >
           {/* Survey Info Header */}
           <View style={styles.headerSection}>
             <Card style={styles.surveyCard}>
@@ -252,28 +251,46 @@ const Surveys: React.FC = () => {
           
           {/* Navigation Buttons */}
           <View style={styles.navigationContainer}>
-            <Button 
-              text={messages.CONTAINER.PREVIOUS} 
-              variant="outline"
-              onPress={goToPreviousQuestion}
-              disabled={currentQuestionIndex === 0}
-              style={currentQuestionIndex === 0 ? [styles.navButton, styles.disabledNavButton] : styles.navButton}
-              titleStyle={currentQuestionIndex === 0 ? styles.disabledNavButtonText : undefined}
-            />
+            <View style={styles.navButtonsRow}>
+              <Button 
+                text={messages.CONTAINER.PREVIOUS} 
+                variant="outline"
+                onPress={goToPreviousQuestion}
+                disabled={currentQuestionIndex === 0}
+                style={currentQuestionIndex === 0 ? [styles.navButton, styles.disabledNavButton] : styles.navButton}
+                titleStyle={currentQuestionIndex === 0 ? styles.disabledNavButtonText : undefined}
+              />
+              
+              {currentQuestionIndex < questions.length - 1 ? (
+                <Button 
+                  text={messages.CONTAINER.NEXT}
+                  onPress={goToNextQuestion}
+                  style={styles.navButton}
+                />
+              ) : (
+                <Button 
+                  text={messages.CONTAINER.SUBMIT}
+                  onPress={handleSubmit}
+                  style={styles.navButton}
+                />
+              )}
+            </View>
             
-            {currentQuestionIndex < questions.length - 1 ? (
-              <Button 
-                text={messages.CONTAINER.NEXT}
-                onPress={goToNextQuestion}
-                style={styles.navButton}
-              />
-            ) : (
-              <Button 
-                text={messages.CONTAINER.SUBMIT}
-                onPress={handleSubmit}
-                style={styles.navButton}
-              />
-            )}
+            {/* Back to Surveys Button - Moved below navigation */}
+            <Button 
+              text="Volver a encuestas"
+              variant="outline"
+              onPress={() => setShowSurveyForm(false)}
+              style={styles.backToSurveysButton}
+              icon={
+                <Ionicons 
+                  name="arrow-back" 
+                  size={16} 
+                  color={COLORS.primary} 
+                  style={styles.backIcon}
+                />
+              }
+            />
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -302,47 +319,52 @@ const Surveys: React.FC = () => {
 
   // Default list view
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#F9FAFB' }}>
-      <ScrollView>
-        {/* Header with Stats */}
-        <HeaderWithStats
-          activeSurveys={activeSurveys}
-          completedSurveys={completedSurveys}
-          averageRating={averageRating}
-        />
+    <View style={styles.container}>
+      <ScrollView 
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.contentContainer}>
+          {/* Header with Stats */}
+          <HeaderWithStats
+            activeSurveys={activeSurveys}
+            completedSurveys={completedSurveys}
+            averageRating={averageRating}
+          />
 
-        {/* Filter Section */}
-        <FilterSection
-          selectedCategory={currentFilter.category}
-          selectedStatus={currentFilter.status}
-          onCategoryChange={handleCategoryChange}
-          onStatusChange={handleStatusChange}
-        />
+          {/* Filter Section */}
+          <FilterSection
+            selectedCategory={currentFilter.category}
+            selectedStatus={currentFilter.status}
+            onCategoryChange={handleCategoryChange}
+            onStatusChange={handleStatusChange}
+          />
 
-        {/* Surveys List */}
-        <View>
-          {filteredSurveys.map((survey) => (
-            <SurveyCard
-              key={survey.id}
-              survey={survey}
-              onPress={handleCardPress}
-              surveyId={survey.id}
-            />
-          ))}
+          {/* Surveys List */}
+          <View style={styles.surveysList}>
+            {filteredSurveys.map((survey) => (
+              <SurveyCard
+                key={survey.id}
+                survey={survey}
+                onPress={handleCardPress}
+                surveyId={survey.id}
+              />
+            ))}
+          </View>
         </View>
-
-        {/* Confirmation Modal */}
-        <Modal
-          visible={!!modalVisible}
-          title={messages.CONTAINER.ANSWER_SURVERY}
-          message={messages.CONTAINER.MESSAGE}
-          confirmText={messages.CONTAINER.CONFIRM}
-          cancelText={messages.CONTAINER.CANCEL}
-          onConfirm={() => modalVisible && confirmSurveyResponse(modalVisible as string)}
-          onCancel={cancelSurveyResponse}
-        />
       </ScrollView>
-    </SafeAreaView>
+
+      {/* Confirmation Modal */}
+      {/* <Modal
+        visible={!!modalVisible}
+        title={messages.CONTAINER.ANSWER_SURVERY}
+        message={messages.CONTAINER.MESSAGE}
+        confirmText={messages.CONTAINER.CONFIRM}
+        cancelText={messages.CONTAINER.CANCEL}
+        onConfirm={() => modalVisible && confirmSurveyResponse(modalVisible as string)}
+        onCancel={cancelSurveyResponse}
+      /> */}
+    </View>
   );
 };
 
@@ -433,4 +455,4 @@ const YesNoQuestion: React.FC<{
   );
 };
 
-export default Surveys;
+export default SurveysScreen;

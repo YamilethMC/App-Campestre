@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { CompositeNavigationProp, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +9,7 @@ import { COLORS } from '../../shared/theme/colors';
 
 // Importar tipos de navegación
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { CompositeNavigationProp } from '@react-navigation/native';
+
 import { MoreStackParamList, RootStackParamList } from '../types';
 
 // Tipo para la navegación del stack de More
@@ -29,16 +29,16 @@ const MoreOptionsScreen = () => {
       icon: 'person-outline' as const,
       onPress: () => navigation.navigate('Profile')
     },
-    { 
-      title: t('surveys.title'), 
-      icon: 'chatbubble-ellipses-outline' as const,
-      onPress: () => navigation.navigate('Surveys')
-    },
-    { 
-      title: t('menus.title'), 
-      icon: 'cafe-outline' as const,
-      onPress: () => navigation.navigate('Menu')
-    },
+    // { 
+    //   title: t('surveys.title'), 
+    //   icon: 'chatbubble-ellipses-outline' as const,
+    //   onPress: () => navigation.navigate('Surveys')
+    // },
+    // { 
+    //   title: t('menus.title'), 
+    //   icon: 'cafe-outline' as const,
+    //   onPress: () => navigation.navigate('Menu')
+    // },
     { 
       title: t('settings.title'), 
       icon: 'settings-outline' as const,

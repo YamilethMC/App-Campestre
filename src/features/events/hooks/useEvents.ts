@@ -73,7 +73,7 @@ export const useEvents = () => {
   const registerForEvent = useCallback(async (eventId: string) => {
     if (!userId) return { success: false, error: 'Usuario no autenticado' };
     
-    setLoading(true);
+    // setLoading(true);
     try {
       const updatedEvent = await eventsService.registerForEvent(eventId, userId);
       updateEvent(eventId, {
@@ -93,7 +93,7 @@ export const useEvents = () => {
   const unregisterFromEvent = useCallback(async (eventId: string) => {
     if (!userId) return { success: false, error: 'Usuario no autenticado' };
     
-    setLoading(true);
+    // setLoading(true);
     try {
       const updatedEvent = await eventsService.unregisterFromEvent(eventId, userId);
       updateEvent(eventId, {
