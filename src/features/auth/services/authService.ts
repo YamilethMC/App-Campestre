@@ -39,23 +39,56 @@ export const authService = {
   /**
    * Iniciar sesión con email y contraseña
    */
-  login: async (email: string, password: string): Promise<{ success: boolean; user?: userProfile; error?: string }> => {
+  login: async (email: string, password: string): Promise<{ success: boolean; user?: userProfile; token?: string; error?: string }> => {
     await simulateNetworkDelay();
-    
+    console.log('process.env.API_URL:', process.env.EXPO_PUBLIC_API_URL);
+    console.log('email: ', email, 'passwrod: ', password);
+
+    try {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      console.log('response login: ', response);
+      const data = await response.json();
+      console.log('data login: ', data);
+
+      if (!response.ok) {
+        return {
+          success: false,
+          error: data.message || "Credenciales inválidas",
+        };
+      }
+
+      return {
+        success: true,
+        token: data.data.access_token,
+        user: data.data.user,
+      };
+
+    } catch (error) {
+      console.log("login error:", error);
+      return {
+        success: false,
+        error: "No se pudo conectar con el servidor",
+      };
+    }
     // Validación simple para propósitos de demostración
     // En una aplicación real, esto se haría en el servidor
-    if (!email || !password) {
+    /*if (!email || !password) {
       return { 
         success: false, 
         error: 'Email y contraseña son requeridos' 
       };
-    }
+    }*/
 
     // Buscar usuario por email
-    const user = mockUsers.find(u => u.email?.toLowerCase() === email.toLowerCase());
+    //const user = mockUsers.find(u => u.email?.toLowerCase() === email.toLowerCase());
 
     // En un caso real, aquí se verificaría la contraseña hasheada
-    if (!user || password !== '123456') { // Contraseña hardcodeada para demo
+   /* if (!user || password !== '123456') { // Contraseña hardcodeada para demo
       return { 
         success: false, 
         error: 'Credenciales inválidas' 
@@ -65,7 +98,7 @@ export const authService = {
     return { 
       success: true, 
       user: user
-    };
+    };*/
   },
 
   /**

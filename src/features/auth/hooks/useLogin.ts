@@ -53,19 +53,17 @@ export const useLogin = () => {
 
     try {
       // 1. Llamar al servicio de autenticación
-      const { success, user, error: authError } = await authService.login(email, password);
-      
+      const { success, token, user, error: authError } = await authService.login(email, password);
+      console.log('login hook user:', user);
+
       if (success && user) {
         // 2. Separar datos de autenticación y perfil
-        const { token, ...profileData } = user;
+        const profileData = { ...user};
         
         // 3. Actualizar los stores
-        setAuthData(user.id, token);
+        setAuthData(user.id, token ?? '');
         // Asegurarse de que profileData cumpla con UserProfile
-        setProfile({
-          ...profileData,
-          token: '' // Agregar token vacío o undefined si es necesario
-        } as userProfile);
+        setProfile(profileData as userProfile);
         
         // 4. Navegar a la pantalla principal
         // @ts-ignore - asumiendo que existe la ruta 'MainTabs'
