@@ -1,9 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import useLogout from '../../../hooks/useLogout';
-import { updateProfileData, userProfile } from '../interfaces/interfaces';
-import { useProfileStore } from '../store/useProfileStore';
+import { useAuthStore } from '../../../store';
 import useMessages from '../hooks/useMessages';
+import { updateProfileData, userProfile } from '../interfaces/interfaces';
+import { memberService } from '../services/memberService';
+import { useProfileStore } from '../store/useProfileStore';
 
 export const useProfile = () => {
   const navigation = useNavigation();
@@ -11,10 +13,30 @@ export const useProfile = () => {
   const { handleLogout } = useLogout();
   const messages = useMessages();
   
+  const { userId, token } = useAuthStore();
+
   const currentUser = profile as userProfile | null;
   
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingContactEmergency, setIsEditingContactEmergency] = useState(false);
+
+  useEffect(() => {
+    const loadMember = async () => {
+      try {
+        if (userId && token) {
+          const data = await memberService.getMemberById(userId, token);
+          console.log('Loaded member data:', data);
+          updateProfile(data);
+        }
+      } catch (err) {
+        console.log('Error loading member:', err);
+      }
+    };
+
+    loadMember();
+  }, [userId, token, updateProfile]);
+
+
   const [formData, setFormData] = useState({
     name: currentUser?.name || '',
     email: currentUser?.email || '',
@@ -112,6 +134,7 @@ export const useProfile = () => {
     isEditing,
     formData,
     currentUser,
+    profile,
     isEditingContactEmergency,
     emergencyContactFormData,
     

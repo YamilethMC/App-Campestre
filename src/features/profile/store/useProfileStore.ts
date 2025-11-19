@@ -33,6 +33,20 @@ export const useProfileStore = create<ProfileState>()(
               id: state.profile.id,
               name: state.profile.name,
               email: state.profile.email,
+              phone: state.profile.phone,
+              address: state.profile.address,
+              lastName: state.profile.lastName,
+              membershipType: state.profile.membershipType,
+              memberSince: state.profile.memberSince,
+              street: state.profile.street,
+              externalNumber: state.profile.externalNumber,
+              internalNumber: state.profile.internalNumber,
+              colony: state.profile.colony,
+              zipCode: state.profile.zipCode,
+              city: state.profile.city,
+              state: state.profile.state,
+              country: state.profile.country
+
             } 
           : null
       })

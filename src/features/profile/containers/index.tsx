@@ -23,6 +23,7 @@ const ProfileContainer = () => {
   const {
     isEditing,
     isEditingContactEmergency,
+    profile,
     formData,
     currentUser,
     emergencyContactFormData,
@@ -57,9 +58,10 @@ const ProfileContainer = () => {
       >
         {/* Profile Header */}
         <ProfileHeader
-          name={currentUser?.name || messages.CONTAINER.USER}
-          id={currentUser?.id || 'N/A'}
-          membershipType={currentUser?.membershipType || 'Premium'}
+          name={profile?.name || messages.CONTAINER.USER}
+          lastName={profile?.lastName || ''}
+          id={profile?.id || 'N/A'}
+          membershipType={profile?.membershipType || 'Premium'}
           isActive={true}
           style={styles.profileHeader}
         />
@@ -81,17 +83,27 @@ const ProfileContainer = () => {
           }
         >
           <PersonalInfo
-            id={currentUser?.id || ''}
-            name={formData.name}
-            email={formData.email}
-            phone={formData.phone}
-            address={formData.address}
-            memberSince={currentUser?.memberSince || new Date()}
+            id={profile?.id || ''}
+            name={profile?.name || ''}
+            lastName={profile?.lastName || ''}
+            email={profile?.email}
+            phone={profile?.phone}
+            address={profile?.address}
+            memberSince={profile?.memberSince || new Date()}
             isEditing={isEditing}
             onNameChange={(text) => handleInputChange('name', text)}
+            onlastNameChange={(text) => handleInputChange('lastName', text)}
             onEmailChange={(text) => handleInputChange('email', text)}
             onPhoneChange={(text) => handleInputChange('phone', text)}
             onAddressChange={(text) => handleInputChange('address', text)}
+            onStreetChange={(text) => handleInputChange('street', text)}
+            onexternalNumberChange={(text) => handleInputChange('externalNumber', text)}
+            oninternalNumberChange={(text) => handleInputChange('internalNumber', text)}
+            oncolonyChange={(text) => handleInputChange('colony', text)}
+            onzipCodeChange={(text) => handleInputChange('zipCode', text)}
+            oncityChange={(text) => handleInputChange('city', text)}
+            onstateChange={(text) => handleInputChange('state', text)}
+            oncountryChange={(text) => handleInputChange('country', text)}
             />
             { isEditing && (
               <View style={styles.editActions}>

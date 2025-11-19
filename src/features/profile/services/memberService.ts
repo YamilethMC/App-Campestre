@@ -90,26 +90,51 @@ export const memberService = {
 
       console.log('response memberService.getMemberById: ', response);
       const result = await response.json();
+      const data = result.data
       console.log('result memberService.getMemberById: ', result);
+      console.log('data memberService.getMemberById: ', data);
       // Transformar la respuesta de la API a la interfaz MemberProfile
       const { user } = result.data;
+      console.log('user data memberService.getMemberById: ', user);
       const memberProfile: userProfile = {
-        id: user.id.toString(),
-        name: user.name,
-        lastName: user.lastName,
-        email: user.email,
-        phone: user.phone.length > 0 ? user.phone[0] : undefined, // Suponiendo que phone es un array
+        id: data.id.toString(),
+        memberCode: data.memberCode,
+        title: data.title,
+        profession: data.profession,
+        paymentMethod: data.paymentMethod,
+        dateOfAdmission: data.dateOfAdmission,
+        foreignMember: data.foreignMember,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
+        userId: data.user.userId,
+        invitedById: user.invitedById,
+        relationship: user.relationship,
+        name: data.user.name,
+        lastName: data.user.lastName,
+        addressId: data.user.addressId,
+        type: data.user.type,
+        active: data.user.active,
+        birthDate: data.user.birthDate,
+        gender: data.user.gender,
+        RFC: data.user.RFC,
+        roleId: data.user.roleId,
+        email: data.user.email,
+        phone: data.user.phone.length > 0 ? data.user.phone[0] : undefined, // Suponiendo que phone es un array
         address: `${user.address.street}, ${user.address.suburb}, ${user.address.city}, ${user.address.state}, ${user.address.country}`,
-        street: user.address.street,
-        externalNumber: user.address.externalNumber,
-        internalNumber: user.address.internalNumber,
-        colony: user.address.suburb,
-        zipCode: user.address.zipCode,
-        city: user.address.city,
-        state: user.address.state,
-        country: user.address.country,
+        street: data.user.address.street,
+        externalNumber: data.user.address.externalNumber,
+        internalNumber: data.user.address.internalNumber,
+        colony: data.user.address.suburb,
+        zipCode: data.user.address.zipCode,
+        city: data.user.address.city,
+        state: data.user.address.state,
+        country: data.user.address.country,
         membershipType: user.type,
         memberSince: result.data.dateOfAdmission,
+        role: data.user.role,
+        qrCode: data.user.qrCode,
+        invitedBy: data.invitedBy,
+        guests: data.guests,
       };
 
       return memberProfile;

@@ -1,5 +1,6 @@
 
 export interface UserProfile {
+  memberCode?: string;
   id: string;
   name: string;
   lastName: string;
@@ -19,6 +20,27 @@ export interface UserProfile {
   familyMembers?: FamilyMember[];
   vehicles?: Vehicle[];
   emergencyContact?: EmergencyContact;
+  title?: string;
+  profession?: string;
+  paymentMethod?: string;
+  dateOfAdmission?: string;
+  foreignMember?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  userId?: number;
+  invitedById?: number | null;
+  relationship?: string | null;
+  role?: any;
+  qrCode?: any[];
+  invitedBy?: any;
+  guests?: any[];
+  addressId?: number;
+  type?: string;
+  active?: boolean;
+  birthDate?: string;
+  gender?: string;
+  RFC?: string;
+  roleId?: number | null;
 }
 
 // Interface of emergency contact

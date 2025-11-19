@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, Text, Image, ViewStyle } from 'react-native';
-import { styles } from './Style';
+import { Image, Text, View } from 'react-native';
 import useMessages from '../../hooks/useMessages';
 import { userProfile } from '../../interfaces/interfaces';
+import { styles } from './Style';
 
 const ProfileHeader: React.FC<userProfile> = ({
   name,
+  lastName,
   id,
   membershipType,
   isActive = true,
@@ -25,7 +26,7 @@ const ProfileHeader: React.FC<userProfile> = ({
     <View style={[styles.header, style]}>
       {avatar}
       <View style={styles.userInfo}>
-        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.name}>{name} {lastName}</Text>
         <Text style={styles.memberId}>ID: {id}</Text>
         <View style={styles.row}>
           <Text style={styles.membershipType}>{membershipType}</Text>

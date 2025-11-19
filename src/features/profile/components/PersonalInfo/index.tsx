@@ -36,6 +36,23 @@ const PersonalInfo: React.FC<userProfile> = ({
   oncountryChange = () => {},
   style,
 }) => {
+  console.log('PersonalInfo props:', {
+    name,
+    lastName,
+    email,
+    phone,
+    address,
+    street,
+    externalNumber,
+    internalNumber,
+    colony,
+    zipCode,
+    city,
+    state,
+    country,
+    memberSince,
+    isEditing,
+  });
   const { messages } = useMessages();
   const formatDate = (date: string | Date | undefined): string => {
     if (!date) return messages.CONTAINER.NO_SPECIFIED;
