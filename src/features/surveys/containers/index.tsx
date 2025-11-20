@@ -402,7 +402,7 @@ const SurveysScreen: React.FC = () => {
             <View style={styles.paginationControlsContainer}>
               <View style={styles.paginationRow}>
                 <Button
-                  text="<"
+                  icon={<Ionicons name="chevron-back" size={22} color={COLORS.primary} />}
                   variant="outline"
                   onPress={fetchPreviousPage}
                   disabled={pagination.page <= 1}
@@ -436,7 +436,7 @@ const SurveysScreen: React.FC = () => {
                 </View>
 
                 <Button
-                  text=">"
+                  icon={<Ionicons name="chevron-forward" size={22} color={COLORS.primary} />}
                   variant="outline"
                   onPress={fetchNextPage}
                   disabled={pagination.page >= pagination.totalPages}
