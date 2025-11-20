@@ -95,7 +95,7 @@ export const memberService = {
 
       const result = await response.json();
       const data = result.data
-      console.log('data memberService.getMemberById: ', data);
+      
       const memberProfile: userProfile = {
         id: data.id.toString(),
         memberCode: data.memberCode,

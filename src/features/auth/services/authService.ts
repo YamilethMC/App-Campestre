@@ -7,9 +7,6 @@ export const authService = {
    * Iniciar sesión con email y contraseña
    */
   login: async (email: string, password: string): Promise<{ success: boolean; user?: userProfile; token?: string; error?: string }> => {
-    console.log('process.env.API_URL:', process.env.EXPO_PUBLIC_API_URL);
-    console.log('email: ', email, 'passwrod: ', password);
-
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/login`, {
         method: 'POST',
@@ -17,9 +14,7 @@ export const authService = {
         body: JSON.stringify({ email, password }),
       });
 
-      console.log('response login: ', response);
       const data = await response.json();
-      console.log('data login: ', data);
 
       if (!response.ok) {
         return {
