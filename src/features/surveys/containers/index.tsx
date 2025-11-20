@@ -68,13 +68,9 @@ const SurveysScreen: React.FC = () => {
         try {
           setLoading(true);
           const surveyData = await surveyService.getSurveys(pagination.page, pagination.limit, currentFilter.category)
-console.log('Selected Survey ID:', selectedSurveyId);
           const questionsData = await surveyService.getQuestionsBySurveyId(selectedSurveyId);
-console.log('Fetched Questions Data:', questionsData);
           if (surveyData && questionsData) {
-            console.log('Survey Data:', surveyData);
             setSurvey(questionsData);
-            console.log('Survey Questions:', survey);;
             setQuestions(questionsData.surveyQuestions);
             // Initialize answers object with empty values
             const initialAnswers: Record<string, any> = {};
@@ -478,12 +474,12 @@ const MultipleChoiceQuestion: React.FC<{
 }> = ({ question, answer, onAnswerChange }) => {
   return (
     <View>
-      {question.options?.map((option: string, index: number) => (
+      {question.options?.map((option: any) => (
         <Button
-          key={index}
-          text={option}
-          variant={answer === option ? 'filled' : 'outline'}
-          onPress={() => onAnswerChange(option)}
+          key={option.id}
+          text={option.value}
+          variant={answer === option.value ? 'filled' : 'outline'}
+          onPress={() => onAnswerChange(option.value)}
           style={styles.multipleChoiceButton}
         />
       ))}
