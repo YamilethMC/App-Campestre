@@ -72,6 +72,8 @@ const SurveysScreen: React.FC = () => {
           if (surveyData && questionsData) {
             setSurvey(questionsData);
             setQuestions(questionsData.surveyQuestions);
+
+            console.log('Fetched questions data:', questionsData.surveyQuestions);
             // Initialize answers object with empty values
             const initialAnswers: Record<string, any> = {};
             questionsData.surveyQuestions.forEach(q => initialAnswers[q.id] = '');
@@ -127,6 +129,7 @@ const SurveysScreen: React.FC = () => {
         incrementCompletedSurveys(selectedSurveyId as string);
       }
       
+      await fetchSurveys(1);
       setSubmitSuccess(true);
     } catch (error) {
       console.error('Error submitting survey:', error);

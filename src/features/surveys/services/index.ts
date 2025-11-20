@@ -264,20 +264,31 @@ export const surveyService = {
   },
 
   // Enviar respuestas de encuesta - endpoint hipotético, revisar API real
-  submitSurvey: async (surveyId: string, answers: any, token: string): Promise<boolean> => {
+  submitSurvey: async (surveyId: string, answers: any): Promise<boolean> => {
+    const {token, userId } = useAuthStore.getState();
     if (!token) {
       throw new Error('No authentication token available');
     }
 
+    console.log('Submitting survey with answers:', answers, 'and surveyId:', surveyId, 'for userId:', userId);
+
+    const formattedResponses = Object.entries(answers).map(
+      ([questionId, answer]) => ({
+        questionId,
+        answer,
+      })
+    );
+
+    console.log('Formatted responses for submission:', formattedResponses);
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/survey/${surveyId}/submit`, {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/survey/${surveyId}/club-member/${userId}/submit`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
           'accept': '*/*',
         },
-        body: JSON.stringify({ answers }),
+        body: JSON.stringify({ responses: formattedResponses }),
       });
 
       if (!response.ok) {
@@ -285,12 +296,18 @@ export const surveyService = {
           throw new Error('No autorizado. Por favor inicia sesión nuevamente.');
         } else if (response.status === 400) {
           throw new Error('Respuestas inválidas. Verifica tus respuestas.');
+        } else if (response.status === 404) {
+          throw new Error('Socio o encuesta no encontrado.');
+        } else if (response.status === 409) {
+          throw new Error('El socio ya ha respondido esta encuesta.');
         } else {
           throw new Error(`Error al enviar encuesta: ${response.status}`);
         }
       }
 
       const data = await response.json();
+      console.log('Survey submission response data:', data);
+
       return data.success;
     } catch (error) {
       console.error('Error submitting survey:', error);

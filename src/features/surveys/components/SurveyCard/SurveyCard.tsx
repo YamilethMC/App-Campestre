@@ -9,6 +9,7 @@ import styles from './Style';
 
 const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onPress, surveyId }) => {
   const { messages } = useMessages();
+  console.log('Rendering SurveyCard for surveyId:', survey);
   // Function to get color based on priority
   const getPriorityColor = (priority: string) => {
     switch (priority.toLowerCase()) {
@@ -82,9 +83,11 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onPress, surveyId }) =>
         </View>
 
         {/* Action Button */}
-        <TouchableOpacity style={styles.button} onPress={() => onPress(surveyId)}>
-          <Text style={styles.buttonText}>{messages.SURVEYCARD.START}</Text>
-        </TouchableOpacity>
+        {survey.isActive && (
+          <TouchableOpacity style={styles.button} onPress={() => onPress(surveyId)}>
+            <Text style={styles.buttonText}>{messages.SURVEYCARD.START}</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </Card>
   );
