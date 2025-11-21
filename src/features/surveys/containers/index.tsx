@@ -475,14 +475,15 @@ const MultipleChoiceQuestion: React.FC<{
   answer: string;
   onAnswerChange: (value: string) => void;
 }> = ({ question, answer, onAnswerChange }) => {
+  console.log('question', question, 'answer', answer);
   return (
     <View>
       {question.options?.map((option: any) => (
         <Button
           key={option.id}
           text={option.value}
-          variant={answer === option.value ? 'filled' : 'outline'}
-          onPress={() => onAnswerChange(option.value)}
+          variant={answer === option.option ? 'filled' : 'outline'}
+          onPress={() => onAnswerChange(option.option)}
           style={styles.multipleChoiceButton}
         />
       ))}
@@ -534,22 +535,22 @@ const TextQuestion: React.FC<{
 
 const YesNoQuestion: React.FC<{
   question: any;
-  answer: string;
-  onAnswerChange: (value: string) => void;
+  answer: boolean;
+  onAnswerChange: (value: boolean) => void;
 }> = ({ question, answer, onAnswerChange }) => {
   const { messages } = useMessages();
   return (
     <View style={styles.yesNoContainer}>
       <Button
         text={messages.CONTAINER.YES}
-        variant={answer === 'Sí' ? 'filled' : 'outline'}
-        onPress={() => onAnswerChange('Sí')}
+        variant={answer === true ? 'filled' : 'outline'}
+        onPress={() => onAnswerChange(true)}
         style={styles.yesNoButton}
       />
       <Button
         text={messages.CONTAINER.NO}
-        variant={answer === 'No' ? 'filled' : 'outline'}
-        onPress={() => onAnswerChange('No')}
+        variant={answer === false ? 'filled' : 'outline'}
+        onPress={() => onAnswerChange(false)}
         style={styles.yesNoButton}
       />
     </View>
