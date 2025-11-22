@@ -79,7 +79,7 @@ const ReservationsContainer = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
         
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 50 }}>
         {/* Componente de calendario */}
         <CalendarComponent 
           selectedDate={date} 
