@@ -182,7 +182,27 @@ const SurveysScreen: React.FC = () => {
   const currentQuestion = questions[currentQuestionIndex];
   const progress = selectedSurveyId ? ((currentQuestionIndex + 1) / questions.length) * 100 : 0;
 
+  const getVisiblePages = () => {
+    const total = pagination.totalPages;
+    const current = pagination.page;
+    const maxVisible = 6;
 
+    if (total <= maxVisible) {
+      return Array.from({ length: total }, (_, i) => i + 1);
+    }
+
+    let start = current - Math.floor(maxVisible / 2);
+    if (start < 1) start = 1;
+
+    let end = start + maxVisible - 1;
+    if (end > total) {
+      end = total;
+      start = end - maxVisible + 1;
+    }
+
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  };
+    
   if (showSurveyForm && survey && !submitSuccess) {
     // Survey form view
     if (loading || !survey) {
@@ -417,7 +437,8 @@ const SurveysScreen: React.FC = () => {
                 />
 
                 <View style={styles.pageNumbersContainer}>
-                  {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(pageNum => (
+                  {/*{Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(pageNum => (*/}
+                   {getVisiblePages().map(pageNum => (
                     <Button
                       key={pageNum}
                       text={pageNum.toString()}
