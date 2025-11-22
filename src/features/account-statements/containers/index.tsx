@@ -2,13 +2,9 @@ import * as Sharing from 'expo-sharing';
 import React, { useState } from 'react';
 import { Alert, Modal, SafeAreaView, ScrollView } from 'react-native';
 import AccountStatementCard from '../components/AccountStatementCard';
-import AccountStatementDetail from '../components/AccountStatementDetail';
 import AccountStatementHeader from '../components/AccountStatementHeader';
-import EmptyState from '../components/EmptyState';
 import { useAccountStatements } from '../hooks';
 import useMessages from '../hooks/useMessages';
-import { AccountStatement } from '../interfaces';
-import { useAccountStatementStore } from '../store';
 
 const AccountStatementsContainer = () => {
   const { messages } = useMessages();
@@ -17,30 +13,37 @@ const AccountStatementsContainer = () => {
     filteredStatements,
     loading,
     error,
-  } = useAccountStatements();
-  
-  const {
-    statements,
+    fetchStatements,
     setSelectedStatement,
     selectedStatement,
-    downloadStatement
-  } = useAccountStatementStore();
+    statements,
+  } = useAccountStatements();
+  
+  // const {
+  //   statements,
+  //   getFilteredStatements,
+  //   setFilter,
+  //   setLoading,
+  //   setError,
+  //   setStatements,
+  // } = useAccountStatementStore();
   
   const [showDetail, setShowDetail] = useState(false);
 
-  if (error) {
-    Alert.alert('Error', error);
-  }
+  // if (error) {
+  //   Alert.alert('Error', error);
+  // }
 
-  const handleCardPress = (statement: AccountStatement) => {
-    setSelectedStatement(statement);
+  const handleCardPress = (statement: any) => {
+    // setSelectedStatement(statement);
     setShowDetail(true);
   };
 
-  const handleDownload = async (statement: AccountStatement) => {
+  const handleDownload = async (statement: any) => {
     try {
       // Perform the download - this will copy the PDF to device storage
-      const downloadUri = await downloadStatement(statement.id);
+      // const downloadUri = await downloadStatement(statement.id);
+      const downloadUri = 'https://www.wipple.com.mx';
       
       if (downloadUri) {
         // Check if sharing is available and share the file
@@ -59,11 +62,14 @@ const AccountStatementsContainer = () => {
 
   const handleCloseDetail = () => {
     setShowDetail(false);
-    setSelectedStatement(null);
+    // setSelectedStatement(null);
   };
 
-  const hasStatements = filteredStatements.length > 0;
-  const hasNoFilteredStatements = statements.length > 0 && filteredStatements.length === 0;
+  const hasStatements = statements.length > 0;
+  console.log('statements', statements);
+  console.log('hasStatements', hasStatements);
+  console.log('statements.length', statements.length);
+  // const hasNoFilteredStatements = statements.length > 0 && filteredStatements.length === 0;
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#F9FAFB' }}>
@@ -72,17 +78,18 @@ const AccountStatementsContainer = () => {
         <AccountStatementHeader />
         
         {/* List of Account Statements */}
-        {!loading && !hasStatements && (
+        {/* {!loading && !hasStatements && (
           <EmptyState 
             message={statements.length > 0 ? messages.CONTAINER.NO_STATEMENTS1 : messages.CONTAINER.NO_STATEMENTS2} 
           />
-        )}
+        )} */}
         
-        {hasNoFilteredStatements && (
+        {/* {hasNoFilteredStatements && (
           <EmptyState message= {messages.CONTAINER.NO_STATEMENTS_FILTERS} />
-        )}
+        )} */}
         
-        {hasStatements && filteredStatements.map((statement) => (
+        {hasStatements && statements.map((statement) => (
+          console.log('statement en el ciclo', statement),
           <AccountStatementCard
             key={statement.id}
             statement={statement}
@@ -99,11 +106,11 @@ const AccountStatementsContainer = () => {
         visible={showDetail}
         onRequestClose={handleCloseDetail}
       >
-        <AccountStatementDetail
+        {/* <AccountStatementDetail
           statement={selectedStatement}
           onClose={handleCloseDetail}
           onDownload={handleDownload}
-        />
+        /> */}
       </Modal>
     </SafeAreaView>
   );

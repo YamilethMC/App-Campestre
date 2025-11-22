@@ -1,84 +1,71 @@
+
 import { create } from 'zustand';
-import { AccountStatement, AccountStatementFilter } from '../interfaces';
-import { accountStatementService } from '../services';
 
 interface AccountStatementState {
-  statements: AccountStatement[];
-  filteredStatements: AccountStatement[];
-  selectedStatement: AccountStatement | null;
+  statements: any[];
+  filteredStatements: any[];
   loading: boolean;
   error: string | null;
-  currentFilter: AccountStatementFilter;
+  currentFilter: any;
+  setStatements: (statements: any[]) => void;
+  setLoading: (loading: boolean) => void;
+  setError: (error: string | null) => void;
+  setFilter: (filter: any) => void;
+  getFilteredStatements: () => any[];
 }
 
-interface AccountStatementActions {
-  fetchStatements: () => Promise<void>;
-  setFilter: (filter: AccountStatementFilter) => void;
-  getFilteredStatements: () => AccountStatement[];
-  setSelectedStatement: (statement: AccountStatement | null) => void;
-  downloadStatement: (id: string) => Promise<string | null>;
-}
-
-export const useAccountStatementStore = create<AccountStatementState & AccountStatementActions>()((set, get) => ({
+export const useAccountStatementStore = create<AccountStatementState>((set, get) => ({
   statements: [],
   filteredStatements: [],
-  selectedStatement: null,
   loading: false,
   error: null,
   currentFilter: {},
 
-  fetchStatements: async () => {
-    set({ loading: true, error: null });
-    try {
-      const statements = await accountStatementService.getAccountStatements();
-      set({ 
-        statements, 
-        filteredStatements: statements,
-        loading: false 
-      });
-    } catch (error) {
-      set({ 
-        error: 'Error al cargar estados de cuenta',
-        loading: false 
-      });
-      console.error('Error fetching account statements:', error);
-    }
+  setStatements: (statements) => {
+    set({ 
+      statements,
+      filteredStatements: statements
+    });
+  },
+
+  setLoading: (loading) => {
+    set({ loading });
+  },
+
+  setError: (error) => {
+    set({ error });
   },
 
   setFilter: (filter) => {
-    set({ currentFilter: filter });
-    const filteredStatements = get().getFilteredStatements();
-    set({ filteredStatements });
+    const { statements } = get();
+    const filteredStatements = statements.filter(statement => {
+
+      if (!statement.periodStart) return true;
+
+      if (filter.month && statement.periodStart && !statement.periodStart.includes(`-${filter.month}-`)) {
+        return false;
+      }
+      if (filter.year && statement.periodStart && !statement.periodStart.startsWith(filter.year)) {
+        return false;
+      }
+      return true;
+    });
+    set({ 
+      currentFilter: filter,
+      filteredStatements 
+    });
   },
 
   getFilteredStatements: () => {
     const { statements, currentFilter } = get();
     return statements.filter(statement => {
-      // Apply filters based on currentFilter
-      if (currentFilter.month && statement.month !== currentFilter.month) {
+      if (currentFilter.month && statement.periodStart && !statement.periodStart.includes(`-${currentFilter.month}-`)) {
         return false;
       }
-      if (currentFilter.year && statement.year !== currentFilter.year) {
-        return false;
-      }
-      if (currentFilter.status && statement.status !== currentFilter.status) {
+      if (currentFilter.year && statement.periodStart && !statement.periodStart.startsWith(currentFilter.year)) {
         return false;
       }
       return true;
     });
-  },
-
-  setSelectedStatement: (statement) => {
-    set({ selectedStatement: statement });
-  },
-
-  downloadStatement: async (id) => {
-    try {
-      const downloadPath = await accountStatementService.downloadAccountStatement(id);
-      return downloadPath;
-    } catch (error) {
-      console.error('Error downloading statement:', error);
-      return null;
-    }
   }
 }));
