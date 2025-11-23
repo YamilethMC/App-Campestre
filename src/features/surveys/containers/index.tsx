@@ -113,8 +113,14 @@ const SurveysScreen: React.FC = () => {
   const handleSubmit = async () => {
     // Check if all required questions are answered
     const requiredQuestions = questions.filter(q => q.required);
-    const unansweredRequired = requiredQuestions.some(q => !answers[q.id] || answers[q.id] === '');
-    
+    const unansweredRequired = requiredQuestions.some(q => {
+      const value = answers[q.id];
+      if (q.type === 'BOOLEAN') {
+        return value !== true && value !== false;
+      }
+      return !value || value === '';
+    });
+
     if (unansweredRequired) {
       Alert.alert('Error', 'Por favor responde todas las preguntas obligatorias antes de enviar.');
       return;
@@ -284,7 +290,7 @@ const SurveysScreen: React.FC = () => {
                   {currentQuestion.type === 'BOOLEAN' && (
                     <YesNoQuestion 
                       question={currentQuestion}
-                      answer={answers[currentQuestion.id] || ''}
+                      answer={answers[currentQuestion.id] ?? null}
                       onAnswerChange={(value) => handleAnswerChange(currentQuestion.id, value)}
                     />
                   )}
@@ -559,6 +565,7 @@ const YesNoQuestion: React.FC<{
   answer: boolean;
   onAnswerChange: (value: boolean) => void;
 }> = ({ question, answer, onAnswerChange }) => {
+  console.log('answer', answer);
   const { messages } = useMessages();
   return (
     <View style={styles.yesNoContainer}>
