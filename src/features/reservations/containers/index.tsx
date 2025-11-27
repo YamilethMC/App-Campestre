@@ -36,11 +36,17 @@ const ReservationsContainer = () => {
     date,
     time,
     selectedCourt,
+    selectedCourtId,
     selectedTable,
     partySize,
     showConfirmationModal,
+    facilities,
+    availableTimeSlots,
+    loading,
+    loadingTimeSlots,
     setTime,
     setSelectedCourt,
+    setSelectedCourtId,
     setSelectedTable,
     setPartySize,
     setShowConfirmationModal,
@@ -52,10 +58,11 @@ const ReservationsContainer = () => {
     getTableName,
     getAvailableTimeSlots,
     confirmReservation,
-    resetSelection
+    resetSelection,
+    loadTimeSlotsForCourt
   } = useReservation();
  
-  // Si no hay servicio seleccionado, mostrar la lista de servicios
+  // Si no hay servicio seleccionado, mostrar la lista de servicios (solo Padel)
   if (!selectedService) {
     return (
       <SafeAreaView style={styles.safeArea}>
@@ -63,7 +70,7 @@ const ReservationsContainer = () => {
           <Text style={styles.questionText}>{messages.CONTAINER.QUESTION}</Text>
           <ScrollView contentContainerStyle={styles.servicesContainer}>
             {mockServices.map((service) => (
-              <ServiceCard 
+              <ServiceCard
                 key={service.id}
                 service={service}
                 onPress={() => handleSelectService(service)}
@@ -78,33 +85,35 @@ const ReservationsContainer = () => {
   // Si hay un servicio seleccionado, mostrar la interfaz de reserva
   return (
     <SafeAreaView style={styles.safeArea}>
-        
+
       <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 50 }}>
         {/* Componente de calendario */}
-        <CalendarComponent 
-          selectedDate={date} 
-          onDateChange={handleDateChange} 
-        />
-        
-        {/* Componente de horarios */}
-        <TimeSlots 
-          selectedTime={time}
-          onTimeChange={setTime}
-          availableTimes={getAvailableTimeSlots()}
+        <CalendarComponent
           selectedDate={date}
-          unavailableMessage={messages.CONTAINER.NO_HOURS_AVAILABLE}
+          onDateChange={handleDateChange}
         />
-        
-        {/* Componentes adicionales según el servicio */}
-        {selectedService.id === 'tenis' && (
+
+        {/* Componente de canchas - Mostrar solo para padel */}
+        {selectedService.id === 'padel' && (
           <CourtSelector
             selectedCourt={selectedCourt}
-            onCourtChange={setSelectedCourt}
+            onCourtChange={(courtId) => {
+              // Set both the string ID and numeric ID
+              setSelectedCourt(courtId);
+              const numericId = parseInt(courtId);
+              setSelectedCourtId(numericId);
+
+              // Load time slots for this court and selected date
+              if (date) {
+                loadTimeSlotsForCourt(numericId, date);
+              }
+            }}
             courts={getAvailableCourts()}
             unavailableMessage={messages.CONTAINER.NO_COURTS_AVAILABLE}
           />
         )}
-        
+
+        {/* Componentes adicionales para otros servicios */}
         {selectedService.id === 'restaurante' && (
           <>
             <View style={styles.numberSelector}>
@@ -124,7 +133,7 @@ const ReservationsContainer = () => {
                 />
               </View>
             </View>
-            
+
             <TableSelector
               selectedTable={selectedTable}
               onTableChange={setSelectedTable}
@@ -133,7 +142,18 @@ const ReservationsContainer = () => {
             />
           </>
         )}
-        
+
+        {/* Componente de horarios - Mostrar solo para padel y cuando se haya seleccionado cancha y fecha */}
+        {selectedService.id === 'padel' && (
+          <TimeSlots
+            selectedTime={time}
+            onTimeChange={setTime}
+            availableTimes={getAvailableTimeSlots()}
+            selectedDate={date}
+            unavailableMessage={date && selectedCourt ? messages.CONTAINER.NO_HOURS_AVAILABLE : "Debe seleccionar fecha y cancha para mostrar los horarios"}
+          />
+        )}
+
         {/* Resumen de la reserva */}
         {(date && time) && (
           <SummaryCard
@@ -141,23 +161,23 @@ const ReservationsContainer = () => {
             date={date}
             time={time}
             details={{
-              ...(selectedService.id === 'tenis' && selectedCourt && { court: getCourtName(selectedCourt), courtId: selectedCourt }),
+              ...(selectedService.id === 'padel' && selectedCourt && { court: getCourtName(selectedCourt), courtId: selectedCourtId }),
               ...(selectedService.id === 'restaurante' && selectedTable && { table: getTableName(selectedTable), tableId: selectedTable, partySize }),
             }}
           />
         )}
-        
+
         {/* Botón de confirmar */}
         <View style={styles.confirmButton}>
           <Button
             text={messages.CONTAINER.CONFIRM_RESERVATION}
             onPress={confirmReservation}
-            disabled={!date || !time || 
-              (selectedService.id === 'tenis' && !selectedCourt) || 
+            disabled={!date || !time ||
+              (selectedService.id === 'padel' && !selectedCourtId) ||
               (selectedService.id === 'restaurante' && !selectedTable)}
           />
         </View>
-        
+
         {/* Botón para seleccionar otro servicio */}
         <View style={styles.changeServiceButton}>
           <Button

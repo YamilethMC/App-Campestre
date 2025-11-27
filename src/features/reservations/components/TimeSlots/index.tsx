@@ -77,7 +77,9 @@ export const TimeSlots: React.FC<TimeSlotsProps> = ({
         </View>
       ) : (
         <View style={styles.noAvailabilityContainer}>
-          <Text style={styles.noAvailabilityText}>{unavailableMessage}</Text>
+          <Text style={styles.noAvailabilityText} selectable={false}>
+            {unavailableMessage}
+          </Text>
         </View>
       )}
     </View>

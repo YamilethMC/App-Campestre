@@ -19,19 +19,17 @@ const styles = StyleSheet.create({
   timeSlotsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start', // Changed to align items to the left
   },
   timeSlot: {
-    flex: 1,
-    margin: 4,
+    width: '31%', // Use fixed width instead of flexBasis for more predictable 3-column layout
+    margin: '1%',  // Use percentage for consistent spacing
     paddingVertical: 12,
-    paddingHorizontal: 8,
-    borderRadius: 10, // Menos radio
+    paddingHorizontal: 6,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    minWidth: 80,
-    maxWidth: 100,
   },
   availableSlot: {
     backgroundColor: COLORS.gray50,
@@ -46,9 +44,11 @@ const styles = StyleSheet.create({
     borderColor: COLORS.primary,
   },
   timeText: {
-    fontSize: 14,
+    fontSize: 14, // Smaller font to fit longer text
     fontWeight: '500',
     color: COLORS.gray700,
+    textAlign: 'center',
+    flexWrap: 'nowrap', // Prevent text wrapping to new line
   },
   selectedTimeText: {
     color: COLORS.white,
@@ -63,11 +63,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: COLORS.gray300,
+    marginVertical: 8, // Add some vertical spacing
   },
   noAvailabilityText: {
     fontSize: 16,
     color: COLORS.gray600,
     textAlign: 'center',
+    lineHeight: 24, // Add line height for better readability when text wraps
   },
 });
 

@@ -1,5 +1,5 @@
-// Mock data for services
-export const mockServices = [
+// Mock data for services - Commented out as per requirements
+/*export const mockServices = [
   {
     id: 'tenis',
     name: 'Tenis',
@@ -42,9 +42,20 @@ export const mockServices = [
     icon: 'briefcase-outline',
     color: '#6B7280' // Gris
   }
+];*/
+
+// New services list with only Padel
+export const mockServices = [
+  {
+    id: 'padel',
+    name: 'Padel',
+    description: 'Canchas para disfrutar del padel',
+    icon: 'tennisball-outline',
+    color: '#10B981' // Verde
+  }
 ];
 
-// Mock data for tennis courts
+// Mock data for tennis courts (to be used for padel)
 export const mockTennisCourts = [
   { id: 'tc1', name: 'Cancha 1', available: true },
   { id: 'tc2', name: 'Cancha 2', available: true },
@@ -68,7 +79,7 @@ export const mockRestaurantTables = [
 
 // Mock data for time slots
 export const mockTimeSlots = [
-  '08:00', '08:30', '09:00', '09:30', 
+  '08:00', '08:30', '09:00', '09:30',
   '10:00', '10:30', '11:00', '11:30',
   '12:00', '12:30', '13:00', '13:30',
   '14:00', '14:30', '15:00', '15:30',
@@ -76,3 +87,6 @@ export const mockTimeSlots = [
   '18:00', '18:30', '19:00', '19:30',
   '20:00', '20:30', '21:00'
 ];
+
+// Export the facility service functions
+export * from './facilityService';

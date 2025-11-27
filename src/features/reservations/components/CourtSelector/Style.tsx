@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     color: COLORS.gray700,
+    textAlign: 'center', // Center the court name text
   },
   selectedCourtText: {
     color: COLORS.white,
