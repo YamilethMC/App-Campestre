@@ -10,6 +10,7 @@ import ProfileScreen from '../../features/profile/containers';
 import ReservationScreen from '../../features/reservations';
 import SurveysScreen from '../../features/surveys';
 import AccountStatementsScreen from '../../features/account-statements/containers';
+import NotificationsScreen from '../../features/notify';
 import MainHeader from '../../shared/components/MainHeader/Container';
 import { COLORS } from '../../shared/theme/colors';
 import MoreOptionsScreen from '../moreOptions';
@@ -94,42 +95,47 @@ const ReservationStack = () => (
 
 const MoreStack = () => (
   <Stack.Navigator>
-    <Stack.Screen 
-      name="MoreOptionsScreen" 
-      component={MoreOptionsScreen} 
+    <Stack.Screen
+      name="MoreOptionsScreen"
+      component={MoreOptionsScreen}
       options={{ headerShown: false }}
     />
-    <Stack.Screen 
-      name="Profile" 
+    <Stack.Screen
+      name="Profile"
       component={ProfileScreen}
-      options={{ headerShown: false }} 
+      options={{ headerShown: false }}
       // options={({ navigation }) => ({
       //   ...headerOptions('Perfil', 'Edita tu información personal', true),
       // })}
     />
-    <Stack.Screen 
-      name="Surveys" 
-      component={SurveysScreen} 
-      options={{ headerShown: false }} 
+    <Stack.Screen
+      name="Surveys"
+      component={SurveysScreen}
+      options={{ headerShown: false }}
       // options={({ navigation }) => ({
       //   ...headerOptions('Encuestas', 'Responde nuestras encuestas', true),
       // })}
     />
-    <Stack.Screen 
-      name="AccountStatements" 
-      component={AccountStatementsScreen} 
-      options={{ headerShown: false }} 
+    <Stack.Screen
+      name="AccountStatements"
+      component={AccountStatementsScreen}
+      options={{ headerShown: false }}
       // options={({ navigation }) => ({
       //   ...headerOptions('Menú', 'Nuestro menú del día', true),
       // })}
     />
-    <Stack.Screen 
-      name="Menu" 
-      component={MenuScreen} 
-      options={{ headerShown: false }} 
+    <Stack.Screen
+      name="Menu"
+      component={MenuScreen}
+      options={{ headerShown: false }}
       // options={({ navigation }) => ({
       //   ...headerOptions('Menú', 'Nuestro menú del día', true),
       // })}
+    />
+    <Stack.Screen
+      name="Notifications"
+      component={NotificationsScreen}
+      options={{ headerShown: false }}
     />
   </Stack.Navigator>
 );
