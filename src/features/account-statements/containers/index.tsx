@@ -1,6 +1,5 @@
-import * as Sharing from 'expo-sharing';
 import React from 'react';
-import { Alert, Modal, SafeAreaView, ScrollView } from 'react-native';
+import { Modal, SafeAreaView, ScrollView } from 'react-native';
 import AccountStatementCard from '../components/AccountStatementCard';
 import AccountStatementDetail from '../components/AccountStatementDetail';
 import AccountStatementHeader from '../components/AccountStatementHeader';
@@ -21,7 +20,8 @@ const AccountStatementsContainer = () => {
     showDetail,
     setShowDetail,
     setSelectedStatement,
-    selectedStatement
+    selectedStatement,
+    handleDownload
   } = useAccountStatements();
 
   // const {
@@ -42,27 +42,6 @@ const AccountStatementsContainer = () => {
   //   // setShowDetail(true);
   //   console.log('statement', statement);
   // };
-
-  const handleDownload = async (statement: any) => {
-    try {
-      // Perform the download - this will copy the PDF to device storage
-      // const downloadUri = await downloadStatement(statement.id);
-      const downloadUri = 'https://www.wipple.com.mx';
-
-      if (downloadUri) {
-        // Check if sharing is available and share the file
-        if (await Sharing.isAvailableAsync()) {
-          await Sharing.shareAsync(downloadUri);
-        } else {
-          console.log(`File saved to: ${downloadUri}`);
-          Alert.alert('Éxito', `El archivo ${statement.fileName} se ha descargado.`);
-        }
-      }
-    } catch (err: any) {
-      console.error('Download error:', err);
-      Alert.alert('Error', `Ocurrió un error al descargar el archivo: ${err.message || 'Error desconocido'}`);
-    }
-  };
 
   const handleCloseDetail = () => {
     setShowDetail(false);

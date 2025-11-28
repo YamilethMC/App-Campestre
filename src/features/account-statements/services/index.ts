@@ -1,5 +1,3 @@
-import { Asset } from 'expo-asset';
-import * as FileSystem from 'expo-file-system/legacy';
 
 //Obtener el toekn
 import { useAuthStore } from '../../auth/store/useAuthStore';
@@ -70,46 +68,25 @@ export const accountStatementService = {
     }
   },
   
-  downloadAccountStatement: async (id: string) => {
+   downloadAccountStatement: async (id: string) => {
     try {
-      // Find the statement to download
-      const statement = await accountStatementService.getAccountStatementById(id);
-      
-      if (!statement) {
-        throw new Error('Statement not found');
-      }
-
-      // Get the asset based on the file name
-      let assetModule;
-      if (statement.fileName.includes('agosto')) {
-        assetModule = require('../../../../assets/estados-cuenta/22308-agosto.pdf');
-      } else if (statement.fileName.includes('septiembre')) {
-        assetModule = require('../../../../assets/estados-cuenta/22308-septiembre.pdf');
-      } else {
-        throw new Error('Unknown file');
-      }
-
-      // Create an Asset object from the module
-      const asset = Asset.fromModule(assetModule);
-      
-      // Download the asset if not already downloaded
-      if (!asset.localUri) {
-        await asset.downloadAsync();
-      }
-
-      // Get the destination path in the document directory
-      const destinationUri = `${FileSystem.documentDirectory}${statement.fileName}`;
-      
-      // Copy the asset file to the document directory
-      await FileSystem.copyAsync({
-        from: asset.localUri || asset.uri,
-        to: destinationUri,
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/account-statements/download/${id}`, {
+        method: 'GET',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${useAuthStore.getState().token}`
+        },
       });
 
-      // Return the destination URI
-      return destinationUri;
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.message || 'Error al descargar el estado de cuenta');
+      }
+
+      const data = await response.json();
+
+      return data.data
     } catch (error) {
-      console.error('Download error:', error);
       throw error;
     }
   }

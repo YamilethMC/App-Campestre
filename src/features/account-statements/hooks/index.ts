@@ -1,5 +1,7 @@
 // src/features/account-statements/hooks/index.ts
+import * as Sharing from 'expo-sharing';
 import { useCallback, useEffect, useState } from 'react';
+import { Alert, Linking } from 'react-native';
 import { useProfileStore } from '../../profile/store/useProfileStore';
 import { accountStatementService } from '../services';
 import { useAccountStatementStore } from '../store';
@@ -82,6 +84,50 @@ export const useAccountStatements = () => {
     setShowDetail(true);
   };
 
+  const handleDownload = async (statement: any) => {
+    try {
+      setLoading?.(true);
+
+      // 1. Obtener la URL firmada del servidor
+      const response = await accountStatementService.downloadAccountStatement(statement.id);
+
+      // La respuesta ya es la URL directa al PDF
+      let downloadUrl = response;
+
+      // Si la respuesta es un objeto, intentar extraer la URL
+      if (typeof response === 'object' && response !== null) {
+        downloadUrl = response?.data?.signedUrl || response?.signedUrl || response;
+      }
+
+      if (!downloadUrl) {
+        console.error('No se pudo obtener la URL de descarga');
+        throw new Error("No se pudo obtener la URL de descarga del estado de cuenta");
+      }
+
+      // 2. Verificar si se puede abrir la URL directamente
+      const supported = await Linking.canOpenURL(downloadUrl);
+      if (supported) {
+        await Linking.openURL(downloadUrl);
+      } else {
+        // 3. Si no se puede abrir directamente, intentar compartir
+        if (await Sharing.isAvailableAsync()) {
+          await Sharing.shareAsync(downloadUrl, {
+            mimeType: 'application/pdf',
+            dialogTitle: `Compartir ${statement.fileName || 'documento'}`,
+            UTI: 'com.adobe.pdf'
+          });
+        } else {
+          Alert.alert('Error', 'No se pudo abrir el archivo');
+        }
+      }
+    } catch (error) {
+      console.error('Error al descargar:', error);
+      Alert.alert('Error', 'No se pudo abrir el archivo. Por favor, inténtalo de nuevo más tarde.');
+    } finally {
+      setLoading?.(false);
+    }
+  };
+
   return {
     statements,
     filteredStatements,
@@ -93,6 +139,7 @@ export const useAccountStatements = () => {
     setStatements,
     handleCardPress,
     showDetail,
-    setShowDetail
+    setShowDetail,
+    handleDownload
   };
 };
