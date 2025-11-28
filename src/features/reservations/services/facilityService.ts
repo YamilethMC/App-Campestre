@@ -119,14 +119,15 @@ export const facilityService = {
     if (!token) {
       throw new Error('No authentication token available');
     }
-
+    const fecha = new Date(`${date}T00:00:00`);
+    fecha.setDate(fecha.getDate() - 1);
+    const dateG = fecha.toISOString().split("T")[0];
     // Verify date format is YYYY-MM-DD
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateRegex.test(date)) {
+    if (!dateRegex.test(dateG)) {
       throw new Error('Formato de fecha inválido. Use YYYY-MM-DD');
     }
-
-    const url = `${process.env.EXPO_PUBLIC_API_URL}/facilities/${facilityId}?date=${date}`;
+    const url = `${process.env.EXPO_PUBLIC_API_URL}/facilities/${facilityId}?date=${dateG}`;
 
     const response = await fetch(url, {
       method: 'GET',
@@ -149,8 +150,8 @@ export const facilityService = {
         throw new Error(`Error en la solicitud: ${response.status}. ${errorData.message || errorText}`);
       }
     }
-
-    return await response.json();
+    const responseJson = await response.json()
+    return responseJson;
   },
 
   /**
@@ -189,7 +190,6 @@ export const facilityService = {
       }
     }
     const responseJson = await response.json()
-    console.log('el response al crear es: ', responseJson)
     return responseJson;
   },
 };

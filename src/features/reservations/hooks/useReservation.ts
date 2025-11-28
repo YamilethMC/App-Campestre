@@ -262,6 +262,12 @@ export const useReservation = () => {
 
         return availableTimeSlots;
       };
+
+      function toUTC(localDateTime: string) {
+        const date = new Date(localDateTime);
+        return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString();
+      }
+
     
       // Confirmar la reserva
       const confirmReservation = async () => {
@@ -286,10 +292,11 @@ export const useReservation = () => {
           alert('Formato de hora inválido');
           return;
         }
-
+        const fixedDate = new Date(date);
+        fixedDate.setDate(fixedDate.getDate() - 1);
         const [startTimePart, endTimePart] = time.split('-');
-        const startTimeISO = new Date(`${date}T${startTimePart}:00`).toISOString();
-        const endTimeISO = new Date(`${date}T${endTimePart}:00`).toISOString();
+        const startTimeISO = `${fixedDate.toISOString().split('T')[0]}T${startTimePart}:00Z`; 
+        const endTimeISO = `${fixedDate.toISOString().split('T')[0]}T${endTimePart}:00Z`;
 
         try {
           // Obtener el ID del miembro del store de autenticación
@@ -307,9 +314,7 @@ export const useReservation = () => {
               startTime: startTimeISO,
               endTime: endTimeISO
             };
-
             const response = await facilityService.createReservation(selectedCourtId, clubMemberId, reservationData);
-            console.log('el response al crear es: ', response)
             if (response.success) {
               // Crear objeto de reserva para almacenar localmente
               const newReservation = {

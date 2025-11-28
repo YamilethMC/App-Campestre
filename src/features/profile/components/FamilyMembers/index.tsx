@@ -13,10 +13,10 @@ const FamilyMembers: React.FC<familyMembersProps> = ({
   const renderItem: ListRenderItem<familyMembers> = ({ item }) => (
     <View style={styles.memberItem}>
       <View style={styles.memberInfo}>
-        <Text style={styles.memberName}>{item.name}</Text>
+        <Text style={styles.memberName}>{item.name} {item.lastName}</Text>
         <View style={styles.memberDetails}>
           <Text style={styles.detailText}>{item.relationship}</Text>
-          <Text style={styles.detailText}>• {item.age} {messages.FAMILY.AGE}</Text>
+          {/*<Text style={styles.detailText}>• {item.age} {messages.FAMILY.AGE}</Text>*/}
         </View>
       </View>
       <View style={[
@@ -49,17 +49,9 @@ const FamilyMembers: React.FC<familyMembersProps> = ({
       />
       {onAddMember && (
         <View style={styles.addButtonContainer}>
-          <Text 
-            style={styles.addButton} 
-            onPress={() => {
-              Alert.alert(
-                messages.FAMILY.ADD_MEMBER,
-                'Esta función no está disponible en este momento.',
-                [{ text: 'OK' }]
-              );
-              if (onAddMember) onAddMember();
-            }}
-            /*onPress={onAddMember}*/>
+          <Text
+            style={styles.addButton}
+            onPress={onAddMember}>
             + {messages.FAMILY.ADD_MEMBER}
           </Text>
         </View>

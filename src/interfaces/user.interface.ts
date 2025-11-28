@@ -1,6 +1,6 @@
 
 export interface UserProfile {
-  memberCode?: string;
+  memberCode?: number;
   id: string;
   name: string;
   lastName: string;
@@ -53,6 +53,7 @@ export interface EmergencyContact {
  export interface FamilyMember {
     id: number;
     name: string;
+    lastName?: string;
     relationship: string;
     age: number;
     isActive: boolean;

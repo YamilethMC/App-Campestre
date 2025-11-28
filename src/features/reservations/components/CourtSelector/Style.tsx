@@ -19,14 +19,14 @@ const styles = StyleSheet.create({
   courtsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
   },
+
   court: {
-    flex: 1,
     margin: 4,
     paddingVertical: 12,
     paddingHorizontal: 8,
-    borderRadius: 10, // Menos radio
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,

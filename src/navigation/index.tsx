@@ -19,20 +19,20 @@ const MainNavigator = (): React.JSX.Element => {
   return (
     <Stack.Navigator>
       {!isAuthenticated ? (
-        <Stack.Screen 
-          name="Auth" 
-          component={AuthScreen} 
-          options={{ 
+        <Stack.Screen
+          name="Auth"
+          component={AuthScreen}
+          options={{
             headerShown: false,
             title: 'Iniciar Sesión'
           }}
         />
       ) : (
         <>
-          <Stack.Screen 
-            name="MainTabs" 
-            component={MainTabs} 
-            options={{ 
+          <Stack.Screen
+            name="MainTabs"
+            component={MainTabs}
+            options={{
               headerShown: false,
               title: 'Inicio'
             }}

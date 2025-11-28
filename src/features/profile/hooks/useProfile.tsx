@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 import useLogout from '../../../hooks/useLogout';
 import { useAuthStore } from '../../../store';
 import useMessages from '../hooks/useMessages';
@@ -129,8 +130,33 @@ export const useProfile = () => {
   }, []);
 
   const handleAddFamilyMember = useCallback(() => {
-    // Navigation to add family member screen will be implemented here
+    // Esta función se llamará desde el contenedor para mostrar el formulario
+    // La implementación se hará en el contenedor
   }, []);
+
+  // Función para recargar los datos del perfil
+  const refreshProfile = useCallback(async () => {
+    try {
+      if (userId && token) {
+        const data = await memberService.getMemberById(userId, token);
+        if (data) {
+          updateProfile(data);
+        }
+      }
+    } catch (err: any) {
+      console.error('Error reloading member:', err);
+      Alert.alert(
+        'Error',
+        err.message || 'Ocurrió un error al cargar la información del perfil.',
+        [
+          {
+            text: 'Aceptar',
+            style: 'default'
+          }
+        ]
+      );
+    }
+  }, [userId, token, updateProfile]);
 
   return {
     // State
@@ -140,7 +166,7 @@ export const useProfile = () => {
     profile,
     isEditingContactEmergency,
     emergencyContactFormData,
-    
+
     // Handlers
     handleInputChange,
     handleEmergencyContactChange,
@@ -153,6 +179,7 @@ export const useProfile = () => {
     handleLogout,
     handleAddVehicle,
     handleAddFamilyMember,
+    refreshProfile,
   };
 };
 

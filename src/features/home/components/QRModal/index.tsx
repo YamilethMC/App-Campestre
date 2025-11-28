@@ -1,24 +1,21 @@
-import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Text, View } from 'react-native';
 import Modal from '../../../../shared/components/Modal/Modal';
 import { COLORS } from '../../../../shared/theme/colors';
+import { useProfileStore } from '../../../profile/store/useProfileStore';
+import QRCodeComponent from '../QRCodeComponent';
 
 interface QRModalProps {
   visible: boolean;
   onClose: () => void;
-  userName?: string;
-  memberId?: string;
-  memberSince?: string;
 }
 
-const QRModal: React.FC<QRModalProps> = ({ 
-  visible, 
-  onClose, 
-  userName = 'Juan Pérez',
-  memberId = '1',
-  memberSince = '2020'
+const QRModal: React.FC<QRModalProps> = ({
+  visible,
+  onClose,
 }) => {
+  const { profile } = useProfileStore();
+
   return (
     <Modal
       visible={visible}
@@ -29,7 +26,7 @@ const QRModal: React.FC<QRModalProps> = ({
       showCancelButton={false}
       confirmButtonStyle={{
         width: '100%',
-        paddingVertical: 14, 
+        paddingVertical: 14,
         backgroundColor: COLORS.primary,
         borderRadius: 3,
         alignItems: 'center',
@@ -48,60 +45,48 @@ const QRModal: React.FC<QRModalProps> = ({
         marginHorizontal: 20,
         marginBottom: 20,
       }}
-      contentStyle={{ 
-        alignItems: 'center', 
-        padding: 20 
+      contentStyle={{
+        alignItems: 'center',
+        padding: 20
       }}
     >
-      {/* Placeholder para el código QR */}
-      <View 
-        style={{ 
-          width: 200, 
-          height: 200, 
-          backgroundColor: COLORS.gray100,
-          justifyContent: 'center', 
-          alignItems: 'center',
-          borderRadius: 8,
-          marginBottom: 20,
-          borderWidth: 2,
-          borderColor: COLORS.primaryLight,
-          borderStyle: 'dashed',
-        }}
-      >
-        <Ionicons name="qr-code-outline" size={100} color={COLORS.primary} />
-      </View>
-      
+      {/* Componente QR real con el memberCode del socio */}
+      <QRCodeComponent
+        size={200}
+        memberCode={profile?.memberCode}
+      />
+
       {/* Nombre del socio en negrita */}
-      <Text style={{ 
-        fontSize: 18, 
-        fontWeight: 'bold', 
+      <Text style={{
+        fontSize: 18,
+        fontWeight: 'bold',
         color: COLORS.gray800,
         marginBottom: 5
       }}>
-        {userName}
+        {(profile?.name || 'Nombre') + ' ' + (profile?.lastName || 'del Socio')}
       </Text>
-      
+
       {/* Tipo de socio y ID */}
-      <Text style={{ 
-        fontSize: 16, 
+      <Text style={{
+        fontSize: 16,
         color: COLORS.gray600,
         marginBottom: 5
       }}>
-        Socio #{memberId}
+        Socio #{profile?.memberCode || profile?.id}
       </Text>
-      
+
       {/* Miembro desde */}
-      <Text style={{ 
-        fontSize: 14, 
+      <Text style={{
+        fontSize: 14,
         color: COLORS.gray500,
         marginBottom: 15
       }}>
-        Socio desde {memberSince}
+        Socio desde {profile?.memberSince ? new Date(profile.memberSince.toString()).getFullYear() : '2020'}
       </Text>
-      
+
       {/* Leyenda */}
-      <Text style={{ 
-        fontSize: 14, 
+      <Text style={{
+        fontSize: 14,
         color: COLORS.gray700,
         textAlign: 'center',
         fontStyle: 'italic'

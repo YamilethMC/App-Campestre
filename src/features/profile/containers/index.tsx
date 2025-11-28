@@ -1,8 +1,9 @@
-import React from 'react';
-import { SafeAreaView, ScrollView, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { SafeAreaView, ScrollView, Text, View, Alert } from 'react-native';
 import Button from '../../../shared/components/Button/Button';
+import { useAuthStore } from '../../../store';
 
-//Style 
+//Style
 import styles from './Style';
 
 // Components
@@ -12,6 +13,7 @@ import PersonalInfo from '../components/PersonalInfo';
 import ProfileHeader from '../components/ProfileHeader';
 import SectionCard from '../components/SectionCard';
 import Vehicles from '../components/Vehicles';
+import AddFamilyMemberForm from '../components/AddFamilyMemberForm';
 
 import useMessages from '../hooks/useMessages';
 import useProfile from '../hooks/useProfile';
@@ -19,7 +21,8 @@ import useProfile from '../hooks/useProfile';
 
 const ProfileContainer = () => {
   const { messages } = useMessages();
-  
+  const { userId } = useAuthStore();
+
   const {
     isEditing,
     isEditingContactEmergency,
@@ -38,7 +41,10 @@ const ProfileContainer = () => {
     handleLogout,
     handleAddVehicle,
     handleAddFamilyMember,
+    refreshProfile,
   } = useProfile();
+
+  const [showAddFamilyForm, setShowAddFamilyForm] = useState(false);
 
   if (!currentUser) {
     return (
@@ -50,9 +56,23 @@ const ProfileContainer = () => {
     );
   }
 
+  if (showAddFamilyForm && userId) {
+    return (
+      <AddFamilyMemberForm
+        memberId={parseInt(userId.toString())}
+        onCancel={() => setShowAddFamilyForm(false)}
+        onAddSuccess={() => {
+          setShowAddFamilyForm(false);
+          // Recargar los datos del perfil para actualizar la lista de familiares
+          refreshProfile();
+        }}
+      />
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView 
+      <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
       >
@@ -61,20 +81,20 @@ const ProfileContainer = () => {
           name={profile?.name || messages.CONTAINER.USER}
           lastName={profile?.lastName || ''}
           id={profile?.id || 'N/A'}
-          memberCode={profile?.memberCode || 'N/A'}
+          memberCode={profile?.memberCode}
           membershipType={profile?.membershipType || 'Premium'}
           isActive={true}
           style={styles.profileHeader}
         />
 
         {/* Información personal */}
-        <SectionCard 
+        <SectionCard
           title={messages.PERSONAL.TITLE}
           rightAction={
             isEditing ? (
               null
             ) : (
-              <Button 
+              <Button
                 text={messages.CONTAINER.EDIT}
                 onPress={handleEdit}
                 variant="primary"
@@ -116,7 +136,7 @@ const ProfileContainer = () => {
             />
             { isEditing && (
               <View style={styles.editActions}>
-                <Button 
+                <Button
                   text={messages.CONTAINER.CANCEL}
                   onPress={handleCancel}
                   variant="secondary"
@@ -124,7 +144,7 @@ const ProfileContainer = () => {
                   titleStyle={styles.cancelButtonText}
                 />
                 <View style={styles.buttonSpacer} />
-                <Button 
+                <Button
                   text={messages.CONTAINER.SAVE}
                   onPress={handleSave}
                   variant="primary"
@@ -132,20 +152,20 @@ const ProfileContainer = () => {
                 />
               </View>
             )}
-          
+
         </SectionCard>
 
         {/* Familiares */}
         <SectionCard title={messages.FAMILY.TITLE}>
-          <FamilyMembers 
-            members={currentUser?.familyMembers || []} 
-            onAddMember={handleAddFamilyMember} 
+          <FamilyMembers
+            members={currentUser?.familyMembers || []}
+            onAddMember={() => setShowAddFamilyForm(true)}
           />
         </SectionCard>
 
         {/* Vehículos */}
         <SectionCard title={messages.VEHICLES.TITLE}>
-          <Vehicles 
+          <Vehicles
             vehicles={currentUser?.vehicles || []}
             onAddVehicle={handleAddVehicle}
           />
@@ -157,7 +177,7 @@ const ProfileContainer = () => {
             isEditingContactEmergency ? (
               null
             ) : (
-              <Button 
+              <Button
                 text={messages.CONTAINER.EDIT}
                 onPress={handleEditContactEmergency}
                 variant="primary"
@@ -166,7 +186,7 @@ const ProfileContainer = () => {
             )
           }
           >
-          <EmergencyContact 
+          <EmergencyContact
             name={emergencyContactFormData.name}
             relationship={emergencyContactFormData.relationship}
             phone={emergencyContactFormData.phone}
@@ -178,7 +198,7 @@ const ProfileContainer = () => {
           />
           { isEditingContactEmergency && (
             <View style={styles.editActions}>
-              <Button 
+              <Button
                 text={messages.CONTAINER.CANCEL}
                 onPress={handleCancelContactEmergency}
                 variant="secondary"
@@ -186,7 +206,7 @@ const ProfileContainer = () => {
                 titleStyle={styles.cancelButtonText}
               />
               <View style={styles.buttonSpacer} />
-              <Button 
+              <Button
                 text={messages.CONTAINER.SAVE}
                 onPress={handleSaveContactEmergency}
                 variant="primary"

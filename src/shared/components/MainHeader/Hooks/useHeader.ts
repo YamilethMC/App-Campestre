@@ -1,34 +1,29 @@
 import { DrawerActions, useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Alert } from 'react-native';
-
-type RootStackParamList = {
-    Notifications: undefined;
-    // Agrega otras rutas aquí según sea necesario
-  };
+import { CommonActions } from '@react-navigation/native';
 
 export const useHeader = () => {
-    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation();
 
   const toggleDrawer = () => {
     navigation.dispatch(DrawerActions.toggleDrawer());
   };
 
   const handleNotifications = () => {
-    // Show alert that the update is not available yet
-    Alert.alert(
-      'Actualización no disponible',
-      'Lo sentimos, esta actualización aún no está disponible. ¡Pronto estará disponible!',
-      [
-        {
-          text: 'Aceptar',
-          style: 'default'
-        }
-      ]
+    // Reset the More stack and navigate to Notifications
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: 'MainTabs',
+        params: {
+          screen: 'More',
+          params: {
+            screen: 'Notifications',
+          },
+        },
+      })
     );
   };
 
-  return {  
+  return {
     toggleDrawer,
     handleNotifications
   }
