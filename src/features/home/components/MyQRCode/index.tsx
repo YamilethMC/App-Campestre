@@ -4,13 +4,13 @@ import { COLORS } from '../../../../shared/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import QRModal from '../QRModal';
 import { useProfileStore } from '../../../profile/store/useProfileStore';
+import QRCodeComponent from '../QRCodeComponent';
 import styles from './Style';
 
 const MyQRCode: React.FC = () => {
   const { profile } = useProfileStore();
   const [qrModalVisible, setQrModalVisible] = useState(false);
-
-  const memberSinceYear = profile?.memberSince 
+  const memberSinceYear = profile?.memberSince
     ? new Date(profile.memberSince.toString()).getFullYear()
     : '2020';
 
@@ -20,30 +20,30 @@ const MyQRCode: React.FC = () => {
         <Ionicons name="qr-code-outline" size={24} color={COLORS.primary} />
         <Text style={styles.cardTitle}>Mi código QR</Text>
       </View>
-      
+
       <View style={styles.qrContainer}>
-        {/* Placeholder para el código QR */}
+        {/* Código QR real en la tarjeta principal */}
         <View style={styles.qrPlaceholderContainer}>
-          <Ionicons name="qr-code-outline" size={50} color={COLORS.primary} />
+          <QRCodeComponent
+            size={100}
+            memberCode={profile?.memberCode}
+          />
         </View>
-        
-        <Text style={styles.userName}>{profile?.name || 'Nombre del Socio'}</Text>
-        <Text style={styles.memberText}>Socio desde {memberSinceYear}</Text>
-        
-        <TouchableOpacity 
+
+        <Text style={styles.userName}>{(profile?.name || 'Nombre') + ' ' + (profile?.lastName || 'del Socio')}</Text>
+        <Text style={styles.memberText}>Socio #{profile?.memberCode ?? profile?.id ?? 'N/A'} | Desde {memberSinceYear}</Text>
+
+        <TouchableOpacity
           style={styles.showQrButton}
           onPress={() => setQrModalVisible(true)}
         >
           <Text style={styles.showQrButtonText}>Mostrar QR completo</Text>
         </TouchableOpacity>
       </View>
-      
-      <QRModal 
-        visible={qrModalVisible} 
+
+      <QRModal
+        visible={qrModalVisible}
         onClose={() => setQrModalVisible(false)}
-        userName={profile?.name}
-        memberId={profile?.id}
-        memberSince={memberSinceYear.toString()}
       />
     </View>
   );

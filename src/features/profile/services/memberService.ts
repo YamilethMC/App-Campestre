@@ -262,6 +262,7 @@ export const memberService = {
         familyMembers: data.guests.map(guest => ({
           id: guest.id,
           name: guest.user.name,
+          lastName: guest.user.lastName,
           relationship: translateRelationship(guest.relationship),
           age: 0, // Temporalmente 0 ya que en "guest.user" no viene la fecha de nacimiento completa
           isActive: data.user.active
