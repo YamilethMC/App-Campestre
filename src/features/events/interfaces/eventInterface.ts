@@ -36,9 +36,24 @@ export interface EventCardProps {
   onRegister: (eventId: string) => void;
   onUnregister: (eventId: string) => void;
   onToggleReminder: (eventId: string) => void;
+  onOpenRegisterScreen: (eventId: string) => void;
 }
 
 export interface FilterSectionProps {
   selectedEventType: 'Todos' | 'Deportivo' | 'Social' | 'Familiar' | 'Fitness' | 'SPORT' | 'SOCIAL' | 'FAMILY' | 'OTHER';
   onEventTypeChange: (type: 'Todos' | 'SPORT' | 'SOCIAL' | 'FAMILY' | 'OTHER') => void;
+}
+
+export interface Guest {
+  id: number;
+  name: string;
+  lastName: string;
+}
+
+export interface Member {
+  id: number;
+  memberCode: number | null;
+  name: string;
+  lastName: string;
+  guests: Guest[];
 }

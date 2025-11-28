@@ -7,6 +7,8 @@ import {
   View,
   ViewStyle
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Button from '../../../shared/components/Button/Button';
 import Search from '../../../shared/components/Search/Search';
 import { COLORS } from '../../../shared/theme/colors';
@@ -15,6 +17,13 @@ import FilterSection from '../components/FilterSection';
 import baseStyles from './Style';
 // Hooks
 import { useEvents } from '../hooks/useEvents';
+
+type RootStackParamList = {
+  SelectMembers: { eventId: string };
+  Events: undefined;
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'SelectMembers'>;
 
 // Extend the base styles with additional styles
 const styles = {
@@ -41,6 +50,7 @@ const styles = {
 };
 
 const EventsContainer = () => {
+  const navigation = useNavigation<NavigationProp>();
   const {
     events = [],
     loading = false,
@@ -63,6 +73,7 @@ const EventsContainer = () => {
     registerForEvent = async (eventId: string) => ({ success: false, error: 'Not implemented' }),
     unregisterFromEvent = async (eventId: string) => ({ success: false, error: 'Not implemented' }),
     checkIfRegistered = (eventId: string) => false,
+    fetchEvents = async (page: number = 1) => {},
     pagination = {
       page: 1,
       totalPages: 1,
@@ -73,6 +84,16 @@ const EventsContainer = () => {
     fetchPreviousPage = async () => {},
     goToPage = async (page: number) => {},
   } = useEvents();
+
+  const openRegisterScreen = (eventId: string) => {
+    navigation.navigate('SelectMembers', { eventId });
+  };
+
+  const handleRegistrationSuccess = async () => {
+    // Refresh events to update the registration status
+    await fetchEvents(1);
+    navigation.goBack();
+  };
 
   const displayMonth = `${monthNames?.[currentMonth] || ''} ${currentYear}`;
 
@@ -184,6 +205,7 @@ const EventsContainer = () => {
                 onRegister={registerForEvent}
                 onUnregister={unregisterFromEvent}
                 onToggleReminder={() => {}}
+                onOpenRegisterScreen={openRegisterScreen}
               />
             ))}
           </View>

@@ -63,7 +63,8 @@ const EventCard: React.FC<EventCardProps> = ({
   isRegistered,
   onRegister,
   onUnregister,
-  onToggleReminder
+  onToggleReminder,
+  onOpenRegisterScreen
 }) => {
   const { messages } = useMessages();
   const eventTypeColor = getEventTypeColor(event.eventType);
@@ -171,7 +172,7 @@ const EventCard: React.FC<EventCardProps> = ({
         <Button
           text={messages.EVENTCARD.REGISTER}
           variant="primary"
-          onPress={() => onRegister(event.id)}
+          onPress={() => onOpenRegisterScreen(event.id)}
           disabled={event.availableSpots <= 0}
         />
       )}
