@@ -1,16 +1,18 @@
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ScrollView, View } from 'react-native';
+import { Alert, ScrollView, View } from 'react-native';
 import styles from './Style';
 
 // Components
 import ActiveOrders from '../components/ActiveOrders';
 import GuestManagement from '../components/GuestManagement';
+import GuestsModal from '../components/GuestsModal';
 import Header from '../components/Header';
 import MyQRCode from '../components/MyQRCode';
 import MyRewards from '../components/MyRewards';
 import QuickActions from '../components/QuickActions';
 import AddFamilyMemberForm from '../../profile/components/AddFamilyMemberForm';
+import { useMemberData } from '../hooks/useMemberData';
 
 // Modal from shared components
 import Modal from '../../../shared/components/Modal/Modal';
@@ -50,6 +52,24 @@ const HomeScreen = () => {
     setShowGuestPassForm(false);
   }, []);
 
+  // State for showing guests modal
+  const [showGuestsModal, setShowGuestsModal] = useState(false);
+
+  const { getMemberData, loading, memberData } = useMemberData();
+
+  const handleViewGuests = useCallback(async () => {
+    const { userId, token } = useAuthStore.getState();
+    if (!userId || !token) {
+      Alert.alert('Error', 'No hay sesión activa.');
+      return;
+    }
+
+    const data = await getMemberData(parseInt(userId), token);
+    if (data) {
+      setShowGuestsModal(true);
+    }
+  }, [getMemberData]);
+
   const handleVehicleSelect = useCallback((vehicleId: string, vehicleName: string) => {
     showNotification("Solicitud exitosa", `Auto "${vehicleName}" solicitado correctamente. Llega en 5 min`);
   }, [showNotification]);
@@ -84,7 +104,10 @@ const HomeScreen = () => {
           />
           <ActiveOrders />
           <MyQRCode />
-          <GuestManagement onNewPassPress={handleShowGuestPassForm} />
+          <GuestManagement
+            onNewPassPress={handleShowGuestPassForm}
+            onViewGuestsPress={handleViewGuests}
+          />
           <MyRewards />
         </View>
       </ScrollView>
@@ -105,6 +128,14 @@ const HomeScreen = () => {
           paddingHorizontal: 10,
           paddingVertical: 10,
         }}
+      />
+
+      {/* Guests Modal using custom component */}
+      <GuestsModal
+        visible={showGuestsModal}
+        guests={memberData?.guests || []}
+        loading={loading}
+        onClose={() => setShowGuestsModal(false)}
       />
     </View>
   );

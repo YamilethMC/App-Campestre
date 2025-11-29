@@ -6,16 +6,13 @@ import styles from './Style';
 
 interface GuestManagementProps {
   onNewPassPress: () => void;
+  onViewGuestsPress: () => void;
 }
 
-const GuestManagement: React.FC<GuestManagementProps> = ({ onNewPassPress }) => {
+const GuestManagement: React.FC<GuestManagementProps> = ({ onNewPassPress, onViewGuestsPress }) => {
   const activeGuests = 2;  // Número de invitados activos
   const totalPasses = 5;   // Número total de pases temporales
 
-  const handleViewGuests = () => {
-    // Mostrar alerta de funcionalidad no implementada
-    alert('Funcionalidad en desarrollo: Ver invitados');
-  };
 
   return (
     <View style={styles.card}>
@@ -42,7 +39,7 @@ const GuestManagement: React.FC<GuestManagementProps> = ({ onNewPassPress }) => 
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.outlineButton}
-            onPress={handleViewGuests}
+            onPress={onViewGuestsPress}
           >
             <Text style={styles.outlineButtonText}>Ver invitados</Text>
           </TouchableOpacity>
