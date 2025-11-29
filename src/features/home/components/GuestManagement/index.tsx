@@ -4,14 +4,13 @@ import { COLORS } from '../../../../shared/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
 import styles from './Style';
 
-const GuestManagement: React.FC = () => {
+interface GuestManagementProps {
+  onNewPassPress: () => void;
+}
+
+const GuestManagement: React.FC<GuestManagementProps> = ({ onNewPassPress }) => {
   const activeGuests = 2;  // Número de invitados activos
   const totalPasses = 5;   // Número total de pases temporales
-
-  const handleNewPass = () => {
-    // Mostrar alerta de funcionalidad no implementada
-    alert('Funcionalidad en desarrollo: Nuevo Pase');
-  };
 
   const handleViewGuests = () => {
     // Mostrar alerta de funcionalidad no implementada
@@ -24,7 +23,7 @@ const GuestManagement: React.FC = () => {
         <Ionicons name="people-outline" size={24} color={COLORS.primary} />
         <Text style={styles.cardTitle}>Gestión de Invitados</Text>
       </View>
-      
+
       <View style={styles.guestSection}>
         <Text style={styles.sectionTitle}>Invitados Activos</Text>
         <View style={styles.pasesContainer}>
@@ -33,11 +32,11 @@ const GuestManagement: React.FC = () => {
             <Text style={styles.activeLabelText}>{activeGuests} activos</Text>
           </View>
         </View>
-        
+
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.filledButton}
-            onPress={handleNewPass}
+            onPress={onNewPassPress}
           >
             <Text style={styles.filledButtonText}>+ Nuevo Pase</Text>
           </TouchableOpacity>
@@ -49,7 +48,7 @@ const GuestManagement: React.FC = () => {
           </TouchableOpacity>
         </View>
       </View>
-      
+
       <View style={styles.infoLabel}>
         <Ionicons name="bulb-outline" size={18} color="#F59E0B" style={styles.infoIcon} />
         <Text style={styles.infoText}>Los pases temporales son válidos por 24 horas</Text>
