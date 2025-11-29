@@ -65,20 +65,7 @@ const MoreOptionsScreen = () => {
     { 
       title: t('help.title'), 
       icon: 'help-circle-outline' as const,
-      //onPress: () => navigation.navigate('Help')
-      onPress: () => {
-        Alert.alert(
-          t('help.title'),
-          t('Función no disponible por el momento'),
-          [
-            {
-              text: t('common.ok'),
-              style: 'default',
-            },
-          ],
-          { cancelable: true }
-        );
-      }
+      onPress: () => navigation.navigate('HelpCenter')
     },
     { 
       title: t('auth.logout.title'), 

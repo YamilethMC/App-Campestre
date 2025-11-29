@@ -8,7 +8,7 @@ export type RootStackParamList = {
   More: undefined;
   Profile: undefined;
   Settings: undefined;
-  Help: undefined;
+  HelpCenter: undefined;
 };
 
 // Tipos para el Tab Navigator
@@ -26,7 +26,7 @@ export type MoreStackParamList = {
   MoreOptions: undefined;
   Profile: undefined;
   Settings: undefined;
-  Help: undefined;
+  HelpCenter: undefined;
   Reservations: undefined;
   Menu: undefined;
   Surveys: undefined;
