@@ -33,10 +33,13 @@ type SelectMembersNavigationProp = NativeStackNavigationProp<RootStackParamList,
 interface SelectMembersProps {
   route: SelectMembersRouteProp;
   navigation: SelectMembersNavigationProp;
+  onRegistrationSuccess?: () => void;
+  onCancelRegistration?: () => void;
 }
 
-const SelectMembers: React.FC<SelectMembersProps> = ({ route, navigation }) => {
-  const { eventId } = route.params;
+const SelectMembers: React.FC<SelectMembersProps> = ({ route, navigation, onRegistrationSuccess, onCancelRegistration }) => {
+  const { eventId } = route?.params || {};
+  const [expandedMemberId, setExpandedMemberId] = useState<string | number | null>(null);
   const {
     members,
     memberLoading: loading,
@@ -87,7 +90,6 @@ const SelectMembers: React.FC<SelectMembersProps> = ({ route, navigation }) => {
     if (!selectedMember) return;
 
     setIsRegistering(true);
-    setShowConfirmationModal(false);
 
     try {
       const result = await registerForEvent(
@@ -97,14 +99,21 @@ const SelectMembers: React.FC<SelectMembersProps> = ({ route, navigation }) => {
       );
 
       if (result.success) {
-        navigation.goBack();
+        setShowConfirmationModal(false); // Close modal on success
+        if (onRegistrationSuccess) {
+          onRegistrationSuccess();
+        } else {
+          navigation.goBack();
+        }
       } else {
         if (result.error) {
           Alert.alert('Error', result.error);
+          // Keep the confirmation modal open so user can try again
         }
       }
     } catch (error) {
       Alert.alert('Error', 'Ocurrió un error inesperado');
+      // Keep the confirmation modal open so user can try again
     } finally {
       setIsRegistering(false);
     }
@@ -155,157 +164,245 @@ const SelectMembers: React.FC<SelectMembersProps> = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={[
-          { type: 'header' } as FlatListItem,
-          { type: 'search' } as FlatListItem,
-          { type: 'error' } as FlatListItem,
-          { type: 'loading' } as FlatListItem,
-          { type: 'members', data: members },
-          { type: 'noresults' } as FlatListItem,
-          { type: 'selectedmember' } as FlatListItem
-        ]}
-        renderItem={({ item }: { item: FlatListItem }) => {
-          switch (item.type) {
-            case 'header':
-              return (
-                <View style={styles.header}>
-                  <View style={styles.headerContent}>
-                    <Text style={styles.title}>Seleccionar participantes</Text>
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.closeButton}>
-                      <Ionicons name="close" size={24} color={COLORS.gray700} />
-                    </TouchableOpacity>
-                  </View>
-                  <Text style={styles.subtitle}>Busca y selecciona un socio y sus invitados</Text>
-                </View>
-              );
-            case 'search':
-              return (
-                <View style={styles.searchContainer}>
-                  <Search
-                    placeholder="Buscar socio por nombre..."
-                    onSearch={handleSearch}
-                    inputStyle={styles.searchInput}
-                  />
-                </View>
-              );
-            case 'error':
-              return error ? (
-                <View style={styles.errorContainer}>
-                  <Text style={styles.errorText}>{error}</Text>
-                </View>
-              ) : null;
-            case 'loading':
-              return (loading && !members.length) ? (
-                <View style={styles.loadingContainer}>
-                  <ActivityIndicator size="large" color={COLORS.primary} />
-                  <Text style={styles.loadingText}>Cargando socios...</Text>
-                </View>
-              ) : null;
-            case 'members':
-              return item.data && item.data.length > 0 ? (
-                <View style={{ paddingHorizontal: 20 }}>
-                  <Text style={styles.sectionTitle}>Socios encontrados</Text>
-                  <FlatList
-                    data={item.data}
-                    renderItem={renderMember}
-                    keyExtractor={member => member.id.toString()}
-                    style={styles.membersList}
-                    showsVerticalScrollIndicator={false}
-                    maxToRenderPerBatch={3}
-                    windowSize={5}
-                    scrollEnabled={false} // Disable internal scrolling since parent FlatList handles it
-                    nestedScrollEnabled={false}
-                  />
-                </View>
-              ) : null;
-            case 'noresults':
-              return (!loading && searchTerm && members.length === 0) ? (
-                <View style={styles.noResultsContainer}>
-                  <Text style={styles.noResultsText}>No se encontraron socios</Text>
-                </View>
-              ) : null;
-            case 'selectedmember':
-              if (!selectedMember) return null;
-              return (
-                <View style={styles.selectionContainer}>
-                  <Text style={styles.sectionTitle}>Seleccionar participantes</Text>
-                  <View style={styles.selectedMemberContainer}>
-                    <TouchableOpacity
-                      style={styles.guestItem}
-                      onPress={() => toggleGuestSelection({
-                        id: selectedMember.id,
-                        name: selectedMember.name,
-                        lastName: selectedMember.lastName
-                      })}
-                    >
-                      <View style={styles.checkboxContainer}>
-                        <Ionicons
-                          name={selectedGuests.some(g => g.id === selectedMember.id) ? "checkbox" : "square-outline"}
-                          size={24}
-                          color={COLORS.primary}
-                        />
-                      </View>
-                      <Text style={styles.guestName}>
-                        {selectedMember.name} {selectedMember.lastName}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+      {/* Create a flattened list with both members and their selection details when expanded */}
+      {(() => {
+        // Build the data array
+        let items: any[] = [
+          { type: 'header' },
+          { type: 'search' }
+        ];
 
-                  {selectedMember.guests.length > 0 ? (
-                    <View style={styles.guestsContainer}>
-                      <Text style={styles.subTitle}>Invitados:</Text>
-                      <FlatList
-                        data={selectedMember.guests}
-                        renderItem={renderGuest}
-                        keyExtractor={guest => guest.id.toString()}
-                        style={styles.guestsList}
-                        showsVerticalScrollIndicator={false}
-                        maxToRenderPerBatch={3}
-                        windowSize={5}
-                        scrollEnabled={false} // Disable internal scrolling since parent FlatList handles it
-                        nestedScrollEnabled={false}
+        // Add error if present
+        if (error) {
+          items.push({ type: 'error' });
+        }
+
+        // Add loading if needed
+        if (loading && !members.length) {
+          items.push({ type: 'loading' });
+        }
+
+        // Add no results if applicable
+        if (!loading && searchTerm && members.length === 0) {
+          items.push({ type: 'noresults' });
+        }
+
+        // Add section title if there are members
+        if (members && members.length > 0) {
+          items.push({ type: 'sectiontitle' });
+
+          // Add each member with their potential expanded section
+          members.forEach(member => {
+            // Add the member row
+            items.push({ type: 'member', data: member });
+
+            // If this member is currently expanded, add the expanded section right after
+            if (expandedMemberId === member.id) {
+              items.push({ type: 'member_selection', data: member });
+            }
+          });
+        }
+
+        return (
+          <FlatList
+            data={items}
+            renderItem={({ item }: any) => {
+              switch (item.type) {
+                case 'header':
+                  return (
+                    <View style={styles.header}>
+                      <View style={styles.headerContent}>
+                        <Text style={styles.title}>Seleccionar participantes</Text>
+                        <TouchableOpacity
+                          onPress={() => {
+                            if (onCancelRegistration) {
+                              onCancelRegistration();
+                            } else {
+                              navigation.goBack();
+                            }
+                          }}
+                          style={styles.closeButton}
+                        >
+                          <Ionicons name="close" size={24} color={COLORS.gray700} />
+                        </TouchableOpacity>
+                      </View>
+                      {/*<Text style={styles.subtitle}>Busca y selecciona un socio y sus invitados</Text>*/}
+                    </View>
+                  );
+                case 'search':
+                  return (
+                    <View style={styles.searchContainer}>
+                      <Search
+                        placeholder="Buscar socio por nombre..."
+                        onSearch={handleSearch}
+                        inputStyle={styles.searchInput}
                       />
                     </View>
-                  ) : (
-                    <View style={styles.noGuestsContainer}>
-                      <Text style={styles.noGuestsText}>Este socio no tiene invitados</Text>
+                  );
+                case 'error':
+                  return (
+                    <View style={styles.errorContainer}>
+                      <Text style={styles.errorText}>{error}</Text>
                     </View>
-                  )}
+                  );
+                case 'loading':
+                  return (
+                    <View style={styles.loadingContainer}>
+                      <ActivityIndicator size="large" color={COLORS.primary} />
+                      <Text style={styles.loadingText}>Cargando socios...</Text>
+                    </View>
+                  );
+                case 'noresults':
+                  return (!loading && searchTerm && members.length === 0) ? (
+                    <View style={styles.noResultsContainer}>
+                      <Text style={styles.noResultsText}>No se encontraron socios</Text>
+                    </View>
+                  ) : null;
+                case 'sectiontitle':
+                  return (
+                    <View style={{ paddingHorizontal: 20 }}>
+                      <Text style={styles.sectionTitle}>Socios encontrados</Text>
+                    </View>
+                  );
+                case 'member':
+                  return (
+                    <View style={{ paddingHorizontal: 20 }}>
+                      <TouchableOpacity
+                        style={[
+                          styles.memberItem,
+                          expandedMemberId === item.data.id && styles.selectedMemberItem
+                        ]}
+                        onPress={() => {
+                  if (expandedMemberId === item.data.id) {
+                    // If clicking the same member again, collapse it
+                    setExpandedMemberId(null);
+                  } else {
+                    // Select the new member and expand it
+                    handleMemberSelect(item.data);
+                    setExpandedMemberId(item.data.id);
+                  }
+                }}
+                      >
+                        <Text style={styles.memberCode}>
+                          {item.data.memberCode ? `#${item.data.memberCode}` : 'Sin código'}
+                        </Text>
+                        <Text style={styles.memberName}>
+                          {item.data.name} {item.data.lastName}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  );
+                case 'member_selection':
+                  // This is the expanded selection section for the specific member
+                  const member = item.data;
+                  return (
+                    <View style={{ paddingHorizontal: 20, marginTop: 2 }}>
+                      <View style={styles.selectionContainer}>
+                        <Text style={styles.sectionTitle}>Seleccionar participantes</Text>
+                        <View style={styles.selectedMemberContainer}>
+                          <TouchableOpacity
+                            style={styles.guestItem}
+                            onPress={() => toggleGuestSelection({
+                              id: member.id,
+                              name: member.name,
+                              lastName: member.lastName
+                            })}
+                          >
+                            <View style={styles.checkboxContainer}>
+                              <Ionicons
+                                name={selectedGuests.some(g => g.id === member.id) ? "checkbox" : "square-outline"}
+                                size={24}
+                                color={COLORS.primary}
+                              />
+                            </View>
+                            <Text style={styles.guestName}>
+                              {member.name} {member.lastName}
+                            </Text>
+                          </TouchableOpacity>
+                           {selectedMember?.guests && selectedMember.guests.length > 0 ? (
+                            <FlatList
+                              data={selectedMember.guests}
+                              renderItem={renderGuest}
+                              keyExtractor={guest => guest.id.toString()}
+                              style={styles.guestsList}
+                              showsVerticalScrollIndicator={false}
+                              maxToRenderPerBatch={3}
+                              windowSize={5}
+                              scrollEnabled={false} // Disable internal scrolling since parent FlatList handles it
+                              nestedScrollEnabled={false}
+                            />
+                            ) : (
+                          <View style={styles.noGuestsContainer}>
+                            <Text style={styles.noGuestsText}>Este socio no tiene invitados</Text>
+                          </View>
+                        )}
+                        </View>
 
-                  <View style={styles.selectionSummary}>
-                    <Text style={styles.selectionSummaryText}>
-                      Participantes seleccionados: {selectedGuests.length}
-                    </Text>
-                  </View>
-                </View>
-              );
-            default:
-              return <View />;
-          }
-        }}
-        keyExtractor={(item, index) => `${item.type}-${index}`}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 150 }} // Add padding to account for fixed buttons
-        scrollEventThrottle={16}
-      />
+                        {/*{selectedMember?.guests && selectedMember.guests.length > 0 ? (
+                          <View style={styles.guestsContainer}>
+                            <Text style={styles.subTitle}>Invitados:</Text>
+                            <FlatList
+                              data={selectedMember.guests}
+                              renderItem={renderGuest}
+                              keyExtractor={guest => guest.id.toString()}
+                              style={styles.guestsList}
+                              showsVerticalScrollIndicator={false}
+                              maxToRenderPerBatch={3}
+                              windowSize={5}
+                              scrollEnabled={false} // Disable internal scrolling since parent FlatList handles it
+                              nestedScrollEnabled={false}
+                            />
+                          </View>
+                        ) : (
+                          <View style={styles.noGuestsContainer}>
+                            <Text style={styles.noGuestsText}>Este socio no tiene invitados</Text>
+                          </View>
+                        )}*/}
 
-      {/* Fixed button container that stays at bottom */}
-      <View style={[styles.buttonContainer, { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: COLORS.white, zIndex: 10 }]}>
-        <Button
-          text="Cancelar"
-          variant="outline"
-          onPress={() => navigation.goBack()}
-          style={styles.cancelButton}
-        />
-        <Button
-          text="Guardar"
-          variant="primary"
-          onPress={handleRegister}
-          disabled={selectedGuests.length === 0}
-          style={styles.saveButton}
-        />
-      </View>
+                        {/*<View style={styles.selectionSummary}>
+                          <Text style={styles.selectionSummaryText}>
+                            Participantes seleccionados: {selectedGuests.length}
+                          </Text>
+                        </View>*/}
+                      </View>
+                    </View>
+                  );
+                default:
+                  return null;
+              }
+            }}
+            keyExtractor={(item, index) => `${item.type}-${item.data?.id || index}`}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 20 }}
+            scrollEventThrottle={16}
+          />
+        );
+      })()}
+
+      {/* Show buttons only when a member is expanded */}
+      {expandedMemberId && (
+        <View style={[styles.buttonContainer, { paddingBottom: 20, marginBottom: 82 }]}>
+          <Button
+            text="Cancelar"
+            variant="outline"
+            onPress={() => {
+              if (onCancelRegistration) {
+                onCancelRegistration();
+              } else {
+                navigation.goBack();
+              }
+            }}
+            style={styles.cancelButton}
+          />
+          <Button
+            text="Guardar"
+            variant="primary"
+            onPress={handleRegister}
+            disabled={selectedGuests.length === 0}
+            style={styles.saveButton}
+          />
+        </View>
+      )}
 
       <Modal
         visible={showConfirmationModal}

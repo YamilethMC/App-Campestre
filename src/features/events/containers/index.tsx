@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   ScrollView,
   Text,
@@ -7,23 +7,15 @@ import {
   View,
   ViewStyle
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Button from '../../../shared/components/Button/Button';
 import Search from '../../../shared/components/Search/Search';
 import { COLORS } from '../../../shared/theme/colors';
 import EventCard from '../components/EventCard';
 import FilterSection from '../components/FilterSection';
+import SelectMembers from '../components/SelectMembers';
 import baseStyles from './Style';
 // Hooks
 import { useEvents } from '../hooks/useEvents';
-
-type RootStackParamList = {
-  SelectMembers: { eventId: string };
-  Events: undefined;
-};
-
-type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'SelectMembers'>;
 
 // Extend the base styles with additional styles
 const styles = {
@@ -50,7 +42,8 @@ const styles = {
 };
 
 const EventsContainer = () => {
-  const navigation = useNavigation<NavigationProp>();
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+
   const {
     events = [],
     loading = false,
@@ -86,13 +79,17 @@ const EventsContainer = () => {
   } = useEvents();
 
   const openRegisterScreen = (eventId: string) => {
-    navigation.navigate('SelectMembers', { eventId });
+    setSelectedEventId(eventId);
   };
 
   const handleRegistrationSuccess = async () => {
     // Refresh events to update the registration status
     await fetchEvents(1);
-    navigation.goBack();
+    setSelectedEventId(null);
+  };
+
+  const handleCancelRegistration = () => {
+    setSelectedEventId(null);
   };
 
   const displayMonth = `${monthNames?.[currentMonth] || ''} ${currentYear}`;
@@ -263,6 +260,41 @@ const EventsContainer = () => {
           </View>
         )}
       </ScrollView>
+
+      {/* Show SelectMembers component when an event is selected */}
+      {selectedEventId && (
+        <SelectMembers
+          route={{ params: { eventId: selectedEventId } } as any}
+          navigation={{
+            goBack: handleCancelRegistration,
+            navigate: () => {},
+            setOptions: () => {},
+            addListener: () => () => {},
+            removeListener: () => {},
+            isFocused: () => true,
+          } as any}
+          onRegistrationSuccess={handleRegistrationSuccess}
+          onCancelRegistration={handleCancelRegistration}
+        />
+      )}
+      {/* Show SelectMembers component when an event is selected */}
+      {selectedEventId && (
+        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1000 }}>
+          <SelectMembers
+            route={{ params: { eventId: selectedEventId } } as any}
+            navigation={{
+              goBack: handleCancelRegistration,
+              navigate: () => {},
+              setOptions: () => {},
+              addListener: () => () => {},
+              removeListener: () => {},
+              isFocused: () => true,
+            } as any}
+            onRegistrationSuccess={handleRegistrationSuccess}
+            onCancelRegistration={handleCancelRegistration}
+          />
+        </View>
+      )}
     </View>
   );
 };
