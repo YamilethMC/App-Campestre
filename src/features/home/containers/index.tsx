@@ -64,7 +64,7 @@ const HomeScreen = () => {
       return;
     }
 
-    const data = await getMemberData(parseInt(userId), token);
+    const data = await getMemberData(parseInt(userId));
     if (data) {
       setShowGuestsModal(true);
     }
@@ -98,17 +98,17 @@ const HomeScreen = () => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.cardsContainer}>
-          <QuickActions
+          {/*<QuickActions
             onVehicleSelect={handleVehicleSelect}
             onWaiterCall={handleCallWaiter}
           />
-          <ActiveOrders />
+          <ActiveOrders />*/}
           <MyQRCode />
           <GuestManagement
             onNewPassPress={handleShowGuestPassForm}
             onViewGuestsPress={handleViewGuests}
           />
-          <MyRewards />
+          {/*<MyRewards />*/}
         </View>
       </ScrollView>
 

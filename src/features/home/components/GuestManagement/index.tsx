@@ -22,13 +22,13 @@ const GuestManagement: React.FC<GuestManagementProps> = ({ onNewPassPress, onVie
       </View>
 
       <View style={styles.guestSection}>
-        <Text style={styles.sectionTitle}>Invitados Activos</Text>
+        {/*<Text style={styles.sectionTitle}>Invitados Activos</Text>
         <View style={styles.pasesContainer}>
           <Text style={styles.pasesText}>{totalPasses} pases temporales vigentes</Text>
           <View style={styles.activeLabel}>
             <Text style={styles.activeLabelText}>{activeGuests} activos</Text>
           </View>
-        </View>
+        </View>*/}
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -46,10 +46,10 @@ const GuestManagement: React.FC<GuestManagementProps> = ({ onNewPassPress, onVie
         </View>
       </View>
 
-      <View style={styles.infoLabel}>
+      {/*<View style={styles.infoLabel}>
         <Ionicons name="bulb-outline" size={18} color="#F59E0B" style={styles.infoIcon} />
         <Text style={styles.infoText}>Los pases temporales son válidos por 24 horas</Text>
-      </View>
+      </View>*/}
     </View>
   );
 };

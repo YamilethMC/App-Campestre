@@ -37,7 +37,7 @@ const HomeHeader: React.FC<HeaderProps> = ({ navigation }) => {
               ¡Hola, {profile?.name || 'Usuario'}!
             </Text>
             <Text style={styles.userInfoText}>
-              Socio {userId || 'N/A'}
+              Socio {profile?.memberCode ||userId || 'N/A'}
             </Text>
           </View>
           <TouchableOpacity 
