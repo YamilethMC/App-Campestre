@@ -56,20 +56,21 @@ export const useAccountStatements = () => {
 
   const fetchStatements = useCallback(async () => {
     if (!profile?.id) return;
-    
-    try {
-      setLoading(true);
-      const data = await accountStatementService.getAccountStatements(parseInt(profile.id));
-      data.data.forEach((statement: any) => {
+
+    setLoading(true);
+    const response = await accountStatementService.getAccountStatements(parseInt(profile.id));
+
+    if (response.success && response.data) {
+      response.data.forEach((statement: any) => {
         statement.period = formatDateRange(statement.periodStart, statement.periodEnd);
       });
-      setStatements(data.data);
-    } catch (err) {
-      console.error('Error al cargar estados de cuenta:', err);
-      setError('Error al cargar los estados de cuenta');
-    } finally {
-      setLoading(false);
+      setStatements(response.data);
+    } else {
+      console.error('Error al cargar estados de cuenta:', response.error);
+      Alert.alert('Error', response.error || 'Error al cargar los estados de cuenta');
     }
+
+    setLoading(false);
   }, [profile?.id, setStatements, setLoading, setError]);
 
   // Cargar al montar el componente
@@ -79,29 +80,37 @@ export const useAccountStatements = () => {
 
   
   const handleCardPress = async (statement: any) => {
-    const result = await accountStatementService.getAccountStatementById(statement.id);
-    setSelectedStatement(result);
-    setShowDetail(true);
+    const response = await accountStatementService.getAccountStatementById(statement.id);
+
+    if (response.success && response.data) {
+      setSelectedStatement(response.data);
+      setShowDetail(true);
+    } else {
+      console.error('Error al cargar el estado de cuenta:', response.error);
+      Alert.alert('Error', response.error || 'Error al cargar el estado de cuenta');
+    }
   };
 
   const handleDownload = async (statement: any) => {
-    try {
-      setLoading?.(true);
+    setLoading?.(true);
 
-      // 1. Obtener la URL firmada del servidor
-      const response = await accountStatementService.downloadAccountStatement(statement.id);
+    // 1. Obtener la URL firmada del servidor
+    const response = await accountStatementService.downloadAccountStatement(statement.id);
 
+    if (response.success && response.data) {
       // La respuesta ya es la URL directa al PDF
-      let downloadUrl = response;
+      let downloadUrl: string | any = response.data;
 
       // Si la respuesta es un objeto, intentar extraer la URL
-      if (typeof response === 'object' && response !== null) {
-        downloadUrl = response?.data?.signedUrl || response?.signedUrl || response;
+      if (typeof response.data === 'object' && response.data !== null) {
+        downloadUrl = (response.data as any)?.signedUrl || response.data;
       }
 
       if (!downloadUrl) {
         console.error('No se pudo obtener la URL de descarga');
-        throw new Error("No se pudo obtener la URL de descarga del estado de cuenta");
+        Alert.alert('Error', "No se pudo obtener la URL de descarga del estado de cuenta");
+        setLoading?.(false);
+        return;
       }
 
       // 2. Verificar si se puede abrir la URL directamente
@@ -120,12 +129,12 @@ export const useAccountStatements = () => {
           Alert.alert('Error', 'No se pudo abrir el archivo');
         }
       }
-    } catch (error) {
-      console.error('Error al descargar:', error);
-      Alert.alert('Error', 'No se pudo abrir el archivo. Por favor, inténtalo de nuevo más tarde.');
-    } finally {
-      setLoading?.(false);
+    } else {
+      console.error('Error al descargar:', response.error);
+      Alert.alert('Error', response.error || 'No se pudo abrir el archivo. Por favor, inténtalo de nuevo más tarde.');
     }
+
+    setLoading?.(false);
   };
 
   return {
