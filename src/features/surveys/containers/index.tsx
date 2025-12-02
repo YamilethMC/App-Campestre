@@ -16,7 +16,7 @@ import HeaderWithStats from '../components/HeaderWithStats/HeaderWithStats';
 import SurveyCard from '../components/SurveyCard/SurveyCard';
 import useMessages from '../hooks/useMessage';
 import { useSurveyActions } from '../hooks/useSurveyActions';
-import { SurveyCategory, SurveyQuestion } from '../interfaces';
+import { SurveyCategory } from '../interfaces';
 import { surveyService } from '../services';
 import { useSurveyStore } from '../store';
 import styles from './Style';
@@ -46,13 +46,15 @@ const SurveysScreen: React.FC = () => {
     selectedSurveyId,
     showSurveyForm,
     setShowSurveyForm,
+    surveyData,
+    questions,
+    loading: hookLoading,
+    loadSurveyData,
+    submitSurveyResponse,
   } = useSurveyActions();
 
-  const [survey, setSurvey] = useState<any>(null);
-  const [questions, setQuestions] = useState<SurveyQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, any>>({});
-  const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
@@ -64,30 +66,7 @@ const SurveysScreen: React.FC = () => {
   // Load survey and questions when selectedSurveyId changes
   useEffect(() => {
     if (selectedSurveyId) {
-      const fetchSurveyData = async () => {
-        try {
-          setLoading(true);
-          const surveyData = await surveyService.getSurveys(pagination.page, pagination.limit, currentFilter.category)
-          const questionsData = await surveyService.getQuestionsBySurveyId(selectedSurveyId);
-          if (surveyData && questionsData) {
-            setSurvey(questionsData);
-            setQuestions(questionsData.surveyQuestions);
-
-            console.log('Fetched questions data:', questionsData.surveyQuestions);
-            // Initialize answers object with empty values
-            const initialAnswers: Record<string, any> = {};
-            questionsData.surveyQuestions.forEach(q => initialAnswers[q.id] = '');
-            setAnswers(initialAnswers);
-            setCurrentQuestionIndex(0);
-          }
-        } catch (error) {
-          console.error('Error fetching survey data:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchSurveyData();
+      loadSurveyData(selectedSurveyId, pagination.page, pagination.limit, currentFilter.category);
     }
   }, [selectedSurveyId]);
 
@@ -127,16 +106,18 @@ const SurveysScreen: React.FC = () => {
     }
     
     try {
-      // Submit survey answers
-      await surveyService.submitSurvey(selectedSurveyId as string, answers);
-      
-      // Update survey status in store
-      if (selectedSurveyId) {
-        incrementCompletedSurveys(selectedSurveyId as string);
+      // Submit survey answers using hook function
+      const success = await submitSurveyResponse(selectedSurveyId as string, answers);
+
+      if (success) {
+        // Update survey status in store
+        if (selectedSurveyId) {
+          incrementCompletedSurveys(selectedSurveyId as string);
+        }
+
+        await fetchSurveys(1);
+        setSubmitSuccess(true);
       }
-      
-      await fetchSurveys(1);
-      setSubmitSuccess(true);
     } catch (error) {
       console.error('Error submitting survey:', error);
       Alert.alert('Error', 'Hubo un error al enviar la encuesta. Por favor intenta de nuevo.');
@@ -156,7 +137,6 @@ const SurveysScreen: React.FC = () => {
     });
   };
 
-  // Actualizar la lógica para poder filtrar entre encuestas disponibles y completadas por el usuario
   const handleStatusChange = (status: 'activas' | 'completadas') => {
     setFilter({
       ...currentFilter,
@@ -168,19 +148,13 @@ const SurveysScreen: React.FC = () => {
     handleSurveyResponse(surveyId);
   };
 
-  // Requerir acceso directo a la respuesta de la API para manejar answered/unanswered
-  // Pero como no tenemos acceso directo a la respuesta sin modificar más componentes,
-  // usaré el campo isActive que se mapea correctamente
   const { messages } = useMessages();
   const filteredSurveys = surveys.filter(survey => {
     const matchesCategory = currentFilter.category === SurveyCategory.ALL ||
                             survey.category === currentFilter.category;
-
-    // Si el filtro es 'activas', mostrar encuestas no respondidas (isActive = true)
-    // Si el filtro es 'completadas', mostrar encuestas respondidas (isActive = false)
     const matchesStatus = currentFilter.status === 'activas'
-      ? survey.isActive  // Solo encuestas activas (no respondidas)
-      : !survey.isActive; // Solo encuestas completadas (respondidas)
+      ? survey.isActive 
+      : !survey.isActive;
 
     return matchesCategory && matchesStatus;
   });
@@ -209,9 +183,9 @@ const SurveysScreen: React.FC = () => {
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   };
     
-  if (showSurveyForm && survey && !submitSuccess) {
+  if (showSurveyForm && surveyData && !submitSuccess) {
     // Survey form view
-    if (loading || !survey) {
+    if (hookLoading || !surveyData) {
       return (
         <SafeAreaView style={styles.container}>
           <View style={styles.centerContainer}>
@@ -227,8 +201,8 @@ const SurveysScreen: React.FC = () => {
           {/* Survey Info Header */}
           <View style={styles.headerSection}>
             <Card style={styles.surveyCard}>
-              <Text style={styles.surveyTitle}>{survey.title}</Text>
-              <Text style={styles.surveyDescription}>{survey.description}</Text>
+              <Text style={styles.surveyTitle}>{surveyData.title}</Text>
+              <Text style={styles.surveyDescription}>{surveyData.description}</Text>
             </Card>
           </View>
           

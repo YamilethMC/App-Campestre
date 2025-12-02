@@ -100,6 +100,15 @@ const mapPriority = (priority: string): SurveyPriority => {
   }
 };
 
+// Interface para service responses
+interface ServiceResponse<T = any> {
+  success: boolean;
+  data?: T;
+  message?: string;
+  error?: string;
+  status: number;
+}
+
 export const surveyService = {
   // Obtener las encuestas activas paginadas con filtros
   getSurveys: async (
@@ -108,16 +117,20 @@ export const surveyService = {
     search: string = '',
     order: string = 'asc',
     category: string = ''
-  ): Promise<{
+  ): Promise<ServiceResponse<{
     surveys: Survey[];
     unansweredSurveys: Survey[];
     answeredSurveys: Survey[];
     unansweredMeta: any;
     answeredMeta: any;
-  }> => {
+  }>> => {
     const {userId, token } = useAuthStore.getState();
     if (!token) {
-      throw new Error('No authentication token available');
+      return {
+        success: false,
+        error: 'No authentication token available',
+        status: 401
+      };
     }
 
     try {
@@ -140,14 +153,29 @@ export const surveyService = {
       );
 
       if (!response.ok) {
-        const errorText = await response.text();
-        if (response.status === 401) {
-          throw new Error('No autorizado. Por favor inicia sesión nuevamente.');
-        } else if (response.status === 400) {
-          throw new Error(`Petición inválida. Verifica los parámetros. Detalles: ${errorText}`);
-        } else {
-          throw new Error(`Error en la solicitud: ${response.status}. Detalles: ${errorText}`);
+        let errorMessage = 'Error al cargar las encuestas';
+
+        // Manejar códigos de error específicos en el servicio
+        switch (response.status) {
+          case 400:
+            errorMessage = 'Petición inválida. Verifica los parámetros.';
+            break;
+          case 401:
+            errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
+            break;
+          case 500:
+            errorMessage = 'Error interno del servidor: Por favor intenta más tarde';
+            break;
+          default:
+            const errorTextDefault = await response.text();
+            errorMessage = `Error en la solicitud: ${response.status}. Detalles: ${errorTextDefault}`;
         }
+
+        return {
+          success: false,
+          error: errorMessage,
+          status: response.status
+        };
       }
 
       const result: SurveyApiResponse = await response.json();
@@ -183,23 +211,36 @@ export const surveyService = {
 
       // Devolver ambos conjuntos de datos y la información de paginación
       return {
-        surveys: [...unansweredSurveys, ...answeredSurveys],
-        unansweredSurveys,
-        answeredSurveys,
-        unansweredMeta: result.data.data.unanswered.meta,
-        answeredMeta: result.data.data.answered.meta
+        success: true,
+        data: {
+          surveys: [...unansweredSurveys, ...answeredSurveys],
+          unansweredSurveys,
+          answeredSurveys,
+          unansweredMeta: result.data.data.unanswered.meta,
+          answeredMeta: result.data.data.answered.meta
+        },
+        message: 'Encuestas cargadas exitosamente',
+        status: response.status
       };
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching surveys:', error);
-      throw error;
+      return {
+        success: false,
+        error: error.message || 'Error desconocido al cargar las encuestas',
+        status: 500
+      };
     }
   },
 
   // Obtener preguntas de una encuesta específica
-  getQuestionsBySurveyId: async (surveyId: string): Promise<FullSurvey | null> => {
+  getQuestionsBySurveyId: async (surveyId: string): Promise<ServiceResponse<FullSurvey>> => {
     const {token } = useAuthStore.getState();
     if (!token) {
-      throw new Error('No authentication token available');
+      return {
+        success: false,
+        error: 'No authentication token available',
+        status: 401
+      };
     }
 
     try {
@@ -216,25 +257,47 @@ export const surveyService = {
       });
 
       if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error('No autorizado. Por favor inicia sesión nuevamente.');
-        } else if (response.status === 400) {
-          throw new Error('Petición inválida. Verifica los parámetros.');
-        } else if (response.status === 404) {
-          throw new Error('No se encontró esa encuesta.');
-        }  else {
-          throw new Error(`Error en la solicitud: ${response.status}`);
+        let errorMessage = 'Error al cargar las preguntas de la encuesta';
+
+        // Manejar códigos de error específicos en el servicio
+        switch (response.status) {
+          case 400:
+            errorMessage = 'Petición inválida. Verifica los parámetros.';
+            break;
+          case 401:
+            errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
+            break;
+          case 404:
+            errorMessage = 'No se encontró esa encuesta.';
+            break;
+          case 500:
+            errorMessage = 'Error interno del servidor: Por favor intenta más tarde';
+            break;
+          default:
+            errorMessage = `Error en la solicitud: ${response.status}`;
         }
+
+        return {
+          success: false,
+          error: errorMessage,
+          status: response.status
+        };
       }
 
       const data = await response.json();
       console.log('Survey questions data:', data);
 
-      if (!data.success || !data.data) return null;
+      if (!data.success || !data.data) {
+        return {
+          success: false,
+          error: 'No se encontraron datos de la encuesta',
+          status: response.status
+        };
+      }
 
       const survey = data.data;
-      
-      return {
+
+      const fullSurvey: FullSurvey = {
         id: survey.id,
         title: survey.title,
         description: survey.description,
@@ -257,17 +320,32 @@ export const surveyService = {
         }))
       };
 
-    } catch (error) {
+      return {
+        success: true,
+        data: fullSurvey,
+        message: 'Preguntas de la encuesta cargadas exitosamente',
+        status: response.status
+      };
+
+    } catch (error: any) {
       console.error('Error fetching questions:', error);
-      throw error;
+      return {
+        success: false,
+        error: error.message || 'Error desconocido al cargar las preguntas',
+        status: 500
+      };
     }
   },
 
   // Enviar respuestas de encuesta - endpoint hipotético, revisar API real
-  submitSurvey: async (surveyId: string, answers: any): Promise<boolean> => {
+  submitSurvey: async (surveyId: string, answers: any): Promise<ServiceResponse<boolean>> => {
     const {token, userId } = useAuthStore.getState();
     if (!token) {
-      throw new Error('No authentication token available');
+      return {
+        success: false,
+        error: 'No authentication token available',
+        status: 401
+      };
     }
 
     console.log('Submitting survey with answers:', answers, 'and surveyId:', surveyId, 'for userId:', userId);
@@ -292,26 +370,52 @@ export const surveyService = {
       });
 
       if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error('No autorizado. Por favor inicia sesión nuevamente.');
-        } else if (response.status === 400) {
-          throw new Error('Respuestas inválidas. Verifica tus respuestas.');
-        } else if (response.status === 404) {
-          throw new Error('Socio o encuesta no encontrado.');
-        } else if (response.status === 409) {
-          throw new Error('El socio ya ha respondido esta encuesta.');
-        } else {
-          throw new Error(`Error al enviar encuesta: ${response.status}`);
+        let errorMessage = 'Error al enviar la encuesta';
+
+        // Manejar códigos de error específicos en el servicio
+        switch (response.status) {
+          case 400:
+            errorMessage = 'Respuestas inválidas. Verifica tus respuestas.';
+            break;
+          case 401:
+            errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
+            break;
+          case 404:
+            errorMessage = 'Socio o encuesta no encontrado.';
+            break;
+          case 409:
+            errorMessage = 'El socio ya ha respondido esta encuesta.';
+            break;
+          case 500:
+            errorMessage = 'Error interno del servidor: Por favor intenta más tarde';
+            break;
+          default:
+            errorMessage = `Error al enviar encuesta: ${response.status}`;
         }
+
+        return {
+          success: false,
+          error: errorMessage,
+          status: response.status
+        };
       }
 
       const data = await response.json();
       console.log('Survey submission response data:', data);
 
-      return data.success;
-    } catch (error) {
+      return {
+        success: true,
+        data: data.success,
+        message: 'Encuesta enviada exitosamente',
+        status: response.status
+      };
+    } catch (error: any) {
       console.error('Error submitting survey:', error);
-      throw error;
+      return {
+        success: false,
+        error: error.message || 'Error desconocido al enviar la encuesta',
+        status: 500
+      };
     }
   },
 };

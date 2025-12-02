@@ -118,43 +118,50 @@ export const useSurveyStore = create<SurveyStore>((set, get) => ({
       const order = 'asc';
       const limit = get().pagination.limit;
 
-      const result = await surveyService.getSurveys(page, limit, search, order, category);
+      const response = await surveyService.getSurveys(page, limit, search, order, category);
 
-      // Usar los datos y la paginación correspondiente según el estado actual
-      const { currentFilter } = get();
-      let surveys, meta;
+      if (response.success && response.data) {
+        // Usar los datos y la paginación correspondiente según el estado actual
+        const { currentFilter } = get();
+        let surveys, meta;
 
-      if (currentFilter.status === 'activas') {
-        surveys = result.unansweredSurveys;
-        meta = result.unansweredMeta;
-      } else if (currentFilter.status === 'completadas') {
-        surveys = result.answeredSurveys;
-        meta = result.answeredMeta;
-      } else {
-        // Por defecto, usar unanswered (encuestas activas)
-        surveys = result.unansweredSurveys;
-        meta = result.unansweredMeta;
-      }
-
-      set({
-        surveys: surveys,
-        pagination: {
-          page: meta.page,
-          limit: meta.limit,
-          total: meta.total,
-          totalPages: meta.totalPages,
+        if (currentFilter.status === 'activas') {
+          surveys = response.data.unansweredSurveys;
+          meta = response.data.unansweredMeta;
+        } else if (currentFilter.status === 'completadas') {
+          surveys = response.data.answeredSurveys;
+          meta = response.data.answeredMeta;
+        } else {
+          // Por defecto, usar unanswered (encuestas activas)
+          surveys = response.data.unansweredSurveys;
+          meta = response.data.unansweredMeta;
         }
-      });
 
-      // Calcular estadísticas usando todos los datos
-      const activeSurveys = result.unansweredSurveys.length;
-      const completedSurveys = result.answeredSurveys.length;
+        set({
+          surveys: surveys,
+          pagination: {
+            page: meta.page,
+            limit: meta.limit,
+            total: meta.total,
+            totalPages: meta.totalPages,
+          }
+        });
 
-      set({
-        activeSurveys,
-        completedSurveys,
-        averageRating: 0, // Valor por defecto, ya que la API no proporciona este dato
-      });
+        // Calcular estadísticas usando todos los datos
+        const activeSurveys = response.data.unansweredSurveys.length;
+        const completedSurveys = response.data.answeredSurveys.length;
+
+        set({
+          activeSurveys,
+          completedSurveys,
+          averageRating: 0, // Valor por defecto, ya que la API no proporciona este dato
+        });
+      } else {
+        set({
+          error: response.error || 'Error al cargar las encuestas',
+          loading: false
+        });
+      }
     } catch (error: any) {
       console.error('Error fetching surveys:', error);
       set({ error: error.message || 'Error fetching surveys', loading: false });
