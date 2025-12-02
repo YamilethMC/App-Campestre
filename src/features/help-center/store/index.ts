@@ -28,19 +28,18 @@ export const useHelpCenterStore = create<HelpCenterStore>((set, get) => ({
   fetchFAQs: async () => {
     set({ loading: true, error: null });
 
-    try {
-      const response = await helpCenterService.getFAQs();
-      
-      if (response.success) {
-        set({
-          faqs: response.data,
-          loading: false
-        });
-      } else {
-        set({ error: 'Error al obtener las preguntas frecuentes', loading: false });
-      }
-    } catch (error: any) {
-      set({ error: error.message || 'Error al obtener las preguntas frecuentes', loading: false });
+    const response = await helpCenterService.getFAQs();
+
+    if (response.success && response.data) {
+      set({
+        faqs: response.data,
+        loading: false
+      });
+    } else {
+      set({
+        error: response.error || 'Error al obtener las preguntas frecuentes',
+        loading: false
+      });
     }
   }
 }));

@@ -3,10 +3,20 @@ import { FAQ, HelpCenterResponse } from '../interfaces';
 
 export const helpCenterService = {
   // Obtener preguntas frecuentes
-  getFAQs: async (): Promise<HelpCenterResponse> => {
+  getFAQs: async (): Promise<{
+    success: boolean;
+    data?: FAQ[];
+    message?: string;
+    error?: string;
+    status: number;
+  }> => {
     const { token } = useAuthStore.getState();
     if (!token) {
-      throw new Error('No authentication token available');
+      return {
+        success: false,
+        error: 'No authentication token available',
+        status: 401
+      };
     }
 
     try {
@@ -20,23 +30,49 @@ export const helpCenterService = {
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        if (response.status === 400) {
-          throw new Error(`Petición inválida. Verifica los parámetros. Detalles: ${errorText}`);
-        } else if (response.status === 401) {
-          throw new Error('No autorizado. Por favor inicia sesión nuevamente.');
-        } else if (response.status === 404) {
-          throw new Error('No encontrado. Detalles: ' + errorText);
-        } else {
-          throw new Error(`Error en la solicitud: ${response.status}. Detalles: ${errorText}`);
+        let errorMessage = 'Error al cargar las preguntas frecuentes';
+
+        // Manejar códigos de error específicos en el servicio
+        switch (response.status) {
+          case 400:
+            errorMessage = 'Petición inválida. Verifica los parámetros';
+            break;
+          case 401:
+            errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
+            break;
+          case 404:
+            errorMessage = 'Preguntas frecuentes no encontradas';
+            break;
+          case 500:
+            errorMessage = 'Error interno del servidor: Por favor intenta más tarde';
+            break;
+          default:
+            const errorText = await response.text();
+            errorMessage = `Error en la solicitud: ${response.status}. Detalles: ${errorText}`;
         }
+
+        return {
+          success: false,
+          error: errorMessage,
+          status: response.status
+        };
       }
 
       const result: HelpCenterResponse = await response.json();
-      return result;
+
+      return {
+        success: true,
+        data: result.data,
+        message: 'Preguntas frecuentes cargadas exitosamente',
+        status: response.status
+      };
     } catch (error) {
       console.error('Error fetching FAQs:', error);
-      throw error;
+      return {
+        success: false,
+        error: 'Error desconocido al cargar las preguntas frecuentes',
+        status: 500
+      };
     }
   },
 };
