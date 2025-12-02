@@ -94,58 +94,6 @@ export const useEvents = () => {
     }
   }, [fetchEvents]);
 
-  // Event registration handlers
-  const registerForEvent = useCallback(async (eventId: string) => {
-    if (!userId) {
-      Alert.alert('Error', 'Usuario no autenticado');
-      return { success: false, error: 'Usuario no autenticado' };
-    }
-
-    try {
-      const result = await eventsService.registerForEvent(eventId, userId);
-      
-      // Actualizar directamente el evento en la lista con los nuevos valores
-      updateEvent(eventId, {
-        availableSpots: result.availableSpots,
-        ocupedSpots: (events.find(e => e.id === eventId)?.totalSpots || 0) - result.availableSpots,
-      });
-      
-      return { success: true };
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Error al registrarse';
-      setError(errorMessage);
-      Alert.alert('Error', errorMessage);
-      return { success: false, error: errorMessage };
-    }
-  }, [userId, events, updateEvent, setError]);
-
-  const unregisterFromEvent = useCallback(async (eventId: string) => {
-    if (!userId) {
-      Alert.alert('Error', 'Usuario no autenticado');
-      return { success: false, error: 'Usuario no autenticado' };
-    }
-
-    try {
-      await eventsService.unregisterFromEvent(eventId, userId);
-      
-      // Actualizar directamente el evento en la lista con los nuevos valores
-      const currentEvent = events.find(e => e.id === eventId);
-      if (currentEvent) {
-        updateEvent(eventId, {
-          availableSpots: currentEvent.availableSpots + 1,
-          ocupedSpots: currentEvent.ocupedSpots - 1,
-        });
-      }
-      
-      return { success: true };
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Error al cancelar registro';
-      setError(errorMessage);
-      Alert.alert('Error', errorMessage);
-      return { success: false, error: errorMessage };
-    }
-  }, [userId, events, updateEvent, setError]);
-
   // Navigation
   const goToPreviousMonth = useCallback(() => {
     const prevDate = new Date(currentYear, currentMonth - 1, 1);
@@ -247,124 +195,6 @@ export const useEvents = () => {
     fetchEvents(1);
   }, [setStoreSelectedEventType, fetchEvents]);
 
-  // Member selection functions
-  // Fetch members from API
-  const fetchMembers = useCallback(async (search: string = '') => {
-    setMemberLoading(true);
-    setMemberError(null);
-
-    try {
-      const response = await eventsService.getMembers(
-        1, 10, search, 'name', true
-      );
-
-      if (response.success && response.data) {
-        // Transform the API response to match our Member interface
-        // Filter to only include members who have a memberCode (socios)
-        const filteredMembers = (response.data.members || []).filter(m => m.memberCode !== null);
-        const transformedMembers = filteredMembers.map(member => ({
-          id: member.id,
-          memberCode: member.memberCode,
-          name: member.user.name,
-          lastName: member.user.lastName,
-          guests: [] // Will be populated when user selects the member
-        }));
-
-        setMembers(transformedMembers);
-      } else {
-        setMemberError(response.error || 'Error al cargar socios');
-      }
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Error desconocido';
-      setMemberError(errorMessage);
-    } finally {
-      setMemberLoading(false);
-    }
-  }, []);
-
-  // Fetch member details and guests
-  const fetchMemberDetails = useCallback(async (memberId: number) => {
-    try {
-      const response = await eventsService.getMemberById(memberId);
-
-      if (response.success && response.data) {
-        // Update the selected member with guests
-        const updatedMember: Member = {
-          id: response.data.id,
-          memberCode: response.data.memberCode,
-          name: response.data.user.name,
-          lastName: response.data.user.lastName,
-          guests: response.data.guests.map(guest => ({
-            id: guest.id,
-            name: guest.user.name,
-            lastName: guest.user.lastName
-          }))
-        };
-
-        setSelectedMember(updatedMember);
-        // Reset selected guests when changing member
-        setSelectedGuests([]);
-      } else {
-        setMemberError(response.error || 'Error al cargar detalles del socio');
-        Alert.alert('Error', response.error || 'Error al cargar detalles del socio');
-      }
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Error desconocido';
-      setMemberError(errorMessage);
-      Alert.alert('Error', errorMessage);
-    }
-  }, []);
-
-  // Select a member
-  const selectMember = useCallback((member: Member) => {
-    setSelectedMember(member);
-    // Reset selected guests when changing member
-    setSelectedGuests([]);
-  }, []);
-
-  // Toggle guest selection
-  const toggleGuestSelection = useCallback((guest: Guest) => {
-    setSelectedGuests(prev => {
-      const isAlreadySelected = prev.some(g => g.id === guest.id);
-
-      if (isAlreadySelected) {
-        // Deselect the guest
-        return prev.filter(g => g.id !== guest.id);
-      } else {
-        // Select the guest
-        return [...prev, guest];
-      }
-    });
-  }, []);
-
-  // Register for event
-  const registerForEventWithMembers = useCallback(async (
-    eventId: string,
-    clubMemberId: number,
-    totalRegistrations: number
-  ) => {
-    try {
-      const response = await eventsService.registerForEventWithMembers(
-        eventId,
-        clubMemberId,
-        totalRegistrations
-      );
-
-      if (!response.success) {
-        if (response.error) {
-          Alert.alert('Error', response.error);
-        }
-        return response;
-      }
-
-      return response;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Error desconocido';
-      Alert.alert('Error', errorMessage);
-      return { success: false, error: errorMessage };
-    }
-  }, []);
-
   return {
     // State
     events,
@@ -396,19 +226,10 @@ export const useEvents = () => {
     setSelectedEventType: handleEventTypeChange,
     goToPreviousMonth,
     goToNextMonth,
-    registerForEvent,
-    unregisterFromEvent,
     checkIfRegistered,
     fetchEvents,
     fetchNextPage,
     fetchPreviousPage,
-    goToPage,
-
-    // Member selection actions
-    fetchMembers,
-    fetchMemberDetails,
-    selectMember,
-    toggleGuestSelection,
-    registerForEventWithMembers,
+    goToPage
   };
 };

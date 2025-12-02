@@ -33,10 +33,10 @@ export interface EventState {
 export interface EventCardProps {
   event: Event;
   isRegistered: boolean;
-  onRegister: (eventId: string) => void;
-  onUnregister: (eventId: string) => void;
-  onToggleReminder: (eventId: string) => void;
-  onOpenRegisterScreen: (eventId: string) => void;
+  onRegister?: (eventId: string) => void;
+  onUnregister?: (eventId: string) => void;
+  onToggleReminder?: (eventId: string) => void;
+  onOpenRegisterScreen?: (eventId: string) => void;
 }
 
 export interface FilterSectionProps {

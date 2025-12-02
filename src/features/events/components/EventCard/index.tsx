@@ -61,9 +61,6 @@ const formatDate = (dateString: string) => {
 const EventCard: React.FC<EventCardProps> = ({
   event,
   isRegistered,
-  onRegister,
-  onUnregister,
-  onToggleReminder,
   onOpenRegisterScreen
 }) => {
   const { messages } = useMessages();
@@ -148,7 +145,7 @@ const EventCard: React.FC<EventCardProps> = ({
           <Button
             text={messages.EVENTCARD.CANCELREGISTRATION}
             variant="outline"
-            onPress={() => onUnregister(event.id)}
+            onPress={() => {}}
             style={styles.cancelButton}
             titleStyle={styles.cancelButtonText}
           />
@@ -172,7 +169,7 @@ const EventCard: React.FC<EventCardProps> = ({
         <Button
           text={messages.EVENTCARD.REGISTER}
           variant="primary"
-          onPress={() => onOpenRegisterScreen(event.id)}
+          onPress={() => {}}
           disabled={event.availableSpots <= 0}
         />
       )}

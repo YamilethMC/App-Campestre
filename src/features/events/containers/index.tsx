@@ -12,7 +12,6 @@ import Search from '../../../shared/components/Search/Search';
 import { COLORS } from '../../../shared/theme/colors';
 import EventCard from '../components/EventCard';
 import FilterSection from '../components/FilterSection';
-import SelectMembers from '../components/SelectMembers';
 import baseStyles from './Style';
 // Hooks
 import { useEvents } from '../hooks/useEvents';
@@ -63,8 +62,6 @@ const EventsContainer = () => {
     setSelectedEventType = (type: any) => {},
     goToPreviousMonth = () => {},
     goToNextMonth = () => {},
-    registerForEvent = async (eventId: string) => ({ success: false, error: 'Not implemented' }),
-    unregisterFromEvent = async (eventId: string) => ({ success: false, error: 'Not implemented' }),
     checkIfRegistered = (eventId: string) => false,
     fetchEvents = async (page: number = 1) => {},
     pagination = {
@@ -199,10 +196,6 @@ const EventsContainer = () => {
                 key={event.id}
                 event={event}
                 isRegistered={checkIfRegistered(event.id)}
-                onRegister={registerForEvent}
-                onUnregister={unregisterFromEvent}
-                onToggleReminder={() => {}}
-                onOpenRegisterScreen={openRegisterScreen}
               />
             ))}
           </View>
@@ -260,41 +253,6 @@ const EventsContainer = () => {
           </View>
         )}
       </ScrollView>
-
-      {/* Show SelectMembers component when an event is selected */}
-      {selectedEventId && (
-        <SelectMembers
-          route={{ params: { eventId: selectedEventId } } as any}
-          navigation={{
-            goBack: handleCancelRegistration,
-            navigate: () => {},
-            setOptions: () => {},
-            addListener: () => () => {},
-            removeListener: () => {},
-            isFocused: () => true,
-          } as any}
-          onRegistrationSuccess={handleRegistrationSuccess}
-          onCancelRegistration={handleCancelRegistration}
-        />
-      )}
-      {/* Show SelectMembers component when an event is selected */}
-      {selectedEventId && (
-        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1000 }}>
-          <SelectMembers
-            route={{ params: { eventId: selectedEventId } } as any}
-            navigation={{
-              goBack: handleCancelRegistration,
-              navigate: () => {},
-              setOptions: () => {},
-              addListener: () => () => {},
-              removeListener: () => {},
-              isFocused: () => true,
-            } as any}
-            onRegistrationSuccess={handleRegistrationSuccess}
-            onCancelRegistration={handleCancelRegistration}
-          />
-        </View>
-      )}
     </View>
   );
 };
