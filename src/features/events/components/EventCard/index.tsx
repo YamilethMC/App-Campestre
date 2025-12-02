@@ -169,7 +169,7 @@ const EventCard: React.FC<EventCardProps> = ({
         <Button
           text={messages.EVENTCARD.REGISTER}
           variant="primary"
-          onPress={() => {}}
+          onPress={onOpenRegisterScreen}
           disabled={event.availableSpots <= 0}
         />
       )}

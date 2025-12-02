@@ -41,6 +41,11 @@ export const useEvents = () => {
   const [selectedGuests, setSelectedGuests] = useState<Guest[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
 
+  // State to track selected participants for registration
+  const [selectedParticipants, setSelectedParticipants] = useState<number[]>([]);
+  const [showRegistrationScreen, setShowRegistrationScreen] = useState<boolean>(false);
+  const [currentEventId, setCurrentEventId] = useState<string>('');
+
   // Referencia para evitar múltiples ejecuciones
   const isInitialLoad = useRef(true);
   const fetchRef = useRef(false);
@@ -55,20 +60,20 @@ export const useEvents = () => {
   const fetchEvents = useCallback(async (page: number = 1) => {
     // Evitar múltiples ejecuciones simultáneas
     if (fetchRef.current) return;
-    
+
     fetchRef.current = true;
     try {
       // Format the date as 'yyyy-mm'
       const dateParam = selectedDate || `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}`;
       const eventTypeParam = selectedEventType === 'Todos' ? '' : selectedEventType;
-      
+
       const result = await eventsService.getEvents(
         page,
         searchQuery,
         eventTypeParam,
         dateParam
       );
-      
+
       setEvents(result.events);
       setPagination({
         page: result.meta.page,
@@ -101,12 +106,12 @@ export const useEvents = () => {
     const newYear = prevDate.getFullYear();
     setCurrentMonth(newMonth);
     setCurrentYear(newYear);
-    
+
     // Update the selected date to reflect the new month
     const newDate = `${newYear}-${(newMonth + 1).toString().padStart(2, '0')}`;
     setSelectedDate(newDate);
     setStoreSelectedDate(newDate);
-    
+
     // Fetch new events for the selected month but don't reset pagination
     fetchEvents(1);
   }, [currentMonth, currentYear, setSelectedDate, setStoreSelectedDate, fetchEvents]);
@@ -117,12 +122,12 @@ export const useEvents = () => {
     const newYear = nextDate.getFullYear();
     setCurrentMonth(newMonth);
     setCurrentYear(newYear);
-    
+
     // Update the selected date to reflect the new month
     const newDate = `${newYear}-${(newMonth + 1).toString().padStart(2, '0')}`;
     setSelectedDate(newDate);
     setStoreSelectedDate(newDate);
-    
+
     // Fetch new events for the selected month but don't reset pagination
     fetchEvents(1);
   }, [currentMonth, currentYear, setSelectedDate, setStoreSelectedDate, fetchEvents]);
@@ -195,6 +200,55 @@ export const useEvents = () => {
     fetchEvents(1);
   }, [setStoreSelectedEventType, fetchEvents]);
 
+  // Function to handle opening the registration screen
+  const openRegistrationScreen = useCallback((eventId: string, memberId: number) => {
+    setCurrentEventId(eventId);
+    setShowRegistrationScreen(true);
+
+    // Reset participants selection when opening screen
+    setSelectedParticipants([]);
+  }, []);
+
+  // Function to handle closing the registration screen
+  const closeRegistrationScreen = useCallback(() => {
+    setShowRegistrationScreen(false);
+    setCurrentEventId('');
+    setSelectedParticipants([]);
+  }, []);
+
+  // Function to handle registration completion and refresh events
+  const handleRegistrationComplete = useCallback(async () => {
+    setShowRegistrationScreen(false);
+    setCurrentEventId('');
+    setSelectedParticipants([]);
+
+    // Refresh events to update registration status
+    await fetchEvents(1);
+  }, [fetchEvents]);
+
+  // Function to toggle participant selection
+  const toggleParticipantSelection = useCallback((id: number) => {
+    setSelectedParticipants(prev => {
+      if (prev.includes(id)) {
+        return prev.filter(participantId => participantId !== id);
+      } else {
+        return [...prev, id];
+      }
+    });
+  }, []);
+
+  // Function to register participants to an event
+  const registerParticipants = useCallback(async (memberId: number, totalRegistrations: number) => {
+    try {
+      await eventsService.registerForEvent(currentEventId, memberId.toString(), totalRegistrations);
+      return true;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Error al registrar en el evento';
+      Alert.alert('Error', errorMessage);
+      return false;
+    }
+  }, [currentEventId]);
+
   return {
     // State
     events,
@@ -221,6 +275,13 @@ export const useEvents = () => {
     searchTerm,
     setSearchTerm,
 
+    // Registration screen state
+    showRegistrationScreen,
+    setShowRegistrationScreen,
+    currentEventId,
+    selectedParticipants,
+    setSelectedParticipants,
+
     // Actions
     setSearchQuery: handleSearchChange,
     setSelectedEventType: handleEventTypeChange,
@@ -230,6 +291,11 @@ export const useEvents = () => {
     fetchEvents,
     fetchNextPage,
     fetchPreviousPage,
-    goToPage
+    goToPage,
+    openRegistrationScreen,
+    closeRegistrationScreen,
+    handleRegistrationComplete,
+    toggleParticipantSelection,
+    registerParticipants,
   };
 };

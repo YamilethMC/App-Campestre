@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   ScrollView,
   Text,
@@ -12,9 +12,11 @@ import Search from '../../../shared/components/Search/Search';
 import { COLORS } from '../../../shared/theme/colors';
 import EventCard from '../components/EventCard';
 import FilterSection from '../components/FilterSection';
+import RegisterScreen from '../components/RegisterScreen';
 import baseStyles from './Style';
 // Hooks
 import { useEvents } from '../hooks/useEvents';
+import { useAuthStore } from '../../auth/store/useAuthStore';
 
 // Extend the base styles with additional styles
 const styles = {
@@ -41,8 +43,6 @@ const styles = {
 };
 
 const EventsContainer = () => {
-  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
-
   const {
     events = [],
     loading = false,
@@ -58,36 +58,46 @@ const EventsContainer = () => {
     hasEventsThisMonth = false,
     hasFutureMonths = false,
     isAfterCurrentMonth = false,
-    setSearchQuery = (query: string) => {},
-    setSelectedEventType = (type: any) => {},
-    goToPreviousMonth = () => {},
-    goToNextMonth = () => {},
-    checkIfRegistered = (eventId: string) => false,
-    fetchEvents = async (page: number = 1) => {},
     pagination = {
       page: 1,
       totalPages: 1,
       total: 0,
       limit: 10
     },
-    fetchNextPage = async () => {},
-    fetchPreviousPage = async () => {},
-    goToPage = async (page: number) => {},
+    showRegistrationScreen,
+    currentEventId,
+    selectedParticipants,
+    // Actions
+    setSearchQuery,
+    setSelectedEventType,
+    goToPreviousMonth,
+    goToNextMonth,
+    checkIfRegistered,
+    fetchEvents,
+    fetchNextPage,
+    fetchPreviousPage,
+    goToPage,
+    openRegistrationScreen,
+    closeRegistrationScreen,
+    handleRegistrationComplete,
+    toggleParticipantSelection,
   } = useEvents();
 
-  const openRegisterScreen = (eventId: string) => {
-    setSelectedEventId(eventId);
-  };
+  // Si se está mostrando la pantalla de registro, solo mostrarla
+  if (showRegistrationScreen) {
+    return (
+      <RegisterScreen
+        visible={true}
+        memberId={useAuthStore.getState().userId}
+        eventId={currentEventId}
+        onClose={closeRegistrationScreen} // Esta función cierra la pantalla de registro
+        onRegistrationComplete={handleRegistrationComplete}
+        toggleParticipantSelection={toggleParticipantSelection}
+        selectedParticipants={selectedParticipants}
+      />
+    );
+  }
 
-  const handleRegistrationSuccess = async () => {
-    // Refresh events to update the registration status
-    await fetchEvents(1);
-    setSelectedEventId(null);
-  };
-
-  const handleCancelRegistration = () => {
-    setSelectedEventId(null);
-  };
 
   const displayMonth = `${monthNames?.[currentMonth] || ''} ${currentYear}`;
 
@@ -196,6 +206,7 @@ const EventsContainer = () => {
                 key={event.id}
                 event={event}
                 isRegistered={checkIfRegistered(event.id)}
+                onOpenRegisterScreen={() => openRegistrationScreen(event.id, useAuthStore.getState().userId)}
               />
             ))}
           </View>
@@ -253,6 +264,7 @@ const EventsContainer = () => {
           </View>
         )}
       </ScrollView>
+
     </View>
   );
 };

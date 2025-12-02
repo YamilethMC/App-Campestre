@@ -199,6 +199,7 @@ export const eventsService = {
       totalPages: number;
     };
   }> {
+    console.log('HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
     const { token } = useAuthStore.getState();
     if (!token) {
       throw new Error('No authentication token available');
@@ -213,17 +214,17 @@ export const eventsService = {
         order: 'asc', // Orden fijo
         orderBy: 'name', // Orden por nombre fijo
       });
-      
+
       if (type) {
         params.append('type', type.toUpperCase());
       }
-      
+
       if (date) {
         params.append('date', date);
       }
 
       const url = `${process.env.EXPO_PUBLIC_API_URL}/events?${params.toString()}`;
-
+      console.log('URL DE EVENTOS:', url);
       const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -233,16 +234,27 @@ export const eventsService = {
       });
 
       if (!response.ok) {
-        if (response.status === 400) {
-          const errorText = await response.text();
-          throw new Error(`Datos de entrada inválidos. Detalles: ${errorText}`);
-        } else if (response.status === 404) {
-          const errorText = await response.text();
-          throw new Error(`No se encontraron eventos. Detalles: ${errorText}`);
-        } else {
-          const errorText = await response.text();
-          throw new Error(`Error en la solicitud: ${response.status}. Detalles: ${errorText}`);
+        let errorMessage = 'Error al cargar los eventos';
+
+        switch (response.status) {
+          case 400:
+            errorMessage = 'Solicitud incorrecta: Verifica los parámetros proporcionados';
+            break;
+          case 401:
+            errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
+            break;
+          case 404:
+            errorMessage = 'No se encontraron eventos';
+            break;
+          case 500:
+            errorMessage = 'Error interno del servidor: Por favor intenta más tarde';
+            break;
+          default:
+            const errorText = await response.text();
+            errorMessage = `Error en la solicitud: ${response.status}. Detalles: ${errorText}`;
         }
+
+        throw new Error(errorMessage);
       }
 
       const result: EventsApiResponse = await response.json();
@@ -261,7 +273,7 @@ export const eventsService = {
         registeredUsers: [], // La API no proporciona esta información directamente
         ocupedSpots: apiEvent.totalSpots - apiEvent.availableSpots,
       }));
-
+      console.log('EVENTOS:', events);
       return {
         events,
         meta: result.data.meta,
@@ -273,14 +285,61 @@ export const eventsService = {
   },
 
   /**
-   * Registrar usuario a un evento
+   * Obtener detalles de un miembro del club
    */
-  async registerForEvent(eventId: string, clubMemberId: string): Promise<Event> {
+  async getMemberDetails(memberId: number): Promise<MemberDetailsResponse> {
     const { token } = useAuthStore.getState();
     if (!token) {
       throw new Error('No authentication token available');
     }
 
+    try {
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_API_URL}/club-members/${memberId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'accept': '*/*',
+          },
+        }
+      );
+
+      if (!response.ok) {
+        let errorMessage = 'Error al cargar los detalles del miembro';
+
+        switch (response.status) {
+          case 404:
+            errorMessage = 'Miembro no encontrado';
+            break;
+          case 500:
+            errorMessage = 'Error interno del servidor: Por favor intenta más tarde';
+            break;
+          default:
+            const errorText = await response.text();
+            errorMessage = `Error en la solicitud: ${response.status}. Detalles: ${errorText}`;
+        }
+
+        throw new Error(errorMessage);
+      }
+
+      const result: ApiResponse<MemberDetailsResponse> = await response.json();
+      return result.data;
+    } catch (error) {
+      console.error('Error fetching member details:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Registrar usuario a un evento
+   */
+  async registerForEvent(eventId: string, clubMemberId: string, totalRegistrations: number = 1): Promise<Event> {
+    const { token } = useAuthStore.getState();
+    if (!token) {
+      throw new Error('No authentication token available');
+    }
+    console.log('REGISTRANDO EVENTO:', { eventId, clubMemberId, totalRegistrations });
     try {
       const response = await fetch(
         `${process.env.EXPO_PUBLIC_API_URL}/events/${eventId}/registration`,
@@ -293,25 +352,33 @@ export const eventsService = {
           },
           body: JSON.stringify({
             clubMemberId,
-            totalRegistrations: 1,
+            totalRegistrations,
           }),
         }
       );
 
       if (!response.ok) {
-        if (response.status === 400) {
-          const errorText = await response.text();
-          throw new Error(`Datos de entrada inválidos. Detalles: ${errorText}`);
-        } else if (response.status === 404) {
-          const errorText = await response.text();
-          throw new Error(`Evento o miembro no encontrado. Detalles: ${errorText}`);
-        } else if (response.status === 409) {
-          const errorText = await response.text();
-          throw new Error(`El evento está lleno o el socio ya está registrado. Detalles: ${errorText}`);
-        } else {
-          const errorText = await response.text();
-          throw new Error(`Error en la solicitud: ${response.status}. Detalles: ${errorText}`);
+        let errorMessage = 'Error al registrar en el evento';
+
+        switch (response.status) {
+          case 400:
+            errorMessage = 'Solicitud incorrecta: Verifica los datos proporcionados';
+            break;
+          case 404:
+            errorMessage = 'Evento o Miembro no encontrado';
+            break;
+          case 409:
+            errorMessage = 'El evento está lleno o el socio ya está registrado';
+            break;
+          case 500:
+            errorMessage = 'Error interno del servidor: Por favor intenta más tarde';
+            break;
+          default:
+            const errorText = await response.text();
+            errorMessage = `Error en la solicitud: ${response.status}. Detalles: ${errorText}`;
         }
+
+        throw new Error(errorMessage);
       }
 
       const result: EventRegistrationApiResponse = await response.json();
