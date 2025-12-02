@@ -1,12 +1,12 @@
+import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useRef } from 'react';
 import { Alert, SafeAreaView, ScrollView, Text, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useNotificationStore } from '../store';
-import NotificationCard from '../components/NotificationCard';
-import SearchBar from '../components/SearchBar';
 import Button from '../../../shared/components/Button';
 import { COLORS } from '../../../shared/theme/colors';
+import NotificationCard from '../components/NotificationCard';
+import SearchBar from '../components/SearchBar';
 import { useDebounce } from '../hooks/useDebounce';
+import { useNotificationStore } from '../store';
 import styles from './Style';
 
 const NotificationsScreen: React.FC = () => {
@@ -121,7 +121,6 @@ const NotificationsScreen: React.FC = () => {
               ))
             ) : (
               <View style={styles.noNotificationsContainer}>
-                <Ionicons name="notifications-off" size={60} color={COLORS.gray400} />
                 <Text style={styles.noNotificationsText}>
                   {search ? 'No se encontraron notificaciones' : 'No hay notificaciones disponibles'}
                 </Text>

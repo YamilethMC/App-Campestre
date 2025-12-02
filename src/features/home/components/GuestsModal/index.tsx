@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, Modal, ScrollView, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS } from '../../../../shared/theme/colors';
 
 interface GuestUser {
@@ -54,24 +54,26 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
                 <Text>Cargando invitados...</Text>
               </View>
             ) : guests.length > 0 ? (
-              <ScrollView 
-                style={styles.guestsList}
-                contentContainerStyle={styles.guestsListContent}
-              >
-                {guests.map((guest) => (
-                  <View key={guest.id} style={styles.guestCard}>
-                    <View style={styles.guestInfo}>
-                      <Text style={styles.guestName}>
-                        {guest.user?.name} {guest.user?.lastName}
-                      </Text>
-                      <Text style={styles.guestEmail}>{guest.user?.email}</Text>
-                      <Text style={styles.guestRelation}>
-                        {guest.relationship}
-                      </Text>
+              <View style={styles.guestsContainer}>
+                <ScrollView
+                  style={styles.guestsList}
+                  contentContainerStyle={styles.guestsListContent}
+                >
+                  {guests.map((guest) => (
+                    <View key={guest.id} style={styles.guestCard}>
+                      <View style={styles.guestInfo}>
+                        <Text style={styles.guestName}>
+                          {guest.user?.name} {guest.user?.lastName}
+                        </Text>
+                        <Text style={styles.guestEmail}>{guest.user?.email}</Text>
+                        <Text style={styles.guestRelation}>
+                          {guest.relationship}
+                        </Text>
+                      </View>
                     </View>
-                  </View>
-                ))}
-              </ScrollView>
+                  ))}
+                </ScrollView>
+              </View>
             ) : (
               <View style={styles.noGuestsContainer}>
                 <Text>No hay invitados registrados.</Text>
@@ -99,9 +101,10 @@ const styles = StyleSheet.create({
   modalContainer: {
     backgroundColor: COLORS.white,
     borderRadius: 16,
-    width: '100%',
-    maxWidth: 500,
+    width: '95%',
+    maxWidth: 700,
     maxHeight: '80%',
+    height: '80%',
     elevation: 10,
     shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 4 },
@@ -112,21 +115,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.gray200,
   },
   modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontWeight: '700',
     color: COLORS.gray900,
   },
   closeButton: {
-    padding: 4,
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: COLORS.gray100,
   },
   contentContainer: {
     flex: 1,
     padding: 20,
+    justifyContent: 'flex-start',
+  },
+  guestsContainer: {
+    flex: 1,
+    minHeight: 100,  // Aumentar altura mínima
   },
   loadingContainer: {
     flex: 1,
@@ -140,12 +151,17 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   guestCard: {
-    backgroundColor: COLORS.gray50,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
+    backgroundColor: COLORS.white,
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 15,
     borderWidth: 1,
     borderColor: COLORS.gray200,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
   },
   guestInfo: {
     flex: 1,
@@ -154,22 +170,26 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: COLORS.gray900,
-    marginBottom: 4,
+    marginBottom: 6,
   },
   guestEmail: {
     fontSize: 14,
     color: COLORS.gray600,
-    marginBottom: 4,
+    marginBottom: 6,
+    fontStyle: 'normal',
   },
   guestRelation: {
-    fontSize: 12,
+    fontSize: 13,
     color: COLORS.primary,
-    backgroundColor: COLORS.primaryLight,
+    backgroundColor: 'transparent',
     alignSelf: 'flex-start',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 10,
     textTransform: 'capitalize',
+    fontWeight: '600',
+    borderWidth: 1,
+    borderColor: COLORS.primary,
   },
   noGuestsContainer: {
     flex: 1,
@@ -178,7 +198,8 @@ const styles = StyleSheet.create({
   },
   closeModalButton: {
     backgroundColor: COLORS.primary,
-    padding: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 20,
     alignItems: 'center',
     borderBottomLeftRadius: 16,
     borderBottomRightRadius: 16,
@@ -186,7 +207,7 @@ const styles = StyleSheet.create({
   closeModalButtonText: {
     color: COLORS.white,
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
 });
 
