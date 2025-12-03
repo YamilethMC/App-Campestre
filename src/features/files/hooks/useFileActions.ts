@@ -1,5 +1,6 @@
+import * as Sharing from 'expo-sharing';
 import { useEffect, useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, Linking } from 'react-native';
 import { File } from '../interfaces';
 import { fileService } from '../services';
 
@@ -95,10 +96,34 @@ export const useFileActions = () => {
   }, [search]);
 
   // Handle download
-  const handleDownload = async (fileId: number) => {  // Change from string to number
+  const handleDownload = async (fileId: number) => {
     try {
-      await fileService.downloadFile(fileId.toString()); // Convert to string for the service
-      Alert.alert('Éxito', 'El archivo se ha descargado correctamente.');
+      // Get the signed URL from the service
+      const downloadUrl = await fileService.downloadFile(fileId);
+
+      console.log("downloadUrl", downloadUrl) 
+      
+      if (!downloadUrl) {
+        console.error('No se pudo obtener la URL de descarga');
+        Alert.alert('Error', 'No se pudo obtener la URL de descarga del archivo');
+        return;
+      }
+
+      // 2. Verificar si se puede abrir la URL directamente
+      const supported = await Linking.canOpenURL(downloadUrl);
+      if (supported) {
+        await Linking.openURL(downloadUrl);
+      } else {
+        // 3. Si no se puede abrir directamente, intentar compartir
+        if (await Sharing.isAvailableAsync()) {
+          await Sharing.shareAsync(downloadUrl, {
+            dialogTitle: `Compartir archivo`,
+            UTI: 'public.data'
+          });
+        } else {
+          Alert.alert('Error', 'No se pudo abrir el archivo');
+        }
+      }
     } catch (err: any) {
       console.error('Download error:', err);
       Alert.alert('Error', err.message || 'Error al descargar el archivo');

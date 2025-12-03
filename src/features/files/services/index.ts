@@ -25,7 +25,7 @@ export const fileService = {
           'accept': '*/*',
         },
       });
-      
+
       if (!response.ok) {
         const errorText = await response.text();
         if (response.status === 400) {
@@ -49,7 +49,7 @@ export const fileService = {
     }
   },
 
-  downloadFile: async (fileId: string): Promise<void> => {
+  downloadFile: async (fileId: number): Promise<string> => {
     const { token } = useAuthStore.getState();
     if (!token) {
       throw new Error('No authentication token available');
@@ -75,21 +75,23 @@ export const fileService = {
         }
       }
 
-      // Get the filename from the content-disposition header or use a generic name
-      const contentDisposition = response.headers.get('content-disposition');
-      let filename = `file_${fileId}`;
-      if (contentDisposition) {
-        const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/i);
-        if (filenameMatch && filenameMatch[1]) {
-          filename = filenameMatch[1];
-        }
+      // Parse the JSON response to get the signed URL
+      const result = await response.json();
+      console.log('Download API response:', result);
+       
+      // Return the signed URL from the response
+      if (result.data && result.data.signedUrl) {
+        return result.data.signedUrl;
+      } else if (result.data && result.data.url) {
+        return result.data.url;
+      } else if (result.signedUrl) {
+        return result.signedUrl;
+      } else if (result.url) {
+        return result.url;
+      } else {
+        console.log('Response structure:', JSON.stringify(result, null, 2));
+        throw new Error('No se encontró la URL de descarga en la respuesta');
       }
-
-      // Get the blob content
-      const blob = await response.blob();
-      
-      // For now, we just return void since the actual file handling will be done in the hook
-      // In a real implementation, we would use Expo FileSystem and Sharing APIs
     } catch (error) {
       console.error('Error downloading file:', error);
       throw error;
