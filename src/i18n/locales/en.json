@@ -164,6 +164,7 @@
   },
   "reservation": {
     "title": "Reservations",
+    "myReservations": "My reservations",
     "question": "What would you like to reserve?",
     "noHoursAvailable": "No available time slots",
     "noCourtsAvailable": "No available courts",

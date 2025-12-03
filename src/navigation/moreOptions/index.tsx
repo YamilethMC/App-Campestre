@@ -40,6 +40,11 @@ const MoreOptionsScreen = () => {
     //   onPress: () => navigation.navigate('Menu')
     // },
     { 
+      title: t('reservations.myReservations'), 
+      icon: 'calendar-outline' as const,
+      onPress: () => navigation.navigate('MyReservations')
+    },
+    { 
       title: t('accountStatements.title'), 
       icon: 'document-text-outline' as const,
       onPress: () => navigation.navigate('AccountStatements')

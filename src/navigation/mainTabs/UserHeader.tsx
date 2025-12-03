@@ -33,7 +33,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ navigation }) => {
               ¡Hola, {profile?.name || 'Usuario'}!
             </Text>
             <Text style={styles.userInfoText}>
-              Socio {userId || 'N/A'}
+              Socio {profile?.memberCode || userId || 'N/A'}
             </Text>
           </View>
           <View style={styles.rightContainer}>
@@ -63,7 +63,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ navigation }) => {
           </View>
           
           <Text style={styles.modalName}>{profile?.name || 'Nombre del Socio'}</Text>
-          <Text style={styles.modalMemberId}>Socio {userId || 'N/A'}</Text>
+          <Text style={styles.modalMemberId}>Socio {profile?.memberCode || userId || 'N/A'}</Text>
           <Text style={styles.modalDescription}>
             Presenta este código en recepción o cualquier área del club
           </Text>

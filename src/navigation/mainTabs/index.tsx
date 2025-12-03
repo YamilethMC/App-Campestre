@@ -17,6 +17,7 @@ import MoreOptionsScreen from '../moreOptions';
 import UserHeader from './UserHeader';
 import HelpCenterScreen from '../../features/help-center';
 import FilesScreen from '../../features/files';
+import MyReservationsScreen from '../../features/my-reservations';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -109,6 +110,11 @@ const MoreStack = () => (
       // options={({ navigation }) => ({
       //   ...headerOptions('Perfil', 'Edita tu información personal', true),
       // })}
+    />
+    <Stack.Screen
+      name="MyReservations"
+      component={MyReservationsScreen}
+      options={{ headerShown: false }}
     />
     <Stack.Screen
       name="Surveys"

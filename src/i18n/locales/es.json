@@ -17,7 +17,8 @@
     "English": "Inglés"
   },
   "reservations": {
-    "title": "Reservaciones"
+    "title": "Reservaciones",
+    "myReservations": "Mis reservaciones"
   },
   "auth": {
     "container": {
