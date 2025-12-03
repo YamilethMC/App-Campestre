@@ -145,3 +145,61 @@ export const requestVehicle = async (vehicleId: string): Promise<{ success: bool
     message: `Auto solicitado, llega en 5 minutos`,
   };
 };
+
+// Delete guest from member's guest list
+export const deleteGuest = async (guestId: number): Promise<{ success: boolean; message?: string; error?: string; status: number }> => {
+  const { token } = useAuthStore.getState();
+  if (!token) {
+    return {
+      success: false,
+      error: 'No hay token de autenticación disponible.',
+      status: 401
+    };
+  }
+console.log('guestId:', guestId);
+  try {
+    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/club-members/${guestId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'accept': '*/*',
+      },
+    });
+
+    if (!response.ok) {
+      let errorMessage = 'Error al eliminar el invitado';
+
+      // Manejar códigos de error específicos
+      switch (response.status) {
+        case 404:
+          errorMessage = 'Miembro no encontrado';
+          break;
+        case 500:
+          errorMessage = 'Error interno del servidor: Por favor intenta más tarde';
+          break;
+        default:
+          const errorText = await response.text();
+          errorMessage = `Error en la solicitud: ${response.status}. Detalles: ${errorText}`;
+      }
+
+      return {
+        success: false,
+        error: errorMessage,
+        status: response.status
+      };
+    }
+
+    return {
+      success: true,
+      message: 'Invitado eliminado exitosamente',
+      status: response.status
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: 'Error desconocido al eliminar el invitado',
+      status: 500
+    };
+  }
+};

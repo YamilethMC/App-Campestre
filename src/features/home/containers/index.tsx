@@ -55,7 +55,7 @@ const HomeScreen = () => {
   // State for showing guests modal
   const [showGuestsModal, setShowGuestsModal] = useState(false);
 
-  const { getMemberData, loading, memberData } = useMemberData();
+  const { getMemberData, loading, memberData, deleteGuest } = useMemberData();
 
   const handleViewGuests = useCallback(async () => {
     const { userId, token } = useAuthStore.getState();
@@ -136,6 +136,7 @@ const HomeScreen = () => {
         guests={memberData?.guests || []}
         loading={loading}
         onClose={() => setShowGuestsModal(false)}
+        onDeleteGuest={deleteGuest}
       />
     </View>
   );

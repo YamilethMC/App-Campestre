@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS } from '../../../../shared/theme/colors';
 
@@ -21,16 +21,21 @@ interface GuestsModalProps {
   guests: Guest[];
   loading: boolean;
   onClose: () => void;
+  onDeleteGuest?: (guestId: number) => Promise<boolean>;
 }
 
-const GuestsModal: React.FC<GuestsModalProps> = ({ 
-  visible, 
-  guests, 
-  loading, 
-  onClose 
+const GuestsModal: React.FC<GuestsModalProps> = ({
+  visible,
+  guests,
+  loading,
+  onClose,
+  onDeleteGuest
 }) => {
   console.log('guests en modal:', guests);
   console.log('loading en modal:', loading);
+
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [guestToDelete, setGuestToDelete] = useState<number | null>(null);
 
   return (
     <Modal
@@ -42,7 +47,7 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
           <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>Lista de Invitados</Text>
+            <Text style={styles.modalTitle}>Lista de invitados</Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Ionicons name="close" size={24} color={COLORS.gray600} />
             </TouchableOpacity>
@@ -70,6 +75,17 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
                           {guest.relationship}
                         </Text>
                       </View>
+                      {onDeleteGuest && (
+                        <TouchableOpacity
+                          style={styles.deleteButton}
+                          onPress={() => {
+                            setGuestToDelete(guest.id);
+                            setShowConfirmation(true);
+                          }}
+                        >
+                          <Ionicons name="trash-outline" size={20} color={COLORS.error} />
+                        </TouchableOpacity>
+                      )}
                     </View>
                   ))}
                 </ScrollView>
@@ -86,6 +102,42 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
           </TouchableOpacity>
         </View>
       </View>
+
+      {/* Confirmation Modal for Delete */}
+      <Modal
+        animationType="none"
+        transparent={true}
+        visible={showConfirmation}
+        onRequestClose={() => setShowConfirmation(false)}
+      >
+        <View style={styles.confirmationOverlay}>
+          <View style={styles.confirmationContainer}>
+            <Text style={styles.confirmationTitle}>Confirmar eliminación</Text>
+            <Text style={styles.confirmationMessage}>¿Estás seguro de que deseas eliminar a este invitado?</Text>
+            <View style={styles.confirmationButtonsContainer}>
+              <TouchableOpacity
+                style={[styles.confirmationButton, styles.cancelButton]}
+                onPress={() => setShowConfirmation(false)}
+              >
+                <Text style={styles.confirmationButtonText}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.confirmationButton, styles.deleteButtonConfirm]}
+                onPress={async () => {
+                  if (guestToDelete !== null && onDeleteGuest) {
+                    if (await onDeleteGuest(guestToDelete)) {
+                      onClose(); // Close the modal after successful deletion
+                    }
+                  }
+                  setShowConfirmation(false);
+                }}
+              >
+                <Text style={[styles.confirmationButtonText, styles.confirmationButtonDeleteText]}>Eliminar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </Modal>
   );
 };
@@ -162,6 +214,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 4,
+    position: 'relative',
   },
   guestInfo: {
     flex: 1,
@@ -191,6 +244,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.primary,
   },
+  deleteButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: COLORS.gray100,
+  },
   noGuestsContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -208,6 +269,60 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: 16,
     fontWeight: '600',
+  },
+  confirmationOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  confirmationContainer: {
+    backgroundColor: COLORS.white,
+    borderRadius: 16,
+    padding: 20,
+    width: '80%',
+    maxWidth: 400,
+    alignItems: 'center',
+  },
+  confirmationTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: COLORS.gray900,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  confirmationMessage: {
+    fontSize: 16,
+    color: COLORS.gray700,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  confirmationButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    gap: 10,
+  },
+  confirmationButton: {
+    flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  cancelButton: {
+    backgroundColor: COLORS.gray200,
+  },
+  deleteButtonConfirm: {
+    backgroundColor: COLORS.error,
+  },
+  confirmationButtonText: {
+    color: COLORS.gray800,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  confirmationButtonDeleteText: {
+    color: COLORS.white,
   },
 });
 
