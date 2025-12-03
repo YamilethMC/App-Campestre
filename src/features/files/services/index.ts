@@ -1,5 +1,5 @@
 import { useAuthStore } from '../../auth/store/useAuthStore';
-import { File, FileApiResponse, FileDownloadResponse } from '../interfaces';
+import { FileApiResponse } from '../interfaces';
 
 export const fileService = {
   // Obtener archivos paginados con búsqueda
@@ -49,20 +49,18 @@ export const fileService = {
   },
 
   // Descargar archivo
-  downloadFile: async (fileId: number): Promise<void> => {
-    const { token } = useAuthStore.getState();
-    if (!token) {
-      throw new Error('No authentication token available');
-    }
+  downloadFile: async (fileId: string): Promise<void> => {
 
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/files/download/${fileId}`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'accept': '*/*',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${useAuthStore.getState().token}`,
         },
       });
+
+      console.log('Response:', response);
 
       if (!response.ok) {
         const errorText = await response.text();

@@ -21,7 +21,7 @@ export const useAccountStatements = () => {
     setError
   } = useAccountStatementStore();
 
-  const formatDateRange = (startDate: string, endDate: string) => {
+  const formatDateRange = (startDate: Date, endDate: Date) => {
   try {
     const start = new Date(startDate);
     const end = new Date(endDate);
@@ -61,10 +61,17 @@ export const useAccountStatements = () => {
     const response = await accountStatementService.getAccountStatements(parseInt(profile.id));
 
     if (response.success && response.data) {
-      response.data.forEach((statement: any) => {
-        statement.period = formatDateRange(statement.periodStart, statement.periodEnd);
-      });
-      setStatements(response.data);
+      const statementsArray = Array.isArray(response.data) 
+        ? response.data 
+        : response.data.data || [];
+
+      // Process each statement
+      const formattedStatements = statementsArray.map((statement: any) => ({
+        ...statement,
+        period: formatDateRange(statement.periodStart, statement.periodEnd)
+      }));
+
+      setStatements(formattedStatements);
     } else {
       console.error('Error al cargar estados de cuenta:', response.error);
       Alert.alert('Error', response.error || 'Error al cargar los estados de cuenta');
