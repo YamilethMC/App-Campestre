@@ -17,32 +17,43 @@ const ReservationCard = ({ reservation, onCancel }: ReservationCardProps) => {
     onCancel(reservation.id, reservation.startTime, reservation.endTime);
   };
 
-  // Format the time for display
+  // Format the time for display - extract date and time directly from ISO string without timezone conversion
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('es-ES', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
+    // Extract date part from ISO string (YYYY-MM-DD format)
+    const datePart = dateString.split('T')[0];
+    const [year, month, day] = datePart.split('-');
+    // Format as DD/MM/YYYY
+    return `${day}/${month}/${year}`;
   };
 
   const formatTime = (dateString: string) => {
-    const date = new Date(dateString);
     console.log('dateString: ', dateString);
-    console.log('date: ', date);
-    return date.toLocaleTimeString('es-ES', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    });
+    // Extract time part from ISO string (HH:MM:SS.sss format) and get only HH:MM
+    const timePart = dateString.split('T')[1].split('.')[0]; // Get HH:MM:SS part
+    const [hour, minute] = timePart.split(':');
+    console.log('extracted time: ', `${hour}:${minute}`);
+    return `${hour}:${minute}`;
   };
 
   const getDuration = (start: string, end: string) => {
-    const startDate = new Date(start);
-    const endDate = new Date(end);
-    const diffInMinutes = (endDate.getTime() - startDate.getTime()) / (1000 * 60);
-    return `${Math.round(diffInMinutes)} min`;
+    // Extract time parts to calculate duration
+    const startTime = start.split('T')[1].split('.')[0]; // HH:MM:SS
+    const endTime = end.split('T')[1].split('.')[0]; // HH:MM:SS
+
+    const [startHour, startMinute] = startTime.split(':').map(Number);
+    const [endHour, endMinute] = endTime.split(':').map(Number);
+
+    // Calculate difference in minutes
+    const startTotalMinutes = startHour * 60 + startMinute;
+    const endTotalMinutes = endHour * 60 + endMinute;
+
+    // Handle case where end time is on the next day (if needed)
+    let diffInMinutes = endTotalMinutes - startTotalMinutes;
+    if (diffInMinutes < 0) {
+      diffInMinutes += 24 * 60; // Add 24 hours if end time is smaller
+    }
+
+    return `${diffInMinutes} min`;
   };
 
   // Get an appropriate icon based on the facility type

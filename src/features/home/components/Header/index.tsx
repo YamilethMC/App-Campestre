@@ -53,9 +53,6 @@ const HomeHeader: React.FC<HeaderProps> = ({ navigation }) => {
       <QRModal
         visible={showQRModal}
         onClose={handleCloseQRModal}
-        userName={profile?.name}
-        memberId={userId?.toString()}
-        memberSince={memberSinceYear.toString()}
       />
     </>
   );
