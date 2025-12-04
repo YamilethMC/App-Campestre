@@ -64,10 +64,11 @@ const HomeScreen = () => {
       return;
     }
 
-    const data = await getMemberData(parseInt(userId));
-    if (data) {
-      setShowGuestsModal(true);
-    }
+    // Abrir el modal inmediatamente con indicador de carga
+    setShowGuestsModal(true);
+
+    // Cargar los datos después de abrir el modal
+    await getMemberData(parseInt(userId));
   }, [getMemberData]);
 
   const handleVehicleSelect = useCallback((vehicleId: string, vehicleName: string) => {

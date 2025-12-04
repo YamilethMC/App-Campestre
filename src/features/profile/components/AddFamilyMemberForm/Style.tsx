@@ -160,10 +160,10 @@ const styles = StyleSheet.create({
   },
   modalButtonRow: {
     flexDirection: 'row',
-    gap: 16,
+    gap: 8,
   },
   modalButtonSpacer: {
-    width: 16,
+    width: 8,
   },
   modalButton: {
     flex: 1,
