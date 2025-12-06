@@ -14,6 +14,9 @@ import QuickActions from '../components/QuickActions';
 import AddFamilyMemberForm from '../../profile/components/AddFamilyMemberForm';
 import { useMemberData } from '../hooks/useMemberData';
 
+// Banner component
+import BannerContainer from '../../banner';
+
 // Modal from shared components
 import Modal from '../../../shared/components/Modal/Modal';
 import { useAuthStore } from '../../auth/store/useAuthStore';
@@ -92,6 +95,7 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
+      <BannerContainer />
       <Header />
       <ScrollView
         style={styles.scrollView}
