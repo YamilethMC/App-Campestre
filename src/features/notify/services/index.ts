@@ -1,49 +1,5 @@
 import { useAuthStore } from '../../auth/store/useAuthStore';
-
-// Interface for notification data
-export interface Notification {
-  id: number;
-  title: string;
-  message: string;
-  type: string;
-  sentDate: string;
-  active: boolean;
-  visibleUntil: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-// Interface for pagination metadata
-export interface PaginationMeta {
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
-}
-
-// Interface for the API response
-export interface NotificationResponse {
-  success: boolean;
-  data: {
-    notifications: Notification[];
-    meta: PaginationMeta;
-  };
-  timestamp: string;
-  messageId: string;
-  traceId: string;
-}
-
-// Interface for service response
-interface ServiceResponse {
-  success: boolean;
-  data?: {
-    notifications: Notification[];
-    meta: PaginationMeta;
-  };
-  message?: string;
-  error?: string;
-  status: number;
-}
+import { Notification, PaginationMeta, ServiceResponse } from '../interfaces';
 
 // Service class for handling notification API calls
 export class NotificationService {

@@ -1,12 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { Alert, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import Button from '../../../shared/components/Button';
 import { COLORS } from '../../../shared/theme/colors';
 import NotificationCard from '../components/NotificationCard';
 import SearchBar from '../components/SearchBar';
-import { useDebounce } from '../hooks/useDebounce';
-import { useNotificationStore } from '../store';
+import { useNotifications } from '../hooks';
 import styles from './Style';
 
 const NotificationsScreen: React.FC = () => {
@@ -14,32 +13,13 @@ const NotificationsScreen: React.FC = () => {
     notifications,
     loading,
     error,
-    search,
     pagination,
-    fetchNotifications,
-    fetchNextPage,
-    fetchPreviousPage,
-    goToPage,
-    updateSearch,
-  } = useNotificationStore();
-
-  const initialLoadCompleted = useRef(false);
-
-  // Debounce the search input to avoid too many API calls
-  const debouncedSearch = useDebounce(search, 500);
-
-  useEffect(() => {
-    // Only fetch if this is not the initial load or if search has changed after initial load
-    if (initialLoadCompleted.current) {
-      // Fetch notifications when search changes (after initial load)
-      fetchNotifications(1, debouncedSearch);
-    } else {
-      // Mark that the initial load has been completed
-      initialLoadCompleted.current = true;
-      // Fetch notifications on initial mount with current search (which could be empty)
-      fetchNotifications(1, search);
-    }
-  }, [debouncedSearch]);
+    search,
+    handleNextPage,
+    handlePreviousPage,
+    handleGoToPage,
+    handleSearch,
+  } = useNotifications();
 
   // Show error if there's an error
   useEffect(() => {
@@ -56,11 +36,6 @@ const NotificationsScreen: React.FC = () => {
       );
     }
   }, [error]);
-
-  // Function to handle search input changes
-  const handleSearchChange = (text: string) => {
-    updateSearch(text);
-  };
 
   // Function to get visible page numbers for pagination
   const getVisiblePages = () => {
@@ -102,7 +77,7 @@ const NotificationsScreen: React.FC = () => {
           {/* Search Bar */}
           <SearchBar
             value={search}
-            onChangeText={handleSearchChange}
+            onChangeText={handleSearch}
             placeholder="Buscar notificaciones..."
           />
 
@@ -142,7 +117,7 @@ const NotificationsScreen: React.FC = () => {
                 <Button
                   icon={<Ionicons name="chevron-back" size={22} color={COLORS.primary} />}
                   variant="outline"
-                  onPress={fetchPreviousPage}
+                  onPress={handlePreviousPage}
                   disabled={pagination.page <= 1}
                   style={[
                     styles.paginationArrowButton,
@@ -160,7 +135,7 @@ const NotificationsScreen: React.FC = () => {
                       key={pageNum}
                       text={pageNum.toString()}
                       variant="outline"
-                      onPress={() => goToPage(pageNum)}
+                      onPress={() => handleGoToPage(pageNum)}
                       style={[
                         styles.pageNumberButton,
                         pageNum === pagination.page && styles.currentPageButton
@@ -176,7 +151,7 @@ const NotificationsScreen: React.FC = () => {
                 <Button
                   icon={<Ionicons name="chevron-forward" size={22} color={COLORS.primary} />}
                   variant="outline"
-                  onPress={fetchNextPage}
+                  onPress={handleNextPage}
                   disabled={pagination.page >= pagination.totalPages}
                   style={[
                     styles.paginationArrowButton,

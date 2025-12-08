@@ -1,13 +1,9 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../../../shared/theme/colors';
-import { Notification } from '../../services';
+import { Notification, NotificationCardProps } from '../../interfaces';
 import styles from './Style';
-
-interface NotificationCardProps {
-  notification: Notification;
-}
 
 const NotificationCard: React.FC<NotificationCardProps> = ({ notification }) => {
   // Format the date to be more readable
@@ -53,13 +49,22 @@ const NotificationCard: React.FC<NotificationCardProps> = ({ notification }) => 
 
   return (
     <View style={[styles.container, { borderLeftColor: typeColor }]}>
+      {/* Mostrar imagen si está disponible */}
+      {notification.image && (
+        <Image
+          source={{ uri: notification.image }}
+          style={styles.image}
+          resizeMode="cover"
+        />
+      )}
+
       <View style={styles.header}>
         <View style={styles.titleContainer}>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4 }}>
-            <Ionicons 
-              name={getIconName(notification.type)} 
-              size={22} 
-              color={typeColor} 
+            <Ionicons
+              name={getIconName(notification.type)}
+              size={22}
+              color={typeColor}
               style={{ marginRight: 8 }}
             />
             <Text style={styles.title} numberOfLines={2}>

@@ -12,6 +12,12 @@ const TYPE_COLORS = {
 };
 
 const styles = StyleSheet.create({
+  image: {
+    width: '100%',
+    height: 120,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
   container: {
     backgroundColor: COLORS.white,
     borderRadius: 16,
