@@ -71,7 +71,7 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onPress, surveyId }) =>
             <Text style={styles.iconText}>{survey.estimatedTime}</Text>
           </View>
           {/* Mostrar el contador de personas solo si showResponseCount es true */}
-          {survey.showResponseCount !== false && (
+          {survey.responsesShow !== false && (
             <View style={styles.iconContainer}>
               <Ionicons name="people-outline" size={16} color={COLORS.gray600} />
               <Text style={styles.iconText}>{survey.participantCount} {messages.SURVEYCARD.PEOPLE}</Text>

@@ -24,7 +24,7 @@ interface SurveyApiResponse {
           responseCount?: number;
           responsePercentage?: number;
           image?: string; // Nueva propiedad para la imagen
-          showResponseCount?: boolean; // Nueva propiedad para mostrar conteo de respuestas
+          responsesShow?: boolean; // Nueva propiedad para mostrar conteo de respuestas
         }>;
         meta: {
           total: number;
@@ -51,7 +51,7 @@ interface SurveyApiResponse {
           responseCount?: number;
           responsePercentage?: number;
           image?: string; // Nueva propiedad para la imagen
-          showResponseCount?: boolean; // Nueva propiedad para mostrar conteo de respuestas
+          responsesShow?: boolean; // Nueva propiedad para mostrar conteo de respuestas
         }>;
         meta: {
           total: number;
@@ -198,7 +198,7 @@ export const surveyService = {
         dateCreated: apiSurvey.createdAt,
         dateCompleted: apiSurvey.endDate,
         image: apiSurvey.image, // Nuevo campo para la imagen
-        showResponseCount: apiSurvey.showResponseCount, // Nuevo campo para mostrar conteo de respuestas
+        responsesShow: apiSurvey.responsesShow, // Nuevo campo para mostrar conteo de respuestas
       }));
 
       const unansweredSurveys: Survey[] = result.data.data.unanswered.data.map(apiSurvey => ({
@@ -214,7 +214,7 @@ export const surveyService = {
         dateCreated: apiSurvey.createdAt,
         dateCompleted: apiSurvey.endDate,
         image: apiSurvey.image, // Nuevo campo para la imagen
-        showResponseCount: apiSurvey.showResponseCount, // Nuevo campo para mostrar conteo de respuestas
+        responsesShow: apiSurvey.responsesShow, // Nuevo campo para mostrar conteo de respuestas
       }));
 
       // Devolver ambos conjuntos de datos y la información de paginación

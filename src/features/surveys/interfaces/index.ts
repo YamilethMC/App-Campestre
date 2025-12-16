@@ -9,7 +9,7 @@ export interface Survey {
   questionCount: number; // e.g. 8 questions
   isActive: boolean;
   image?: string; // Image URL (replaces imageUrl)
-  showResponseCount?: boolean; // Whether to show response count
+  responsesShow?: boolean; // Whether to show response count
   averageRating?: number; // Average rating for completed surveys
   dateCreated?: string;
   dateCompleted?: string;
