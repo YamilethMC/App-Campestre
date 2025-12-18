@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import Button from '../../../shared/components/Button/Button';
 import Modal from '../../../shared/components/Modal/Modal';
 import { useAuthStore } from '../../../store';
@@ -21,6 +22,7 @@ import useProfile from '../hooks/useProfile';
 const ProfileContainer = () => {
   const { messages } = useMessages();
   const { userId } = useAuthStore();
+  const navigation = useNavigation();
 
   const {
     isEditing,
@@ -222,8 +224,22 @@ console.log('el profile esssssssssss: ', profile);
           )}
         </SectionCard>*/}
 
-        {/* Logout Button */}
+        {/* Change Password Button */}
         <View style={styles.logoutContainer}>
+          <Button
+            text="Cambiar Contraseña"
+            onPress={() => {
+              // @ts-ignore
+              navigation.navigate('ChangePassword', {
+                userId: userId,
+                isFirstLogin: false
+              });
+            }}
+            variant="secondary"
+            style={[styles.logoutButton, { marginBottom: 15 }]}
+          />
+          
+          {/* Logout Button */}
           <Button
             text={messages.CONTAINER.LOGOUT}
             onPress={handleLogout}

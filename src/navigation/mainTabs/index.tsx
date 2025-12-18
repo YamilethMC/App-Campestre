@@ -18,6 +18,7 @@ import UserHeader from './UserHeader';
 import HelpCenterScreen from '../../features/help-center';
 import FilesScreen from '../../features/files';
 import MyReservationsScreen from '../../features/my-reservations';
+import { ChangePasswordScreen } from '../../features/auth/components/ChangePassword';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -155,6 +156,15 @@ const MoreStack = () => (
       name="Files"
       component={FilesScreen}
       options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="ChangePassword"
+      component={ChangePasswordScreen}
+      options={{ 
+        headerShown: true,
+        title: 'Cambiar Contraseña',
+        headerBackVisible: true
+      }}
     />
   </Stack.Navigator>
 );

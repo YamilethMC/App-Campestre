@@ -36,6 +36,10 @@ export type MoreStackParamList = {
   Notifications: undefined;
   Files: undefined;
   MyReservations: undefined;
+  ChangePassword: {
+    userId: number;
+    isFirstLogin?: boolean;
+  };
 };
 
 export type RootStackNavigationProp = NavigationProp<RootStackParamList>;

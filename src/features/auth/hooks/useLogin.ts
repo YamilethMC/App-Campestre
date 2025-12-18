@@ -54,7 +54,6 @@ export const useLogin = () => {
     try {
       // 1. Llamar al servicio de autenticación
       const { success, token, user, error: authError } = await authService.login(email, password);
-      console.log('login hook user:', user);
 
       if (success && user) {
         // 2. Separar datos de autenticación y perfil
@@ -65,7 +64,18 @@ export const useLogin = () => {
         // Asegurarse de que profileData cumpla con UserProfile
         setProfile(profileData as userProfile);
         
-        // 4. Navegar a la pantalla principal
+        // 4. Verificar si debe cambiar contraseña
+        if (user.mustChangePassword) {
+          console.log('Debe cambiar contraseña');
+          // @ts-ignore
+          navigation.navigate('ChangePassword', { 
+            userId: user.id, 
+            isFirstLogin: true 
+          });
+          return true;
+        }
+        
+        // 5. Navegar a la pantalla principal
         // @ts-ignore - asumiendo que existe la ruta 'MainTabs'
         // navigation.navigate('Main');
         return true;

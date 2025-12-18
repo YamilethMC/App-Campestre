@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 //Alert 
 
@@ -22,6 +23,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   emailError,
 }) => {
   const { messages } = useMessages();
+  const navigation = useNavigation();
 
   return (
     <View style={styles.content}>
@@ -60,7 +62,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.forgotPasswordButton}>
+      <TouchableOpacity 
+        style={styles.forgotPasswordButton}
+        onPress={() => {
+          // @ts-ignore
+          navigation.navigate('ForgotPassword');
+        }}
+      >
         <Text style={styles.linkText}>{messages.LOGIN.FORGOT_PASSWORD}</Text>
       </TouchableOpacity>
     </View>
