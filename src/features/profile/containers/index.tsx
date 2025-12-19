@@ -235,7 +235,7 @@ console.log('el profile esssssssssss: ', profile);
                 isFirstLogin: false
               });
             }}
-            variant="secondary"
+            variant="outline"
             style={[styles.logoutButton, { marginBottom: 15 }]}
           />
           
