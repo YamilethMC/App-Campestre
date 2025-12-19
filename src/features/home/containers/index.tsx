@@ -118,7 +118,6 @@ console.log('Member data in HomeScreen:', memberData);
 
   return (
     <View style={styles.container}>
-      <BannerContainer />
       {/*<Header memberData={memberData} />*/}
       <ScrollView
         style={styles.scrollView}
@@ -126,6 +125,7 @@ console.log('Member data in HomeScreen:', memberData);
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.cardsContainer}>
+          <BannerContainer />
           {/*<QuickActions
             onVehicleSelect={handleVehicleSelect}
             onWaiterCall={handleCallWaiter}
