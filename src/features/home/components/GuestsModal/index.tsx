@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS } from '../../../../shared/theme/colors';
 import { Guest } from '../../../home/services/homeService';
 
@@ -21,12 +21,10 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
 }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [guestToDelete, setGuestToDelete] = useState<number | null>(null);
-  const [activeTab, setActiveTab] = useState<'all' | 'invitados' | 'dependientes' | 'temporales'>('all');
+  const [activeTab, setActiveTab] = useState<'invitados' | 'dependientes' | 'temporales'>('invitados');
 
   // Filter guests by type
-  const filteredGuests = activeTab === 'all'
-    ? guests
-    : guests.filter(guest => guest.type === activeTab.toUpperCase());
+  const filteredGuests = guests.filter(guest => guest.type === activeTab.toUpperCase());
 
   // Check if we have any guests of a specific type
   const hasInvitados = guests.some(guest => guest.type === 'INVITADO');
@@ -52,31 +50,37 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
           {/* Tabs for different guest types */}
           <View style={styles.tabsContainer}>
             <TouchableOpacity
-              style={[styles.tab, activeTab === 'all' && styles.activeTab]}
-              onPress={() => setActiveTab('all')}
-            >
-              <Text style={[styles.tabText, activeTab === 'all' && styles.activeTabText]}>Todos</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
               style={[styles.tab, activeTab === 'invitados' && styles.activeTab]}
               onPress={() => setActiveTab('invitados')}
-              disabled={!hasInvitados}
             >
-              <Text style={[styles.tabText, activeTab === 'invitados' && styles.activeTabText, !hasInvitados && styles.disabledTabText]}>Invitados</Text>
+              <Text style={[
+                styles.tabText,
+                activeTab === 'invitados' ? styles.activeTabText : (hasInvitados ? styles.tabText : styles.disabledTabText)
+              ]}>
+                Invitados
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.tab, activeTab === 'dependientes' && styles.activeTab]}
               onPress={() => setActiveTab('dependientes')}
-              disabled={!hasDependientes}
             >
-              <Text style={[styles.tabText, activeTab === 'dependientes' && styles.activeTabText, !hasDependientes && styles.disabledTabText]}>Dependientes</Text>
+              <Text style={[
+                styles.tabText,
+                activeTab === 'dependientes' ? styles.activeTabText : (hasDependientes ? styles.tabText : styles.disabledTabText)
+              ]}>
+                Dependientes
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.tab, activeTab === 'temporales' && styles.activeTab]}
               onPress={() => setActiveTab('temporales')}
-              disabled={!hasTemporales}
             >
-              <Text style={[styles.tabText, activeTab === 'temporales' && styles.activeTabText, !hasTemporales && styles.disabledTabText]}>Temporales</Text>
+              <Text style={[
+                styles.tabText,
+                activeTab === 'temporales' ? styles.activeTabText : (hasTemporales ? styles.tabText : styles.disabledTabText)
+              ]}>
+                Temporales
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -120,10 +124,9 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
             ) : (
               <View style={styles.noGuestsContainer}>
                 <Text>
-                  {activeTab === 'invitados' ? 'No hay invitados' :
-                   activeTab === 'dependientes' ? 'No hay socios dependientes' :
-                   activeTab === 'temporales' ? 'No hay pases temporales' :
-                   'No hay invitados registrados'}
+                  {activeTab === 'invitados' ? 'No hay invitados registrados' :
+                   activeTab === 'dependientes' ? 'No hay socios dependientes registrados' :
+                   'No hay pases temporales registrados'}
                 </Text>
               </View>
             )}
