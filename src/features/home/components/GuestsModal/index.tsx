@@ -1,20 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { COLORS } from '../../../../shared/theme/colors';
-
-interface GuestUser {
-  id: number;
-  name: string;
-  lastName: string;
-  email: string;
-}
-
-interface Guest {
-  id: number;
-  relationship: string;
-  user: GuestUser;
-}
+import { Guest } from '../../../home/services/homeService';
 
 interface GuestsModalProps {
   visible: boolean;
@@ -31,11 +19,19 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
   onClose,
   onDeleteGuest
 }) => {
-  console.log('guests en modal:', guests);
-  console.log('loading en modal:', loading);
-
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [guestToDelete, setGuestToDelete] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState<'all' | 'invitados' | 'dependientes' | 'temporales'>('all');
+
+  // Filter guests by type
+  const filteredGuests = activeTab === 'all'
+    ? guests
+    : guests.filter(guest => guest.type === activeTab.toUpperCase());
+
+  // Check if we have any guests of a specific type
+  const hasInvitados = guests.some(guest => guest.type === 'INVITADO');
+  const hasDependientes = guests.some(guest => guest.type === 'DEPENDIENTE');
+  const hasTemporales = guests.some(guest => guest.type === 'TEMPORAL');
 
   return (
     <Modal
@@ -53,18 +49,49 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
             </TouchableOpacity>
           </View>
 
+          {/* Tabs for different guest types */}
+          <View style={styles.tabsContainer}>
+            <TouchableOpacity
+              style={[styles.tab, activeTab === 'all' && styles.activeTab]}
+              onPress={() => setActiveTab('all')}
+            >
+              <Text style={[styles.tabText, activeTab === 'all' && styles.activeTabText]}>Todos</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.tab, activeTab === 'invitados' && styles.activeTab]}
+              onPress={() => setActiveTab('invitados')}
+              disabled={!hasInvitados}
+            >
+              <Text style={[styles.tabText, activeTab === 'invitados' && styles.activeTabText, !hasInvitados && styles.disabledTabText]}>Invitados</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.tab, activeTab === 'dependientes' && styles.activeTab]}
+              onPress={() => setActiveTab('dependientes')}
+              disabled={!hasDependientes}
+            >
+              <Text style={[styles.tabText, activeTab === 'dependientes' && styles.activeTabText, !hasDependientes && styles.disabledTabText]}>Dependientes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.tab, activeTab === 'temporales' && styles.activeTab]}
+              onPress={() => setActiveTab('temporales')}
+              disabled={!hasTemporales}
+            >
+              <Text style={[styles.tabText, activeTab === 'temporales' && styles.activeTabText, !hasTemporales && styles.disabledTabText]}>Temporales</Text>
+            </TouchableOpacity>
+          </View>
+
           <View style={styles.contentContainer}>
             {loading ? (
               <View style={styles.loadingContainer}>
                 <Text>Cargando invitados...</Text>
               </View>
-            ) : guests.length > 0 ? (
+            ) : filteredGuests.length > 0 ? (
               <View style={styles.guestsContainer}>
                 <ScrollView
                   style={styles.guestsList}
                   contentContainerStyle={styles.guestsListContent}
                 >
-                  {guests.map((guest) => (
+                  {filteredGuests.map((guest) => (
                     <View key={guest.id} style={styles.guestCard}>
                       <View style={styles.guestInfo}>
                         <Text style={styles.guestName}>
@@ -92,7 +119,12 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
               </View>
             ) : (
               <View style={styles.noGuestsContainer}>
-                <Text>No hay invitados registrados.</Text>
+                <Text>
+                  {activeTab === 'invitados' ? 'No hay invitados' :
+                   activeTab === 'dependientes' ? 'No hay socios dependientes' :
+                   activeTab === 'temporales' ? 'No hay pases temporales' :
+                   'No hay invitados registrados'}
+                </Text>
               </View>
             )}
           </View>
@@ -181,6 +213,36 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 20,
     backgroundColor: COLORS.gray100,
+  },
+  tabsContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.gray200,
+    backgroundColor: COLORS.gray50,
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: 12,
+    alignItems: 'center',
+    borderBottomWidth: 2,
+    borderBottomColor: 'transparent',
+  },
+  activeTab: {
+    borderBottomColor: COLORS.primary,
+    backgroundColor: COLORS.white,
+  },
+  tabText: {
+    fontSize: 14,
+    color: COLORS.gray600,
+    fontWeight: '500',
+  },
+  activeTabText: {
+    color: COLORS.primary,
+    fontWeight: '600',
+  },
+  disabledTabText: {
+    color: COLORS.gray400,
   },
   contentContainer: {
     flex: 1,

@@ -2,8 +2,7 @@
 import { authService } from '../../auth/services/authService';
 import { useAuthStore } from '../../auth/store/useAuthStore';
 
-// Interface for guest data
-interface GuestUser {
+export interface GuestUser {
   id: number;
   name: string;
   lastName: string;
@@ -12,24 +11,72 @@ interface GuestUser {
 
 export interface Guest {
   id: number;
+  memberCode: number | null;
+  title: string | null;
+  profession: string | null;
+  paymentMethod: string;
+  dateOfAdmission: string;
+  foreignMember: boolean;
+  createdAt: string;
+  updatedAt: string;
+  invitedById: number;
   relationship: string;
   user: GuestUser;
+  type: string; // The guest type: 'INVITADO', 'DEPENDIENTE', or 'TEMPORAL'
 }
 
-// Interface for API response
-interface MemberDataResponse {
-  success: boolean;
-  data: {
-    guests: Guest[];
-  };
-  message?: string;
-  timestamp: string;
-  messageId: string;
-  traceId: string;
+export interface Address {
+  id: number;
+  street: string;
+  externalNumber: string;
+  internalNumber: string;
+  suburb: string;
+  city: string;
+  zipCode: string;
+  state: string;
+  country: string;
+}
+
+export interface User {
+  id: number;
+  email: string;
+  password: string;
+  name: string;
+  lastName: string;
+  addressId: number;
+  type: string;
+  passesAvailable: string;
+  active: boolean;
+  birthDate: string;
+  gender: string;
+  RFC: string;
+  expireAt: string | null;
+  resetToken: string;
+  tokenExpires: string;
+  mustChangePassword: boolean;
+  createdAt: string;
+  updatedAt: string;
+  roleId: number | null;
+  address: Address;
+  phone: any[];
+  role: null;
+  qrCode: any[];
 }
 
 export interface MemberData {
   id: number;
+  memberCode: number;
+  title: string;
+  profession: string;
+  paymentMethod: string;
+  dateOfAdmission: string;
+  foreignMember: boolean;
+  createdAt: string;
+  updatedAt: string;
+  invitedById: number | null;
+  relationship: string | null;
+  user: User;
+  invitedBy: null;
   guests: Guest[];
 }
 
@@ -49,7 +96,6 @@ export const getMemberData = async (memberId: number): Promise<{
       status: 401
     };
   }
-
   try {
     const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/club-members/${memberId}`, {
       method: 'GET',
@@ -59,7 +105,6 @@ export const getMemberData = async (memberId: number): Promise<{
         'accept': '*/*',
       },
     });
-
     if (!response.ok) {
       let errorMessage = 'Error al cargar los datos del socio';
 
@@ -83,17 +128,12 @@ export const getMemberData = async (memberId: number): Promise<{
       };
     }
 
-    const result: MemberDataResponse = await response.json();
+    const result = await response.json();
 
     if (result.success) {
-      const data: MemberData = {
-        id: memberId,
-        guests: result.data.guests || [],
-      };
-
       return {
         success: true,
-        data: data,
+        data: result.data,
         message: 'Datos del socio cargados exitosamente',
         status: response.status
       };

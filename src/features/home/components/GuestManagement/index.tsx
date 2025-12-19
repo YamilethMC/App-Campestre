@@ -1,31 +1,49 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal as RNModal } from 'react-native';
-import { COLORS } from '../../../../shared/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
-import styles from './Style';
+import React, { useState } from 'react';
+import { Modal as RNModal, Text, TouchableOpacity, View } from 'react-native';
 import Button from '../../../../shared/components/Button/Button';
-import { useProfileStore } from '../../../profile/store/useProfileStore';
+import { COLORS } from '../../../../shared/theme/colors';
+import { MemberData } from '../../services/homeService';
+import styles from './Style';
 
 interface GuestManagementProps {
   onNewPassPress: () => void;
+  onNewTempPassPress: () => void;
   onViewGuestsPress: () => void;
+  memberData: MemberData | null;
 }
 
-const GuestManagement: React.FC<GuestManagementProps> = ({ onNewPassPress, onViewGuestsPress }) => {
-  const activeGuests = 2;  // Número de invitados activos
-  const totalPasses = 5;   // Número total de pases temporales
-  const { profile } = useProfileStore();
+const GuestManagement: React.FC<GuestManagementProps> = ({ onNewPassPress, onNewTempPassPress, onViewGuestsPress, memberData }) => {
   const [showGuestRestrictionModal, setShowGuestRestrictionModal] = useState(false);
 
-  console.log('el profile en guest es: ', profile);
+  const isSocioOrDependiente = memberData?.user?.type === 'SOCIO' || memberData?.user?.type === 'DEPENDIENTE';
+  const passesAvailable = memberData?.user?.passesAvailable ? parseInt(memberData.user.passesAvailable) : 2;
+  const hasPassesAvailable = passesAvailable > 0;
 
   const handleNewPassPress = () => {
-    if (profile?.type === 'SOCIO') {
+    if (isSocioOrDependiente && hasPassesAvailable) {
       onNewPassPress();
     } else {
       setShowGuestRestrictionModal(true);
     }
   };
+
+  const handleNewTempPassPress = () => {
+    if (isSocioOrDependiente) {
+      onNewTempPassPress();
+    } else {
+      setShowGuestRestrictionModal(true);
+    }
+  };
+
+  const handleViewGuestsPress = () => {
+    if (isSocioOrDependiente) {
+      onViewGuestsPress();
+    } else {
+      setShowGuestRestrictionModal(true);
+    }
+  };
+
   return (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
@@ -34,26 +52,43 @@ const GuestManagement: React.FC<GuestManagementProps> = ({ onNewPassPress, onVie
       </View>
 
       <View style={styles.guestSection}>
-        {/*<Text style={styles.sectionTitle}>Invitados Activos</Text>
-        <View style={styles.pasesContainer}>
-          <Text style={styles.pasesText}>{totalPasses} pases temporales vigentes</Text>
-          <View style={styles.activeLabel}>
-            <Text style={styles.activeLabelText}>{activeGuests} activos</Text>
-          </View>
-        </View>*/}
+        {isSocioOrDependiente ? (
+          <Text style={styles.pasesAvailableText}>Cuenta con {passesAvailable} pases disponibles</Text>
+        ) : (
+          <Text style={styles.restrictionText}>Disponible solo para socios o socios dependientes</Text>
+        )}
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity
-            style={styles.filledButton}
+            style={[styles.filledButton, (!isSocioOrDependiente || !hasPassesAvailable) ? styles.disabledButton : null]}
             onPress={handleNewPassPress}
+            disabled={!isSocioOrDependiente || !hasPassesAvailable}
           >
-            <Text style={styles.filledButtonText}>+ Nuevo Pase</Text>
+            <Text style={[styles.filledButtonText, (!isSocioOrDependiente || !hasPassesAvailable) ? styles.disabledButtonText : null]}>
+              + Nuevo pase
+            </Text>
           </TouchableOpacity>
+
           <TouchableOpacity
-            style={styles.outlineButton}
-            onPress={onViewGuestsPress}
+            style={[styles.outlineButtonTemp, !isSocioOrDependiente ? styles.disabledButton : null]}
+            onPress={handleNewTempPassPress}
+            disabled={!isSocioOrDependiente}
           >
-            <Text style={styles.outlineButtonText}>Ver invitados</Text>
+            <Text style={[styles.outlineButtonTempText, !isSocioOrDependiente ? styles.disabledButtonText : null]}>
+              + Nuevo pase temporal
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={[styles.outlineButton, !isSocioOrDependiente ? styles.disabledButton : null]}
+            onPress={handleViewGuestsPress}
+            disabled={!isSocioOrDependiente}
+          >
+            <Text style={[styles.outlineButtonText, !isSocioOrDependiente ? styles.disabledButtonText : null]}>
+              Ver invitados
+            </Text>
           </TouchableOpacity>
         </View>
 
@@ -67,7 +102,11 @@ const GuestManagement: React.FC<GuestManagementProps> = ({ onNewPassPress, onVie
           <View style={styles.modalOverlay}>
             <View style={styles.modalContainer}>
               <Text style={styles.modalTitle}>Acceso Restringido</Text>
-              <Text style={styles.modalMessage}>Un invitado no puede generar nuevos pases. Solo los socios tienen este privilegio.</Text>
+              <Text style={styles.modalMessage}>
+                {isSocioOrDependiente && !hasPassesAvailable
+                  ? 'No tiene pases disponibles para crear nuevos invitados.'
+                  : 'Un invitado no puede generar nuevos pases. Solo los socios tienen este privilegio.'}
+              </Text>
               <View style={styles.modalButtonContainer}>
                 <Button
                   text="Aceptar"
@@ -80,11 +119,6 @@ const GuestManagement: React.FC<GuestManagementProps> = ({ onNewPassPress, onVie
           </View>
         </RNModal>
       </View>
-
-      {/*<View style={styles.infoLabel}>
-        <Ionicons name="bulb-outline" size={18} color="#F59E0B" style={styles.infoIcon} />
-        <Text style={styles.infoText}>Los pases temporales son válidos por 24 horas</Text>
-      </View>*/}
     </View>
   );
 };

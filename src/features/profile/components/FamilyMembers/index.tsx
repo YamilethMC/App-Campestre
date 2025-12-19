@@ -1,8 +1,8 @@
 import React from 'react';
-import { Alert, FlatList, ListRenderItem, Text, View, ViewStyle } from 'react-native';
-import { styles } from './Style';
+import { FlatList, ListRenderItem, Text, View } from 'react-native';
 import useMessages from '../../hooks/useMessages';
-import { familyMembersProps, familyMembers } from '../../interfaces/interfaces';
+import { familyMembers, familyMembersProps } from '../../interfaces/interfaces';
+import { styles } from './Style';
 
 const FamilyMembers: React.FC<familyMembersProps> = ({
   members = [],
@@ -47,7 +47,7 @@ const FamilyMembers: React.FC<familyMembersProps> = ({
         }
         contentContainerStyle={styles.listContent}
       />
-      {onAddMember && (
+      {/*{onAddMember && (
         <View style={styles.addButtonContainer}>
           <Text
             style={styles.addButton}
@@ -55,7 +55,7 @@ const FamilyMembers: React.FC<familyMembersProps> = ({
             + {messages.FAMILY.ADD_MEMBER}
           </Text>
         </View>
-      )}
+      )}*/}
     </View>
   );
 };

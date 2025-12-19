@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { COLORS } from '../../../../shared/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
-import QRModal from '../QRModal';
-import { useProfileStore } from '../../../profile/store/useProfileStore';
+import React, { useState } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { COLORS } from '../../../../shared/theme/colors';
 import QRCodeComponent from '../QRCodeComponent';
+import QRModal from '../QRModal';
 import styles from './Style';
+import { MemberData } from '../../services/homeService';
 
-const MyQRCode: React.FC = () => {
-  const { profile } = useProfileStore();
+interface MyQRCodeProps {
+  memberData: MemberData | null;
+}
+
+const MyQRCode: React.FC<MyQRCodeProps> = ({ memberData }) => {
   const [qrModalVisible, setQrModalVisible] = useState(false);
-  const memberSinceYear = profile?.memberSince
-    ? new Date(profile.memberSince.toString()).getFullYear()
+  console.log('Member data in QR component:', memberData);
+  const dateOfAdmission = memberData?.dateOfAdmission
+    ? new Date(memberData.dateOfAdmission).getFullYear()
     : '2020';
 
   return (
@@ -26,12 +30,12 @@ const MyQRCode: React.FC = () => {
         <View style={styles.qrPlaceholderContainer}>
           <QRCodeComponent
             size={100}
-            memberCode={profile?.memberCode}
+            memberCode={memberData?.memberCode}
           />
         </View>
 
-        <Text style={styles.userName}>{(profile?.name || 'Nombre') + ' ' + (profile?.lastName || 'del Socio')}</Text>
-        <Text style={styles.memberText}>Socio #{profile?.memberCode ?? profile?.id ?? 'N/A'} | Desde {memberSinceYear}</Text>
+        <Text style={styles.userName}>{(memberData?.user?.name || 'Nombre') + ' ' + (memberData?.user?.lastName || 'del Socio')}</Text>
+        <Text style={styles.memberText}>Socio #{memberData?.memberCode ?? 'N/A'} | Desde {dateOfAdmission}</Text>
 
         <TouchableOpacity
           style={styles.showQrButton}
@@ -44,6 +48,7 @@ const MyQRCode: React.FC = () => {
       <QRModal
         visible={qrModalVisible}
         onClose={() => setQrModalVisible(false)}
+        memberData={memberData}
       />
     </View>
   );

@@ -1,30 +1,31 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
 import {
-  View,
+  FlatList,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  ScrollView,
   Text,
   TextInput,
-  ScrollView,
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
   TouchableOpacity,
-  Modal,
-  FlatList,
-  Switch,
+  View
 } from 'react-native';
 import Button from '../../../../shared/components/Button/Button';
-import { Ionicons } from '@expo/vector-icons';
-import styles from './Style';
+import { COLORS } from '../../../../shared/theme/colors';
 import { useAddFamilyMember } from '../../hooks/useAddFamilyMember';
+import styles from './Style';
 
 interface AddFamilyMemberFormProps {
   memberId: number;
+  guestType?: 'INVITADO' | 'TEMPORAL';
   onCancel: () => void;
   onAddSuccess: () => void;
 }
 
 const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
   memberId,
+  guestType = 'INVITADO',
   onCancel,
   onAddSuccess
 }) => {
@@ -40,9 +41,10 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
     setTemporaryPass,
   } = useAddFamilyMember({
     memberId,
+    guestType,
     onAddSuccess
   });
-
+console.log('......,.--..--.--.--..Guest type:', guestType);
   const [showCancelModal, setShowCancelModal] = React.useState(false);
   const [showSubmitModal, setShowSubmitModal] = React.useState(false);
   const [showGenderPicker, setShowGenderPicker] = React.useState(false);
@@ -191,10 +193,14 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
               style={styles.pickerContainer}
               onPress={() => setShowGenderPicker(true)}
             >
-              <Text style={styles.pickerText}>
+              <Text style={
+                formData.gender
+                  ? styles.pickerText
+                  : styles.pickerTextPlaceholder
+              }>
                 {GENDER_OPTIONS.find(option => option.value === formData.gender)?.label || 'Selecciona un género'}
               </Text>
-              <Ionicons name="chevron-down" size={20} color="#6b7280" />
+              <Ionicons name="chevron-down" size={20} color={formData.gender ? "#6b7280" : COLORS.gray400} />
             </TouchableOpacity>
           </View>
 
@@ -204,14 +210,18 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
               style={styles.pickerContainer}
               onPress={() => setShowRelationshipPicker(true)}
             >
-              <Text style={styles.pickerText}>
+              <Text style={
+                formData.relationship
+                  ? styles.pickerText
+                  : styles.pickerTextPlaceholder
+              }>
                 {RELATIONSHIP_OPTIONS.find(option => option.value === formData.relationship)?.label || 'Selecciona una relación'}
               </Text>
-              <Ionicons name="chevron-down" size={20} color="#6b7280" />
+              <Ionicons name="chevron-down" size={20} color={formData.relationship ? "#6b7280" : COLORS.gray400} />
             </TouchableOpacity>
           </View>
 
-          {/* Toggle para pase temporal */}
+          {/* 
           <View style={styles.toggleContainer}>
             <Text style={styles.label}>Pase Temporal</Text>
             <View style={styles.toggleRow}>
@@ -232,7 +242,6 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
             </View>
           </View>
 
-          {/* Campo de fecha de expiración (solo visible si es pase temporal) */}
           {tempPass && (
             <View style={styles.inputGroup}>
               <Text style={styles.label}>Fecha de Expiración <Text style={styles.requiredIndicator}>*</Text></Text>
@@ -266,6 +275,7 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
               />
             </View>
           )}
+          */}
 
         </View>
 
@@ -351,16 +361,25 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
           onPress={() => setShowGenderPicker(false)}
         >
           <View style={styles.pickerModalContainer}>
-            <Text style={styles.pickerModalTitle}>Seleccionar Género</Text>
+            <Text style={styles.pickerModalTitle}>Seleccionar género</Text>
             <FlatList
               data={GENDER_OPTIONS}
               keyExtractor={(item) => item.value}
-              renderItem={({ item }) => (
+              renderItem={({ item, index }) => (
                 <TouchableOpacity
-                  style={styles.pickerOption}
+                  style={[
+                    styles.pickerOption,
+                    index === GENDER_OPTIONS.length - 1 && styles.pickerOptionLast,
+                    item.value === formData.gender && styles.pickerOptionSelected
+                  ]}
                   onPress={() => handleSelectGender(item.value)}
                 >
-                  <Text style={styles.pickerOptionText}>{item.label}</Text>
+                  <Text style={[
+                    styles.pickerOptionText,
+                    item.value === formData.gender && styles.pickerOptionTextSelected
+                  ]}>
+                    {item.label}
+                  </Text>
                 </TouchableOpacity>
               )}
             />
@@ -380,16 +399,25 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
           onPress={() => setShowRelationshipPicker(false)}
         >
           <View style={styles.pickerModalContainer}>
-            <Text style={styles.pickerModalTitle}>Seleccionar Relación</Text>
+            <Text style={styles.pickerModalTitle}>Seleccionar relación</Text>
             <FlatList
               data={RELATIONSHIP_OPTIONS}
               keyExtractor={(item) => item.value}
-              renderItem={({ item }) => (
+              renderItem={({ item, index }) => (
                 <TouchableOpacity
-                  style={styles.pickerOption}
+                  style={[
+                    styles.pickerOption,
+                    index === RELATIONSHIP_OPTIONS.length - 1 && styles.pickerOptionLast,
+                    item.value === formData.relationship && styles.pickerOptionSelected
+                  ]}
                   onPress={() => handleSelectRelationship(item.value)}
                 >
-                  <Text style={styles.pickerOptionText}>{item.label}</Text>
+                  <Text style={[
+                    styles.pickerOptionText,
+                    item.value === formData.relationship && styles.pickerOptionTextSelected
+                  ]}>
+                    {item.label}
+                  </Text>
                 </TouchableOpacity>
               )}
             />
@@ -407,7 +435,7 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Confirmar guardado</Text>
-            <Text style={styles.modalMessage}>¿Deseas guardar los cambios y agregar al familiar?</Text>
+            <Text style={styles.modalMessage}>¿Estás seguro de que deseas guardar esta información?</Text>
             <View style={styles.modalButtonRow}>
               <Button
                 text="Cancelar"

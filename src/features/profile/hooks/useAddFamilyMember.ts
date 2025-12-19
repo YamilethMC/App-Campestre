@@ -1,27 +1,28 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Alert } from 'react-native';
 import { useAuthStore } from '../../../store';
-import { memberService, AddFamilyMemberRequest } from '../services/memberService';
+import { AddFamilyMemberRequest, memberService } from '../services/memberService';
 
 interface UseAddFamilyMemberProps {
-  memberId: number; 
-  onAddSuccess?: () => void; 
+  memberId: number;
+  guestType?: 'INVITADO' | 'TEMPORAL';
+  onAddSuccess?: () => void;
 }
 
 interface FormDataState extends Omit<AddFamilyMemberRequest, 'birthDate'> {
   birthDate: string;
 }
 
-export const useAddFamilyMember = ({ memberId, onAddSuccess }: UseAddFamilyMemberProps) => {
+export const useAddFamilyMember = ({ memberId, guestType = 'INVITADO', onAddSuccess }: UseAddFamilyMemberProps) => {
   const [token] = useState(() => useAuthStore.getState().token);
   const [loading, setLoading] = useState(false);
-  const [tempPass, setTempPass] = useState(false);
+  const [tempPass, setTempPass] = useState(guestType === 'TEMPORAL');
   const [formData, setFormData] = useState<FormDataState>({
     email: '',
     active: true,
     name: '',
     lastName: '',
-    type: 'INVITADO',
+    type: guestType,
     birthDate: '',
     gender: 'MASCULINO',
     RFC: '',
@@ -128,7 +129,7 @@ export const useAddFamilyMember = ({ memberId, onAddSuccess }: UseAddFamilyMembe
     }
 
     // Validar fecha de expiración para pase temporal
-    if (tempPass && !formData.expireAt?.trim()) {
+    /*if (tempPass && !formData.expireAt?.trim()) {
       Alert.alert('Error', 'La fecha de expiración es requerida para el pase temporal.');
       return false;
     }
@@ -145,7 +146,7 @@ export const useAddFamilyMember = ({ memberId, onAddSuccess }: UseAddFamilyMembe
         Alert.alert('Error', 'La fecha de expiración debe ser posterior a la fecha actual.');
         return false;
       }
-    }
+    }*/
 
     return true;
   };
@@ -165,7 +166,7 @@ export const useAddFamilyMember = ({ memberId, onAddSuccess }: UseAddFamilyMembe
     try {
       // Construir submitData según si es pase temporal o no
       let submitData: AddFamilyMemberRequest;
-      if (tempPass) {
+      /*if (tempPass) {
         // Incluir expireAt para pase temporal
         submitData = {
           ...formData,
@@ -175,8 +176,9 @@ export const useAddFamilyMember = ({ memberId, onAddSuccess }: UseAddFamilyMembe
         // Excluir expireAt para invitado normal
         const { expireAt, ...dataWithoutExpireAt } = formData;
         submitData = dataWithoutExpireAt;
-      }
-
+      }*/
+      submitData = formData;
+      console.log('........................................Submitting form data:', submitData);
       const result = await memberService.addFamilyMember(submitData, token);
 
       if (result.success && result.data) {
@@ -222,13 +224,13 @@ export const useAddFamilyMember = ({ memberId, onAddSuccess }: UseAddFamilyMembe
   };
 
   const resetForm = () => {
-    setTempPass(false);
+    setTempPass(guestType === 'TEMPORAL');
     setFormData({
       email: '',
       active: true,
       name: '',
       lastName: '',
-      type: 'INVITADO',
+      type: guestType,
       birthDate: new Date().toISOString().split('T')[0] + 'T00:00:00.000Z',
       gender: 'MASCULINO',
       RFC: '',
@@ -257,6 +259,12 @@ export const useAddFamilyMember = ({ memberId, onAddSuccess }: UseAddFamilyMembe
 
   const setTemporaryPass = (enabled: boolean) => {
     setTempPass(enabled);
+    // Update the type when temp pass is enabled/disabled
+    if (enabled) {
+      setFormData(prev => ({ ...prev, type: 'TEMPORAL' }));
+    } else {
+      setFormData(prev => ({ ...prev, type: 'INVITADO' }));
+    }
   };
 
   return {

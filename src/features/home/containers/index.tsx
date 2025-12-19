@@ -1,6 +1,6 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, ScrollView, View } from 'react-native';
+import { Alert, ScrollView, Text, View } from 'react-native';
 import styles from './Style';
 
 // Components
@@ -20,9 +20,9 @@ import { useAuthStore } from '../../auth/store/useAuthStore';
 const HomeScreen = () => {
   const { t } = useTranslation();
   const { userId } = useAuthStore();
-
   // State for guest pass form
   const [showGuestPassForm, setShowGuestPassForm] = useState(false);
+  const [guestPassType, setGuestPassType] = useState<'INVITADO' | 'TEMPORAL'>('INVITADO'); // Track the type of guest pass to create
 
   // State for notification modal
   const [notificationModalVisible, setNotificationModalVisible] = useState(false);
@@ -40,6 +40,12 @@ const HomeScreen = () => {
   }, []);
 
   const handleShowGuestPassForm = useCallback(() => {
+    setGuestPassType('INVITADO'); // Default to INVITADO for regular pass
+    setShowGuestPassForm(true);
+  }, []);
+
+  const handleShowTempPassForm = useCallback(() => {
+    setGuestPassType('TEMPORAL'); // Set type to TEMPORAL for temporary pass
     setShowGuestPassForm(true);
   }, []);
 
@@ -47,28 +53,29 @@ const HomeScreen = () => {
     setShowGuestPassForm(false);
   }, []);
 
-  const handleGuestPassSuccess = useCallback(() => {
-    setShowGuestPassForm(false);
-  }, []);
-
   // State for showing guests modal
   const [showGuestsModal, setShowGuestsModal] = useState(false);
 
   const { getMemberData, loading, memberData, deleteGuest } = useMemberData();
+console.log('Member data in HomeScreen:', memberData);
+  const handleGuestPassSuccess = useCallback(async () => {
+    // Refresh the member data to get updated passes available and guests
+    if (userId) {
+      await getMemberData(parseInt(userId));
+    }
+    setShowGuestPassForm(false);
+  }, [userId, getMemberData]);
 
   const handleViewGuests = useCallback(async () => {
-    const { userId, token } = useAuthStore.getState();
+    const { token } = useAuthStore.getState();
     if (!userId || !token) {
       Alert.alert('Error', 'No hay sesión activa.');
       return;
     }
 
-    // Abrir el modal inmediatamente con indicador de carga
+    // Abrir el modal inmediatamente (member data is already loaded)
     setShowGuestsModal(true);
-
-    // Cargar los datos después de abrir el modal
-    await getMemberData(parseInt(userId));
-  }, [getMemberData]);
+  }, [userId]);
 
   const handleVehicleSelect = useCallback((vehicleId: string, vehicleName: string) => {
     showNotification("Solicitud exitosa", `Auto "${vehicleName}" solicitado correctamente. Llega en 5 min`);
@@ -78,21 +85,41 @@ const HomeScreen = () => {
     showNotification("Mesero llamado", "El mesero llegará en 7 min");
   }, [showNotification]);
 
+  // Load member data on mount
+  useEffect(() => {
+    const loadData = async () => {
+      if (userId) {
+        await getMemberData(parseInt(userId));
+      }
+    };
+    loadData();
+  }, [userId, getMemberData]);
+
   if (showGuestPassForm && userId) {
     // Render the Add Family Member form instead of home content when form is active
     return (
       <AddFamilyMemberForm
         memberId={parseInt(userId || '0')}
+        guestType={guestPassType} // Pass the guest type to the form
         onCancel={handleHideGuestPassForm}
         onAddSuccess={handleGuestPassSuccess}
       />
     );
   }
 
+  // Show loading state until member data is loaded
+  if (loading && !memberData) {
+    return (
+      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <Text>Cargando datos...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <BannerContainer />
-      {/*<Header />*/}
+      {/*<Header memberData={memberData} />*/}
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
@@ -104,10 +131,12 @@ const HomeScreen = () => {
             onWaiterCall={handleCallWaiter}
           />
           <ActiveOrders />*/}
-          <MyQRCode />
+          <MyQRCode memberData={memberData} />
           <GuestManagement
             onNewPassPress={handleShowGuestPassForm}
+            onNewTempPassPress={handleShowTempPassForm}
             onViewGuestsPress={handleViewGuests}
+            memberData={memberData}
           />
           {/*<MyRewards />*/}
         </View>

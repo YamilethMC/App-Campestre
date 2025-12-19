@@ -2,19 +2,23 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import Modal from '../../../../shared/components/Modal/Modal';
 import { COLORS } from '../../../../shared/theme/colors';
-import { useProfileStore } from '../../../profile/store/useProfileStore';
 import QRCodeComponent from '../QRCodeComponent';
+import { MemberData } from '../../services/homeService';
 
 interface QRModalProps {
   visible: boolean;
   onClose: () => void;
+  memberData: MemberData | null;
 }
 
 const QRModal: React.FC<QRModalProps> = ({
   visible,
   onClose,
+  memberData
 }) => {
-  const { profile } = useProfileStore();
+  const dateOfAdmission = memberData?.dateOfAdmission
+    ? new Date(memberData.dateOfAdmission).getFullYear()
+    : '2020';
 
   return (
     <Modal
@@ -53,7 +57,7 @@ const QRModal: React.FC<QRModalProps> = ({
       {/* Componente QR real con el memberCode del socio */}
       <QRCodeComponent
         size={200}
-        memberCode={profile?.memberCode}
+        memberCode={memberData?.memberCode}
       />
 
       {/* Nombre del socio en negrita */}
@@ -63,7 +67,7 @@ const QRModal: React.FC<QRModalProps> = ({
         color: COLORS.gray800,
         marginBottom: 5
       }}>
-        {(profile?.name || 'Nombre') + ' ' + (profile?.lastName || 'del Socio')}
+        {(memberData?.user?.name || 'Nombre') + ' ' + (memberData?.user?.lastName || 'del Socio')}
       </Text>
 
       {/* Tipo de socio y ID */}
@@ -72,7 +76,7 @@ const QRModal: React.FC<QRModalProps> = ({
         color: COLORS.gray600,
         marginBottom: 5
       }}>
-        Socio #{profile?.memberCode || profile?.id}
+        Socio #{memberData?.memberCode || memberData?.id}
       </Text>
 
       {/* Miembro desde */}
@@ -81,7 +85,7 @@ const QRModal: React.FC<QRModalProps> = ({
         color: COLORS.gray500,
         marginBottom: 15
       }}>
-        Socio desde {profile?.memberSince ? new Date(profile.memberSince.toString()).getFullYear() : '2020'}
+        Socio desde {dateOfAdmission}
       </Text>
 
       {/* Leyenda */}

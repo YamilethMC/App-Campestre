@@ -5,14 +5,14 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import QRModal from '../QRModal';
 import { COLORS } from '../../../../shared/theme/colors';
 import { useAuthStore } from '../../../auth/store/useAuthStore';
-import { useProfile } from '../../../profile/store/useProfileStore';
+import { MemberData } from '../../services/homeService';
 
 interface HeaderProps {
   navigation?: any;
+  memberData: MemberData | null;
 }
 
-const HomeHeader: React.FC<HeaderProps> = ({ navigation }) => {
-  const { profile } = useProfile();
+const HomeHeader: React.FC<HeaderProps> = ({ navigation, memberData }) => {
   const { userId } = useAuthStore();
   const [showQRModal, setShowQRModal] = useState(false);
 
@@ -24,8 +24,8 @@ const HomeHeader: React.FC<HeaderProps> = ({ navigation }) => {
     setShowQRModal(false);
   };
 
-  const memberSinceYear = profile?.memberSince 
-    ? new Date(profile.memberSince.toString()).getFullYear()
+  const memberSinceYear = memberData?.dateOfAdmission
+    ? new Date(memberData.dateOfAdmission).getFullYear()
     : '2020';
 
   return (
@@ -34,14 +34,14 @@ const HomeHeader: React.FC<HeaderProps> = ({ navigation }) => {
         <View style={styles.headerContent}>
           <View style={styles.userInfoContainer}>
             <Text style={styles.greetingText} numberOfLines={1}>
-              ¡Hola, {profile?.name || 'Usuario'}!
+              ¡Hola, {memberData?.user?.name || 'Usuario'}!
             </Text>
             <Text style={styles.userInfoText}>
-              Socio {profile?.memberCode ||userId || 'N/A'}
+              Socio {memberData?.memberCode || userId || 'N/A'}
             </Text>
           </View>
-          <TouchableOpacity 
-            style={styles.qrButton} 
+          <TouchableOpacity
+            style={styles.qrButton}
             onPress={handleOpenQRModal}
             activeOpacity={0.8}
           >
@@ -53,6 +53,7 @@ const HomeHeader: React.FC<HeaderProps> = ({ navigation }) => {
       <QRModal
         visible={showQRModal}
         onClose={handleCloseQRModal}
+        memberData={memberData}
       />
     </>
   );
