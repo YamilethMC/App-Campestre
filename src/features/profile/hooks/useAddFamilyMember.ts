@@ -109,6 +109,29 @@ export const useAddFamilyMember = ({ memberId, guestType = 'INVITADO', onAddSucc
       }
     }
 
+    // Validaciones adicionales para pases temporales
+    if (guestType === 'TEMPORAL') {
+      // Validar relación (requerido para temporales)
+      if (!formData.relationship.trim()) {
+        Alert.alert('Error', 'La relación es requerida.');
+        return false;
+      }
+
+      // Validar fecha de nacimiento (requerido para temporales)
+      if (!formData.birthDate.trim()) {
+        Alert.alert('Error', 'La fecha de nacimiento es requerida.');
+        return false;
+      }
+
+      // Validar RFC (no requerido, pero si se proporciona, debe tener 12 o 13 caracteres)
+      if (formData.RFC.trim()) {
+        if (formData.RFC.length < 12 || formData.RFC.length > 13) {
+          Alert.alert('Error', 'El RFC debe tener 12 o 13 caracteres.');
+          return false;
+        }
+      }
+    }
+
     return true;
   };
 
@@ -125,48 +148,83 @@ export const useAddFamilyMember = ({ memberId, guestType = 'INVITADO', onAddSucc
     setLoading(true);
 
     try {
-      // Usar el nuevo endpoint /pass para crear pases de invitados
-      const passData: CreatePassRequest = {
-        guestName: formData.name,
-        guestLastName: formData.lastName,
-        guestEmail: formData.email,
-        guestPhone: formData.phone[0].number,
-        type: guestType === 'TEMPORAL' ? 'TEMPORAL' : 'GUEST'
-      };
+      // Usar endpoint diferente según el tipo de pase
+      if (guestType === 'INVITADO') {
+        // NUEVO: Usar endpoint /pass para invitados regulares
+        const passData: CreatePassRequest = {
+          guestName: formData.name,
+          guestLastName: formData.lastName,
+          guestEmail: formData.email,
+          guestPhone: formData.phone[0].number,
+          type: 'GUEST'
+        };
 
-      console.log('Creating pass with data:', passData);
-      const result = await passService.createPass(passData);
+        console.log('Creating guest pass with /pass endpoint:', passData);
+        const result = await passService.createPass(passData);
 
-      if (result.success && result.data) {
-        Alert.alert(
-          'Éxito',
-          `Pase de invitado creado correctamente.\n\nEl invitado recibirá una notificación con el link para ver su pase QR.`,
-          [
-            {
-              text: 'Aceptar',
-              onPress: () => {
-                if (onAddSuccess) onAddSuccess();
+        if (result.success && result.data) {
+          Alert.alert(
+            'Éxito',
+            `Pase de invitado creado correctamente.\n\nEl invitado recibirá una notificación con el link para ver su pase QR.`,
+            [
+              {
+                text: 'Aceptar',
+                onPress: () => {
+                  if (onAddSuccess) onAddSuccess();
+                }
               }
-            }
-          ],
-          { cancelable: false }
-        );
+            ],
+            { cancelable: false }
+          );
+        } else {
+          Alert.alert(
+            'Error',
+            result.error || 'Ocurrió un error al crear el pase de invitado.',
+            [
+              {
+                text: 'Aceptar',
+                style: 'default'
+              }
+            ]
+          );
+        }
       } else {
-        Alert.alert(
-          'Error',
-          result.error || 'Ocurrió un error al crear el pase de invitado.',
-          [
-            {
-              text: 'Aceptar',
-              style: 'default'
-            }
-          ]
-        );
+        // ORIGINAL: Usar endpoint /club-members para pases temporales
+        const submitData: AddFamilyMemberRequest = formData;
+        console.log('Creating temporal pass with /club-members endpoint:', submitData);
+        const result = await memberService.addFamilyMember(submitData, token);
+
+        if (result.success && result.data) {
+          Alert.alert(
+            'Éxito',
+            'Pase temporal creado correctamente.',
+            [
+              {
+                text: 'Aceptar',
+                onPress: () => {
+                  if (onAddSuccess) onAddSuccess();
+                }
+              }
+            ],
+            { cancelable: false }
+          );
+        } else {
+          Alert.alert(
+            'Error',
+            result.error || 'Ocurrió un error al crear el pase temporal.',
+            [
+              {
+                text: 'Aceptar',
+                style: 'default'
+              }
+            ]
+          );
+        }
       }
     } catch (error: any) {
       Alert.alert(
         'Error',
-        error.message || 'Ocurrió un error al crear el pase de invitado.',
+        error.message || 'Ocurrió un error al crear el pase.',
         [
           {
             text: 'Aceptar',

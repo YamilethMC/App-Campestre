@@ -17,7 +17,7 @@ const GuestManagement: React.FC<GuestManagementProps> = ({ onNewPassPress, onNew
   const [showGuestRestrictionModal, setShowGuestRestrictionModal] = useState(false);
 
   const isSocioOrDependiente = memberData?.user?.type === 'SOCIO' || memberData?.user?.type === 'DEPENDIENTE';
-  const passesAvailable = memberData?.user?.passesAvailable ? parseInt(memberData.user.passesAvailable) : 2;
+  const passesAvailable = memberData?.passesAvailable ? parseInt(memberData.passesAvailable) : 2;
   const hasPassesAvailable = passesAvailable > 0;
 
   const handleNewPassPress = () => {
@@ -65,7 +65,7 @@ const GuestManagement: React.FC<GuestManagementProps> = ({ onNewPassPress, onNew
             disabled={!isSocioOrDependiente || !hasPassesAvailable}
           >
             <Text style={[styles.filledButtonText, (!isSocioOrDependiente || !hasPassesAvailable) ? styles.disabledButtonText : null]}>
-              + Nuevo pase
+              + Nuevo invitado
             </Text>
           </TouchableOpacity>
 

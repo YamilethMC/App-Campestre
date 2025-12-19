@@ -111,7 +111,9 @@ console.log('......,.--..--.--.--..Guest type:', guestType);
       >
         {/* Formulario de datos personales */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Información del Invitado</Text>
+          <Text style={styles.sectionTitle}>
+            {guestType === 'TEMPORAL' ? 'Información del Pase Temporal' : 'Información del Invitado'}
+          </Text>
           <Text style={styles.sectionSubtitle}>
             {guestType === 'TEMPORAL' 
               ? 'Crea un pase temporal para un invitado' 
@@ -151,10 +153,90 @@ console.log('......,.--..--.--.--..Guest type:', guestType);
               autoCapitalize="none"
               placeholderTextColor="#9ca3af"
             />
-            <Text style={styles.helperText}>
-              El invitado recibirá su pase QR por email
-            </Text>
+            {guestType === 'INVITADO' && (
+              <Text style={styles.helperText}>
+                El invitado recibirá su pase QR por email
+              </Text>
+            )}
           </View>
+
+          {/* Campos adicionales solo para pases temporales */}
+          {guestType === 'TEMPORAL' && (
+            <>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>RFC</Text>
+                <TextInput
+                  style={styles.input}
+                  value={formData.RFC}
+                  onChangeText={(text) => updateFormData('RFC', text)}
+                  placeholder="RFC (12 a 13 caracteres)"
+                  maxLength={13}
+                  autoCapitalize="characters"
+                  placeholderTextColor="#9ca3af"
+                />
+              </View>
+
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Fecha de Nacimiento <Text style={styles.requiredIndicator}>*</Text></Text>
+                <TextInput
+                  style={styles.input}
+                  value={formData.birthDate.split('T')[0]}
+                  onChangeText={(text) => {
+                    // Formatear automáticamente la fecha si el usuario ingresa 8 dígitos (AAAAMMDD)
+                    let formattedText = text;
+                    if (/^\d{8}$/.test(text)) {
+                      // Convertir AAAAMMDD a AAAA-MM-DD
+                      formattedText = `${text.substring(0, 4)}-${text.substring(4, 6)}-${text.substring(6, 8)}`;
+                    }
+
+                    if (formattedText) {
+                      updateFormData('birthDate', formattedText + 'T00:00:00.000Z');
+                    } else {
+                      updateFormData('birthDate', '');
+                    }
+                  }}
+                  placeholder="YYYY-MM-DD"
+                  keyboardType="numeric"
+                  maxLength={10}
+                  placeholderTextColor="#9ca3af"
+                />
+              </View>
+              
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Género</Text>
+                <TouchableOpacity
+                  style={styles.pickerContainer}
+                  onPress={() => setShowGenderPicker(true)}
+                >
+                  <Text style={
+                    formData.gender
+                      ? styles.pickerText
+                      : styles.pickerTextPlaceholder
+                  }>
+                    {GENDER_OPTIONS.find(option => option.value === formData.gender)?.label || 'Selecciona un género'}
+                  </Text>
+                  <Ionicons name="chevron-down" size={20} color={formData.gender ? "#6b7280" : COLORS.gray400} />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Relación <Text style={styles.requiredIndicator}>*</Text></Text>
+                <TouchableOpacity
+                  style={styles.pickerContainer}
+                  onPress={() => setShowRelationshipPicker(true)}
+                >
+                  <Text style={
+                    formData.relationship
+                      ? styles.pickerText
+                      : styles.pickerTextPlaceholder
+                  }>
+                    {RELATIONSHIP_OPTIONS.find(option => option.value === formData.relationship)?.label || 'Selecciona una relación'}
+                  </Text>
+                  <Ionicons name="chevron-down" size={20} color={formData.relationship ? "#6b7280" : COLORS.gray400} />
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
 
           {/* 
           <View style={styles.toggleContainer}>

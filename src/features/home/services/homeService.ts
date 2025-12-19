@@ -45,7 +45,6 @@ export interface User {
   lastName: string;
   addressId: number;
   type: string;
-  passesAvailable: string;
   active: boolean;
   birthDate: string;
   gender: string;
@@ -78,6 +77,7 @@ export interface MemberData {
   user: User;
   invitedBy: null;
   guests: Guest[];
+  passesAvailable: string;
 }
 
 // Get member data from API
