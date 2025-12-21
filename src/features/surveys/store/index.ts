@@ -26,10 +26,8 @@ interface SurveyStore {
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   setPagination: (pagination: any) => void;
-  fetchSurveys: (page?: number) => Promise<void>; // Mantenida para compatibilidad, pero ahora se llama desde el hook
-  fetchNextPage: () => Promise<void>;
-  fetchPreviousPage: () => Promise<void>;
-  goToPage: (page: number) => Promise<void>;
+  // Removed: fetchSurveys, fetchNextPage, fetchPreviousPage, goToPage
+  // These should be handled by the hook that calls the service
   getFilteredSurveys: () => Survey[];
   updateSurveyStatus: (surveyId: string, status: 'completed' | 'active') => void;
   incrementCompletedSurveys: (surveyId: string) => void;
@@ -90,37 +88,7 @@ export const useSurveyStore = create<SurveyStore>((set, get) => ({
     });
   },
 
-  fetchSurveys: async (page = 1) => {
-    set({ loading: true });
-    set({
-      pagination: {
-        ...get().pagination,
-        page: page
-      }
-    });
-    set({ loading: false });
-  },
-
-  fetchNextPage: async () => {
-    const { pagination } = get();
-    if (pagination.page < pagination.totalPages) {
-      await get().fetchSurveys(pagination.page + 1);
-    }
-  },
-
-  fetchPreviousPage: async () => {
-    const { pagination } = get();
-    if (pagination.page > 1) {
-      await get().fetchSurveys(pagination.page - 1);
-    }
-  },
-
-  goToPage: async (page: number) => {
-    const { pagination } = get();
-    if (page >= 1 && page <= pagination.totalPages) {
-      await get().fetchSurveys(page);
-    }
-  },
+  // Pagination methods removed - handled by useSurveyActions hook
 
   getFilteredSurveys: () => {
     const { surveys, currentFilter, userCompletedSurveys } = get();

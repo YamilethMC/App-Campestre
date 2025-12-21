@@ -30,13 +30,9 @@ const SurveysScreen: React.FC = () => {
     surveys,
     getFilteredSurveys,
     setFilter,
-    fetchSurveys,
     incrementCompletedSurveys,
     pagination,
     loading: storeLoading,
-    fetchNextPage,
-    fetchPreviousPage,
-    goToPage,
   } = useSurveyStore();
 
   const {
@@ -51,6 +47,12 @@ const SurveysScreen: React.FC = () => {
     loading: hookLoading,
     loadSurveyData,
     submitSurveyResponse,
+    loadSurveys,
+    handleNextPage,
+    handlePreviousPage,
+    handleGoToPage,
+    handleFilterChange,
+    handleStatusChange: hookHandleStatusChange,
   } = useSurveyActions();
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -58,10 +60,7 @@ const SurveysScreen: React.FC = () => {
   const [modalVisible, setModalVisible] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
-  useEffect(() => {
-    // Cargar página 1 al inicio y cuando cambie el filtro
-    fetchSurveys(1);
-  }, [currentFilter]);
+  // Remove this useEffect - loadSurveys is called automatically in useSurveyActions
 
   // Load survey and questions when selectedSurveyId changes
   useEffect(() => {
@@ -115,7 +114,7 @@ const SurveysScreen: React.FC = () => {
           incrementCompletedSurveys(selectedSurveyId as string);
         }
 
-        await fetchSurveys(1);
+        await loadSurveys(1);
         setSubmitSuccess(true);
       }
     } catch (error) {
@@ -131,17 +130,14 @@ const SurveysScreen: React.FC = () => {
   };
 
   const handleCategoryChange = (category: SurveyCategory) => {
-    setFilter({
+    handleFilterChange({
       ...currentFilter,
       category,
     });
   };
 
   const handleStatusChange = (status: 'activas' | 'completadas') => {
-    setFilter({
-      ...currentFilter,
-      status,
-    });
+    hookHandleStatusChange(status);
   };
 
   const handleCardPress = (surveyId: string) => {
@@ -404,7 +400,7 @@ const SurveysScreen: React.FC = () => {
                 <Button
                   icon={<Ionicons name="chevron-back" size={22} color={COLORS.primary} />}
                   variant="outline"
-                  onPress={fetchPreviousPage}
+                  onPress={handlePreviousPage}
                   disabled={pagination.page <= 1}
                   style={[
                     styles.paginationArrowButton,
@@ -423,7 +419,7 @@ const SurveysScreen: React.FC = () => {
                       key={pageNum}
                       text={pageNum.toString()}
                       variant="outline"
-                      onPress={() => goToPage(pageNum)}
+                      onPress={() => handleGoToPage(pageNum)}
                       style={[
                         styles.pageNumberButton,
                         pageNum === pagination.page && styles.currentPageButton
@@ -439,7 +435,7 @@ const SurveysScreen: React.FC = () => {
                 <Button
                   icon={<Ionicons name="chevron-forward" size={22} color={COLORS.primary} />}
                   variant="outline"
-                  onPress={fetchNextPage}
+                  onPress={handleNextPage}
                   disabled={pagination.page >= pagination.totalPages}
                   style={[
                     styles.paginationArrowButton,

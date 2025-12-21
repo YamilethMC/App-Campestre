@@ -130,6 +130,7 @@ export const surveyService = {
   }>> => {
     const {userId, token } = useAuthStore.getState();
     if (!token) {
+      console.error('🚫 [surveyService.getSurveys] No hay token de autenticación');
       return {
         success: false,
         error: 'No authentication token available',
@@ -143,7 +144,7 @@ export const surveyService = {
       if (category) {
         url += `&category=${encodeURIComponent(category)}`;
       }
-
+      
       const response = await fetch(
         url,
         {
@@ -183,6 +184,7 @@ export const surveyService = {
       }
 
       const result: SurveyApiResponse = await response.json();
+      
       // Convertir los datos de la API a formato de Survey
       // Devolver ambos arrays por separado para manejarlos adecuadamente
       const answeredSurveys: Survey[] = result.data.data.answered.data.map(apiSurvey => ({
@@ -218,7 +220,7 @@ export const surveyService = {
       }));
 
       // Devolver ambos conjuntos de datos y la información de paginación
-      return {
+      const serviceResponse = {
         success: true,
         data: {
           surveys: [...unansweredSurveys, ...answeredSurveys],
@@ -230,6 +232,16 @@ export const surveyService = {
         message: 'Encuestas cargadas exitosamente',
         status: response.status
       };
+      
+      console.log('✅ [surveyService.getSurveys] Retornando:', {
+        success: true,
+        unansweredCount: unansweredSurveys.length,
+        answeredCount: answeredSurveys.length,
+        unansweredMeta: result.data.data.unanswered.meta,
+        answeredMeta: result.data.data.answered.meta
+      });
+      
+      return serviceResponse;
     } catch (error: any) {
       console.error('Error fetching surveys:', error);
       return {

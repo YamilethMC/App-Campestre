@@ -10,7 +10,6 @@ export const useSurveyActions = () => {
   const [surveyData, setSurveyData] = useState<any>(null);
   const [questions, setQuestions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState<'activas' | 'completadas'>('activas');
 
@@ -168,51 +167,50 @@ export const useSurveyActions = () => {
   // Set up auto-refresh every 30 minutes (1800000 ms)
   useEffect(() => {
     const autoRefreshInterval = setInterval(() => {
-      loadSurveys();
+      loadSurveys(pagination.page);
     }, 1800000); // 30 minutes = 1800000 ms
 
     // Initial load
-    loadSurveys();
+    loadSurveys(1);
 
     // Cleanup interval on unmount
     return () => {
       clearInterval(autoRefreshInterval);
     };
-  }, [page, status, search, loadSurveys]);
+  }, [status, search, loadSurveys]);  // Removed page and pagination.page from deps to avoid re-triggering on pagination changes
 
   // Filter handlers
   const handleFilterChange = useCallback((filter: SurveyFilter) => {
     setFilter(filter);
-    setPage(1); // Reset to first page when filter changes
-    loadSurveys(1); // Reload surveys with new filter
+    loadSurveys(1); // Reset to first page when filter changes
   }, [setFilter, loadSurveys]);
 
   const handleStatusChange = useCallback((newStatus: 'activas' | 'completadas') => {
     setStatus(newStatus);
-    setPage(1); // Reset to first page when status changes
-    loadSurveys(1); // Reload surveys with new status
-  }, [setStatus, loadSurveys]);
+    setFilter({
+      ...currentFilter,
+      status: newStatus,
+    });
+    loadSurveys(1); // Reset to first page when status changes
+  }, [currentFilter, loadSurveys, setFilter]);
 
   // Pagination handlers
   const handleNextPage = useCallback(() => {
-    if (page < pagination.totalPages) {
-      const nextPage = page + 1;
-      setPage(nextPage);
+    if (pagination.page < pagination.totalPages) {
+      const nextPage = pagination.page + 1;
       loadSurveys(nextPage);
     }
-  }, [page, pagination.totalPages, loadSurveys]);
+  }, [pagination.page, pagination.totalPages, loadSurveys]);
 
   const handlePreviousPage = useCallback(() => {
-    if (page > 1) {
-      const prevPage = page - 1;
-      setPage(prevPage);
+    if (pagination.page > 1) {
+      const prevPage = pagination.page - 1;
       loadSurveys(prevPage);
     }
-  }, [page, loadSurveys]);
+  }, [pagination.page, loadSurveys]);
 
   const handleGoToPage = useCallback((pageNum: number) => {
     if (pageNum >= 1 && pageNum <= pagination.totalPages) {
-      setPage(pageNum);
       loadSurveys(pageNum);
     }
   }, [pagination.totalPages, loadSurveys]);
@@ -220,9 +218,8 @@ export const useSurveyActions = () => {
   // Search handler
   const handleSearch = useCallback((searchQuery: string) => {
     setSearch(searchQuery);
-    setPage(1); // Reset to first page when search changes
-    loadSurveys(1); // Reload surveys with new search query
-  }, [setSearch, loadSurveys]);
+    loadSurveys(1); // Reset to first page when search changes
+  }, [loadSurveys]);
 
   // Enviar respuestas de la encuesta
   const submitSurveyResponse = async (surveyId: string, answers: any) => {
@@ -233,7 +230,7 @@ export const useSurveyActions = () => {
 
       if (response.success) {
         // Actualizar encuestas después de enviar respuestas
-        loadSurveys(page);
+        loadSurveys(pagination.page);
         return true;
       } else {
         console.error('Error submitting survey:', response.error);
@@ -279,7 +276,6 @@ export const useSurveyActions = () => {
     handlePreviousPage,
     handleGoToPage,
     handleSearch,
-    setPage,
     setStatus,
     setSearch,
   };
