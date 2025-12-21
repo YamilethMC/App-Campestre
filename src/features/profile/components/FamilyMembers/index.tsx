@@ -4,29 +4,21 @@ import useMessages from '../../hooks/useMessages';
 import { familyMembers, familyMembersProps } from '../../interfaces/interfaces';
 import { styles } from './Style';
 
-const FamilyMembers: React.FC<familyMembersProps> = ({
-  members = [],
-  onAddMember,
-  style,
-}) => {
+const FamilyMembers: React.FC<familyMembersProps> = ({ members = [], onAddMember, style }) => {
   const { messages } = useMessages();
   const renderItem: ListRenderItem<familyMembers> = ({ item }) => (
     <View style={styles.memberItem}>
       <View style={styles.memberInfo}>
-        <Text style={styles.memberName}>{item.name} {item.lastName}</Text>
+        <Text style={styles.memberName}>
+          {item.name} {item.lastName}
+        </Text>
         <View style={styles.memberDetails}>
           <Text style={styles.detailText}>{item.relationship}</Text>
           {/*<Text style={styles.detailText}>• {item.age} {messages.FAMILY.AGE}</Text>*/}
         </View>
       </View>
-      <View style={[
-        styles.statusBadge,
-        item.isActive ? styles.activeBadge : styles.inactiveBadge
-      ]}>
-        <Text style={[
-          styles.statusText,
-          item.isActive ? styles.activeText : styles.inactiveText
-        ]}>
+      <View style={[styles.statusBadge, item.isActive ? styles.activeBadge : styles.inactiveBadge]}>
+        <Text style={[styles.statusText, item.isActive ? styles.activeText : styles.inactiveText]}>
           {item.isActive ? messages.FAMILY.ACTIVE : messages.FAMILY.INACTIVE}
         </Text>
       </View>
@@ -39,7 +31,7 @@ const FamilyMembers: React.FC<familyMembersProps> = ({
         data={members}
         scrollEnabled={false}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={item => item.id.toString()}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>{messages.FAMILY.NO_FAMILYMEMBERS}</Text>

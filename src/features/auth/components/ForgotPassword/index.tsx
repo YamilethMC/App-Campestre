@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { authService } from '../../services/authService';
 
@@ -34,7 +42,7 @@ export const ForgotPasswordScreen: React.FC = () => {
               text: 'OK',
               onPress: () => setStep('verify'),
             },
-          ]
+          ],
         );
       } else {
         Alert.alert('Error', result.error || 'No se pudo enviar el código');
@@ -73,19 +81,15 @@ export const ForgotPasswordScreen: React.FC = () => {
       const result = await authService.resetPassword(identifier, code, newPassword);
 
       if (result.success) {
-        Alert.alert(
-          'Éxito',
-          'Tu contraseña ha sido actualizada correctamente',
-          [
-            {
-              text: 'OK',
-              onPress: () => {
-                // @ts-ignore
-                navigation.navigate('Login');
-              },
+        Alert.alert('Éxito', 'Tu contraseña ha sido actualizada correctamente', [
+          {
+            text: 'OK',
+            onPress: () => {
+              // @ts-ignore
+              navigation.navigate('Login');
             },
-          ]
-        );
+          },
+        ]);
       } else {
         Alert.alert('Error', result.error || 'No se pudo restablecer la contraseña');
       }
@@ -124,7 +128,12 @@ export const ForgotPasswordScreen: React.FC = () => {
                 style={[styles.methodButton, method === 'email' && styles.methodButtonActive]}
                 onPress={() => setMethod('email')}
               >
-                <Text style={[styles.methodButtonText, method === 'email' && styles.methodButtonTextActive]}>
+                <Text
+                  style={[
+                    styles.methodButtonText,
+                    method === 'email' && styles.methodButtonTextActive,
+                  ]}
+                >
                   📧 Email
                 </Text>
               </TouchableOpacity>
@@ -132,7 +141,12 @@ export const ForgotPasswordScreen: React.FC = () => {
                 style={[styles.methodButton, method === 'whatsapp' && styles.methodButtonActive]}
                 onPress={() => setMethod('whatsapp')}
               >
-                <Text style={[styles.methodButtonText, method === 'whatsapp' && styles.methodButtonTextActive]}>
+                <Text
+                  style={[
+                    styles.methodButtonText,
+                    method === 'whatsapp' && styles.methodButtonTextActive,
+                  ]}
+                >
                   📱 WhatsApp
                 </Text>
               </TouchableOpacity>
@@ -151,9 +165,9 @@ export const ForgotPasswordScreen: React.FC = () => {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity 
+          <TouchableOpacity
             // @ts-ignore
-            onPress={() => navigation.navigate('Login')} 
+            onPress={() => navigation.navigate('Login')}
             style={styles.backButton}
           >
             <Text style={styles.backButtonText}>← Volver al inicio de sesión</Text>
@@ -176,7 +190,7 @@ export const ForgotPasswordScreen: React.FC = () => {
           <TextInput
             style={styles.input}
             value={code}
-            onChangeText={(text) => setCode(text.replace(/\D/g, '').slice(0, 6))}
+            onChangeText={text => setCode(text.replace(/\D/g, '').slice(0, 6))}
             placeholder="123456"
             keyboardType="number-pad"
             maxLength={6}
@@ -194,10 +208,7 @@ export const ForgotPasswordScreen: React.FC = () => {
               placeholder="Mínimo 8 caracteres"
               autoCapitalize="none"
             />
-            <TouchableOpacity
-              onPress={() => setShowPassword(!showPassword)}
-              style={styles.eyeIcon}
-            >
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeIcon}>
               <Text>{showPassword ? '👁️' : '👁️‍🗨️'}</Text>
             </TouchableOpacity>
           </View>

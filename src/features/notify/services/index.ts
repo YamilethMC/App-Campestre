@@ -12,17 +12,17 @@ export class NotificationService {
     search: string = '',
     order: string = 'asc',
     orderBy: string = 'title',
-    active: boolean = true
+    active: boolean = true,
   ): Promise<ServiceResponse> {
     try {
-      const {token } = useAuthStore.getState();
-        if (!token) {
-          return {
-            success: false,
-            error: 'No authentication token available',
-            status: 401
-          };
-        }
+      const { token } = useAuthStore.getState();
+      if (!token) {
+        return {
+          success: false,
+          error: 'No authentication token available',
+          status: 401,
+        };
+      }
 
       const searchParam = search ? encodeURIComponent(search) : '';
       const url = `${this.baseUrl}?page=${page}&limit=${limit}&search=${searchParam}&order=${order}&orderBy=${orderBy}&active=${active}`;
@@ -30,10 +30,10 @@ export class NotificationService {
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-            'accept': '*/*',
-          },
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          accept: '*/*',
+        },
       });
 
       if (!response.ok) {
@@ -58,7 +58,7 @@ export class NotificationService {
         return {
           success: false,
           error: errorMessage,
-          status: response.status
+          status: response.status,
         };
       }
 
@@ -69,14 +69,14 @@ export class NotificationService {
         success: true,
         data: data.data,
         message: 'Notificaciones cargadas exitosamente',
-        status: response.status
+        status: response.status,
       };
     } catch (error: any) {
       console.error('Error fetching notifications:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al obtener las notificaciones',
-        status: 500
+        status: 500,
       };
     }
   }

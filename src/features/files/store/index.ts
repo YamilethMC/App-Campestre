@@ -33,11 +33,11 @@ export const useFileStore = create<FileStore>((set, get) => ({
   search: '',
   error: null,
 
-  setFiles: (files) => set({ files }),
-  setLoading: (loading) => set({ loading }),
-  setSearch: (search) => set({ search }),
-  setError: (error) => set({ error }),
-  setPagination: (pagination) => set({ pagination }),
+  setFiles: files => set({ files }),
+  setLoading: loading => set({ loading }),
+  setSearch: search => set({ search }),
+  setError: error => set({ error }),
+  setPagination: pagination => set({ pagination }),
 
   fetchFiles: async (page: number) => {
     const { search } = get();
@@ -50,7 +50,7 @@ export const useFileStore = create<FileStore>((set, get) => ({
         set({
           files: response.data.files,
           pagination: response.data.meta,
-          loading: false
+          loading: false,
         });
       } else {
         set({ error: response.message || 'Error al obtener los archivos', loading: false });
@@ -67,5 +67,5 @@ export const useFileStore = create<FileStore>((set, get) => ({
       set({ error: error.message || 'Error al descargar el archivo' });
       throw error;
     }
-  }
+  },
 }));

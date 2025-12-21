@@ -11,7 +11,7 @@ const SettingsScreen = () => {
   const colorScheme = useColorScheme() || 'light';
   const [isDarkMode, setIsDarkMode] = React.useState(colorScheme === 'dark');
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
-  
+
   const colors = Colors[isDarkMode ? 'dark' : 'light'];
 
   const toggleTheme = () => {
@@ -30,10 +30,16 @@ const SettingsScreen = () => {
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={[styles.section, { backgroundColor: colors.background, shadowColor: colors.text }]}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>{messages.CONTAINER.APPEARANCE}</Text>
+      <View
+        style={[styles.section, { backgroundColor: colors.background, shadowColor: colors.text }]}
+      >
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          {messages.CONTAINER.APPEARANCE}
+        </Text>
         <View style={styles.settingItem}>
-          <Text style={[styles.settingText, { color: colors.text }]}>{messages.CONTAINER.DARK_MODE}</Text>
+          <Text style={[styles.settingText, { color: colors.text }]}>
+            {messages.CONTAINER.DARK_MODE}
+          </Text>
           <Switch
             trackColor={{ false: '#767577', true: colors.tint }}
             thumbColor={isDarkMode ? colors.tint : colors.background}
@@ -43,10 +49,16 @@ const SettingsScreen = () => {
         </View>
       </View>
 
-      <View style={[styles.section, { backgroundColor: colors.background, shadowColor: colors.text }]}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>{messages.CONTAINER.NOTIFICATIONS}</Text>
+      <View
+        style={[styles.section, { backgroundColor: colors.background, shadowColor: colors.text }]}
+      >
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          {messages.CONTAINER.NOTIFICATIONS}
+        </Text>
         <View style={styles.settingItem}>
-          <Text style={[styles.settingText, { color: colors.text }]}>{messages.CONTAINER.ENABLE_NOTIFICATIONS}</Text>
+          <Text style={[styles.settingText, { color: colors.text }]}>
+            {messages.CONTAINER.ENABLE_NOTIFICATIONS}
+          </Text>
           <Switch
             trackColor={{ false: '#767577', true: colors.tint }}
             thumbColor={isDarkMode ? colors.tint : colors.background}
@@ -56,24 +68,28 @@ const SettingsScreen = () => {
         </View>
       </View>
 
-      <View style={[styles.section, { backgroundColor: colors.background, shadowColor: colors.text }]}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>{messages.CONTAINER.LANGUAGE}</Text>
+      <View
+        style={[styles.section, { backgroundColor: colors.background, shadowColor: colors.text }]}
+      >
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          {messages.CONTAINER.LANGUAGE}
+        </Text>
         <View style={styles.languageItem}>
-          <Text 
+          <Text
             style={[
-              styles.languageText, 
+              styles.languageText,
               { color: colors.text },
-              i18n.language === 'es' && [styles.selectedLanguage, { color: colors.tint }]
+              i18n.language === 'es' && [styles.selectedLanguage, { color: colors.tint }],
             ]}
             onPress={() => changeLanguage('es')}
           >
             {messages.CONTAINER.SPANISH}
           </Text>
-          <Text 
+          <Text
             style={[
-              styles.languageText, 
+              styles.languageText,
               { color: colors.text },
-              i18n.language === 'en' && [styles.selectedLanguage, { color: colors.tint }]
+              i18n.language === 'en' && [styles.selectedLanguage, { color: colors.tint }],
             ]}
             onPress={() => changeLanguage('en')}
           >

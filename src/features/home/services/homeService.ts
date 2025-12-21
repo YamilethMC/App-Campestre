@@ -81,7 +81,9 @@ export interface MemberData {
 }
 
 // Get member data from API
-export const getMemberData = async (memberId: number): Promise<{
+export const getMemberData = async (
+  memberId: number,
+): Promise<{
   success: boolean;
   data?: MemberData;
   message?: string;
@@ -93,16 +95,16 @@ export const getMemberData = async (memberId: number): Promise<{
     return {
       success: false,
       error: 'No hay token de autenticación disponible.',
-      status: 401
+      status: 401,
     };
   }
   try {
     const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/club-members/${memberId}`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        'accept': '*/*',
+        accept: '*/*',
       },
     });
     if (!response.ok) {
@@ -124,7 +126,7 @@ export const getMemberData = async (memberId: number): Promise<{
       return {
         success: false,
         error: errorMessage,
-        status: response.status
+        status: response.status,
       };
     }
 
@@ -135,13 +137,13 @@ export const getMemberData = async (memberId: number): Promise<{
         success: true,
         data: result.data,
         message: 'Datos del socio cargados exitosamente',
-        status: response.status
+        status: response.status,
       };
     } else {
       return {
         success: false,
         error: result.message || 'Error al obtener los datos del socio',
-        status: response.status
+        status: response.status,
       };
     }
   } catch (error) {
@@ -149,7 +151,7 @@ export const getMemberData = async (memberId: number): Promise<{
     return {
       success: false,
       error: 'Error desconocido al cargar los datos del socio',
-      status: 500
+      status: 500,
     };
   }
 };
@@ -170,12 +172,14 @@ export const callWaiter = async (): Promise<{ success: boolean; message?: string
   // Mock success response
   return {
     success: true,
-    message: "Mesero llamado, llegará en 7 minutos",
+    message: 'Mesero llamado, llegará en 7 minutos',
   };
 };
 
 // Request vehicle service (mock implementation)
-export const requestVehicle = async (vehicleId: string): Promise<{ success: boolean; message?: string }> => {
+export const requestVehicle = async (
+  vehicleId: string,
+): Promise<{ success: boolean; message?: string }> => {
   // Simulate API call delay
   await new Promise(resolve => setTimeout(resolve, 1000));
 
@@ -187,23 +191,25 @@ export const requestVehicle = async (vehicleId: string): Promise<{ success: bool
 };
 
 // Delete guest from member's guest list
-export const deleteGuest = async (guestId: number): Promise<{ success: boolean; message?: string; error?: string; status: number }> => {
+export const deleteGuest = async (
+  guestId: number,
+): Promise<{ success: boolean; message?: string; error?: string; status: number }> => {
   const { token } = useAuthStore.getState();
   if (!token) {
     return {
       success: false,
       error: 'No hay token de autenticación disponible.',
-      status: 401
+      status: 401,
     };
   }
-console.log('guestId:', guestId);
+  console.log('guestId:', guestId);
   try {
     const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/club-members/${guestId}`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        'accept': '*/*',
+        accept: '*/*',
       },
     });
 
@@ -226,20 +232,20 @@ console.log('guestId:', guestId);
       return {
         success: false,
         error: errorMessage,
-        status: response.status
+        status: response.status,
       };
     }
 
     return {
       success: true,
       message: 'Invitado eliminado exitosamente',
-      status: response.status
+      status: response.status,
     };
   } catch (error) {
     return {
       success: false,
       error: 'Error desconocido al eliminar el invitado',
-      status: 500
+      status: 500,
     };
   }
 };

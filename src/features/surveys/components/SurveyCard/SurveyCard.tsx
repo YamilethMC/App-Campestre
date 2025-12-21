@@ -47,11 +47,7 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onPress, surveyId }) =>
       {/* Survey Image - Use the image URL if available */}
       <View style={styles.imageContainer}>
         {survey.image ? (
-          <Image
-            source={{ uri: survey.image }}
-            style={styles.image}
-            resizeMode="cover"
-          />
+          <Image source={{ uri: survey.image }} style={styles.image} resizeMode="cover" />
         ) : (
           <View style={styles.imagePlaceholder}>
             <Text style={styles.placeholderText}>IMG</Text>
@@ -74,12 +70,16 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onPress, surveyId }) =>
           {survey.responsesShow !== false && (
             <View style={styles.iconContainer}>
               <Ionicons name="people-outline" size={16} color={COLORS.gray600} />
-              <Text style={styles.iconText}>{survey.participantCount} {messages.SURVEYCARD.PEOPLE}</Text>
+              <Text style={styles.iconText}>
+                {survey.participantCount} {messages.SURVEYCARD.PEOPLE}
+              </Text>
             </View>
           )}
           <View style={styles.iconContainer}>
             <Ionicons name="chatbubble-ellipses-outline" size={16} color={COLORS.gray600} />
-            <Text style={styles.iconText}>{survey.questionCount} {messages.SURVEYCARD.QUESTIONS}</Text>
+            <Text style={styles.iconText}>
+              {survey.questionCount} {messages.SURVEYCARD.QUESTIONS}
+            </Text>
           </View>
         </View>
 

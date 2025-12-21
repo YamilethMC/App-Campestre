@@ -105,8 +105,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: COLORS.gray700,
   },
-  currentPageButton: {
-  },
+  currentPageButton: {},
   currentPageButtonText: {
     fontSize: 22,
     fontWeight: '700',

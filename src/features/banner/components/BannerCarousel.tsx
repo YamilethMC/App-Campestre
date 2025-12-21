@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Banner } from '../interfaces/Banner';
 
@@ -11,7 +19,11 @@ interface BannerCarouselProps {
   error?: string | null;
 }
 
-const BannerCarousel: React.FC<BannerCarouselProps> = ({ banners, loading = false, error = null }) => {
+const BannerCarousel: React.FC<BannerCarouselProps> = ({
+  banners,
+  loading = false,
+  error = null,
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollViewRef = useRef<ScrollView>(null);
   const isScrolling = useRef(false); // Para saber si el usuario está deslizando
@@ -106,7 +118,7 @@ const BannerCarousel: React.FC<BannerCarouselProps> = ({ banners, loading = fals
                 source={{
                   uri: banner.image.startsWith('http')
                     ? banner.image
-                    : `data:image/jpeg;base64,${banner.image}`
+                    : `data:image/jpeg;base64,${banner.image}`,
                 }}
                 style={styles.bannerImage}
                 resizeMode="cover"
@@ -135,11 +147,7 @@ const BannerCarousel: React.FC<BannerCarouselProps> = ({ banners, loading = fals
           }}
           disabled={banners.length <= 1}
         >
-          <Ionicons
-            name="chevron-back"
-            size={24}
-            color={banners.length <= 1 ? '#ccc' : '#fff'}
-          />
+          <Ionicons name="chevron-back" size={24} color={banners.length <= 1 ? '#ccc' : '#fff'} />
         </TouchableOpacity>
 
         {/* Indicators */}
@@ -149,7 +157,7 @@ const BannerCarousel: React.FC<BannerCarouselProps> = ({ banners, loading = fals
               key={index}
               style={[
                 styles.indicator,
-                { backgroundColor: index === currentIndex ? '#fff' : 'rgba(255,255,255,0.5)' }
+                { backgroundColor: index === currentIndex ? '#fff' : 'rgba(255,255,255,0.5)' },
               ]}
               onPress={() => scrollToIndex(index)}
             />

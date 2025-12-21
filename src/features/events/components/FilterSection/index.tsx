@@ -3,17 +3,13 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { FilterSectionProps } from '../../interfaces/eventInterface';
 import styles from './Style';
 
-const FilterSection: React.FC<FilterSectionProps> = ({
-  selectedEventType,
-  onEventTypeChange,
-}) => {
-
+const FilterSection: React.FC<FilterSectionProps> = ({ selectedEventType, onEventTypeChange }) => {
   const eventTypes = [
     { value: 'Todos', label: 'Todos' },
-    { value: 'SPORT', label: 'Deportivo' },  // Using API format
-    { value: 'SOCIAL', label: 'Social' },    // Using API format
-    { value: 'FAMILY', label: 'Familiar' },  // Using API format
-    { value: 'OTHER', label: 'Otros' },      // Using API format
+    { value: 'SPORT', label: 'Deportivo' }, // Using API format
+    { value: 'SOCIAL', label: 'Social' }, // Using API format
+    { value: 'FAMILY', label: 'Familiar' }, // Using API format
+    { value: 'OTHER', label: 'Otros' }, // Using API format
   ];
 
   // Dividir los filtros en dos filas
@@ -23,14 +19,18 @@ const FilterSection: React.FC<FilterSectionProps> = ({
   return (
     <View style={styles.container}>
       <View style={styles.row}>
-        {firstRow.map((eventType) => (
+        {firstRow.map(eventType => (
           <TouchableOpacity
             key={eventType.value}
             style={[
               styles.filterButton,
               selectedEventType === eventType.value && styles.activeFilterButton,
             ]}
-            onPress={() => onEventTypeChange(eventType.value as 'Todos' | 'SPORT' | 'SOCIAL' | 'FAMILY' | 'OTHER')}
+            onPress={() =>
+              onEventTypeChange(
+                eventType.value as 'Todos' | 'SPORT' | 'SOCIAL' | 'FAMILY' | 'OTHER',
+              )
+            }
           >
             <Text
               style={[
@@ -44,14 +44,18 @@ const FilterSection: React.FC<FilterSectionProps> = ({
         ))}
       </View>
       <View style={styles.row}>
-        {secondRow.map((eventType) => (
+        {secondRow.map(eventType => (
           <TouchableOpacity
             key={eventType.value}
             style={[
               styles.filterButton,
               selectedEventType === eventType.value && styles.activeFilterButton,
             ]}
-            onPress={() => onEventTypeChange(eventType.value as 'Todos' | 'SPORT' | 'SOCIAL' | 'FAMILY' | 'OTHER')}
+            onPress={() =>
+              onEventTypeChange(
+                eventType.value as 'Todos' | 'SPORT' | 'SOCIAL' | 'FAMILY' | 'OTHER',
+              )
+            }
           >
             <Text
               style={[

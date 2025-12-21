@@ -31,15 +31,15 @@ export const useNotificationStore = create<NotificationState & NotificationActio
     totalPages: 1,
   },
 
-  setNotifications: (notifications) => set({ notifications }),
+  setNotifications: notifications => set({ notifications }),
 
-  setLoading: (loading) => set({ loading }),
+  setLoading: loading => set({ loading }),
 
-  setError: (error) => set({ error }),
+  setError: error => set({ error }),
 
-  setSearch: (search) => set({ search }),
+  setSearch: search => set({ search }),
 
-  setPagination: (pagination) => set({ pagination }),
+  setPagination: pagination => set({ pagination }),
 
   resetPagination: () => {
     set({
@@ -57,7 +57,7 @@ export const useNotificationStore = create<NotificationState & NotificationActio
     // When search changes, reset to page 1
     set({
       search,
-      pagination: { ...get().pagination, page: 1 }
+      pagination: { ...get().pagination, page: 1 },
     });
   },
 }));

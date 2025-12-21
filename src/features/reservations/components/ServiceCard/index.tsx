@@ -9,11 +9,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, onPress }) =>
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <View style={[styles.iconContainer, { backgroundColor: `${service.color}20` }]}>
-        <Ionicons 
-          name={service.icon as any} 
-          size={32} 
-          color={service.color} 
-        />
+        <Ionicons name={service.icon as any} size={32} color={service.color} />
       </View>
       <View style={styles.textContainer}>
         <Text style={styles.serviceName}>{service.name}</Text>

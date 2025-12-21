@@ -5,7 +5,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import EventsScreen from '../../features/events/containers';
 import HomeScreen from '../../features/home';
-import MenuScreen from '../../features/menu/containers/';
+import MenuScreen from '../../features/menu/containers';
 import ProfileScreen from '../../features/profile/containers';
 import ReservationScreen from '../../features/reservations';
 import SurveysScreen from '../../features/surveys';
@@ -27,9 +27,9 @@ const headerOptions = (title: string, subtitle?: string, showBackButton: boolean
   header: (props: any) => {
     // Only show back button if explicitly enabled
     const handleBack = showBackButton ? props.navigation.goBack : undefined;
-    
+
     return (
-      <MainHeader 
+      <MainHeader
         title={title}
         subtitle={subtitle}
         onBack={handleBack}
@@ -49,39 +49,27 @@ const headerOptions = (title: string, subtitle?: string, showBackButton: boolean
 // Pantallas que se mostrarán en las pestañas
 const HomeStack = () => (
   <Stack.Navigator>
-    <Stack.Screen 
-      name="HomeScreen" 
-      component={HomeScreen} 
-      options={{ headerShown: false }}
-    />
+    <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
   </Stack.Navigator>
 );
 
 const EventsStack = () => (
   <Stack.Navigator>
-    <Stack.Screen 
-      name="EventsScreen" 
-      component={EventsScreen} 
-      options={{ headerShown: false }}
-    />
+    <Stack.Screen name="EventsScreen" component={EventsScreen} options={{ headerShown: false }} />
   </Stack.Navigator>
 );
 
 const SurveysStack = () => (
   <Stack.Navigator>
-    <Stack.Screen 
-      name="SurveysScreen" 
-      component={SurveysScreen} 
-      options={{ headerShown: false }} 
-    />
+    <Stack.Screen name="SurveysScreen" component={SurveysScreen} options={{ headerShown: false }} />
   </Stack.Navigator>
 );
 
 // const RestaurantStack = () => (
 //   <Stack.Navigator>
-//     <Stack.Screen 
-//       name="RestaurantScreen" 
-//       component={RestauranteScreen} 
+//     <Stack.Screen
+//       name="RestaurantScreen"
+//       component={RestauranteScreen}
 //       options={{ headerShown: false }}
 //     />
 //   </Stack.Navigator>
@@ -89,9 +77,9 @@ const SurveysStack = () => (
 
 const ReservationStack = () => (
   <Stack.Navigator>
-    <Stack.Screen 
-      name="ReservationScreen" 
-      component={ReservationScreen} 
+    <Stack.Screen
+      name="ReservationScreen"
+      component={ReservationScreen}
       options={{ headerShown: false }}
     />
   </Stack.Navigator>
@@ -147,23 +135,15 @@ const MoreStack = () => (
       options={{ headerShown: false }}
     />
 
-    <Stack.Screen
-      name="HelpCenter"
-      component={HelpCenterScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="Files"
-      component={FilesScreen}
-      options={{ headerShown: false }}
-    />
+    <Stack.Screen name="HelpCenter" component={HelpCenterScreen} options={{ headerShown: false }} />
+    <Stack.Screen name="Files" component={FilesScreen} options={{ headerShown: false }} />
     <Stack.Screen
       name="ChangePassword"
       component={ChangePasswordScreen}
-      options={{ 
+      options={{
         headerShown: true,
         title: 'Cambiar Contraseña',
-        headerBackVisible: true
+        headerBackVisible: true,
       }}
     />
   </Stack.Navigator>
@@ -173,11 +153,7 @@ const MainTabs = () => {
   const { t } = useTranslation();
 
   const homeHeaderOptions = () => ({
-    header: (props: any) => (
-      <UserHeader 
-        navigation={props.navigation}
-      />
-    ),
+    header: (props: any) => <UserHeader navigation={props.navigation} />,
     headerShown: true,
     headerStyle: {
       backgroundColor: 'transparent',
@@ -213,49 +189,52 @@ const MainTabs = () => {
         },
       }}
     >
-      <Tab.Screen 
-        name="Home" 
-        component={HomeStack} 
+      <Tab.Screen
+        name="Home"
+        component={HomeStack}
         options={{
           title: t('home.title'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home-outline" size={size} color={color} />
           ),
-          ...headerOptions(t('home.title'), '')
-        }} 
+          ...headerOptions(t('home.title'), ''),
+        }}
       />
-      <Tab.Screen 
-        name="Events" 
-        component={EventsStack} 
+      <Tab.Screen
+        name="Events"
+        component={EventsStack}
         options={{
           title: t('events.title'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="book-outline" size={size} color={color} />
           ),
           ...headerOptions(t('events.title'), 'Descubre y regístrate a nuestras actividades'),
-        }} 
+        }}
       />
-      <Tab.Screen 
-        name="Reservation" 
-        component={ReservationStack} 
+      <Tab.Screen
+        name="Reservation"
+        component={ReservationStack}
         options={{
           title: t('reservation.title'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="calendar-outline" size={size} color={color} />
           ),
           ...headerOptions(t('reservation.title'), 'Selecciona tu servicio'),
-        }} 
+        }}
       />
-      <Tab.Screen 
-        name="Surveys" 
-        component={SurveysStack} 
+      <Tab.Screen
+        name="Surveys"
+        component={SurveysStack}
         options={{
           title: t('surveys.title'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="document-text-outline" size={size} color={color} />
           ),
-          ...headerOptions(t('surveys.title') || 'Encuestas', t('surveys.subtitle') || 'Tu opinión nos ayuda a mejorar'),
-        }} 
+          ...headerOptions(
+            t('surveys.title') || 'Encuestas',
+            t('surveys.subtitle') || 'Tu opinión nos ayuda a mejorar',
+          ),
+        }}
       />
       {/* <Tab.Screen 
         name="Restaurant" 
@@ -268,8 +247,8 @@ const MainTabs = () => {
           ...headerOptions(t('restaurant.title'), t('restaurant.openingHours')),
         }} 
       /> */}
-      <Tab.Screen 
-        name="More" 
+      <Tab.Screen
+        name="More"
         component={MoreStack}
         options={{
           title: t('more.title'),
@@ -277,7 +256,7 @@ const MainTabs = () => {
             <Ionicons name="ellipsis-horizontal" size={size} color={color} />
           ),
           ...headerOptions(t('more.title'), ''),
-        }} 
+        }}
       />
     </Tab.Navigator>
   );

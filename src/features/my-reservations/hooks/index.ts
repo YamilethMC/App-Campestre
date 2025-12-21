@@ -1,5 +1,5 @@
 import { Alert } from 'react-native';
-import { useAuthStore } from '../../../features/auth/store/useAuthStore';
+import { useAuthStore } from '../../auth/store/useAuthStore';
 import { reservationService } from '../services';
 import { CancelReservationRequest, Reservation } from '../interfaces';
 
@@ -28,7 +28,11 @@ export const useMyReservations = () => {
     }
   };
 
-  const cancelReservation = async (reservationId: number, startTime: string, endTime: string): Promise<boolean> => {
+  const cancelReservation = async (
+    reservationId: number,
+    startTime: string,
+    endTime: string,
+  ): Promise<boolean> => {
     if (!userId) {
       Alert.alert('Error', 'No se pudo obtener el ID de usuario');
       return false;
@@ -37,11 +41,15 @@ export const useMyReservations = () => {
     const cancelData: CancelReservationRequest = {
       startTime,
       endTime,
-      status: 'CANCELLED'
+      status: 'CANCELLED',
     };
 
     try {
-      const response = await reservationService.cancelReservation(reservationId, userId, cancelData);
+      const response = await reservationService.cancelReservation(
+        reservationId,
+        userId,
+        cancelData,
+      );
 
       if (!response.success) {
         Alert.alert('Error', response.error || 'Error al cancelar la reservación');
@@ -49,8 +57,8 @@ export const useMyReservations = () => {
       }
       return true;
     } catch (error) {
-        console.error('Error in cancelReservation hook:', error);
-        Alert.alert('Error', 'Error inesperado al cancelar la reservación');
+      console.error('Error in cancelReservation hook:', error);
+      Alert.alert('Error', 'Error inesperado al cancelar la reservación');
       return false;
     }
   };

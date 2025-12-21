@@ -43,4 +43,7 @@ export type MoreStackParamList = {
 };
 
 export type RootStackNavigationProp = NavigationProp<RootStackParamList>;
-export type RootStackRouteProp<T extends keyof RootStackParamList> = RouteProp<RootStackParamList, T>;
+export type RootStackRouteProp<T extends keyof RootStackParamList> = RouteProp<
+  RootStackParamList,
+  T
+>;

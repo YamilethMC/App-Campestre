@@ -6,11 +6,7 @@ import { useHelpCenterActions } from '../hooks/useHelpCenterActions';
 import styles from './Style';
 
 const HelpCenterContainer: React.FC = () => {
-  const {
-    faqs,
-    loading,
-    error
-  } = useHelpCenterActions();
+  const { faqs, loading, error } = useHelpCenterActions();
 
   return (
     <SafeAreaView style={styles.container}>

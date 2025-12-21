@@ -9,10 +9,7 @@ interface YesNoQuestionProps {
   onAnswerChange: (value: string) => void;
 }
 
-export const YesNoQuestion: React.FC<YesNoQuestionProps> = ({
-  answer,
-  onAnswerChange,
-}) => {
+export const YesNoQuestion: React.FC<YesNoQuestionProps> = ({ answer, onAnswerChange }) => {
   return (
     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
       <Button

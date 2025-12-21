@@ -1,5 +1,5 @@
-import { ViewStyle } from "react-native";
-import { EmergencyContact, FamilyMember, UserProfile, Vehicle } from "../../../interfaces";
+import { ViewStyle } from 'react-native';
+import { EmergencyContact, FamilyMember, UserProfile, Vehicle } from '../../../interfaces';
 
 export interface userProfile extends UserProfile {
   isEditing?: boolean;
@@ -47,7 +47,7 @@ export interface vehiclesProps {
   style?: ViewStyle;
 }
 
-export interface emergencyContactProps extends EmergencyContact{
+export interface emergencyContactProps extends EmergencyContact {
   emergencyContact?: EmergencyContact;
   style?: ViewStyle;
   isEditingContactEmergency: boolean;

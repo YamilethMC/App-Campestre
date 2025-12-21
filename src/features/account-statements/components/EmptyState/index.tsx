@@ -8,10 +8,7 @@ interface EmptyStateProps {
   showIcon?: boolean;
 }
 
-const EmptyState: React.FC<EmptyStateProps> = ({ 
-  message, 
-  showIcon = true 
-}) => {
+const EmptyState: React.FC<EmptyStateProps> = ({ message, showIcon = true }) => {
   const { messages } = useMessages();
   message = messages.EMPTY_STATE;
   return (

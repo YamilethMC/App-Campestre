@@ -24,16 +24,12 @@ const NotificationsScreen: React.FC = () => {
   // Show error if there's an error
   useEffect(() => {
     if (error) {
-      Alert.alert(
-        'Error',
-        error,
-        [
-          {
-            text: 'Aceptar',
-            style: 'default'
-          }
-        ]
-      );
+      Alert.alert('Error', error, [
+        {
+          text: 'Aceptar',
+          style: 'default',
+        },
+      ]);
     }
   }, [error]);
 
@@ -61,10 +57,7 @@ const NotificationsScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.contentContainer}>
           {/* Header */}
           <View style={styles.headerContainer}>
@@ -88,16 +81,15 @@ const NotificationsScreen: React.FC = () => {
                 <Text>Cargando notificaciones...</Text>
               </View>
             ) : notifications.length > 0 ? (
-              notifications.map((notification) => (
-                <NotificationCard
-                  key={notification.id}
-                  notification={notification}
-                />
+              notifications.map(notification => (
+                <NotificationCard key={notification.id} notification={notification} />
               ))
             ) : (
               <View style={styles.noNotificationsContainer}>
                 <Text style={styles.noNotificationsText}>
-                  {search ? 'No se encontraron notificaciones' : 'No hay notificaciones disponibles'}
+                  {search
+                    ? 'No se encontraron notificaciones'
+                    : 'No hay notificaciones disponibles'}
                 </Text>
               </View>
             )}
@@ -121,11 +113,11 @@ const NotificationsScreen: React.FC = () => {
                   disabled={pagination.page <= 1}
                   style={[
                     styles.paginationArrowButton,
-                    pagination.page <= 1 && styles.paginationArrowButtonDisabled
+                    pagination.page <= 1 && styles.paginationArrowButtonDisabled,
                   ]}
                   titleStyle={[
                     styles.paginationArrowButtonText,
-                    pagination.page <= 1 && styles.paginationArrowButtonTextDisabled
+                    pagination.page <= 1 && styles.paginationArrowButtonTextDisabled,
                   ]}
                 />
 
@@ -138,11 +130,11 @@ const NotificationsScreen: React.FC = () => {
                       onPress={() => handleGoToPage(pageNum)}
                       style={[
                         styles.pageNumberButton,
-                        pageNum === pagination.page && styles.currentPageButton
+                        pageNum === pagination.page && styles.currentPageButton,
                       ]}
                       titleStyle={[
                         styles.pageNumberButtonText,
-                        pageNum === pagination.page && styles.currentPageButtonText
+                        pageNum === pagination.page && styles.currentPageButtonText,
                       ]}
                     />
                   ))}
@@ -155,11 +147,13 @@ const NotificationsScreen: React.FC = () => {
                   disabled={pagination.page >= pagination.totalPages}
                   style={[
                     styles.paginationArrowButton,
-                    pagination.page >= pagination.totalPages && styles.paginationArrowButtonDisabled
+                    pagination.page >= pagination.totalPages &&
+                      styles.paginationArrowButtonDisabled,
                   ]}
                   titleStyle={[
                     styles.paginationArrowButtonText,
-                    pagination.page >= pagination.totalPages && styles.paginationArrowButtonTextDisabled
+                    pagination.page >= pagination.totalPages &&
+                      styles.paginationArrowButtonTextDisabled,
                   ]}
                 />
               </View>

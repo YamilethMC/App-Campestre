@@ -13,7 +13,7 @@ const RestaurantHours: React.FC = () => {
         <Ionicons name="time-outline" size={20} color={COLORS.primary} />
         <Text style={styles.title}>{messages.RESTAURANTHOURS.TITLE}</Text>
       </View>
-      
+
       <View style={styles.hoursContainer}>
         <View style={styles.hourRow}>
           <Text style={styles.hourLabel}>{messages.RESTAURANTHOURS.BREAKFAST}</Text>
@@ -28,11 +28,9 @@ const RestaurantHours: React.FC = () => {
           <Text style={styles.hourValue}>6:00 PM - 10:00 PM</Text>
         </View>
       </View>
-      
+
       <View style={styles.footer}>
-        <Text style={styles.footerText}>
-          {messages.RESTAURANTHOURS.TEXT}
-        </Text>
+        <Text style={styles.footerText}>{messages.RESTAURANTHOURS.TEXT}</Text>
       </View>
     </View>
   );

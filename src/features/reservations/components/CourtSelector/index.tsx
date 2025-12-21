@@ -6,11 +6,11 @@ import useMessages from '../../hooks/useMessages';
 import { CourtSelectorProps } from '../../interfaces/reservationInterface';
 import styles from './Style';
 
-export const CourtSelector: React.FC<CourtSelectorProps> = ({ 
-  selectedCourt, 
-  onCourtChange, 
-  courts, 
-  unavailableMessage = "No hay canchas disponibles" 
+export const CourtSelector: React.FC<CourtSelectorProps> = ({
+  selectedCourt,
+  onCourtChange,
+  courts,
+  unavailableMessage = 'No hay canchas disponibles',
 }) => {
   const { messages } = useMessages();
   return (
@@ -19,25 +19,27 @@ export const CourtSelector: React.FC<CourtSelectorProps> = ({
         <Ionicons name="tennisball-outline" size={24} color={COLORS.primary} />
         <Text style={styles.label}>{messages.COURT.TITLE}</Text>
       </View>
-      
+
       {courts.length > 0 ? (
         <View style={styles.courtsContainer}>
-          {courts.map((court) => (
+          {courts.map(court => (
             <TouchableOpacity
               key={court.id}
               style={[
                 styles.court,
                 court.available ? styles.availableCourt : styles.unavailableCourt,
-                selectedCourt === court.id && styles.selectedCourt
+                selectedCourt === court.id && styles.selectedCourt,
               ]}
               onPress={() => court.available && onCourtChange(court.id)}
               disabled={!court.available}
             >
-              <Text style={[
-                styles.courtText,
-                selectedCourt === court.id && styles.selectedCourtText,
-                !court.available && styles.unavailableText
-              ]}>
+              <Text
+                style={[
+                  styles.courtText,
+                  selectedCourt === court.id && styles.selectedCourtText,
+                  !court.available && styles.unavailableText,
+                ]}
+              >
                 {court.name}
               </Text>
             </TouchableOpacity>

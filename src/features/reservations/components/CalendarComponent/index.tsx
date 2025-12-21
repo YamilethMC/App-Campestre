@@ -6,7 +6,10 @@ import useMessages from '../../hooks/useMessages';
 import { CalendarComponentProps } from '../../interfaces/reservationInterface';
 import styles from './Style';
 
-export const CalendarComponent: React.FC<CalendarComponentProps> = ({ selectedDate, onDateChange }) => {
+export const CalendarComponent: React.FC<CalendarComponentProps> = ({
+  selectedDate,
+  onDateChange,
+}) => {
   const { messages } = useMessages();
   // Estado para manejar el mes y año actual mostrado en el calendario
   const [displayedMonth, setDisplayedMonth] = useState(new Date().getMonth());
@@ -31,8 +34,18 @@ export const CalendarComponent: React.FC<CalendarComponentProps> = ({ selectedDa
   // Obtener nombre del mes
   const getMonthName = (month: number) => {
     const months = [
-      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre',
     ];
     return months[month];
   };
@@ -79,22 +92,34 @@ export const CalendarComponent: React.FC<CalendarComponentProps> = ({ selectedDa
   // Formatear fecha para mostrar
   const formatDateForDisplay = (dateString: string) => {
     if (!dateString) return 'Selecciona una fecha';
-    
+
     const date = new Date(dateString);
     const dayNames = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
     const dayName = dayNames[date.getDay()];
     const day = date.getDate();
-    const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
-                        'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    const monthNames = [
+      'Ene',
+      'Feb',
+      'Mar',
+      'Abr',
+      'May',
+      'Jun',
+      'Jul',
+      'Ago',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dic',
+    ];
     const monthName = monthNames[date.getMonth()];
-    
+
     return `${dayName}, ${day} de ${monthName}`;
   };
 
   // Seleccionar día
   const selectDay = (day: number | null) => {
     if (day === null) return;
-    
+
     const date = new Date(displayedYear, displayedMonth, day + 1);
     const formattedDate = date.toISOString().split('T')[0]; // YYYY-MM-DD
     onDateChange(formattedDate);
@@ -103,22 +128,22 @@ export const CalendarComponent: React.FC<CalendarComponentProps> = ({ selectedDa
   // Verificar si la fecha está en el pasado
   const isPastDay = (day: number | null) => {
     if (day === null) return false;
-    
+
     const date = new Date(displayedYear, displayedMonth, day);
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Establecer horas a 0 para comparación precisa
-    
+
     return date < today;
   };
 
   // Verificar si un día está seleccionado
   const isDaySelected = (day: number | null) => {
     if (!selectedDate || day === null) return false;
-    
+
     const selectedDateObj = new Date(selectedDate);
     return (
-      selectedDateObj.getDate() === day && 
-      selectedDateObj.getMonth() === displayedMonth && 
+      selectedDateObj.getDate() === day &&
+      selectedDateObj.getMonth() === displayedMonth &&
       selectedDateObj.getFullYear() === displayedYear
     );
   };
@@ -129,18 +154,20 @@ export const CalendarComponent: React.FC<CalendarComponentProps> = ({ selectedDa
         <Ionicons name="calendar-outline" size={24} color={COLORS.primary} />
         <Text style={styles.label}>{messages.CALENDARCOMPONENT.DATE}</Text>
       </View>
-      
+
       <View style={styles.calendarContainer}>
         <View style={styles.monthYearHeader}>
           <TouchableOpacity onPress={goToPreviousMonth} style={styles.navButton}>
             <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
           </TouchableOpacity>
-          <Text style={styles.monthYearText}>{getMonthName(displayedMonth)} {displayedYear}</Text>
+          <Text style={styles.monthYearText}>
+            {getMonthName(displayedMonth)} {displayedYear}
+          </Text>
           <TouchableOpacity onPress={goToNextMonth} style={styles.navButton}>
             <Ionicons name="chevron-forward" size={24} color={COLORS.primary} />
           </TouchableOpacity>
         </View>
-        
+
         <View style={styles.weekDaysHeader}>
           <Text style={styles.weekDayText}>{messages.CALENDARCOMPONENT.SUNDAY}</Text>
           <Text style={styles.weekDayText}>{messages.CALENDARCOMPONENT.MONDAY}</Text>
@@ -150,7 +177,7 @@ export const CalendarComponent: React.FC<CalendarComponentProps> = ({ selectedDa
           <Text style={styles.weekDayText}>{messages.CALENDARCOMPONENT.FRIDAY}</Text>
           <Text style={styles.weekDayText}>{messages.CALENDARCOMPONENT.SATURDAY}</Text>
         </View>
-        
+
         <View style={styles.calendarGrid}>
           {generateCalendarDays().map((day, index) => (
             <TouchableOpacity
@@ -158,25 +185,27 @@ export const CalendarComponent: React.FC<CalendarComponentProps> = ({ selectedDa
               style={[
                 styles.dayButton,
                 day === null && styles.emptyDay,
-                day === currentDay && 
-                displayedMonth === currentMonth && 
-                displayedYear === currentYear && 
-                styles.todayButton,
+                day === currentDay &&
+                  displayedMonth === currentMonth &&
+                  displayedYear === currentYear &&
+                  styles.todayButton,
                 day !== null && isDaySelected(day) && styles.selectedDayButton,
-                day !== null && isPastDay(day) && styles.pastDayButton
+                day !== null && isPastDay(day) && styles.pastDayButton,
               ]}
               onPress={() => selectDay(day)}
               disabled={day === null || isPastDay(day)}
             >
-              <Text style={[
-                styles.dayText,
-                day === currentDay && 
-                displayedMonth === currentMonth && 
-                displayedYear === currentYear && 
-                styles.todayText,
-                day !== null && isDaySelected(day) && styles.selectedDayText,
-                day !== null && isPastDay(day) && styles.pastDayText
-              ]}>
+              <Text
+                style={[
+                  styles.dayText,
+                  day === currentDay &&
+                    displayedMonth === currentMonth &&
+                    displayedYear === currentYear &&
+                    styles.todayText,
+                  day !== null && isDaySelected(day) && styles.selectedDayText,
+                  day !== null && isPastDay(day) && styles.pastDayText,
+                ]}
+              >
                 {day}
               </Text>
             </TouchableOpacity>

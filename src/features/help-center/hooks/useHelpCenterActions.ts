@@ -3,12 +3,7 @@ import { Alert } from 'react-native';
 import { useHelpCenterStore } from '../store';
 
 export const useHelpCenterActions = () => {
-  const {
-    faqs,
-    loading,
-    error,
-    fetchFAQs
-  } = useHelpCenterStore();
+  const { faqs, loading, error, fetchFAQs } = useHelpCenterStore();
 
   // Fetch FAQs on initial load
   useEffect(() => {

@@ -7,7 +7,8 @@ const NoReservations = () => {
     <View style={styles.container}>
       <Text style={styles.title}>No se encontraron reservaciones</Text>
       <Text style={styles.message}>
-        Actualmente no tienes reservaciones activas. Haz una nueva reservación en la sección de reservas.
+        Actualmente no tienes reservaciones activas. Haz una nueva reservación en la sección de
+        reservas.
       </Text>
     </View>
   );

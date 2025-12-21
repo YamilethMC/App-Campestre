@@ -24,21 +24,19 @@ export const useLogin = () => {
   const navigation = useNavigation<AuthStackNavigationProp>();
   const { setAuthData, clearAuth, setPendingPasswordChange } = useAuth();
   const { setProfile } = useProfileStore();
-  
+
   // Estado local para manejar la carga y errores
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState<boolean>(false);
-  
 
   // Función para limpiar errores
   const clearError = () => setError(null);
 
   // Función para manejar el login
   const login = async (email: string, password: string): Promise<boolean> => {
-
     if (!validateEmail(email)) {
       console.log('Email invalido');
       return false;
@@ -58,13 +56,13 @@ export const useLogin = () => {
 
       if (success && user) {
         // 2. Separar datos de autenticación y perfil
-        const profileData = { ...user};
-        
+        const profileData = { ...user };
+
         // 3. Actualizar los stores
         setAuthData(user.id, token ?? '');
         // Asegurarse de que profileData cumpla con UserProfile
         setProfile(profileData as userProfile);
-        
+
         // 4. Verificar si debe cambiar contraseña
         const numericUserId = typeof user.id === 'number' ? user.id : Number(user.id);
 
@@ -72,14 +70,14 @@ export const useLogin = () => {
           console.log('Debe cambiar contraseña');
           setPendingPasswordChange(true);
           // @ts-ignore
-          navigation.navigate('ChangePassword', { 
-            userId: numericUserId, 
-            isFirstLogin: true 
+          navigation.navigate('ChangePassword', {
+            userId: numericUserId,
+            isFirstLogin: true,
           });
           return true;
         }
         setPendingPasswordChange(false);
-        
+
         // 5. Navegar a la pantalla principal
         // @ts-ignore - asumiendo que existe la ruta 'MainTabs'
         // navigation.navigate('Main');
@@ -111,7 +109,7 @@ export const useLogin = () => {
     async (email: string, password: string) => {
       await login(email, password);
     },
-    [login]
+    [login],
   );
 
   // Funcion para manejar el cambio del correo
@@ -145,7 +143,7 @@ export const useLogin = () => {
           onPress: clearError,
         },
       ],
-      { cancelable: false }
+      { cancelable: false },
     );
   }
 

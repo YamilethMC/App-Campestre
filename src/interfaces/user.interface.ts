@@ -1,4 +1,3 @@
-
 export interface UserProfile {
   memberCode?: number;
   id: string;
@@ -45,24 +44,24 @@ export interface UserProfile {
 
 // Interface of emergency contact
 export interface EmergencyContact {
-    name: string;
-    relationship: string;
-    phone: string;
-  }
-  
- export interface FamilyMember {
-    id: number;
-    name: string;
-    lastName?: string;
-    relationship: string;
-    age: number;
-    isActive: boolean;
-  }
-  
-  // Interfaces of vehicle
-  export interface Vehicle {
-    id: number;
-    plate: string;
-    model: string;
-    isActive: boolean;
-  }
+  name: string;
+  relationship: string;
+  phone: string;
+}
+
+export interface FamilyMember {
+  id: number;
+  name: string;
+  lastName?: string;
+  relationship: string;
+  age: number;
+  isActive: boolean;
+}
+
+// Interfaces of vehicle
+export interface Vehicle {
+  id: number;
+  plate: string;
+  model: string;
+  isActive: boolean;
+}

@@ -1,5 +1,11 @@
-import { useAuthStore } from '../../../features/auth/store/useAuthStore';
-import { CancelReservationRequest, CancelReservationResponse, GetReservationsResponse, Reservation, ServiceResponse } from '../interfaces';
+import { useAuthStore } from '../../auth/store/useAuthStore';
+import {
+  CancelReservationRequest,
+  CancelReservationResponse,
+  GetReservationsResponse,
+  Reservation,
+  ServiceResponse,
+} from '../interfaces';
 
 export const reservationService = {
   /**
@@ -11,7 +17,7 @@ export const reservationService = {
       return {
         success: false,
         error: 'No authentication token available',
-        status: 401
+        status: 401,
       };
     }
 
@@ -21,8 +27,8 @@ export const reservationService = {
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'accept': '*/*',
+          Authorization: `Bearer ${token}`,
+          accept: '*/*',
           'Content-Type': 'application/json',
         },
       });
@@ -46,7 +52,7 @@ export const reservationService = {
         return {
           success: false,
           error: errorMessage,
-          status: response.status
+          status: response.status,
         };
       }
 
@@ -56,14 +62,14 @@ export const reservationService = {
         success: true,
         data: result.data,
         message: result.message || 'Reservaciones cargadas exitosamente',
-        status: response.status
+        status: response.status,
       };
     } catch (error: any) {
       console.error('Error fetching reservations:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al cargar las reservaciones',
-        status: 500
+        status: 500,
       };
     }
   },
@@ -72,16 +78,16 @@ export const reservationService = {
    * Cancel a reservation
    */
   cancelReservation: async (
-    reservationId: number, 
-    idMember: string | number, 
-    cancelData: CancelReservationRequest
+    reservationId: number,
+    idMember: string | number,
+    cancelData: CancelReservationRequest,
   ): Promise<ServiceResponse<any>> => {
     const token = useAuthStore.getState().token;
     if (!token) {
       return {
         success: false,
         error: 'No authentication token available',
-        status: 401
+        status: 401,
       };
     }
 
@@ -91,8 +97,8 @@ export const reservationService = {
       const response = await fetch(url, {
         method: 'PATCH',
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'accept': '*/*',
+          Authorization: `Bearer ${token}`,
+          accept: '*/*',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(cancelData),
@@ -126,7 +132,7 @@ export const reservationService = {
         return {
           success: false,
           error: errorMessage,
-          status: response.status
+          status: response.status,
         };
       }
 
@@ -136,14 +142,14 @@ export const reservationService = {
         success: true,
         data: result.data,
         message: result.message || 'Reservación cancelada exitosamente',
-        status: response.status
+        status: response.status,
       };
     } catch (error: any) {
       console.error('Error canceling reservation:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al cancelar la reservación',
-        status: 500
+        status: 500,
       };
     }
   },

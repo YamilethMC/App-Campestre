@@ -69,11 +69,15 @@ const RestaurantDishCard: React.FC<RestaurantDishCardProps> = ({ dish }) => {
       {/* Dish Info */}
       <View style={styles.infoContainer}>
         <View style={styles.headerRow}>
-          <Text style={styles.name} numberOfLines={1}>{dish.name}</Text>
+          <Text style={styles.name} numberOfLines={1}>
+            {dish.name}
+          </Text>
           <Text style={styles.price}>${dish.price}</Text>
         </View>
 
-        <Text style={styles.description} numberOfLines={2}>{dish.description}</Text>
+        <Text style={styles.description} numberOfLines={2}>
+          {dish.description}
+        </Text>
 
         <View style={styles.metaRow}>
           <Text style={styles.category}>{dish.category}</Text>

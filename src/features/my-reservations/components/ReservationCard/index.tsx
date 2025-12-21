@@ -115,31 +115,48 @@ const ReservationCard = ({ reservation, onCancel }: ReservationCardProps) => {
           <Text style={styles.title}>{reservation.facility.name}</Text>
           <Text style={styles.description}>{reservation.facility.description}</Text>
         </View>
-        <View style={[styles.status, {
-          borderColor: getStatusColor(reservation.status),
-          borderWidth: 1
-        }]}>
-          <Text style={[styles.statusText, { color: getStatusColor(reservation.status) }]}>{getStatusText(reservation.status)}</Text>
+        <View
+          style={[
+            styles.status,
+            {
+              borderColor: getStatusColor(reservation.status),
+              borderWidth: 1,
+            },
+          ]}
+        >
+          <Text style={[styles.statusText, { color: getStatusColor(reservation.status) }]}>
+            {getStatusText(reservation.status)}
+          </Text>
         </View>
       </View>
 
       <View style={styles.content}>
         <View style={styles.infoSection}>
           <View style={styles.typeRow}>
-            <Ionicons name={getFacilityIcon(reservation.facility.type)} size={18} color={COLORS.primary} style={styles.typeIcon} />
+            <Ionicons
+              name={getFacilityIcon(reservation.facility.type)}
+              size={18}
+              color={COLORS.primary}
+              style={styles.typeIcon}
+            />
             <Text style={styles.typeText}>{reservation.facility.type}</Text>
           </View>
 
           <View style={styles.dateRow}>
-            <Ionicons name="calendar-outline" size={16} color={COLORS.primary} style={styles.dateIcon} />
+            <Ionicons
+              name="calendar-outline"
+              size={16}
+              color={COLORS.primary}
+              style={styles.dateIcon}
+            />
             <View style={styles.dateContainer}>
-              <Text style={styles.dateText}>
-                {formatDate(reservation.startTime)}
-              </Text>
+              <Text style={styles.dateText}>{formatDate(reservation.startTime)}</Text>
               <Text style={styles.timeRangeText}>
                 {formatTime(reservation.startTime)} - {formatTime(reservation.endTime)}
               </Text>
-              <Text style={styles.durationText}>{getDuration(reservation.startTime, reservation.endTime)}</Text>
+              <Text style={styles.durationText}>
+                {getDuration(reservation.startTime, reservation.endTime)}
+              </Text>
             </View>
           </View>
         </View>
@@ -152,18 +169,22 @@ const ReservationCard = ({ reservation, onCancel }: ReservationCardProps) => {
             reservation.status.toUpperCase() === 'CANCELLED' && {
               backgroundColor: COLORS.gray400,
               opacity: 0.6,
-            }
+            },
           ]}
           onPress={() => setIsModalVisible(true)}
           disabled={reservation.status.toUpperCase() === 'CANCELLED'}
         >
           <Ionicons
-            name={reservation.status.toUpperCase() === 'CANCELLED' ? "checkmark-circle" : "close-circle-outline"}
+            name={
+              reservation.status.toUpperCase() === 'CANCELLED'
+                ? 'checkmark-circle'
+                : 'close-circle-outline'
+            }
             size={15}
             color={reservation.status.toUpperCase() === 'CANCELLED' ? COLORS.white : COLORS.white}
           />
           <Text style={styles.cancelButtonText}>
-            {reservation.status.toUpperCase() === 'CANCELLED' ? "Cancelada" : "Cancelar"}
+            {reservation.status.toUpperCase() === 'CANCELLED' ? 'Cancelada' : 'Cancelar'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -182,7 +203,9 @@ const ReservationCard = ({ reservation, onCancel }: ReservationCardProps) => {
             </View>
 
             <Text style={styles.modalMessage}>
-              ¿Estás seguro de que deseas cancelar la reservación para <Text style={styles.facilityName}>{reservation.facility.name}</Text> el día {formatDate(reservation.startTime)} a las {formatTime(reservation.startTime)}?
+              ¿Estás seguro de que deseas cancelar la reservación para{' '}
+              <Text style={styles.facilityName}>{reservation.facility.name}</Text> el día{' '}
+              {formatDate(reservation.startTime)} a las {formatTime(reservation.startTime)}?
             </Text>
 
             <View style={styles.modalActions}>
@@ -197,7 +220,9 @@ const ReservationCard = ({ reservation, onCancel }: ReservationCardProps) => {
                 style={[styles.modalButton, styles.confirmModalButton]}
                 onPress={handleCancelReservation}
               >
-                <Text style={[styles.modalButtonText, styles.confirmModalButtonText]}>Confirmar</Text>
+                <Text style={[styles.modalButtonText, styles.confirmModalButtonText]}>
+                  Confirmar
+                </Text>
               </TouchableOpacity>
             </View>
           </View>

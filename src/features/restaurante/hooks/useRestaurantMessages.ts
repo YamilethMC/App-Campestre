@@ -35,7 +35,7 @@ const useRestaurantMessages = () => {
       SPICY: t('restaurant.tags.spicy'),
       VEGETARIAN: t('restaurant.tags.vegetarian'),
       GLUTEN_FREE: t('restaurant.tags.glutenFree'),
-    }
+    },
   };
 
   return { messages };

@@ -10,7 +10,7 @@ export const bannerService = {
   getAvailableBanners: async (): Promise<GetAvailableBannersResponse> => {
     try {
       const token = useAuthStore.getState().token;
-      
+
       if (!token) {
         throw new Error('No authentication token available');
       }
@@ -19,8 +19,8 @@ export const bannerService = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-          'accept': '*/*',
+          Authorization: `Bearer ${token}`,
+          accept: '*/*',
         },
       });
 
@@ -29,11 +29,11 @@ export const bannerService = {
       }
 
       const data = await response.json();
-      console.log('el response en banner es: ', data)
+      console.log('el response en banner es: ', data);
 
       // Transform the API response to match the expected format
       const transformedData = {
-        banners: data.data || [] // Extract banners from the 'data' property
+        banners: data.data || [], // Extract banners from the 'data' property
       };
 
       return transformedData;

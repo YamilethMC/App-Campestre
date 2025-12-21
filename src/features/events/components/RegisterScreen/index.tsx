@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
 import Button from '../../../../shared/components/Button/Button';
 import ModalComponent from '../../../../shared/components/Modal/Modal';
@@ -85,8 +85,7 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({
       if (success) {
         onRegistrationComplete();
       }
-    } catch (err: any) {
-    }
+    } catch (err: any) {}
   };
 
   if (!visible) return null;
@@ -128,25 +127,30 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({
                     {
                       id: memberDetails.id,
                       name: memberDetails.user.name,
-                      lastName: memberDetails.user.lastName
+                      lastName: memberDetails.user.lastName,
                     },
                     ...memberDetails.guests.map((guest: any) => ({
                       id: guest.id,
                       name: guest.user.name,
-                      lastName: guest.user.lastName
-                    }))
-                  ].map((participant) => (
+                      lastName: guest.user.lastName,
+                    })),
+                  ].map(participant => (
                     <TouchableOpacity
                       key={participant.id}
                       style={[
                         styles.participantItem,
-                        selectedParticipants.includes(participant.id) && styles.selectedParticipantItem
+                        selectedParticipants.includes(participant.id) &&
+                          styles.selectedParticipantItem,
                       ]}
                       onPress={() => toggleParticipantSelection(participant.id)}
                     >
                       <View style={styles.checkboxContainer}>
                         <Ionicons
-                          name={selectedParticipants.includes(participant.id) ? 'checkbox' : 'square-outline'}
+                          name={
+                            selectedParticipants.includes(participant.id)
+                              ? 'checkbox'
+                              : 'square-outline'
+                          }
                           size={24}
                           color={COLORS.primary}
                         />

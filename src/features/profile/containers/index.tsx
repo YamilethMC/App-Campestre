@@ -18,7 +18,6 @@ import SectionCard from '../components/SectionCard';
 import useMessages from '../hooks/useMessages';
 import useProfile from '../hooks/useProfile';
 
-
 const ProfileContainer = () => {
   const { messages } = useMessages();
   const { userId } = useAuthStore();
@@ -47,14 +46,12 @@ const ProfileContainer = () => {
 
   const [showAddFamilyForm, setShowAddFamilyForm] = useState(false);
   const [showGuestRestrictionModal, setShowGuestRestrictionModal] = useState(false);
-console.log('el profile esssssssssss: ', profile);
-console.log('el phone es en containerrrrrrrrrrrrr: ', profile?.phone)
+  console.log('el profile esssssssssss: ', profile);
+  console.log('el phone es en containerrrrrrrrrrrrr: ', profile?.phone);
   if (!currentUser) {
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.errorText}>
-          {messages.CONTAINER.DATA_USER}
-        </Text>
+        <Text style={styles.errorText}>{messages.CONTAINER.DATA_USER}</Text>
       </SafeAreaView>
     );
   }
@@ -75,10 +72,7 @@ console.log('el phone es en containerrrrrrrrrrrrr: ', profile?.phone)
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
-      >
+      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
         {/* Profile Header */}
         <ProfileHeader
           name={profile?.name || messages.CONTAINER.USER}
@@ -94,9 +88,7 @@ console.log('el phone es en containerrrrrrrrrrrrr: ', profile?.phone)
         <SectionCard
           title={messages.PERSONAL.TITLE}
           rightAction={
-            isEditing ? (
-              null
-            ) : (
+            isEditing ? null : (
               <Button
                 text={messages.CONTAINER.EDIT}
                 onPress={handleEdit}
@@ -123,39 +115,38 @@ console.log('el phone es en containerrrrrrrrrrrrr: ', profile?.phone)
             country={isEditing ? formData.country : profile?.country}
             memberSince={profile?.memberSince}
             isEditing={isEditing}
-            onNameChange={(text) => handleInputChange('name', text)}
-            onlastNameChange={(text) => handleInputChange('lastName', text)}
-            onEmailChange={(text) => handleInputChange('email', text)}
-            onPhoneChange={(text) => handleInputChange('phone', text)}
-            onAddressChange={(text) => handleInputChange('address', text)}
-            onStreetChange={(text) => handleInputChange('street', text)}
-            onexternalNumberChange={(text) => handleInputChange('externalNumber', text)}
-            oninternalNumberChange={(text) => handleInputChange('internalNumber', text)}
-            oncolonyChange={(text) => handleInputChange('colony', text)}
-            onzipCodeChange={(text) => handleInputChange('zipCode', text)}
-            oncityChange={(text) => handleInputChange('city', text)}
-            onstateChange={(text) => handleInputChange('state', text)}
-            oncountryChange={(text) => handleInputChange('country', text)}
-            />
-            { isEditing && (
-              <View style={styles.editActions}>
-                <Button
-                  text={messages.CONTAINER.CANCEL}
-                  onPress={handleCancel}
-                  variant="secondary"
-                  style={[styles.actionButton, styles.cancelButton]}
-                  titleStyle={styles.cancelButtonText}
-                />
-                <View style={styles.buttonSpacer} />
-                <Button
-                  text={messages.CONTAINER.SAVE}
-                  onPress={handleSave}
-                  variant="primary"
-                  style={[styles.actionButton, styles.saveButton]}
-                />
-              </View>
-            )}
-
+            onNameChange={text => handleInputChange('name', text)}
+            onlastNameChange={text => handleInputChange('lastName', text)}
+            onEmailChange={text => handleInputChange('email', text)}
+            onPhoneChange={text => handleInputChange('phone', text)}
+            onAddressChange={text => handleInputChange('address', text)}
+            onStreetChange={text => handleInputChange('street', text)}
+            onexternalNumberChange={text => handleInputChange('externalNumber', text)}
+            oninternalNumberChange={text => handleInputChange('internalNumber', text)}
+            oncolonyChange={text => handleInputChange('colony', text)}
+            onzipCodeChange={text => handleInputChange('zipCode', text)}
+            oncityChange={text => handleInputChange('city', text)}
+            onstateChange={text => handleInputChange('state', text)}
+            oncountryChange={text => handleInputChange('country', text)}
+          />
+          {isEditing && (
+            <View style={styles.editActions}>
+              <Button
+                text={messages.CONTAINER.CANCEL}
+                onPress={handleCancel}
+                variant="secondary"
+                style={[styles.actionButton, styles.cancelButton]}
+                titleStyle={styles.cancelButtonText}
+              />
+              <View style={styles.buttonSpacer} />
+              <Button
+                text={messages.CONTAINER.SAVE}
+                onPress={handleSave}
+                variant="primary"
+                style={[styles.actionButton, styles.saveButton]}
+              />
+            </View>
+          )}
         </SectionCard>
 
         {/* Familiares */}
@@ -173,7 +164,7 @@ console.log('el phone es en containerrrrrrrrrrrrr: ', profile?.phone)
         </SectionCard>
 
         {/* Vehículos */}
-       {/* <SectionCard title={messages.VEHICLES.TITLE}>
+        {/* <SectionCard title={messages.VEHICLES.TITLE}>
           <Vehicles
             vehicles={currentUser?.vehicles || []}
             onAddVehicle={handleAddVehicle}
@@ -181,7 +172,7 @@ console.log('el phone es en containerrrrrrrrrrrrr: ', profile?.phone)
         </SectionCard>*/}
 
         {/* Contacto de emergencia */}
-         {/*<SectionCard title={messages.EMERGENCY.TITLE}
+        {/*<SectionCard title={messages.EMERGENCY.TITLE}
           rightAction={
             isEditingContactEmergency ? (
               null
@@ -233,13 +224,13 @@ console.log('el phone es en containerrrrrrrrrrrrr: ', profile?.phone)
               // @ts-ignore
               navigation.navigate('ChangePassword', {
                 userId: userId,
-                isFirstLogin: false
+                isFirstLogin: false,
               });
             }}
             variant="outline"
             style={[styles.logoutButton, { marginBottom: 15 }]}
           />
-          
+
           {/* Logout Button */}
           <Button
             text={messages.CONTAINER.LOGOUT}

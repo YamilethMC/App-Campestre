@@ -146,13 +146,17 @@ interface RegistrationResponse {
 // Mapear el tipo de evento de string a tipo definido
 const mapEventType = (type: string): 'SOCIAL' | 'SPORT' | 'FAMILY' | 'OTHER' => {
   switch (type.toUpperCase()) {
-    case 'SOCIAL': return 'SOCIAL';
+    case 'SOCIAL':
+      return 'SOCIAL';
     case 'SPORT':
-    case 'DEPORTIVO': return 'SPORT';
+    case 'DEPORTIVO':
+      return 'SPORT';
     case 'FAMILY':
     case 'FAMILIAR':
-    case 'FAMILIAR': return 'FAMILY';
-    default: return 'OTHER';
+    case 'FAMILIAR':
+      return 'FAMILY';
+    default:
+      return 'OTHER';
   }
 };
 
@@ -160,12 +164,14 @@ const mapEventType = (type: string): 'SOCIAL' | 'SPORT' | 'FAMILY' | 'OTHER' => 
 const parseDate = (dateString: string): string => {
   try {
     const date = new Date(dateString);
-    return date.toLocaleDateString('es-ES', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    }).replace(/^\w/, (c) => c.toUpperCase());
+    return date
+      .toLocaleDateString('es-ES', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      })
+      .replace(/^\w/, c => c.toUpperCase());
   } catch (error) {
     return dateString;
   }
@@ -175,10 +181,10 @@ const parseDate = (dateString: string): string => {
 const parseTime = (dateISOString: string): string => {
   try {
     const date = new Date(dateISOString);
-    return date.toLocaleTimeString('es-ES', { 
-      hour: '2-digit', 
+    return date.toLocaleTimeString('es-ES', {
+      hour: '2-digit',
       minute: '2-digit',
-      hour12: false 
+      hour12: false,
     });
   } catch (error) {
     return '00:00';
@@ -193,7 +199,7 @@ export const eventsService = {
     page: number = 1,
     search: string = '',
     type: string = '',
-    date: string = '' // formato 'yyyy-mm'
+    date: string = '', // formato 'yyyy-mm'
   ): Promise<{
     success: boolean;
     data?: {
@@ -209,13 +215,15 @@ export const eventsService = {
     status: number;
     error?: string;
   }> {
-    console.log('HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+    console.log(
+      'HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    );
     const { token } = useAuthStore.getState();
     if (!token) {
       return {
         success: false,
         error: 'No authentication token available',
-        status: 401
+        status: 401,
       };
     }
 
@@ -242,8 +250,8 @@ export const eventsService = {
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'accept': 'application/json',
+          Authorization: `Bearer ${token}`,
+          accept: 'application/json',
         },
       });
 
@@ -275,7 +283,7 @@ export const eventsService = {
         return {
           success: false,
           error: errorMessage,
-          status: response.status
+          status: response.status,
         };
       }
 
@@ -307,14 +315,14 @@ export const eventsService = {
           meta: result.data.meta,
         },
         message: 'Eventos cargados exitosamente',
-        status: response.status
+        status: response.status,
       };
     } catch (error) {
       console.error('Error fetching events:', error);
       return {
         success: false,
         error: 'Error desconocido al cargar los eventos',
-        status: 500
+        status: 500,
       };
     }
   },
@@ -334,21 +342,18 @@ export const eventsService = {
       return {
         success: false,
         error: 'No authentication token available',
-        status: 401
+        status: 401,
       };
     }
 
     try {
-      const response = await fetch(
-        `${process.env.EXPO_PUBLIC_API_URL}/club-members/${memberId}`,
-        {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'accept': '*/*',
-          },
-        }
-      );
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/club-members/${memberId}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          accept: '*/*',
+        },
+      });
 
       if (!response.ok) {
         let errorMessage = 'Error al cargar los detalles del miembro';
@@ -378,7 +383,7 @@ export const eventsService = {
         return {
           success: false,
           error: errorMessage,
-          status: response.status
+          status: response.status,
         };
       }
 
@@ -388,14 +393,14 @@ export const eventsService = {
         success: true,
         data: result.data,
         message: 'Detalles del miembro cargados exitosamente',
-        status: response.status
+        status: response.status,
       };
     } catch (error) {
       console.error('Error fetching member details:', error);
       return {
         success: false,
         error: 'Error desconocido al cargar los detalles del miembro',
-        status: 500
+        status: 500,
       };
     }
   },
@@ -403,7 +408,11 @@ export const eventsService = {
   /**
    * Registrar usuario a un evento
    */
-  async registerForEvent(eventId: string, clubMemberId: string, totalRegistrations: number = 1): Promise<{
+  async registerForEvent(
+    eventId: string,
+    clubMemberId: string,
+    totalRegistrations: number = 1,
+  ): Promise<{
     success: boolean;
     data?: Event;
     message?: string;
@@ -415,7 +424,7 @@ export const eventsService = {
       return {
         success: false,
         error: 'No authentication token available',
-        status: 401
+        status: 401,
       };
     }
     console.log('REGISTRANDO EVENTO:', { eventId, clubMemberId, totalRegistrations });
@@ -425,15 +434,15 @@ export const eventsService = {
         {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${token}`,
-            'accept': 'application/json',
+            Authorization: `Bearer ${token}`,
+            accept: 'application/json',
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             clubMemberId,
             totalRegistrations,
           }),
-        }
+        },
       );
 
       if (!response.ok) {
@@ -467,7 +476,7 @@ export const eventsService = {
         return {
           success: false,
           error: errorMessage,
-          status: response.status
+          status: response.status,
         };
       }
 
@@ -491,14 +500,14 @@ export const eventsService = {
         success: true,
         data: event,
         message: 'Registro completado exitosamente',
-        status: response.status
+        status: response.status,
       };
     } catch (error) {
       console.error('Error registering for event:', error);
       return {
         success: false,
         error: 'Error desconocido al registrar en el evento',
-        status: 500
+        status: 500,
       };
     }
   },
@@ -506,7 +515,10 @@ export const eventsService = {
   /**
    * Cancelar el registro de un usuario en un evento
    */
-  async cancelEventRegistration(eventId: string, clubMemberId: string): Promise<{
+  async cancelEventRegistration(
+    eventId: string,
+    clubMemberId: string,
+  ): Promise<{
     success: boolean;
     data?: {
       message: string;
@@ -522,7 +534,7 @@ export const eventsService = {
       return {
         success: false,
         error: 'No authentication token available',
-        status: 401
+        status: 401,
       };
     }
 
@@ -532,10 +544,10 @@ export const eventsService = {
         {
           method: 'DELETE',
           headers: {
-            'Authorization': `Bearer ${token}`,
-            'accept': '*/*',
+            Authorization: `Bearer ${token}`,
+            accept: '*/*',
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -557,7 +569,7 @@ export const eventsService = {
         return {
           success: false,
           error: errorMessage,
-          status: response.status
+          status: response.status,
         };
       }
 
@@ -567,16 +579,15 @@ export const eventsService = {
         success: true,
         data: result.data,
         message: result.data.message,
-        status: response.status
+        status: response.status,
       };
     } catch (error) {
       console.error('Error canceling event registration:', error);
       return {
         success: false,
         error: 'Error desconocido al cancelar el registro',
-        status: 500
+        status: 500,
       };
     }
   },
-
 };

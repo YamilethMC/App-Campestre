@@ -1,7 +1,7 @@
 import Input from '@/src/shared/components/Input/Input';
 import React from 'react';
 import { Text, View } from 'react-native';
-import Select from '../../../../shared/components//Select/Select';
+import Select from '../../../../shared/components/Select/Select';
 import useMessages from '../../hooks/useMessages';
 import { emergencyContact } from '../../interfaces/interfaces';
 import { styles } from './Style';
@@ -15,7 +15,7 @@ const EmergencyContact: React.FC<emergencyContact> = ({
   onNameChange,
   onRelationshipChange,
   onPhoneChange,
-  rightAction
+  rightAction,
 }) => {
   const { messages } = useMessages();
   return (
@@ -24,23 +24,35 @@ const EmergencyContact: React.FC<emergencyContact> = ({
         <View style={[styles.detailRow, isEditingContactEmergency && styles.detailRowEditing]}>
           {isEditingContactEmergency ? (
             <View style={styles.editFieldContainer}>
-              <Text style={[styles.detailLabel, isEditingContactEmergency && styles.detailLabelEditing]}>{messages.EMERGENCY.NAME}:</Text>
+              <Text
+                style={[styles.detailLabel, isEditingContactEmergency && styles.detailLabelEditing]}
+              >
+                {messages.EMERGENCY.NAME}:
+              </Text>
               <Input
                 value={name}
                 onChangeText={onNameChange}
                 placeholder={messages.EMERGENCY.NAME}
-                style={styles.input} 
+                style={styles.input}
               />
             </View>
           ) : (
-            <Text style={[styles.contactName, isEditingContactEmergency && styles.detailValueEditing]}>{name || messages.CONTAINER.NO_SPECIFIED}</Text>
+            <Text
+              style={[styles.contactName, isEditingContactEmergency && styles.detailValueEditing]}
+            >
+              {name || messages.CONTAINER.NO_SPECIFIED}
+            </Text>
           )}
         </View>
-        
+
         <View style={[styles.detailRow, isEditingContactEmergency && styles.detailRowEditing]}>
           {isEditingContactEmergency ? (
             <View style={styles.editFieldContainer}>
-              <Text style={[styles.detailLabel, isEditingContactEmergency && styles.detailLabelEditing]}>{messages.EMERGENCY.RELATIONSHIP}:</Text>
+              <Text
+                style={[styles.detailLabel, isEditingContactEmergency && styles.detailLabelEditing]}
+              >
+                {messages.EMERGENCY.RELATIONSHIP}:
+              </Text>
               <Select
                 placeholder={messages.EMERGENCY.RELATIONSHIP}
                 options={[
@@ -53,12 +65,15 @@ const EmergencyContact: React.FC<emergencyContact> = ({
                   { label: 'Primo/Prima', value: 'primo' },
                   { label: 'Otro', value: 'otro' },
                   // Agregar el valor actual si no está en las opciones estándar
-                  ...(relationship && !['padre', 'madre', 'hijo', 'hermano', 'esposo', 'tio', 'primo', 'otro'].includes(relationship) 
-                    ? [{ label: relationship, value: relationship }] 
+                  ...(relationship &&
+                  !['padre', 'madre', 'hijo', 'hermano', 'esposo', 'tio', 'primo', 'otro'].includes(
+                    relationship,
+                  )
+                    ? [{ label: relationship, value: relationship }]
                     : []),
                 ]}
                 selectedValue={relationship}
-                onValueChange={(value) => onRelationshipChange(value as string)}
+                onValueChange={value => onRelationshipChange(value as string)}
                 style={styles.select}
                 dropdownStyle={styles.selectContainer}
                 itemTextStyle={styles.selectedText}
@@ -66,25 +81,30 @@ const EmergencyContact: React.FC<emergencyContact> = ({
             </View>
           ) : (
             <View style={styles.detailValue}>
-              <Text style={styles.detailValueEditing}>{relationship || messages.CONTAINER.NO_SPECIFIED} • {phone || messages.CONTAINER.NO_SPECIFIED}</Text>
+              <Text style={styles.detailValueEditing}>
+                {relationship || messages.CONTAINER.NO_SPECIFIED} •{' '}
+                {phone || messages.CONTAINER.NO_SPECIFIED}
+              </Text>
             </View>
           )}
         </View>
-        
+
         <View style={[styles.detailRow, isEditingContactEmergency && styles.detailRowEditing]}>
           {isEditingContactEmergency ? (
             <View style={styles.editFieldContainer}>
-              <Text style={[styles.detailLabel, isEditingContactEmergency && styles.detailLabelEditing]}>{messages.EMERGENCY.PHONE}:</Text>
+              <Text
+                style={[styles.detailLabel, isEditingContactEmergency && styles.detailLabelEditing]}
+              >
+                {messages.EMERGENCY.PHONE}:
+              </Text>
               <Input
-              value={phone}
-              onChangeText={onPhoneChange}
-              placeholder={messages.EMERGENCY.PHONE}
-              style={styles.input}
-            />
+                value={phone}
+                onChangeText={onPhoneChange}
+                placeholder={messages.EMERGENCY.PHONE}
+                style={styles.input}
+              />
             </View>
-          ) : (
-            null
-          )}
+          ) : null}
         </View>
       </View>
     </View>

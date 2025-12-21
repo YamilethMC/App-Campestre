@@ -62,7 +62,7 @@ const ReservationsContainer = () => {
     getAvailableTimeSlots,
     confirmReservation,
     resetSelection,
-    loadTimeSlotsForCourt
+    loadTimeSlotsForCourt,
   } = useReservation();
 
   const [showMyReservations, setShowMyReservations] = useState(false);
@@ -72,7 +72,7 @@ const ReservationsContainer = () => {
     return (
       <MyReservationsScreen
         navigation={{
-          goBack: () => setShowMyReservations(false)
+          goBack: () => setShowMyReservations(false),
         }}
       />
     );
@@ -88,7 +88,7 @@ const ReservationsContainer = () => {
             contentContainerStyle={styles.servicesContainer}
             showsVerticalScrollIndicator={false}
           >
-            {mockServices.map((service) => (
+            {mockServices.map(service => (
               <ServiceCard
                 key={service.id}
                 service={service}
@@ -113,19 +113,15 @@ const ReservationsContainer = () => {
   // Si hay un servicio seleccionado, mostrar la interfaz de reserva
   return (
     <SafeAreaView style={styles.safeArea}>
-
       <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 50 }}>
         {/* Componente de calendario */}
-        <CalendarComponent
-          selectedDate={date}
-          onDateChange={handleDateChange}
-        />
+        <CalendarComponent selectedDate={date} onDateChange={handleDateChange} />
 
         {/* Componente de canchas - Mostrar solo para padel */}
         {selectedService.id === 'padel' && (
           <CourtSelector
             selectedCourt={selectedCourt}
-            onCourtChange={(courtId) => {
+            onCourtChange={courtId => {
               // Set both the string ID and numeric ID
               setSelectedCourt(courtId);
               const numericId = parseInt(courtId);
@@ -154,11 +150,7 @@ const ReservationsContainer = () => {
                   onPress={() => setPartySize(prev => Math.max(1, prev - 1))}
                 />
                 <Text style={styles.counterText}>{partySize}</Text>
-                <Button
-                  variant="icon"
-                  text="+"
-                  onPress={() => setPartySize(prev => prev + 1)}
-                />
+                <Button variant="icon" text="+" onPress={() => setPartySize(prev => prev + 1)} />
               </View>
             </View>
 
@@ -178,19 +170,29 @@ const ReservationsContainer = () => {
             onTimeChange={setTime}
             availableTimes={getAvailableTimeSlots()}
             selectedDate={date}
-            unavailableMessage={date && selectedCourt ? messages.CONTAINER.NO_HOURS_AVAILABLE : "Debe seleccionar fecha y cancha para mostrar los horarios"}
+            unavailableMessage={
+              date && selectedCourt
+                ? messages.CONTAINER.NO_HOURS_AVAILABLE
+                : 'Debe seleccionar fecha y cancha para mostrar los horarios'
+            }
           />
         )}
 
         {/* Resumen de la reserva */}
-        {(date && time) && (
+        {date && time && (
           <SummaryCard
             serviceName={selectedService.name}
             date={date}
             time={time}
             details={{
-              ...(selectedService.id === 'padel' && selectedCourt && { court: getCourtName(selectedCourt), courtId: selectedCourtId }),
-              ...(selectedService.id === 'restaurante' && selectedTable && { table: getTableName(selectedTable), tableId: selectedTable, partySize }),
+              ...(selectedService.id === 'padel' &&
+                selectedCourt && { court: getCourtName(selectedCourt), courtId: selectedCourtId }),
+              ...(selectedService.id === 'restaurante' &&
+                selectedTable && {
+                  table: getTableName(selectedTable),
+                  tableId: selectedTable,
+                  partySize,
+                }),
             }}
           />
         )}
@@ -200,9 +202,12 @@ const ReservationsContainer = () => {
           <Button
             text={messages.CONTAINER.CONFIRM_RESERVATION}
             onPress={confirmReservation}
-            disabled={!date || !time ||
+            disabled={
+              !date ||
+              !time ||
               (selectedService.id === 'padel' && !selectedCourtId) ||
-              (selectedService.id === 'restaurante' && !selectedTable)}
+              (selectedService.id === 'restaurante' && !selectedTable)
+            }
           />
         </View>
 

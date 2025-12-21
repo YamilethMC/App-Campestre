@@ -11,4 +11,7 @@ export type AuthStackParamList = {
 };
 
 export type AuthStackNavigationProp = NavigationProp<AuthStackParamList>;
-export type AuthStackRouteProp<T extends keyof AuthStackParamList> = RouteProp<AuthStackParamList, T>;
+export type AuthStackRouteProp<T extends keyof AuthStackParamList> = RouteProp<
+  AuthStackParamList,
+  T
+>;

@@ -13,7 +13,7 @@ const RestaurantContainer: React.FC = () => {
   const { messages } = useMessages();
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredDishes, setFilteredDishes] = useState<Dish[]>([]);
-  
+
   // Sample data for dishes - this would come from your API/service
   const allDishes: Dish[] = [
     {
@@ -25,7 +25,7 @@ const RestaurantContainer: React.FC = () => {
       preparationTime: '10-15 min',
       rating: 4.7,
       isVegetarian: true,
-      isPopular: true
+      isPopular: true,
     },
     {
       id: '2',
@@ -35,7 +35,7 @@ const RestaurantContainer: React.FC = () => {
       category: 'Plato Fuerte',
       preparationTime: '15-20 min',
       rating: 4.8,
-      isSpicy: false
+      isSpicy: false,
     },
     {
       id: '3',
@@ -45,7 +45,7 @@ const RestaurantContainer: React.FC = () => {
       category: 'Platillo Fuerte',
       preparationTime: '10-12 min',
       rating: 4.9,
-      isSpicy: true
+      isSpicy: true,
     },
     {
       id: '4',
@@ -56,7 +56,7 @@ const RestaurantContainer: React.FC = () => {
       preparationTime: '12-15 min',
       rating: 4.6,
       isVegetarian: true,
-      isGlutenFree: false
+      isGlutenFree: false,
     },
     {
       id: '5',
@@ -66,7 +66,7 @@ const RestaurantContainer: React.FC = () => {
       category: 'Entrada',
       preparationTime: '5-10 min',
       rating: 4.5,
-      isVegetarian: true
+      isVegetarian: true,
     },
     {
       id: '6',
@@ -76,8 +76,8 @@ const RestaurantContainer: React.FC = () => {
       category: 'Postre',
       preparationTime: '5-10 min',
       rating: 4.8,
-      isVegetarian: true
-    }
+      isVegetarian: true,
+    },
   ];
 
   useEffect(() => {
@@ -85,10 +85,11 @@ const RestaurantContainer: React.FC = () => {
     if (searchQuery.trim() === '') {
       setFilteredDishes(allDishes);
     } else {
-      const filtered = allDishes.filter(dish => 
-        dish.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        dish.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        dish.category.toLowerCase().includes(searchQuery.toLowerCase())
+      const filtered = allDishes.filter(
+        dish =>
+          dish.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          dish.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          dish.category.toLowerCase().includes(searchQuery.toLowerCase()),
       );
       setFilteredDishes(filtered);
     }
@@ -122,12 +123,7 @@ const RestaurantContainer: React.FC = () => {
       {/* Dish List */}
       <ScrollView style={styles.dishList}>
         {filteredDishes.length > 0 ? (
-          filteredDishes.map(dish => (
-            <RestaurantDishCard 
-              key={dish.id} 
-              dish={dish} 
-            />
-          ))
+          filteredDishes.map(dish => <RestaurantDishCard key={dish.id} dish={dish} />)
         ) : (
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>{messages.CONTAINER.NO_DISHES_AVAILABLE}</Text>

@@ -76,12 +76,18 @@ const HomeScreen = () => {
     setShowGuestsModal(true);
   }, [userId]);
 
-  const handleVehicleSelect = useCallback((vehicleId: string, vehicleName: string) => {
-    showNotification("Solicitud exitosa", `Auto "${vehicleName}" solicitado correctamente. Llega en 5 min`);
-  }, [showNotification]);
+  const handleVehicleSelect = useCallback(
+    (vehicleId: string, vehicleName: string) => {
+      showNotification(
+        'Solicitud exitosa',
+        `Auto "${vehicleName}" solicitado correctamente. Llega en 5 min`,
+      );
+    },
+    [showNotification],
+  );
 
   const handleCallWaiter = useCallback(() => {
-    showNotification("Mesero llamado", "El mesero llegará en 7 min");
+    showNotification('Mesero llamado', 'El mesero llegará en 7 min');
   }, [showNotification]);
 
   // Load member data on mount

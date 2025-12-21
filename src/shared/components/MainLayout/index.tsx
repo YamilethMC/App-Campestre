@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { COLORS } from '../../../shared/theme/colors';
+import { COLORS } from '../../theme/colors';
 import MainHeader from '../MainHeader/Container';
 
 interface MainLayoutProps {
@@ -17,13 +17,11 @@ const MainLayout: React.FC<MainLayoutProps> = ({
   scrollable = true,
 }) => {
   const Container = scrollable ? ScrollView : View;
-  
+
   return (
     <View style={styles.container}>
       <MainHeader title={title} showNotifications={showNotifications} />
-      <Container style={styles.content}>
-        {children}
-      </Container>
+      <Container style={styles.content}>{children}</Container>
     </View>
   );
 };

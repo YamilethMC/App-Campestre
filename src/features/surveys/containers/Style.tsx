@@ -289,24 +289,22 @@ const styles = StyleSheet.create({
   },
   pageNumberButton: {
     paddingHorizontal: 4,
-  paddingVertical: 2,
-  backgroundColor: 'transparent',
-  borderWidth: 0,
-  elevation: 0,
-  shadowOpacity: 0,
+    paddingVertical: 2,
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    elevation: 0,
+    shadowOpacity: 0,
   },
   pageNumberButtonText: {
     fontSize: 20,
-  fontWeight: '500',
-  color: COLORS.gray700,
+    fontWeight: '500',
+    color: COLORS.gray700,
   },
-  currentPageButton: {
-
-  },
+  currentPageButton: {},
   currentPageButtonText: {
     fontSize: 22,
-  fontWeight: '700',
-  color: COLORS.primary,
+    fontWeight: '700',
+    color: COLORS.primary,
   },
   noSurveysContainer: {
     flex: 1,

@@ -14,7 +14,11 @@ interface FormDataState extends Omit<AddFamilyMemberRequest, 'birthDate'> {
   birthDate: string;
 }
 
-export const useAddFamilyMember = ({ memberId, guestType = 'INVITADO', onAddSuccess }: UseAddFamilyMemberProps) => {
+export const useAddFamilyMember = ({
+  memberId,
+  guestType = 'INVITADO',
+  onAddSuccess,
+}: UseAddFamilyMemberProps) => {
   const [token] = useState(() => useAuthStore.getState().token);
   const [loading, setLoading] = useState(false);
   const [tempPass, setTempPass] = useState(guestType === 'TEMPORAL');
@@ -36,23 +40,23 @@ export const useAddFamilyMember = ({ memberId, guestType = 'INVITADO', onAddSucc
       city: 'N/A',
       zipCode: 'N/A',
       state: 'N/A',
-      country: 'N/A'
+      country: 'N/A',
     },
     phone: [
       {
         number: '',
         alias: 'Mobile',
-        type: 'MOVIL'
-      }
+        type: 'MOVIL',
+      },
     ],
     invitedById: memberId,
-    relationship: 'WIFE'
+    relationship: 'WIFE',
   });
 
   const updateFormData = (field: keyof FormDataState, value: any) => {
     setFormData(prev => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -62,9 +66,9 @@ export const useAddFamilyMember = ({ memberId, guestType = 'INVITADO', onAddSucc
       phone: [
         {
           ...prev.phone[0],
-          [field]: value
-        }
-      ]
+          [field]: value,
+        },
+      ],
     }));
   };
 
@@ -156,7 +160,7 @@ export const useAddFamilyMember = ({ memberId, guestType = 'INVITADO', onAddSucc
           guestLastName: formData.lastName,
           guestEmail: formData.email,
           guestPhone: formData.phone[0].number,
-          type: 'GUEST'
+          type: 'GUEST',
         };
 
         console.log('Creating guest pass with /pass endpoint:', passData);
@@ -171,28 +175,25 @@ export const useAddFamilyMember = ({ memberId, guestType = 'INVITADO', onAddSucc
                 text: 'Aceptar',
                 onPress: () => {
                   if (onAddSuccess) onAddSuccess();
-                }
-              }
+                },
+              },
             ],
-            { cancelable: false }
+            { cancelable: false },
           );
         } else {
-          Alert.alert(
-            'Error',
-            result.error || 'Ocurrió un error al crear el pase de invitado.',
-            [
-              {
-                text: 'Aceptar',
-                style: 'default'
-              }
-            ]
-          );
+          Alert.alert('Error', result.error || 'Ocurrió un error al crear el pase de invitado.', [
+            {
+              text: 'Aceptar',
+              style: 'default',
+            },
+          ]);
         }
       } else {
         // ORIGINAL: Usar endpoint /club-members para pases temporales
         const submitData: AddFamilyMemberRequest = {
           ...formData,
-          expireAt: formData.expireAt && formData.expireAt.trim() !== '' ? formData.expireAt : undefined,
+          expireAt:
+            formData.expireAt && formData.expireAt.trim() !== '' ? formData.expireAt : undefined,
           RFC: formData.RFC && formData.RFC.trim() !== '' ? formData.RFC : undefined,
         };
         console.log('Creating temporal pass with /club-members endpoint:', submitData);
@@ -207,35 +208,27 @@ export const useAddFamilyMember = ({ memberId, guestType = 'INVITADO', onAddSucc
                 text: 'Aceptar',
                 onPress: () => {
                   if (onAddSuccess) onAddSuccess();
-                }
-              }
+                },
+              },
             ],
-            { cancelable: false }
+            { cancelable: false },
           );
         } else {
-          Alert.alert(
-            'Error',
-            result.error || 'Ocurrió un error al crear el pase temporal.',
-            [
-              {
-                text: 'Aceptar',
-                style: 'default'
-              }
-            ]
-          );
+          Alert.alert('Error', result.error || 'Ocurrió un error al crear el pase temporal.', [
+            {
+              text: 'Aceptar',
+              style: 'default',
+            },
+          ]);
         }
       }
     } catch (error: any) {
-      Alert.alert(
-        'Error',
-        error.message || 'Ocurrió un error al crear el pase.',
-        [
-          {
-            text: 'Aceptar',
-            style: 'default'
-          }
-        ]
-      );
+      Alert.alert('Error', error.message || 'Ocurrió un error al crear el pase.', [
+        {
+          text: 'Aceptar',
+          style: 'default',
+        },
+      ]);
     } finally {
       setLoading(false);
     }
@@ -261,17 +254,17 @@ export const useAddFamilyMember = ({ memberId, guestType = 'INVITADO', onAddSucc
         city: 'N/A',
         zipCode: 'N/A',
         state: 'N/A',
-        country: 'N/A'
+        country: 'N/A',
       },
       phone: [
         {
           number: '',
           alias: 'Mobile',
-          type: 'MOVIL'
-        }
+          type: 'MOVIL',
+        },
       ],
       invitedById: memberId,
-      relationship: 'WIFE'
+      relationship: 'WIFE',
     });
   };
 

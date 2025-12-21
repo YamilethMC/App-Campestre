@@ -6,7 +6,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 //Hooks
 import { useHeader } from '../Hooks/useHeader';
-  
+
 //Styles
 import styles from './Style';
 
@@ -14,15 +14,14 @@ import styles from './Style';
 import { MainHeaderProps } from '../Interfaces';
 
 // Theme
-import { COLORS } from '../../../../shared/theme/colors';
+import { COLORS } from '../../../theme/colors';
 
 const MainHeader: React.FC<MainHeaderProps> = ({
   title,
   subtitle,
   showNotifications = true,
-  onBack
+  onBack,
 }) => {
-
   const { handleNotifications } = useHeader();
 
   return (

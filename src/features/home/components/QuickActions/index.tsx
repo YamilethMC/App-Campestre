@@ -15,13 +15,8 @@ interface QuickActionsProps {
 const QuickActions: React.FC<QuickActionsProps> = ({ onVehicleSelect, onWaiterCall }) => {
   const [vehicleModalVisible, setVehicleModalVisible] = useState(false);
   const [waiterModalVisible, setWaiterModalVisible] = useState(false);
-  
-  const { 
-    vehicleRequested, 
-    waiterCalled, 
-    requestVehicle, 
-    callWaiter 
-  } = useQuickActionStates();
+
+  const { vehicleRequested, waiterCalled, requestVehicle, callWaiter } = useQuickActionStates();
 
   const handleVehicleSelection = (id: string, name: string) => {
     onVehicleSelect(id, name);
@@ -50,10 +45,10 @@ const QuickActions: React.FC<QuickActionsProps> = ({ onVehicleSelect, onWaiterCa
         <Ionicons name="notifications-outline" size={24} color={COLORS.primary} />
         <Text style={styles.cardTitle}>Acciones rápidas</Text>
       </View>
-      
+
       <View style={styles.quickActionsContainer}>
         {vehicleRequested ? (
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.quickActionItem, styles.disabledActionItem]}
             disabled={true}
           >
@@ -63,7 +58,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({ onVehicleSelect, onWaiterCa
             <Text style={[styles.quickActionText, styles.disabledActionText]}>Auto en 5 min</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.quickActionItem, styles.carActionItem]}
             onPress={() => setVehicleModalVisible(true)}
             activeOpacity={0.8}
@@ -74,9 +69,9 @@ const QuickActions: React.FC<QuickActionsProps> = ({ onVehicleSelect, onWaiterCa
             <Text style={[styles.quickActionText, styles.carActionText]}>Pedir auto</Text>
           </TouchableOpacity>
         )}
-        
+
         {waiterCalled ? (
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.quickActionItem, styles.disabledActionItem]}
             disabled={true}
           >
@@ -86,7 +81,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({ onVehicleSelect, onWaiterCa
             <Text style={[styles.quickActionText, styles.disabledActionText]}>Mesero en 7 min</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.quickActionItem, styles.waiterActionItem]}
             onPress={() => setWaiterModalVisible(true)}
             activeOpacity={0.8}
@@ -98,16 +93,16 @@ const QuickActions: React.FC<QuickActionsProps> = ({ onVehicleSelect, onWaiterCa
           </TouchableOpacity>
         )}
       </View>
-      
+
       {/* Modales */}
-      <VehicleModal 
-        visible={vehicleModalVisible} 
+      <VehicleModal
+        visible={vehicleModalVisible}
         onClose={closeVehicleModal}
         onVehicleSelect={handleVehicleSelection}
       />
-      
-      <WaiterModal 
-        visible={waiterModalVisible} 
+
+      <WaiterModal
+        visible={waiterModalVisible}
         onClose={closeWaiterModal}
         onConfirm={handleWaiterCall}
       />

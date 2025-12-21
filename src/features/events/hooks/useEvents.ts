@@ -24,7 +24,7 @@ export const useEvents = () => {
     setSearchQuery: setStoreSearchQuery,
     setSelectedEventType: setStoreSelectedEventType,
     setSelectedDate: setStoreSelectedDate,
-    resetEvents
+    resetEvents,
   } = useEventStore();
 
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
@@ -50,48 +50,76 @@ export const useEvents = () => {
   const isInitialLoad = useRef(true);
   const fetchRef = useRef(false);
 
-  const eventTypes = ['Todos', 'SOCIAL', 'SPORT', 'FAMILY', 'OTHER', 'Deportivo', 'Social', 'Familiar', 'Fitness'];
+  const eventTypes = [
+    'Todos',
+    'SOCIAL',
+    'SPORT',
+    'FAMILY',
+    'OTHER',
+    'Deportivo',
+    'Social',
+    'Familiar',
+    'Fitness',
+  ];
   const monthNames = [
-    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre',
   ];
 
   // Fetch events with pagination
-  const fetchEvents = useCallback(async (page: number = 1) => {
-    // Evitar múltiples ejecuciones simultáneas
-    if (fetchRef.current) return;
+  const fetchEvents = useCallback(
+    async (page: number = 1) => {
+      // Evitar múltiples ejecuciones simultáneas
+      if (fetchRef.current) return;
 
-    fetchRef.current = true;
-    try {
-      // Format the date as 'yyyy-mm'
-      const dateParam = selectedDate || `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}`;
-      const eventTypeParam = selectedEventType === 'Todos' ? '' : selectedEventType;
+      fetchRef.current = true;
+      try {
+        // Format the date as 'yyyy-mm'
+        const dateParam =
+          selectedDate || `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}`;
+        const eventTypeParam = selectedEventType === 'Todos' ? '' : selectedEventType;
 
-      const result = await eventsService.getEvents(
-        page,
-        searchQuery,
-        eventTypeParam,
-        dateParam
-      );
+        const result = await eventsService.getEvents(page, searchQuery, eventTypeParam, dateParam);
 
-      if (result.success && result.data) {
-        setEvents(result.data.events);
-        setPagination({
-          page: result.data.meta.page,
-          limit: result.data.meta.limit,
-          total: result.data.meta.total,
-          totalPages: result.data.meta.totalPages,
-        });
-      } else {
-        Alert.alert('Error', result.error || 'Error al cargar los eventos');
+        if (result.success && result.data) {
+          setEvents(result.data.events);
+          setPagination({
+            page: result.data.meta.page,
+            limit: result.data.meta.limit,
+            total: result.data.meta.total,
+            totalPages: result.data.meta.totalPages,
+          });
+        } else {
+          Alert.alert('Error', result.error || 'Error al cargar los eventos');
+        }
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Error al cargar los eventos';
+        Alert.alert('Error', errorMessage);
+      } finally {
+        fetchRef.current = false;
       }
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Error al cargar los eventos';
-      Alert.alert('Error', errorMessage);
-    } finally {
-      fetchRef.current = false;
-    }
-  }, [searchQuery, selectedEventType, selectedDate, currentMonth, currentYear, setEvents, setError, setPagination]);
+    },
+    [
+      searchQuery,
+      selectedEventType,
+      selectedDate,
+      currentMonth,
+      currentYear,
+      setEvents,
+      setError,
+      setPagination,
+    ],
+  );
 
   // Set up auto-refresh every 30 minutes (1800000 ms)
   useEffect(() => {
@@ -157,19 +185,25 @@ export const useEvents = () => {
     }
   }, [pagination, fetchEvents]);
 
-  const goToPage = useCallback(async (page: number) => {
-    if (page >= 1 && page <= pagination.totalPages) {
-      await fetchEvents(page);
-    }
-  }, [pagination, fetchEvents]);
+  const goToPage = useCallback(
+    async (page: number) => {
+      if (page >= 1 && page <= pagination.totalPages) {
+        await fetchEvents(page);
+      }
+    },
+    [pagination, fetchEvents],
+  );
 
   // Utility functions
-  const checkIfRegistered = useCallback((eventId: string): boolean => {
-    // Consider the user as registered if there are fewer available spots than total spots
-    const event = events.find(e => e.id === eventId);
-    if (!event) return false;
-    return event.availableSpots < event.totalSpots;
-  }, [events]);
+  const checkIfRegistered = useCallback(
+    (eventId: string): boolean => {
+      // Consider the user as registered if there are fewer available spots than total spots
+      const event = events.find(e => e.id === eventId);
+      if (!event) return false;
+      return event.availableSpots < event.totalSpots;
+    },
+    [events],
+  );
 
   const hasEventsThisMonth = events.length > 0;
 
@@ -188,29 +222,56 @@ export const useEvents = () => {
   };
 
   // Update search and type filters with debouncing
-  const handleSearchChange = useCallback((query: string) => {
-    setSearchQuery(query);
-    setStoreSearchQuery(query);
-    // Reset to page 1 when search changes and fetch new data
-    fetchEvents(1);
-  }, [setStoreSearchQuery, fetchEvents]);
+  const handleSearchChange = useCallback(
+    (query: string) => {
+      setSearchQuery(query);
+      setStoreSearchQuery(query);
+      // Reset to page 1 when search changes and fetch new data
+      fetchEvents(1);
+    },
+    [setStoreSearchQuery, fetchEvents],
+  );
 
-  const handleEventTypeChange = useCallback((type: 'Todos' | 'Deportivo' | 'Social' | 'Familiar' | 'Fitness' | 'SOCIAL' | 'SPORT' | 'FAMILY' | 'OTHER') => {
-    // Convertir los nombres antiguos a los nuevos tipos del store
-    const storeType = type === 'Deportivo' ? 'SPORT' :
-              type === 'Social' ? 'SOCIAL' :
-              type === 'Familiar' ? 'FAMILY' :
-              type === 'Fitness' ? 'OTHER' :
-              type === 'Todos' ? 'Todos' :
-              type === 'SOCIAL' ? 'SOCIAL' :
-              type === 'SPORT' ? 'SPORT' :
-              type === 'FAMILY' ? 'FAMILY' : 'OTHER';
+  const handleEventTypeChange = useCallback(
+    (
+      type:
+        | 'Todos'
+        | 'Deportivo'
+        | 'Social'
+        | 'Familiar'
+        | 'Fitness'
+        | 'SOCIAL'
+        | 'SPORT'
+        | 'FAMILY'
+        | 'OTHER',
+    ) => {
+      // Convertir los nombres antiguos a los nuevos tipos del store
+      const storeType =
+        type === 'Deportivo'
+          ? 'SPORT'
+          : type === 'Social'
+            ? 'SOCIAL'
+            : type === 'Familiar'
+              ? 'FAMILY'
+              : type === 'Fitness'
+                ? 'OTHER'
+                : type === 'Todos'
+                  ? 'Todos'
+                  : type === 'SOCIAL'
+                    ? 'SOCIAL'
+                    : type === 'SPORT'
+                      ? 'SPORT'
+                      : type === 'FAMILY'
+                        ? 'FAMILY'
+                        : 'OTHER';
 
-    setSelectedEventType(storeType as 'Todos' | 'SOCIAL' | 'SPORT' | 'FAMILY' | 'OTHER');
-    setStoreSelectedEventType(storeType as 'Todos' | 'SOCIAL' | 'SPORT' | 'FAMILY' | 'OTHER');
-    // Reset to page 1 when changing filters and fetch new data
-    fetchEvents(1);
-  }, [setStoreSelectedEventType, fetchEvents]);
+      setSelectedEventType(storeType as 'Todos' | 'SOCIAL' | 'SPORT' | 'FAMILY' | 'OTHER');
+      setStoreSelectedEventType(storeType as 'Todos' | 'SOCIAL' | 'SPORT' | 'FAMILY' | 'OTHER');
+      // Reset to page 1 when changing filters and fetch new data
+      fetchEvents(1);
+    },
+    [setStoreSelectedEventType, fetchEvents],
+  );
 
   // Function to handle opening the registration screen
   const openRegistrationScreen = useCallback((eventId: string, memberId: number) => {
@@ -261,35 +322,45 @@ export const useEvents = () => {
   }, []);
 
   // Function to register participants to an event
-  const registerParticipants = useCallback(async (memberId: number, totalRegistrations: number) => {
-    const result = await eventsService.registerForEvent(currentEventId, memberId.toString(), totalRegistrations);
+  const registerParticipants = useCallback(
+    async (memberId: number, totalRegistrations: number) => {
+      const result = await eventsService.registerForEvent(
+        currentEventId,
+        memberId.toString(),
+        totalRegistrations,
+      );
 
-    if (result.success) {
-      return true;
-    } else {
-      Alert.alert('Error', result.error || 'Error al registrar en el evento');
-      return false;
-    }
-  }, [currentEventId]);
+      if (result.success) {
+        return true;
+      } else {
+        Alert.alert('Error', result.error || 'Error al registrar en el evento');
+        return false;
+      }
+    },
+    [currentEventId],
+  );
 
   // Function to cancel registration from an event
-  const cancelRegistration = useCallback(async (eventId: string) => {
-    const userId = useAuthStore.getState().userId;
-    if (!userId) {
-      Alert.alert('Error', 'No se pudo obtener el ID de usuario');
-      return false;
-    }
+  const cancelRegistration = useCallback(
+    async (eventId: string) => {
+      const userId = useAuthStore.getState().userId;
+      if (!userId) {
+        Alert.alert('Error', 'No se pudo obtener el ID de usuario');
+        return false;
+      }
 
-    const result = await eventsService.cancelEventRegistration(eventId, userId);
+      const result = await eventsService.cancelEventRegistration(eventId, userId);
 
-    if (result.success) {
-      await fetchEvents(1);
-      return true;
-    } else {
-      Alert.alert('Error', result.error || 'Error al cancelar el registro');
-      return false;
-    }
-  }, [fetchEvents]);
+      if (result.success) {
+        await fetchEvents(1);
+        return true;
+      } else {
+        Alert.alert('Error', result.error || 'Error al cancelar el registro');
+        return false;
+      }
+    },
+    [fetchEvents],
+  );
 
   return {
     // State

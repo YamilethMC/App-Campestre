@@ -20,44 +20,40 @@ export const useNotifications = () => {
     setError,
     setPagination,
     updateSearch: updateStoreSearch,
-    resetPagination
+    resetPagination,
   } = useNotificationStore();
 
   // Function to load notifications and handle errors
-  const loadNotifications = useCallback(async (currentPage: number = 1) => {
-    setLoading(true);
-    setError(null);
+  const loadNotifications = useCallback(
+    async (currentPage: number = 1) => {
+      setLoading(true);
+      setError(null);
 
-    try {
-      const response = await notificationService.getNotifications(
-        currentPage,
-        pagination.limit,
-        search,
-        'asc',
-        'title',
-        true
-      );
+      try {
+        const response = await notificationService.getNotifications(
+          currentPage,
+          pagination.limit,
+          search,
+          'asc',
+          'title',
+          true,
+        );
 
-      if (response.success && response.data) {
-        setNotifications(response.data.notifications);
-        setPagination(response.data.meta);
-      } else {
-        setError(response.error || 'Error en la respuesta del servidor');
+        if (response.success && response.data) {
+          setNotifications(response.data.notifications);
+          setPagination(response.data.meta);
+        } else {
+          setError(response.error || 'Error en la respuesta del servidor');
+        }
+      } catch (error: any) {
+        console.error('Error loading notifications:', error);
+        setError(error.message || 'Error desconocido al obtener las notificaciones');
+      } finally {
+        setLoading(false);
       }
-    } catch (error: any) {
-      console.error('Error loading notifications:', error);
-      setError(error.message || 'Error desconocido al obtener las notificaciones');
-    } finally {
-      setLoading(false);
-    }
-  }, [
-    search,
-    pagination.limit,
-    setNotifications,
-    setLoading,
-    setError,
-    setPagination
-  ]);
+    },
+    [search, pagination.limit, setNotifications, setLoading, setError, setPagination],
+  );
 
   // Set up auto-refresh every 30 minutes (1800000 ms)
   useEffect(() => {
@@ -91,20 +87,26 @@ export const useNotifications = () => {
     }
   }, [page, loadNotifications]);
 
-  const handleGoToPage = useCallback((pageNum: number) => {
-    if (pageNum >= 1 && pageNum <= pagination.totalPages) {
-      setPage(pageNum);
-      loadNotifications(pageNum);
-    }
-  }, [pagination.totalPages, loadNotifications]);
+  const handleGoToPage = useCallback(
+    (pageNum: number) => {
+      if (pageNum >= 1 && pageNum <= pagination.totalPages) {
+        setPage(pageNum);
+        loadNotifications(pageNum);
+      }
+    },
+    [pagination.totalPages, loadNotifications],
+  );
 
   // Search handler
-  const handleSearch = useCallback((searchQuery: string) => {
-    updateStoreSearch(searchQuery);
-    setSearch(searchQuery);
-    setPage(1); // Reset to first page when search changes
-    loadNotifications(1); // Reload notifications with new search query
-  }, [updateStoreSearch, loadNotifications]);
+  const handleSearch = useCallback(
+    (searchQuery: string) => {
+      updateStoreSearch(searchQuery);
+      setSearch(searchQuery);
+      setPage(1); // Reset to first page when search changes
+      loadNotifications(1); // Reload notifications with new search query
+    },
+    [updateStoreSearch, loadNotifications],
+  );
 
   return {
     // Data

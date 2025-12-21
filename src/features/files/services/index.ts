@@ -8,14 +8,14 @@ export const fileService = {
     limit: number = 10,
     search: string = '',
     order: string = 'asc',
-    orderBy: string = 'name'
+    orderBy: string = 'name',
   ): Promise<ServiceResponse<any>> => {
     const { token } = useAuthStore.getState();
     if (!token) {
       return {
         success: false,
         error: 'No authentication token available',
-        status: 401
+        status: 401,
       };
     }
 
@@ -25,9 +25,9 @@ export const fileService = {
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          'accept': '*/*',
+          accept: '*/*',
         },
       });
 
@@ -49,7 +49,7 @@ export const fileService = {
         return {
           success: false,
           error: errorMessage,
-          status: response.status
+          status: response.status,
         };
       }
 
@@ -60,14 +60,14 @@ export const fileService = {
         success: true,
         data: result.data,
         message: result.message || 'Archivos cargados exitosamente',
-        status: response.status
+        status: response.status,
       };
     } catch (error: any) {
       console.error('Error fetching files:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al obtener los archivos',
-        status: 500
+        status: 500,
       };
     }
   },
@@ -78,7 +78,7 @@ export const fileService = {
       return {
         success: false,
         error: 'No authentication token available',
-        status: 401
+        status: 401,
       };
     }
 
@@ -86,7 +86,7 @@ export const fileService = {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/files/download/${fileId}`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       });
@@ -109,7 +109,7 @@ export const fileService = {
         return {
           success: false,
           error: errorMessage,
-          status: response.status
+          status: response.status,
         };
       }
 
@@ -123,35 +123,35 @@ export const fileService = {
           success: true,
           data: result.data.signedUrl,
           message: 'URL de descarga obtenida exitosamente',
-          status: response.status
+          status: response.status,
         };
       } else if (result.data && result.data.url) {
         return {
           success: true,
           data: result.data.url,
           message: 'URL de descarga obtenida exitosamente',
-          status: response.status
+          status: response.status,
         };
       } else if (result.signedUrl) {
         return {
           success: true,
           data: result.signedUrl,
           message: 'URL de descarga obtenida exitosamente',
-          status: response.status
+          status: response.status,
         };
       } else if (result.url) {
         return {
           success: true,
           data: result.url,
           message: 'URL de descarga obtenida exitosamente',
-          status: response.status
+          status: response.status,
         };
       } else {
         console.log('Response structure:', JSON.stringify(result, null, 2));
         return {
           success: false,
           error: 'No se encontró la URL de descarga en la respuesta',
-          status: 500
+          status: 500,
         };
       }
     } catch (error: any) {
@@ -159,7 +159,7 @@ export const fileService = {
       return {
         success: false,
         error: error.message || 'Error desconocido al descargar el archivo',
-        status: 500
+        status: 500,
       };
     }
   },

@@ -1,4 +1,3 @@
-
 import { create } from 'zustand';
 
 interface AccountStatementState {
@@ -21,28 +20,31 @@ export const useAccountStatementStore = create<AccountStatementState>((set, get)
   error: null,
   currentFilter: {},
 
-  setStatements: (statements) => {
-    set({ 
+  setStatements: statements => {
+    set({
       statements,
-      filteredStatements: statements
+      filteredStatements: statements,
     });
   },
 
-  setLoading: (loading) => {
+  setLoading: loading => {
     set({ loading });
   },
 
-  setError: (error) => {
+  setError: error => {
     set({ error });
   },
 
-  setFilter: (filter) => {
+  setFilter: filter => {
     const { statements } = get();
     const filteredStatements = statements.filter(statement => {
-
       if (!statement.periodStart) return true;
 
-      if (filter.month && statement.periodStart && !statement.periodStart.includes(`-${filter.month}-`)) {
+      if (
+        filter.month &&
+        statement.periodStart &&
+        !statement.periodStart.includes(`-${filter.month}-`)
+      ) {
         return false;
       }
       if (filter.year && statement.periodStart && !statement.periodStart.startsWith(filter.year)) {
@@ -50,22 +52,30 @@ export const useAccountStatementStore = create<AccountStatementState>((set, get)
       }
       return true;
     });
-    set({ 
+    set({
       currentFilter: filter,
-      filteredStatements 
+      filteredStatements,
     });
   },
 
   getFilteredStatements: () => {
     const { statements, currentFilter } = get();
     return statements.filter(statement => {
-      if (currentFilter.month && statement.periodStart && !statement.periodStart.includes(`-${currentFilter.month}-`)) {
+      if (
+        currentFilter.month &&
+        statement.periodStart &&
+        !statement.periodStart.includes(`-${currentFilter.month}-`)
+      ) {
         return false;
       }
-      if (currentFilter.year && statement.periodStart && !statement.periodStart.startsWith(currentFilter.year)) {
+      if (
+        currentFilter.year &&
+        statement.periodStart &&
+        !statement.periodStart.startsWith(currentFilter.year)
+      ) {
         return false;
       }
       return true;
     });
-  }
+  },
 }));

@@ -9,7 +9,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
 import Button from '../../../../shared/components/Button/Button';
 import { COLORS } from '../../../../shared/theme/colors';
@@ -27,7 +27,7 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
   memberId,
   guestType = 'INVITADO',
   onCancel,
-  onAddSuccess
+  onAddSuccess,
 }) => {
   const {
     formData,
@@ -42,7 +42,7 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
   } = useAddFamilyMember({
     memberId,
     guestType,
-    onAddSuccess
+    onAddSuccess,
   });
   const [showCancelModal, setShowCancelModal] = React.useState(false);
   const [showSubmitModal, setShowSubmitModal] = React.useState(false);
@@ -100,62 +100,65 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
   ];
 
   return (
-    <KeyboardAvoidingView 
+    <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <ScrollView 
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Formulario de datos personales */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>
-            {guestType === 'TEMPORAL' ? 'Información del Pase Temporal' : 'Información del Invitado'}
+            {guestType === 'TEMPORAL'
+              ? 'Información del Pase Temporal'
+              : 'Información del Invitado'}
           </Text>
           <Text style={styles.sectionSubtitle}>
-            {guestType === 'TEMPORAL' 
-              ? 'Crea un pase temporal para un invitado' 
+            {guestType === 'TEMPORAL'
+              ? 'Crea un pase temporal para un invitado'
               : 'Crea un pase de invitado (válido para 4 entradas)'}
           </Text>
-          
+
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Nombre <Text style={styles.requiredIndicator}>*</Text></Text>
+            <Text style={styles.label}>
+              Nombre <Text style={styles.requiredIndicator}>*</Text>
+            </Text>
             <TextInput
               style={styles.input}
               value={formData.name}
-              onChangeText={(text) => updateFormData('name', text)}
+              onChangeText={text => updateFormData('name', text)}
               placeholder="Introduce el nombre"
               placeholderTextColor="#9ca3af"
             />
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Apellido <Text style={styles.requiredIndicator}>*</Text></Text>
+            <Text style={styles.label}>
+              Apellido <Text style={styles.requiredIndicator}>*</Text>
+            </Text>
             <TextInput
               style={styles.input}
               value={formData.lastName}
-              onChangeText={(text) => updateFormData('lastName', text)}
+              onChangeText={text => updateFormData('lastName', text)}
               placeholder="Introduce el apellido"
               placeholderTextColor="#9ca3af"
             />
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Correo Electrónico <Text style={styles.requiredIndicator}>*</Text></Text>
+            <Text style={styles.label}>
+              Correo Electrónico <Text style={styles.requiredIndicator}>*</Text>
+            </Text>
             <TextInput
               style={styles.input}
               value={formData.email}
-              onChangeText={(text) => updateFormData('email', text)}
+              onChangeText={text => updateFormData('email', text)}
               placeholder="ejemplo@correo.com"
               keyboardType="email-address"
               autoCapitalize="none"
               placeholderTextColor="#9ca3af"
             />
             {guestType === 'INVITADO' && (
-              <Text style={styles.helperText}>
-                El invitado recibirá su pase QR por email
-              </Text>
+              <Text style={styles.helperText}>El invitado recibirá su pase QR por email</Text>
             )}
           </View>
 
@@ -167,7 +170,7 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
                 <TextInput
                   style={styles.input}
                   value={formData.RFC}
-                  onChangeText={(text) => updateFormData('RFC', text)}
+                  onChangeText={text => updateFormData('RFC', text)}
                   placeholder="RFC (12 a 13 caracteres)"
                   autoCapitalize="characters"
                   maxLength={13}
@@ -176,11 +179,13 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
               </View>
 
               <View style={styles.inputGroup}>
-                <Text style={styles.label}>Fecha de Nacimiento <Text style={styles.requiredIndicator}>*</Text></Text>
+                <Text style={styles.label}>
+                  Fecha de Nacimiento <Text style={styles.requiredIndicator}>*</Text>
+                </Text>
                 <TextInput
                   style={styles.input}
                   value={formData.birthDate.split('T')[0]}
-                  onChangeText={(text) => {
+                  onChangeText={text => {
                     // Formatear automáticamente la fecha si el usuario ingresa 8 dígitos (AAAAMMDD)
                     let formattedText = text;
                     if (/^\d{8}$/.test(text)) {
@@ -200,43 +205,48 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
                   placeholderTextColor="#9ca3af"
                 />
               </View>
-              
+
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>Género</Text>
                 <TouchableOpacity
                   style={styles.pickerContainer}
                   onPress={() => setShowGenderPicker(true)}
                 >
-                  <Text style={
-                    formData.gender
-                      ? styles.pickerText
-                      : styles.pickerTextPlaceholder
-                  }>
-                    {GENDER_OPTIONS.find(option => option.value === formData.gender)?.label || 'Selecciona un género'}
+                  <Text style={formData.gender ? styles.pickerText : styles.pickerTextPlaceholder}>
+                    {GENDER_OPTIONS.find(option => option.value === formData.gender)?.label ||
+                      'Selecciona un género'}
                   </Text>
-                  <Ionicons name="chevron-down" size={20} color={formData.gender ? "#6b7280" : COLORS.gray400} />
+                  <Ionicons
+                    name="chevron-down"
+                    size={20}
+                    color={formData.gender ? '#6b7280' : COLORS.gray400}
+                  />
                 </TouchableOpacity>
               </View>
 
               <View style={styles.inputGroup}>
-                <Text style={styles.label}>Relación <Text style={styles.requiredIndicator}>*</Text></Text>
+                <Text style={styles.label}>
+                  Relación <Text style={styles.requiredIndicator}>*</Text>
+                </Text>
                 <TouchableOpacity
                   style={styles.pickerContainer}
                   onPress={() => setShowRelationshipPicker(true)}
                 >
-                  <Text style={
-                    formData.relationship
-                      ? styles.pickerText
-                      : styles.pickerTextPlaceholder
-                  }>
-                    {RELATIONSHIP_OPTIONS.find(option => option.value === formData.relationship)?.label || 'Selecciona una relación'}
+                  <Text
+                    style={formData.relationship ? styles.pickerText : styles.pickerTextPlaceholder}
+                  >
+                    {RELATIONSHIP_OPTIONS.find(option => option.value === formData.relationship)
+                      ?.label || 'Selecciona una relación'}
                   </Text>
-                  <Ionicons name="chevron-down" size={20} color={formData.relationship ? "#6b7280" : COLORS.gray400} />
+                  <Ionicons
+                    name="chevron-down"
+                    size={20}
+                    color={formData.relationship ? '#6b7280' : COLORS.gray400}
+                  />
                 </TouchableOpacity>
               </View>
             </>
           )}
-
         </View>
 
         {/* Sección de contacto */}
@@ -244,11 +254,13 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
           <Text style={styles.sectionTitle}>Información de Contacto</Text>
 
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Teléfono <Text style={styles.requiredIndicator}>*</Text></Text>
+            <Text style={styles.label}>
+              Teléfono <Text style={styles.requiredIndicator}>*</Text>
+            </Text>
             <TextInput
               style={styles.input}
               value={formData.phone[0].number}
-              onChangeText={(text) => updatePhoneData('number', text)}
+              onChangeText={text => updatePhoneData('number', text)}
               placeholder="10 dígitos (ej. 8112345678)"
               keyboardType="phone-pad"
               maxLength={10}
@@ -270,7 +282,7 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
           />
           <View style={styles.buttonSpacer} />
           <Button
-            text={loading ? "Guardando..." : "Guardar"}
+            text={loading ? 'Guardando...' : 'Guardar'}
             variant="primary"
             onPress={handleSave}
             disabled={loading}
@@ -289,7 +301,9 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Confirmar cancelación</Text>
-            <Text style={styles.modalMessage}>¿Estás seguro de que deseas cancelar? Los cambios no guardados se perderán.</Text>
+            <Text style={styles.modalMessage}>
+              ¿Estás seguro de que deseas cancelar? Los cambios no guardados se perderán.
+            </Text>
             <View style={styles.modalButtonRow}>
               <Button
                 text="Cancelar"
@@ -316,28 +330,27 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
         animationType="slide"
         onRequestClose={() => setShowGenderPicker(false)}
       >
-        <TouchableOpacity
-          style={styles.modalOverlay}
-          onPress={() => setShowGenderPicker(false)}
-        >
+        <TouchableOpacity style={styles.modalOverlay} onPress={() => setShowGenderPicker(false)}>
           <View style={styles.pickerModalContainer}>
             <Text style={styles.pickerModalTitle}>Seleccionar género</Text>
             <FlatList
               data={GENDER_OPTIONS}
-              keyExtractor={(item) => item.value}
+              keyExtractor={item => item.value}
               renderItem={({ item, index }) => (
                 <TouchableOpacity
                   style={[
                     styles.pickerOption,
                     index === GENDER_OPTIONS.length - 1 && styles.pickerOptionLast,
-                    item.value === formData.gender && styles.pickerOptionSelected
+                    item.value === formData.gender && styles.pickerOptionSelected,
                   ]}
                   onPress={() => handleSelectGender(item.value)}
                 >
-                  <Text style={[
-                    styles.pickerOptionText,
-                    item.value === formData.gender && styles.pickerOptionTextSelected
-                  ]}>
+                  <Text
+                    style={[
+                      styles.pickerOptionText,
+                      item.value === formData.gender && styles.pickerOptionTextSelected,
+                    ]}
+                  >
                     {item.label}
                   </Text>
                 </TouchableOpacity>
@@ -362,20 +375,22 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
             <Text style={styles.pickerModalTitle}>Seleccionar relación</Text>
             <FlatList
               data={RELATIONSHIP_OPTIONS}
-              keyExtractor={(item) => item.value}
+              keyExtractor={item => item.value}
               renderItem={({ item, index }) => (
                 <TouchableOpacity
                   style={[
                     styles.pickerOption,
                     index === RELATIONSHIP_OPTIONS.length - 1 && styles.pickerOptionLast,
-                    item.value === formData.relationship && styles.pickerOptionSelected
+                    item.value === formData.relationship && styles.pickerOptionSelected,
                   ]}
                   onPress={() => handleSelectRelationship(item.value)}
                 >
-                  <Text style={[
-                    styles.pickerOptionText,
-                    item.value === formData.relationship && styles.pickerOptionTextSelected
-                  ]}>
+                  <Text
+                    style={[
+                      styles.pickerOptionText,
+                      item.value === formData.relationship && styles.pickerOptionTextSelected,
+                    ]}
+                  >
                     {item.label}
                   </Text>
                 </TouchableOpacity>
@@ -395,7 +410,9 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Confirmar guardado</Text>
-            <Text style={styles.modalMessage}>¿Estás seguro de que deseas guardar esta información?</Text>
+            <Text style={styles.modalMessage}>
+              ¿Estás seguro de que deseas guardar esta información?
+            </Text>
             <View style={styles.modalButtonRow}>
               <Button
                 text="Cancelar"
@@ -405,7 +422,7 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
               />
               <View style={styles.modalButtonSpacer} />
               <Button
-                text={loading ? "Guardando..." : "Guardar"}
+                text={loading ? 'Guardando...' : 'Guardar'}
                 variant="primary"
                 onPress={handleConfirmSubmit}
                 disabled={loading}

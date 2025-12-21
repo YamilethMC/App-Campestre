@@ -13,38 +13,38 @@ const useMessages = () => {
       OTHER_SELECT: t('reservation.otherSelect'),
     },
     CALENDARCOMPONENT: {
-        DATE: t('reservation.calendarComponent.date'),
-        MONDAY: t('reservation.calendarComponent.monday'),
-        TUESDAY: t('reservation.calendarComponent.tuesday'),
-        WEDNESDAY: t('reservation.calendarComponent.wednesday'),
-        THURSDAY: t('reservation.calendarComponent.thursday'),
-        FRIDAY: t('reservation.calendarComponent.friday'),
-        SATURDAY: t('reservation.calendarComponent.saturday'),
-        SUNDAY: t('reservation.calendarComponent.sunday'),
+      DATE: t('reservation.calendarComponent.date'),
+      MONDAY: t('reservation.calendarComponent.monday'),
+      TUESDAY: t('reservation.calendarComponent.tuesday'),
+      WEDNESDAY: t('reservation.calendarComponent.wednesday'),
+      THURSDAY: t('reservation.calendarComponent.thursday'),
+      FRIDAY: t('reservation.calendarComponent.friday'),
+      SATURDAY: t('reservation.calendarComponent.saturday'),
+      SUNDAY: t('reservation.calendarComponent.sunday'),
     },
     CONFIRMATIONMODAL: {
-        TITLE: t('reservation.confirmationModal.title'),
-        MESSAGE: t('reservation.confirmationModal.message')
+      TITLE: t('reservation.confirmationModal.title'),
+      MESSAGE: t('reservation.confirmationModal.message'),
     },
     COURT: {
-        TITLE: t('reservation.court.title'),
-        UNAVAILABLEMESSAGE: t('reservation.court.unavailableMessage')
+      TITLE: t('reservation.court.title'),
+      UNAVAILABLEMESSAGE: t('reservation.court.unavailableMessage'),
     },
     SUMMARYCARD: {
-        TITLE: t('reservation.summaryCard.title'),
-        SERVICE: t('reservation.summaryCard.service'),
-        DATE: t('reservation.summaryCard.date'),
-        TIME: t('reservation.summaryCard.time'),
-        COURT: t('reservation.summaryCard.court'),
-        TABLE: t('reservation.summaryCard.table'),
-        PEOPLE: t('reservation.summaryCard.people'),
+      TITLE: t('reservation.summaryCard.title'),
+      SERVICE: t('reservation.summaryCard.service'),
+      DATE: t('reservation.summaryCard.date'),
+      TIME: t('reservation.summaryCard.time'),
+      COURT: t('reservation.summaryCard.court'),
+      TABLE: t('reservation.summaryCard.table'),
+      PEOPLE: t('reservation.summaryCard.people'),
     },
     TABLESELECTOR: {
-        PERS: t('reservation.tableSelector.people'),
+      PERS: t('reservation.tableSelector.people'),
     },
     TIMESLOTS: {
-        TITLE: t('reservation.timeSlots.title'),
-    }
+      TITLE: t('reservation.timeSlots.title'),
+    },
   };
 
   return { messages };

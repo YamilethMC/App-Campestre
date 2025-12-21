@@ -65,8 +65,18 @@ const PersonalInfo: React.FC<userProfile> = ({
 
       // Array con los nombres de los meses en español
       const months = [
-        'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
-        'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+        'enero',
+        'febrero',
+        'marzo',
+        'abril',
+        'mayo',
+        'junio',
+        'julio',
+        'agosto',
+        'septiembre',
+        'octubre',
+        'noviembre',
+        'diciembre',
       ];
 
       return `${day} de ${months[month]} de ${year}`;
@@ -97,7 +107,9 @@ const PersonalInfo: React.FC<userProfile> = ({
               />
             </>
           ) : (
-            <Text style={styles.value}>{`${name} ${lastName}`|| messages.CONTAINER.NO_SPECIFIED}</Text>
+            <Text style={styles.value}>
+              {`${name} ${lastName}` || messages.CONTAINER.NO_SPECIFIED}
+            </Text>
           )}
         </View>
       </View>

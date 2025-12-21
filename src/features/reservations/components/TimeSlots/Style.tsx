@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   },
   timeSlot: {
     width: '31%', // Use fixed width instead of flexBasis for more predictable 3-column layout
-    margin: '1%',  // Use percentage for consistent spacing
+    margin: '1%', // Use percentage for consistent spacing
     paddingVertical: 12,
     paddingHorizontal: 6,
     borderRadius: 10,

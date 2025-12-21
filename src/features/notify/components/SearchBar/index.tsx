@@ -8,16 +8,11 @@ import styles from './Style';
 const SearchBar: React.FC<SearchBarProps> = ({
   value,
   onChangeText,
-  placeholder = 'Buscar notificaciones...'
+  placeholder = 'Buscar notificaciones...',
 }) => {
   return (
     <View style={styles.container}>
-      <Ionicons
-        name="search"
-        size={20}
-        color={COLORS.gray500}
-        style={styles.searchIcon}
-      />
+      <Ionicons name="search" size={20} color={COLORS.gray500} style={styles.searchIcon} />
       <TextInput
         style={styles.input}
         value={value}

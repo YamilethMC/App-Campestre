@@ -12,7 +12,7 @@ const StickyCart: React.FC = () => {
   const totalItems = useCartStore(state => state.totalItems);
   const totalPrice = useCartStore(state => state.totalPrice);
   const [isCartModalVisible, setIsCartModalVisible] = useState(false);
-  
+
   const hasItems = totalItems > 0;
 
   const handleViewCart = () => {
@@ -32,17 +32,16 @@ const StickyCart: React.FC = () => {
             <Text style={styles.cartText}>{messages.CARRITO.SEE}</Text>
           </View>
         </TouchableOpacity>
-        
+
         <View style={styles.totalContainer}>
-          <Text style={styles.totalItems}>{totalItems} {totalItems === 1 ? messages.CARRITO.ITEMS : messages.CARRITO.ITEMS + 's'}</Text>
+          <Text style={styles.totalItems}>
+            {totalItems} {totalItems === 1 ? messages.CARRITO.ITEMS : messages.CARRITO.ITEMS + 's'}
+          </Text>
           <Text style={styles.totalPrice}>${totalPrice.toFixed(2)}</Text>
         </View>
       </View>
-      
-      <CartModal 
-        visible={isCartModalVisible} 
-        onClose={() => setIsCartModalVisible(false)} 
-      />
+
+      <CartModal visible={isCartModalVisible} onClose={() => setIsCartModalVisible(false)} />
     </>
   );
 };

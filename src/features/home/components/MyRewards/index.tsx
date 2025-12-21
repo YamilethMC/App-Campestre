@@ -20,9 +20,8 @@ const MyRewards: React.FC = () => {
         <Ionicons name="gift-outline" size={24} color="#A78BFA" />
         <Text style={styles.cardTitle}>Mis Recompensas</Text>
       </View>
-      
+
       <View style={styles.rewardsContainer}>
-        
         <View style={styles.pointsContainer}>
           <View style={styles.pointsInfo}>
             <Text style={styles.pointsLabel}>Puntos Acumulados</Text>
@@ -35,22 +34,16 @@ const MyRewards: React.FC = () => {
             </View>
           </View>
         </View>
-        
-        <TouchableOpacity
-          style={styles.catalogButton}
-          onPress={handleViewCatalog}
-        >
+
+        <TouchableOpacity style={styles.catalogButton} onPress={handleViewCatalog}>
           <Text style={styles.catalogButtonText}>Ver Catálogo de Recompensas</Text>
         </TouchableOpacity>
 
         <View style={styles.infoLabel}>
-        <Ionicons name="gift-outline" size={18} color="#7C3AED" style={styles.infoIcon} />
-        <Text style={styles.infoText}>Canjea tus puntos por servicios y productos del club</Text>
+          <Ionicons name="gift-outline" size={18} color="#7C3AED" style={styles.infoIcon} />
+          <Text style={styles.infoText}>Canjea tus puntos por servicios y productos del club</Text>
+        </View>
       </View>
-
-      </View>
-      
-      
     </View>
   );
 };

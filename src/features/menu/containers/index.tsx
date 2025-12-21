@@ -29,18 +29,21 @@ const MenuContainer: React.FC = () => {
   const { messages } = useMessages();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
-  
+
   // Mock data for menus
   const allMenus: Menu[] = [
     {
       id: '1',
       name: t('menu.menu1.name', 'Menú Desayuno Ejecutivo'),
-      description: t('menu.menu1.description', 'Opciones nutritivas para comenzar el día con energía'),
+      description: t(
+        'menu.menu1.description',
+        'Opciones nutritivas para comenzar el día con energía',
+      ),
       category: 'breakfast',
       uploadDate: '15 Mar 2025',
       fileSize: '2.3 MB',
       rating: 4.8,
-      isFeatured: true
+      isFeatured: true,
     },
     {
       id: '2',
@@ -50,17 +53,20 @@ const MenuContainer: React.FC = () => {
       uploadDate: '14 Mar 2025',
       fileSize: '3.1 MB',
       rating: 4.5,
-      isFeatured: false
+      isFeatured: false,
     },
     {
       id: '3',
       name: t('menu.menu3.name', 'Menú Almuerzo Ejecutivo'),
-      description: t('menu.menu3.description', 'Comida completa con entrada, plato principal y postre'),
+      description: t(
+        'menu.menu3.description',
+        'Comida completa con entrada, plato principal y postre',
+      ),
       category: 'lunch',
       uploadDate: '15 Mar 2025',
       fileSize: '2.7 MB',
       rating: 4.7,
-      isFeatured: true
+      isFeatured: true,
     },
     {
       id: '4',
@@ -70,7 +76,7 @@ const MenuContainer: React.FC = () => {
       uploadDate: '13 Mar 2025',
       fileSize: '2.9 MB',
       rating: 4.9,
-      isFeatured: true
+      isFeatured: true,
     },
     {
       id: '5',
@@ -80,17 +86,20 @@ const MenuContainer: React.FC = () => {
       uploadDate: '12 Mar 2025',
       fileSize: '1.8 MB',
       rating: 4.6,
-      isFeatured: false
+      isFeatured: false,
     },
     {
       id: '6',
       name: t('menu.menu6.name', 'Menú Especial Fin de Semana'),
-      description: t('menu.menu6.description', 'Selección especial de platos disponibles solo los fines de semana'),
+      description: t(
+        'menu.menu6.description',
+        'Selección especial de platos disponibles solo los fines de semana',
+      ),
       category: 'specials',
       uploadDate: '10 Mar 2025',
       fileSize: '3.5 MB',
       rating: 4.8,
-      isFeatured: true
+      isFeatured: true,
     },
     {
       id: '7',
@@ -100,7 +109,7 @@ const MenuContainer: React.FC = () => {
       uploadDate: '09 Mar 2025',
       fileSize: '2.2 MB',
       rating: 4.4,
-      isFeatured: false
+      isFeatured: false,
     },
     {
       id: '8',
@@ -110,54 +119,61 @@ const MenuContainer: React.FC = () => {
       uploadDate: '08 Mar 2025',
       fileSize: '3.0 MB',
       rating: 4.9,
-      isFeatured: true
-    }
+      isFeatured: true,
+    },
   ];
 
   // Calculate menu counts for each category based on search query
   const menuCounts = {
-    all: allMenus.filter(menu => 
-      searchQuery === '' || 
-      menu.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      menu.description.toLowerCase().includes(searchQuery.toLowerCase())
-    ).length,
-    breakfast: allMenus.filter(menu => 
-      menu.category === 'breakfast' && 
-      (searchQuery === '' || 
+    all: allMenus.filter(
+      menu =>
+        searchQuery === '' ||
         menu.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        menu.description.toLowerCase().includes(searchQuery.toLowerCase()))
+        menu.description.toLowerCase().includes(searchQuery.toLowerCase()),
     ).length,
-    lunch: allMenus.filter(menu => 
-      menu.category === 'lunch' && 
-      (searchQuery === '' || 
-        menu.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        menu.description.toLowerCase().includes(searchQuery.toLowerCase()))
+    breakfast: allMenus.filter(
+      menu =>
+        menu.category === 'breakfast' &&
+        (searchQuery === '' ||
+          menu.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          menu.description.toLowerCase().includes(searchQuery.toLowerCase())),
     ).length,
-    dinner: allMenus.filter(menu => 
-      menu.category === 'dinner' && 
-      (searchQuery === '' || 
-        menu.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        menu.description.toLowerCase().includes(searchQuery.toLowerCase()))
+    lunch: allMenus.filter(
+      menu =>
+        menu.category === 'lunch' &&
+        (searchQuery === '' ||
+          menu.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          menu.description.toLowerCase().includes(searchQuery.toLowerCase())),
     ).length,
-    drinks: allMenus.filter(menu => 
-      menu.category === 'drinks' && 
-      (searchQuery === '' || 
-        menu.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        menu.description.toLowerCase().includes(searchQuery.toLowerCase()))
+    dinner: allMenus.filter(
+      menu =>
+        menu.category === 'dinner' &&
+        (searchQuery === '' ||
+          menu.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          menu.description.toLowerCase().includes(searchQuery.toLowerCase())),
     ).length,
-    specials: allMenus.filter(menu => 
-      menu.category === 'specials' && 
-      (searchQuery === '' || 
-        menu.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        menu.description.toLowerCase().includes(searchQuery.toLowerCase()))
-    ).length
+    drinks: allMenus.filter(
+      menu =>
+        menu.category === 'drinks' &&
+        (searchQuery === '' ||
+          menu.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          menu.description.toLowerCase().includes(searchQuery.toLowerCase())),
+    ).length,
+    specials: allMenus.filter(
+      menu =>
+        menu.category === 'specials' &&
+        (searchQuery === '' ||
+          menu.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          menu.description.toLowerCase().includes(searchQuery.toLowerCase())),
+    ).length,
   };
 
   // Filter menus based on selected category and search query
   const filteredMenus = allMenus.filter(menu => {
     const matchesCategory = selectedFilter === 'all' || menu.category === selectedFilter;
-    const matchesSearch = menu.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         menu.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch =
+      menu.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      menu.description.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
@@ -165,14 +181,16 @@ const MenuContainer: React.FC = () => {
     <ScrollView style={styles.container}>
       <View style={styles.content}>
         {/* Menu Header */}
-        <MenuHeader 
-          menuCount={allMenus.length} 
-          onDownloadPress={() => Alert.alert(
-            t('menu.downloadAllTitle', 'Descargar todos los menús'), 
-            t('menu.notImplemented', 'Funcionalidad no implementada aún.')
-          )}
+        <MenuHeader
+          menuCount={allMenus.length}
+          onDownloadPress={() =>
+            Alert.alert(
+              t('menu.downloadAllTitle', 'Descargar todos los menús'),
+              t('menu.notImplemented', 'Funcionalidad no implementada aún.'),
+            )
+          }
         />
-        
+
         {/* Search */}
         <Search
           placeholder={messages.CONTAINER.PLACEHOLDER}
@@ -180,30 +198,34 @@ const MenuContainer: React.FC = () => {
           iconColor={COLORS.gray500}
           inputStyle={styles.searchInput}
         />
-        
+
         {/* Filters */}
-        <MenuFilter 
+        <MenuFilter
           selectedFilter={selectedFilter}
           onSelectFilter={setSelectedFilter}
           counts={menuCounts}
         />
-        
+
         {/* All Menus - including featured ones with tags */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{messages.CONTAINER.ALLMENUS}</Text>
           {filteredMenus.length > 0 ? (
             filteredMenus.map(menu => (
-              <MenuCard 
-                key={menu.id} 
-                menu={menu} 
-                onDownloadPress={() => Alert.alert(
-                  t('menu.downloadTitle', 'Descargar menú'), 
-                  t('menu.notImplemented', 'Funcionalidad no implementada aún.')
-                )}
-                onViewPress={() => Alert.alert(
-                  t('menu.viewTitle', 'Ver menú'), 
-                  t('menu.notImplemented', 'Funcionalidad no implementada aún.')
-                )}
+              <MenuCard
+                key={menu.id}
+                menu={menu}
+                onDownloadPress={() =>
+                  Alert.alert(
+                    t('menu.downloadTitle', 'Descargar menú'),
+                    t('menu.notImplemented', 'Funcionalidad no implementada aún.'),
+                  )
+                }
+                onViewPress={() =>
+                  Alert.alert(
+                    t('menu.viewTitle', 'Ver menú'),
+                    t('menu.notImplemented', 'Funcionalidad no implementada aún.'),
+                  )
+                }
               />
             ))
           ) : (
@@ -212,7 +234,7 @@ const MenuContainer: React.FC = () => {
             </View>
           )}
         </View>
-        
+
         {/* Restaurant Hours */}
         <RestaurantHours />
       </View>

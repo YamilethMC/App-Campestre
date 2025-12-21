@@ -1,4 +1,3 @@
-
 //Obtener el toekn
 import { useAuthStore } from '../../auth/store/useAuthStore';
 
@@ -27,13 +26,17 @@ interface ServiceResponse<T = any> {
 
 // Mock data for account statements with detailed information
 export const accountStatementService = {
-  getAccountStatements: async (clubMemberId?: number, page: number = 1, limit: number = 5): Promise<ServiceResponse<any[]>> => {
+  getAccountStatements: async (
+    clubMemberId?: number,
+    page: number = 1,
+    limit: number = 5,
+  ): Promise<ServiceResponse<any[]>> => {
     const token = useAuthStore.getState().token;
     if (!token) {
       return {
         success: false,
         error: 'No authentication token available',
-        status: 401
+        status: 401,
       };
     }
 
@@ -44,9 +47,9 @@ export const accountStatementService = {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -68,7 +71,7 @@ export const accountStatementService = {
         return {
           success: false,
           error: errorMessage,
-          status: response.status
+          status: response.status,
         };
       }
 
@@ -78,15 +81,14 @@ export const accountStatementService = {
         success: true,
         data: data.data,
         message: 'Estados de cuenta cargados exitosamente',
-        status: response.status
+        status: response.status,
       };
-
     } catch (error: any) {
       console.error('Error en getAccountStatements:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al cargar los estados de cuenta',
-        status: 500
+        status: 500,
       };
     }
   },
@@ -97,7 +99,7 @@ export const accountStatementService = {
       return {
         success: false,
         error: 'No authentication token available',
-        status: 401
+        status: 401,
       };
     }
 
@@ -106,7 +108,7 @@ export const accountStatementService = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -129,7 +131,7 @@ export const accountStatementService = {
         return {
           success: false,
           error: errorMessage,
-          status: response.status
+          status: response.status,
         };
       }
 
@@ -139,36 +141,39 @@ export const accountStatementService = {
         success: true,
         data: data.data,
         message: 'Estado de cuenta cargado exitosamente',
-        status: response.status
-      }
+        status: response.status,
+      };
     } catch (error: any) {
       console.error('Error en getAccountStatementById:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al cargar el estado de cuenta',
-        status: 500
+        status: 500,
       };
     }
   },
 
-   downloadAccountStatement: async (id: string): Promise<ServiceResponse<string>> => {
+  downloadAccountStatement: async (id: string): Promise<ServiceResponse<string>> => {
     const token = useAuthStore.getState().token;
     if (!token) {
       return {
         success: false,
         error: 'No authentication token available',
-        status: 401
+        status: 401,
       };
     }
 
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/account-statements/download/${id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_API_URL}/account-statements/download/${id}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         let errorMessage = 'Error al descargar el estado de cuenta';
@@ -182,7 +187,8 @@ export const accountStatementService = {
             errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
             break;
           case 403:
-            errorMessage = 'Acceso prohibido: No tienes permisos para descargar este estado de cuenta';
+            errorMessage =
+              'Acceso prohibido: No tienes permisos para descargar este estado de cuenta';
             break;
           case 404:
             errorMessage = 'Estado de cuenta no encontrado para descargar';
@@ -198,7 +204,7 @@ export const accountStatementService = {
         return {
           success: false,
           error: errorMessage,
-          status: response.status
+          status: response.status,
         };
       }
 
@@ -208,15 +214,15 @@ export const accountStatementService = {
         success: true,
         data: data.data,
         message: 'Descarga de estado de cuenta exitosa',
-        status: response.status
-      }
+        status: response.status,
+      };
     } catch (error: any) {
       console.error('Error al descargar:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al descargar el estado de cuenta',
-        status: 500
+        status: 500,
       };
     }
-  }
+  },
 };

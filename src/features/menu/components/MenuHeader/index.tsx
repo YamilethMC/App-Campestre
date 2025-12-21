@@ -18,7 +18,10 @@ const MenuHeader: React.FC<MenuHeaderProps> = ({ menuCount, onDownloadPress }) =
         <View style={styles.textContainer}>
           <Text style={styles.title}>{messages.TITLE}</Text>
           <Text style={styles.description}>{messages.MENUHEADER.RESTAURANTCLUB}</Text>
-          <Text style={styles.menuCount}>{menuCount} {menuCount === 1 ? messages.MENUHEADER.MENU : messages.MENUHEADER.MENU + "s"}</Text>
+          <Text style={styles.menuCount}>
+            {menuCount}{' '}
+            {menuCount === 1 ? messages.MENUHEADER.MENU : messages.MENUHEADER.MENU + 's'}
+          </Text>
         </View>
       </View>
       <View style={styles.buttonContainer}>

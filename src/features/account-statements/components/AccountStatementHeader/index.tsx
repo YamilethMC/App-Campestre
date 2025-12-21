@@ -6,10 +6,7 @@ import useMessages from '../../hooks/useMessages';
 import { AccountStatementHeaderProps } from '../../interfaces';
 import styles from './Style';
 
-const AccountStatementHeader: React.FC<AccountStatementHeaderProps> = ({
-  title,
-  description
-}) => {
+const AccountStatementHeader: React.FC<AccountStatementHeaderProps> = ({ title, description }) => {
   const { messages } = useMessages();
   title = messages.TITLE;
   description = messages.DESCRIPTION;

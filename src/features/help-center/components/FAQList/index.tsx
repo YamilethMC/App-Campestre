@@ -17,12 +17,9 @@ const FAQList: React.FC<FAQListProps> = ({ faqs }) => {
 
   return (
     <View style={styles.container}>
-      {faqs.map((faq) => (
+      {faqs.map(faq => (
         <View key={faq.id} style={styles.faqCard}>
-          <TouchableOpacity
-            style={styles.questionContainer}
-            onPress={() => toggleFAQ(faq.id)}
-          >
+          <TouchableOpacity style={styles.questionContainer} onPress={() => toggleFAQ(faq.id)}>
             <Text style={styles.questionText}>{faq.question}</Text>
             <Ionicons
               name={expandedId === faq.id ? 'chevron-up' : 'chevron-down'}

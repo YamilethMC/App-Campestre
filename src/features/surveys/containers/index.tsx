@@ -1,13 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
-import {
-  Alert,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TextInput,
-  View
-} from 'react-native';
+import { Alert, SafeAreaView, ScrollView, Text, TextInput, View } from 'react-native';
 import Button from '../../../shared/components/Button';
 import Card from '../../../shared/components/Card/Card';
 import { COLORS } from '../../../shared/theme/colors';
@@ -73,7 +66,7 @@ const SurveysScreen: React.FC = () => {
   const handleAnswerChange = (questionId: string, value: any) => {
     setAnswers(prev => ({
       ...prev,
-      [questionId]: value
+      [questionId]: value,
     }));
   };
 
@@ -104,7 +97,7 @@ const SurveysScreen: React.FC = () => {
       Alert.alert('Error', 'Por favor responde todas las preguntas obligatorias antes de enviar.');
       return;
     }
-    
+
     try {
       // Submit survey answers using hook function
       const success = await submitSurveyResponse(selectedSurveyId as string, answers);
@@ -150,11 +143,9 @@ const SurveysScreen: React.FC = () => {
 
   const { messages } = useMessages();
   const filteredSurveys = surveys.filter(survey => {
-    const matchesCategory = currentFilter.category === SurveyCategory.ALL ||
-                            survey.category === currentFilter.category;
-    const matchesStatus = currentFilter.status === 'activas'
-      ? survey.isActive 
-      : !survey.isActive;
+    const matchesCategory =
+      currentFilter.category === SurveyCategory.ALL || survey.category === currentFilter.category;
+    const matchesStatus = currentFilter.status === 'activas' ? survey.isActive : !survey.isActive;
 
     return matchesCategory && matchesStatus;
   });
@@ -182,7 +173,7 @@ const SurveysScreen: React.FC = () => {
 
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   };
-    
+
   if (showSurveyForm && surveyData && !submitSuccess) {
     // Survey form view
     if (hookLoading || !surveyData) {
@@ -197,7 +188,7 @@ const SurveysScreen: React.FC = () => {
 
     return (
       <SafeAreaView style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollContent} >
+        <ScrollView contentContainerStyle={styles.scrollContent}>
           {/* Survey Info Header */}
           <View style={styles.headerSection}>
             <Card style={styles.surveyCard}>
@@ -205,24 +196,20 @@ const SurveysScreen: React.FC = () => {
               <Text style={styles.surveyDescription}>{surveyData.description}</Text>
             </Card>
           </View>
-          
+
           {/* Progress Bar */}
           <View style={styles.progressContainer}>
             <View style={styles.progressHeader}>
               <Text style={styles.progressText}>
-                {messages.CONTAINER.QUESTION} {currentQuestionIndex + 1} {messages.CONTAINER.OF} {questions.length}
+                {messages.CONTAINER.QUESTION} {currentQuestionIndex + 1} {messages.CONTAINER.OF}{' '}
+                {questions.length}
               </Text>
             </View>
             <View style={styles.progressBarContainer}>
-              <View 
-                style={[
-                  styles.progressBarFill, 
-                  { width: `${progress}%` }
-                ]} 
-              />
+              <View style={[styles.progressBarFill, { width: `${progress}%` }]} />
             </View>
           </View>
-          
+
           {/* Question Card */}
           {currentQuestion && (
             <View style={styles.questionSection}>
@@ -235,82 +222,86 @@ const SurveysScreen: React.FC = () => {
                     </View>
                   )}
                 </View>
-                
+
                 <View style={styles.answerContainer}>
                   {currentQuestion.type === 'SELECT' && currentQuestion.options && (
-                    <MultipleChoiceQuestion 
+                    <MultipleChoiceQuestion
                       question={currentQuestion}
                       answer={answers[currentQuestion.id] || ''}
-                      onAnswerChange={(value) => handleAnswerChange(currentQuestion.id, value)}
+                      onAnswerChange={value => handleAnswerChange(currentQuestion.id, value)}
                     />
                   )}
-                  
+
                   {currentQuestion.type === 'NUMBER' && (
-                    <RatingQuestion 
+                    <RatingQuestion
                       question={currentQuestion}
                       answer={answers[currentQuestion.id] || 0}
-                      onAnswerChange={(value) => handleAnswerChange(currentQuestion.id, value)}
+                      onAnswerChange={value => handleAnswerChange(currentQuestion.id, value)}
                     />
                   )}
-                  
+
                   {currentQuestion.type === 'TEXT' && (
-                    <TextQuestion 
+                    <TextQuestion
                       question={currentQuestion}
                       answer={answers[currentQuestion.id] || ''}
-                      onAnswerChange={(value) => handleAnswerChange(currentQuestion.id, value)}
+                      onAnswerChange={value => handleAnswerChange(currentQuestion.id, value)}
                     />
                   )}
-                  
+
                   {currentQuestion.type === 'BOOLEAN' && (
-                    <YesNoQuestion 
+                    <YesNoQuestion
                       question={currentQuestion}
                       answer={answers[currentQuestion.id] ?? null}
-                      onAnswerChange={(value) => handleAnswerChange(currentQuestion.id, value)}
+                      onAnswerChange={value => handleAnswerChange(currentQuestion.id, value)}
                     />
                   )}
                 </View>
               </Card>
             </View>
           )}
-          
+
           {/* Navigation Buttons */}
           <View style={styles.navigationContainer}>
             <View style={styles.navButtonsRow}>
-              <Button 
-                text={messages.CONTAINER.PREVIOUS} 
+              <Button
+                text={messages.CONTAINER.PREVIOUS}
                 variant="outline"
                 onPress={goToPreviousQuestion}
                 disabled={currentQuestionIndex === 0}
-                style={currentQuestionIndex === 0 ? [styles.navButton, styles.disabledNavButton] : styles.navButton}
+                style={
+                  currentQuestionIndex === 0
+                    ? [styles.navButton, styles.disabledNavButton]
+                    : styles.navButton
+                }
                 titleStyle={currentQuestionIndex === 0 ? styles.disabledNavButtonText : undefined}
               />
-              
+
               {currentQuestionIndex < questions.length - 1 ? (
-                <Button 
+                <Button
                   text={messages.CONTAINER.NEXT}
                   onPress={goToNextQuestion}
                   style={styles.navButton}
                 />
               ) : (
-                <Button 
+                <Button
                   text={messages.CONTAINER.SUBMIT}
                   onPress={handleSubmit}
                   style={styles.navButton}
                 />
               )}
             </View>
-            
+
             {/* Back to Surveys Button - Moved below navigation */}
-            <Button 
+            <Button
               text="Volver a encuestas"
               variant="outline"
               onPress={() => setShowSurveyForm(false)}
               style={styles.backToSurveysButton}
               icon={
-                <Ionicons 
-                  name="arrow-back" 
-                  size={16} 
-                  color={COLORS.primary} 
+                <Ionicons
+                  name="arrow-back"
+                  size={16}
+                  color={COLORS.primary}
                   style={styles.backIcon}
                 />
               }
@@ -327,10 +318,15 @@ const SurveysScreen: React.FC = () => {
       <SafeAreaView style={styles.container}>
         <View style={styles.centerContainer}>
           <View style={styles.successContent}>
-            <Ionicons name="checkmark-circle" size={80} color={COLORS.success} style={styles.successIcon} />
+            <Ionicons
+              name="checkmark-circle"
+              size={80}
+              color={COLORS.success}
+              style={styles.successIcon}
+            />
             <Text style={styles.successTitle}>{messages.CONTAINER.THANK_YOU}</Text>
             <Text style={styles.successMessage}>{messages.CONTAINER.TEXT_INFORMATION}</Text>
-            <Button 
+            <Button
               text={messages.CONTAINER.BACK_TO_SURVEYS}
               onPress={handleFormClose}
               style={styles.successButton}
@@ -347,7 +343,7 @@ const SurveysScreen: React.FC = () => {
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
-        onScroll={(e) => {
+        onScroll={e => {
           // No activar la paginación infinita automática
           // El usuario debe usar los controles de paginación manual
         }}
@@ -371,7 +367,7 @@ const SurveysScreen: React.FC = () => {
           {/* Surveys List */}
           <View style={styles.surveysList}>
             {filteredSurveys.length > 0 ? (
-              filteredSurveys.map((survey) => (
+              filteredSurveys.map(survey => (
                 <SurveyCard
                   key={survey.id}
                   survey={survey}
@@ -408,17 +404,17 @@ const SurveysScreen: React.FC = () => {
                   disabled={pagination.page <= 1}
                   style={[
                     styles.paginationArrowButton,
-                    pagination.page <= 1 && styles.paginationArrowButtonDisabled
+                    pagination.page <= 1 && styles.paginationArrowButtonDisabled,
                   ]}
                   titleStyle={[
                     styles.paginationArrowButtonText,
-                    pagination.page <= 1 && styles.paginationArrowButtonTextDisabled
+                    pagination.page <= 1 && styles.paginationArrowButtonTextDisabled,
                   ]}
                 />
 
                 <View style={styles.pageNumbersContainer}>
                   {/*{Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(pageNum => (*/}
-                   {getVisiblePages().map(pageNum => (
+                  {getVisiblePages().map(pageNum => (
                     <Button
                       key={pageNum}
                       text={pageNum.toString()}
@@ -426,11 +422,11 @@ const SurveysScreen: React.FC = () => {
                       onPress={() => goToPage(pageNum)}
                       style={[
                         styles.pageNumberButton,
-                        pageNum === pagination.page && styles.currentPageButton
+                        pageNum === pagination.page && styles.currentPageButton,
                       ]}
                       titleStyle={[
                         styles.pageNumberButtonText,
-                        pageNum === pagination.page && styles.currentPageButtonText
+                        pageNum === pagination.page && styles.currentPageButtonText,
                       ]}
                     />
                   ))}
@@ -443,11 +439,13 @@ const SurveysScreen: React.FC = () => {
                   disabled={pagination.page >= pagination.totalPages}
                   style={[
                     styles.paginationArrowButton,
-                    pagination.page >= pagination.totalPages && styles.paginationArrowButtonDisabled
+                    pagination.page >= pagination.totalPages &&
+                      styles.paginationArrowButtonDisabled,
                   ]}
                   titleStyle={[
                     styles.paginationArrowButtonText,
-                    pagination.page >= pagination.totalPages && styles.paginationArrowButtonTextDisabled
+                    pagination.page >= pagination.totalPages &&
+                      styles.paginationArrowButtonTextDisabled,
                   ]}
                 />
               </View>
@@ -499,10 +497,10 @@ const RatingQuestion: React.FC<{
 }> = ({ question, answer, onAnswerChange }) => {
   return (
     <View style={styles.ratingContainer}>
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((star) => (
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(star => (
         <Ionicons
           key={star}
-          name={star <= answer ? "star" : "star-outline"}
+          name={star <= answer ? 'star' : 'star-outline'}
           size={25}
           color={star <= answer ? COLORS.primary : COLORS.gray400}
           onPress={() => onAnswerChange(star)}

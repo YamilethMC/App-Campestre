@@ -8,10 +8,7 @@ interface TextQuestionProps {
   onAnswerChange: (value: string) => void;
 }
 
-export const TextQuestion: React.FC<TextQuestionProps> = ({
-  answer,
-  onAnswerChange,
-}) => {
+export const TextQuestion: React.FC<TextQuestionProps> = ({ answer, onAnswerChange }) => {
   return (
     <View style={{ width: '100%' }}>
       <TextInput

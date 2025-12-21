@@ -16,7 +16,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ visible, o
       onConfirm={onClose}
       onCancel={onClose}
       showCancelButton={false}
-      containerStyle={ styles.modalConfirmation }
+      containerStyle={styles.modalConfirmation}
       confirmButtonStyle={{
         width: '100%', // Reducir ligeramente el ancho
         paddingVertical: 14, // Reducir la altura
@@ -33,26 +33,22 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ visible, o
       }}
       buttonsContainerStyle={{
         alignItems: 'center',
-        paddingVertical: 5,  // Reducir espaciado vertical
-        marginTop: -30,      // Juntar más con el contenido anterior
+        paddingVertical: 5, // Reducir espaciado vertical
+        marginTop: -30, // Juntar más con el contenido anterior
       }}
-      contentStyle={{ 
-        alignItems: 'center', 
-        padding: 20 
+      contentStyle={{
+        alignItems: 'center',
+        padding: 20,
       }}
     >
       <View style={styles.viewContainer}>
         <View style={styles.ViewComponent}>
           <Ionicons name="checkmark-circle" size={50} color={COLORS.success} />
         </View>
-        
-        <Text style={styles.textTitle}>
-          {messages.CONFIRMATIONMODAL.TITLE}
-        </Text>
-        
-        <Text style={styles.textSubTitle}>
-          {messages.CONFIRMATIONMODAL.MESSAGE}
-        </Text>
+
+        <Text style={styles.textTitle}>{messages.CONFIRMATIONMODAL.TITLE}</Text>
+
+        <Text style={styles.textSubTitle}>{messages.CONFIRMATIONMODAL.MESSAGE}</Text>
       </View>
     </Modal>
   );

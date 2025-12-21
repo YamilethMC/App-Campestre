@@ -10,21 +10,21 @@ const useMessages = () => {
       NOMENUSAVAILABLE: t('menus.noMenusAvailable'),
     },
     MENUCARD: {
-        FEATURED: t('menus.menuCard.featured'),
-        DOWNLOAD: t('menus.menuCard.download'),
+      FEATURED: t('menus.menuCard.featured'),
+      DOWNLOAD: t('menus.menuCard.download'),
     },
     MENUHEADER: {
-        MENU: t('menus.menuHeader.menu'),
-        RESTAURANTCLUB: t('menus.menuHeader.RestaurantClub'),
-        ALLDOWNLOAD: t('menus.menuHeader.allDownload'),
+      MENU: t('menus.menuHeader.menu'),
+      RESTAURANTCLUB: t('menus.menuHeader.RestaurantClub'),
+      ALLDOWNLOAD: t('menus.menuHeader.allDownload'),
     },
     RESTAURANTHOURS: {
-        TITLE: t('menus.restaurantHours.title'),
-        BREAKFAST: t('menus.restaurantHours.breakfast'),
-        LUNCH: t('menus.restaurantHours.lunch'),
-        DINNER: t('menus.restaurantHours.dinner'),
-        TEXT: t('menus.restaurantHours.text'),
-    }
+      TITLE: t('menus.restaurantHours.title'),
+      BREAKFAST: t('menus.restaurantHours.breakfast'),
+      LUNCH: t('menus.restaurantHours.lunch'),
+      DINNER: t('menus.restaurantHours.dinner'),
+      TEXT: t('menus.restaurantHours.text'),
+    },
   };
 
   return { messages };

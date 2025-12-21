@@ -36,67 +36,42 @@ const Modal: React.FC<ModalProps> = ({
       visible={visible}
       onRequestClose={onCancel || (() => {})}
     >
-      <TouchableOpacity
-        style={styles.overlay}
-        activeOpacity={1}
-        onPress={onCancel || (() => {})}
-      >
+      <TouchableOpacity style={styles.overlay} activeOpacity={1} onPress={onCancel || (() => {})}>
         <TouchableOpacity
           activeOpacity={1}
           style={[styles.container, containerStyle]}
-          onPress={(e) => e.stopPropagation()}
+          onPress={e => e.stopPropagation()}
         >
-          {title && (
-            <Text style={[styles.title, titleStyle]}>
-              {title}
-            </Text>
-          )}
-          
+          {title && <Text style={[styles.title, titleStyle]}>{title}</Text>}
+
           <View style={[styles.content, contentStyle]}>
             {children}
-            {message && !children && (
-              <Text style={[styles.message, messageStyle]}>
-                {message}
-              </Text>
-            )}
+            {message && !children && <Text style={[styles.message, messageStyle]}>{message}</Text>}
           </View>
 
           <View style={[styles.buttonsContainer, buttonsContainerStyle]}>
             {showCancelButton && (
               <TouchableOpacity
-                style={[
-                  styles.button, 
-                  styles.cancelButton, 
-                  cancelButtonStyle
-                ]}
+                style={[styles.button, styles.cancelButton, cancelButtonStyle]}
                 onPress={onCancel}
               >
-                <Text style={[
-                  styles.buttonText, 
-                  styles.cancelButtonText,
-                  cancelButtonTextStyle
-                ]}>
+                <Text style={[styles.buttonText, styles.cancelButtonText, cancelButtonTextStyle]}>
                   {cancelText}
                 </Text>
               </TouchableOpacity>
             )}
-            
+
             <TouchableOpacity
               style={[
                 styles.button,
                 styles.confirmButton,
                 disableConfirmButton && styles.disabledButton,
-                confirmButtonStyle
+                confirmButtonStyle,
               ]}
               onPress={onConfirm}
               disabled={disableConfirmButton}
             >
-              <Text style={[
-                styles.buttonText,
-                confirmButtonTextStyle
-              ]}>
-                {confirmText}
-              </Text>
+              <Text style={[styles.buttonText, confirmButtonTextStyle]}>{confirmText}</Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>

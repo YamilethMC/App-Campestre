@@ -19,12 +19,12 @@ export const useHeader = () => {
             screen: 'Notifications',
           },
         },
-      })
+      }),
     );
   };
 
   return {
     toggleDrawer,
-    handleNotifications
-  }
-}
+    handleNotifications,
+  };
+};

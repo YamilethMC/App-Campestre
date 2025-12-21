@@ -1,12 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import {
-  ScrollView,
-  Text,
-  TextStyle,
-  View,
-  ViewStyle
-} from 'react-native';
+import { ScrollView, Text, TextStyle, View, ViewStyle } from 'react-native';
 import Button from '../../../shared/components/Button/Button';
 import Search from '../../../shared/components/Search/Search';
 import { COLORS } from '../../../shared/theme/colors';
@@ -52,8 +46,18 @@ const EventsContainer = () => {
     searchQuery = '',
     selectedEventType = 'Todos',
     monthNames = [
-      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre',
     ],
     hasEventsThisMonth = false,
     hasFutureMonths = false,
@@ -62,7 +66,7 @@ const EventsContainer = () => {
       page: 1,
       totalPages: 1,
       total: 0,
-      limit: 10
+      limit: 10,
     },
     showRegistrationScreen,
     currentEventId,
@@ -106,7 +110,6 @@ const EventsContainer = () => {
       />
     );
   }
-
 
   const displayMonth = `${monthNames?.[currentMonth] || ''} ${currentYear}`;
 
@@ -166,7 +169,20 @@ const EventsContainer = () => {
       >
         <FilterSection
           selectedEventType={selectedEventType}
-          onEventTypeChange={setSelectedEventType as (type: 'Todos' | 'Deportivo' | 'Social' | 'Familiar' | 'Fitness' | 'SPORT' | 'SOCIAL' | 'FAMILY' | 'OTHER') => void}
+          onEventTypeChange={
+            setSelectedEventType as (
+              type:
+                | 'Todos'
+                | 'Deportivo'
+                | 'Social'
+                | 'Familiar'
+                | 'Fitness'
+                | 'SPORT'
+                | 'SOCIAL'
+                | 'FAMILY'
+                | 'OTHER',
+            ) => void
+          }
         />
 
         <View style={styles.monthSelectorContainer}>
@@ -210,7 +226,7 @@ const EventsContainer = () => {
 
         {events && events.length > 0 ? (
           <View style={styles.eventsList}>
-            {events?.map((event) => (
+            {events?.map(event => (
               <EventCard
                 key={event.id}
                 event={event}
@@ -241,7 +257,7 @@ const EventsContainer = () => {
                 disabled={pagination.page <= 1}
                 style={[
                   styles.paginationArrowButton,
-                  pagination.page <= 1 && styles.paginationArrowButtonDisabled
+                  pagination.page <= 1 && styles.paginationArrowButtonDisabled,
                 ]}
               />
 
@@ -254,11 +270,11 @@ const EventsContainer = () => {
                     onPress={() => goToPage(pageNum)}
                     style={[
                       styles.pageNumberButton,
-                      pageNum === pagination.page && styles.currentPageButton
+                      pageNum === pagination.page && styles.currentPageButton,
                     ]}
                     titleStyle={[
                       styles.pageNumberButtonText,
-                      pageNum === pagination.page && styles.currentPageButtonText
+                      pageNum === pagination.page && styles.currentPageButtonText,
                     ]}
                   />
                 ))}
@@ -271,14 +287,13 @@ const EventsContainer = () => {
                 disabled={pagination.page >= pagination.totalPages}
                 style={[
                   styles.paginationArrowButton,
-                  pagination.page >= pagination.totalPages && styles.paginationArrowButtonDisabled
+                  pagination.page >= pagination.totalPages && styles.paginationArrowButtonDisabled,
                 ]}
               />
             </View>
           </View>
         )}
       </ScrollView>
-
     </View>
   );
 };

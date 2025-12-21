@@ -1,7 +1,7 @@
 export interface File {
   id: number;
   name: string;
-  description?: string;  // Add missing properties
+  description?: string; // Add missing properties
   type?: string;
   url?: string;
   createdAt?: string;

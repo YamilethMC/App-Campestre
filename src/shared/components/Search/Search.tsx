@@ -42,12 +42,8 @@ const Search: React.FC<SearchProps> = ({
 
   return (
     <View style={[styles.container, style]}>
-      <View 
-        style={[
-          styles.searchContainer, 
-          isFocused && styles.searchContainerFocused,
-          inputStyle
-        ]}
+      <View
+        style={[styles.searchContainer, isFocused && styles.searchContainerFocused, inputStyle]}
       >
         <Icon name="search" size={20} color={iconColor} style={styles.icon} />
         <TextInput

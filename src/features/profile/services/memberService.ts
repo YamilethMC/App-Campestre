@@ -1,4 +1,4 @@
-import { userProfile } from "../interfaces/interfaces";
+import { userProfile } from '../interfaces/interfaces';
 
 export interface MemberData {
   id: number;
@@ -203,12 +203,15 @@ export const memberService = {
   /**
    * Obtener la información del miembro del club por ID
    */
-  getMemberById: async (memberId: string | number, token: string): Promise<ServiceResponse<MemberProfile>> => {
+  getMemberById: async (
+    memberId: string | number,
+    token: string,
+  ): Promise<ServiceResponse<MemberProfile>> => {
     if (!token) {
       return {
         success: false,
         error: 'No authentication token available',
-        status: 401
+        status: 401,
       };
     }
 
@@ -216,9 +219,9 @@ export const memberService = {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/club-members/${memberId}`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          'accept': '*/*',
+          accept: '*/*',
         },
       });
 
@@ -240,13 +243,13 @@ export const memberService = {
         return {
           success: false,
           error: errorMessage,
-          status: response.status
+          status: response.status,
         };
       }
 
       const result: GetMemberResponse = await response.json();
       const data = result.data;
-console.log('data is::::::::::::::::::::::::::::::, ', data.user.phone)
+      console.log('data is::::::::::::::::::::::::::::::, ', data.user.phone);
       const memberProfile: userProfile = {
         id: data.id.toString(),
         memberCode: data.memberCode ? Number(data.memberCode) : undefined,
@@ -292,7 +295,7 @@ console.log('data is::::::::::::::::::::::::::::::, ', data.user.phone)
           lastName: guest.user.lastName,
           relationship: translateRelationship(guest.relationship),
           age: 0, // Temporalmente 0 ya que en "guest.user" no viene la fecha de nacimiento completa
-          isActive: data.user.active
+          isActive: data.user.active,
         })),
       };
 
@@ -300,14 +303,14 @@ console.log('data is::::::::::::::::::::::::::::::, ', data.user.phone)
         success: true,
         data: memberProfile,
         message: 'Datos del miembro cargados exitosamente',
-        status: response.status
+        status: response.status,
       };
     } catch (error: any) {
       console.error('Error fetching member data:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al cargar los datos del miembro',
-        status: 500
+        status: 500,
       };
     }
   },
@@ -315,12 +318,15 @@ console.log('data is::::::::::::::::::::::::::::::, ', data.user.phone)
   /**
    * Agregar un nuevo miembro de la familia
    */
-  addFamilyMember: async (memberData: AddFamilyMemberRequest, token: string): Promise<ServiceResponse<AddFamilyMemberResponse>> => {
+  addFamilyMember: async (
+    memberData: AddFamilyMemberRequest,
+    token: string,
+  ): Promise<ServiceResponse<AddFamilyMemberResponse>> => {
     if (!token) {
       return {
         success: false,
         error: 'No authentication token available',
-        status: 401
+        status: 401,
       };
     }
 
@@ -329,9 +335,9 @@ console.log('data is::::::::::::::::::::::::::::::, ', data.user.phone)
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/club-members`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          'accept': '*/*',
+          accept: '*/*',
         },
         body: JSON.stringify(memberData),
       });
@@ -357,7 +363,7 @@ console.log('data is::::::::::::::::::::::::::::::, ', data.user.phone)
         return {
           success: false,
           error: errorMessage,
-          status: response.status
+          status: response.status,
         };
       }
 
@@ -368,14 +374,14 @@ console.log('data is::::::::::::::::::::::::::::::, ', data.user.phone)
         success: true,
         data: result,
         message: 'Miembro de la familia agregado exitosamente',
-        status: response.status
+        status: response.status,
       };
     } catch (error: any) {
       console.error('Error adding family member:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al agregar miembro de la familia',
-        status: 500
+        status: 500,
       };
     }
   },
@@ -461,26 +467,30 @@ interface ServiceResponse<T = any> {
   status: number;
 }
 
-export const updateUser = async (userId: number, userData: UpdateUserRequest, token: string): Promise<ServiceResponse<UpdateUserResponse>> => {
+export const updateUser = async (
+  userId: number,
+  userData: UpdateUserRequest,
+  token: string,
+): Promise<ServiceResponse<UpdateUserResponse>> => {
   if (!token) {
     return {
       success: false,
       error: 'No authentication token available',
-      status: 401
+      status: 401,
     };
   }
-console.log('data para actualizaaaaaaar: ', userData)
+  console.log('data para actualizaaaaaaar: ', userData);
   try {
     const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/users/${userId}`, {
       method: 'PATCH',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        'accept': 'application/json',
+        accept: 'application/json',
       },
       body: JSON.stringify(userData),
     });
-    console.log('response al actualizar: ', response)
+    console.log('response al actualizar: ', response);
     if (!response.ok) {
       let errorMessage = 'Error al actualizar el perfil';
 
@@ -505,24 +515,24 @@ console.log('data para actualizaaaaaaar: ', userData)
       return {
         success: false,
         error: errorMessage,
-        status: response.status
+        status: response.status,
       };
     }
 
     const result: UpdateUserResponse = await response.json();
-    console.log('result al actualizar: ', result)
+    console.log('result al actualizar: ', result);
     return {
       success: true,
       data: result,
       message: 'Perfil actualizado exitosamente',
-      status: response.status
+      status: response.status,
     };
   } catch (error: any) {
     console.error('Error updating user profile:', error);
     return {
       success: false,
       error: error.message || 'Error desconocido al actualizar el perfil',
-      status: 500
+      status: 500,
     };
   }
 };

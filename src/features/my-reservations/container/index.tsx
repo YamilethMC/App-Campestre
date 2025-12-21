@@ -2,7 +2,7 @@ import { Alert, RefreshControl, SafeAreaView, ScrollView, View, Text } from 'rea
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuthStore } from '../../../features/auth/store/useAuthStore';
+import { useAuthStore } from '../../auth/store/useAuthStore';
 import { COLORS } from '../../../shared/theme/colors';
 import Header from '../components/Header';
 import NoReservations from '../components/NoReservations';
@@ -38,8 +38,8 @@ const MyReservationsContainer: React.FC<MyReservationsContainerProps> = ({ navig
       const data = await getReservations();
       if (data !== null) {
         // Sort reservations by start time (newest first)
-        const sortedReservations = [...data].sort((a, b) =>
-          new Date(b.startTime).getTime() - new Date(a.startTime).getTime()
+        const sortedReservations = [...data].sort(
+          (a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime(),
         );
         setReservations(sortedReservations);
       } else {
@@ -59,14 +59,16 @@ const MyReservationsContainer: React.FC<MyReservationsContainerProps> = ({ navig
     setRefreshing(false);
   };
 
-  const handleCancelReservation = async (reservationId: number, startTime: string, endTime: string): Promise<boolean> => {
+  const handleCancelReservation = async (
+    reservationId: number,
+    startTime: string,
+    endTime: string,
+  ): Promise<boolean> => {
     const success = await cancelReservation(reservationId, startTime, endTime);
 
     if (success) {
       // Remove the cancelled reservation from the list
-      setReservations(prev =>
-        prev.filter(reservation => reservation.id !== reservationId)
-      );
+      setReservations(prev => prev.filter(reservation => reservation.id !== reservationId));
     }
 
     return success;
@@ -112,13 +114,11 @@ const MyReservationsContainer: React.FC<MyReservationsContainerProps> = ({ navig
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-          }
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
         >
           <View style={styles.reservationsList}>
             {reservations.length > 0 ? (
-              reservations.map((reservation) => (
+              reservations.map(reservation => (
                 <ReservationCard
                   key={reservation.id}
                   reservation={reservation}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-//Alert 
+//Alert
 
 //Styles
 import styles from './Style';
@@ -31,7 +31,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       <View style={styles.inputContainer}>
         <Text style={styles.label}>{messages.LOGIN.EMAIL}</Text>
         <TextInput
-          style={ emailError && email !== '' ? styles.inputError : styles.input}
+          style={emailError && email !== '' ? styles.inputError : styles.input}
           value={email}
           onChangeText={onEmailChange}
           placeholder={messages.LOGIN.EXAMPLE_EMAIL}
@@ -52,17 +52,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             placeholderTextColor={styles.inputPlaceholder.color}
             secureTextEntry={!showPassword}
           />
-          <TouchableOpacity
-            onPress={() => setShowPassword(!showPassword)}
-            style={styles.eyeIcon}
-          >
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeIcon}>
             <Text style={styles.eyeIconText}>{showPassword ? '👁️' : '👁️‍🗨️'}</Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      <TouchableOpacity 
-        style={styles.loginButton} 
+      <TouchableOpacity
+        style={styles.loginButton}
         onPress={() => onSubmit(email, password)}
         disabled={isLoading}
       >
@@ -71,7 +68,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity 
+      <TouchableOpacity
         style={styles.forgotPasswordButton}
         onPress={() => {
           // @ts-ignore
@@ -83,5 +80,3 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     </View>
   );
 };
-
-

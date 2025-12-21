@@ -8,7 +8,7 @@ import styles from './Style';
 const HelpCenterHeader: React.FC<HelpCenterHeaderProps> = ({
   title,
   description,
-  icon = 'help-circle-outline'
+  icon = 'help-circle-outline',
 }) => {
   return (
     <View style={styles.container}>

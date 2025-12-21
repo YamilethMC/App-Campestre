@@ -1,16 +1,18 @@
 // Tipos de datos
-import { userProfile } from "../interfaces";
+import { userProfile } from '../interfaces';
 
 // Servicio de autenticación
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 
 export const authService = {
   /**
    * Iniciar sesión con email y contraseña
    */
-  login: async (email: string, password: string): Promise<{ success: boolean; user?: userProfile; token?: string; error?: string }> => {
-      try {
+  login: async (
+    email: string,
+    password: string,
+  ): Promise<{ success: boolean; user?: userProfile; token?: string; error?: string }> => {
+    try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -22,7 +24,7 @@ export const authService = {
       if (!response.ok) {
         return {
           success: false,
-          error: data.message || "Credenciales inválidas",
+          error: data.message || 'Credenciales inválidas',
         };
       }
 
@@ -31,12 +33,11 @@ export const authService = {
         token: data.data.access_token,
         user: data.data.user,
       };
-
     } catch (error) {
-      console.log("login error:", error);
+      console.log('login error:', error);
       return {
         success: false,
-        error: "No se pudo conectar con el servidor",
+        error: 'No se pudo conectar con el servidor',
       };
     }
     // Validación simple para propósitos de demostración
@@ -52,7 +53,7 @@ export const authService = {
     //const user = mockUsers.find(u => u.email?.toLowerCase() === email.toLowerCase());
 
     // En un caso real, aquí se verificaría la contraseña hasheada
-   /* if (!user || password !== '123456') { // Contraseña hardcodeada para demo
+    /* if (!user || password !== '123456') { // Contraseña hardcodeada para demo
       return { 
         success: false, 
         error: 'Credenciales inválidas' 
@@ -78,10 +79,10 @@ export const authService = {
   getCurrentUser: async (): Promise<userProfile | null> => {
     const token = await AsyncStorage.getItem('authToken');
     if (!token) return null;
-    
-    const user = '' //mockUsers.find(u => u.token === token);
+
+    const user = ''; //mockUsers.find(u => u.token === token);
     if (!user) return null;
-    
+
     return user;
   },
 
@@ -96,7 +97,10 @@ export const authService = {
   /**
    * Cambiar contraseña (usuario autenticado)
    */
-  changePassword: async (currentPassword: string, newPassword: string): Promise<{ success: boolean; message?: string; error?: string }> => {
+  changePassword: async (
+    currentPassword: string,
+    newPassword: string,
+  ): Promise<{ success: boolean; message?: string; error?: string }> => {
     try {
       const token = await AsyncStorage.getItem('authToken');
       if (!token) {
@@ -106,13 +110,11 @@ export const authService = {
         };
       }
 
-      
-
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/change-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ currentPassword, newPassword }),
       });
@@ -142,7 +144,10 @@ export const authService = {
   /**
    * Solicitar código de recuperación de contraseña
    */
-  forgotPassword: async (identifier: string, method: 'email' | 'whatsapp'): Promise<{ success: boolean; message?: string; error?: string }> => {
+  forgotPassword: async (
+    identifier: string,
+    method: 'email' | 'whatsapp',
+  ): Promise<{ success: boolean; message?: string; error?: string }> => {
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/forgot-password`, {
         method: 'POST',
@@ -177,7 +182,11 @@ export const authService = {
   /**
    * Restablecer contraseña con código
    */
-  resetPassword: async (identifier: string, code: string, newPassword: string): Promise<{ success: boolean; message?: string; error?: string }> => {
+  resetPassword: async (
+    identifier: string,
+    code: string,
+    newPassword: string,
+  ): Promise<{ success: boolean; message?: string; error?: string }> => {
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/reset-password`, {
         method: 'POST',
@@ -207,5 +216,5 @@ export const authService = {
         error: 'No se pudo conectar con el servidor',
       };
     }
-  }
+  },
 };

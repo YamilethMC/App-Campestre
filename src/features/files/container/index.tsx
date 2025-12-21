@@ -22,7 +22,7 @@ const FilesContainer: React.FC = () => {
     fetchPreviousPage,
     goToPage,
     getVisiblePages,
-    refreshFiles
+    refreshFiles,
   } = useFileActions();
 
   return (
@@ -76,11 +76,11 @@ const FilesContainer: React.FC = () => {
                 disabled={pagination.page <= 1}
                 style={[
                   styles.paginationArrowButton,
-                  pagination.page <= 1 && styles.paginationArrowButtonDisabled
+                  pagination.page <= 1 && styles.paginationArrowButtonDisabled,
                 ]}
                 titleStyle={[
                   styles.paginationArrowButtonText,
-                  pagination.page <= 1 && styles.paginationArrowButtonTextDisabled
+                  pagination.page <= 1 && styles.paginationArrowButtonTextDisabled,
                 ]}
               />
 
@@ -93,11 +93,11 @@ const FilesContainer: React.FC = () => {
                     onPress={() => goToPage(pageNum)}
                     style={[
                       styles.pageNumberButton,
-                      pageNum === pagination.page && styles.currentPageButton
+                      pageNum === pagination.page && styles.currentPageButton,
                     ]}
                     titleStyle={[
                       styles.pageNumberButtonText,
-                      pageNum === pagination.page && styles.currentPageButtonText
+                      pageNum === pagination.page && styles.currentPageButtonText,
                     ]}
                   />
                 ))}
@@ -110,11 +110,12 @@ const FilesContainer: React.FC = () => {
                 disabled={pagination.page >= pagination.totalPages}
                 style={[
                   styles.paginationArrowButton,
-                  pagination.page >= pagination.totalPages && styles.paginationArrowButtonDisabled
+                  pagination.page >= pagination.totalPages && styles.paginationArrowButtonDisabled,
                 ]}
                 titleStyle={[
                   styles.paginationArrowButtonText,
-                  pagination.page >= pagination.totalPages && styles.paginationArrowButtonTextDisabled
+                  pagination.page >= pagination.totalPages &&
+                    styles.paginationArrowButtonTextDisabled,
                 ]}
               />
             </View>

@@ -18,10 +18,10 @@ export const styles = StyleSheet.create({
   },
   searchContainerFocused: {
     borderColor: COLORS.primary,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.white,
   },
   icon: {
-    marginRight: 8
+    marginRight: 8,
   },
   input: {
     flex: 1,
@@ -32,5 +32,5 @@ export const styles = StyleSheet.create({
   },
   clearButton: {
     padding: 4,
-  }
+  },
 });

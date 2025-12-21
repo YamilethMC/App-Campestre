@@ -21,9 +21,7 @@ const BannerContainer = () => {
     };
   }, [refetch]);
 
-  return (
-    <BannerCarousel banners={banners} loading={loading} error={error} />
-  );
+  return <BannerCarousel banners={banners} loading={loading} error={error} />;
 };
 
 export default BannerContainer;

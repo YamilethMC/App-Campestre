@@ -10,7 +10,7 @@ export type AuthState = {
   token: string | null;
   refreshToken: string | null;
   expiresAt: number | null;
-  
+
   // Acciones
   setAuthData: (userId: string | null, token: string | null, expiresInSeconds?: number) => void;
   setPendingPasswordChange: (pending: boolean) => void;
@@ -29,7 +29,7 @@ const createAuthStore: StateCreator<AuthState> = (set, get) => ({
   token: null,
   refreshToken: null,
   expiresAt: null,
-  
+
   // Acciones
   setAuthData: (userId, token, expiresInSeconds = 3600) => {
     if (token) {
@@ -43,9 +43,7 @@ const createAuthStore: StateCreator<AuthState> = (set, get) => ({
       token,
       isAuthenticated: !!userId && !!token,
       pendingPasswordChange: false,
-      expiresAt: expiresInSeconds 
-        ? Date.now() + (expiresInSeconds * 1000)
-        : null
+      expiresAt: expiresInSeconds ? Date.now() + expiresInSeconds * 1000 : null,
     });
   },
   setPendingPasswordChange: (pending: boolean) => {
@@ -53,33 +51,30 @@ const createAuthStore: StateCreator<AuthState> = (set, get) => ({
       pendingPasswordChange: pending,
     });
   },
-  
+
   clearAuth: () => {
     AsyncStorage.removeItem('authToken').catch(() => {});
     set({
       userId: null,
       token: null,
       isAuthenticated: false,
-      expiresAt: null
+      expiresAt: null,
     });
   },
-  
+
   isTokenExpired: (): boolean => {
     const state = get();
     if (!state.expiresAt) return true;
     return Date.now() >= state.expiresAt;
-  }
+  },
 });
 
 // Aplicar persistencia al store
 export const useAuthStore = create<AuthState>()(
-  persist(
-    createAuthStore,
-    {
-      name: 'auth-storage',
-      storage: createJSONStorage(() => AsyncStorage)
-    }
-  )
+  persist(createAuthStore, {
+    name: 'auth-storage',
+    storage: createJSONStorage(() => AsyncStorage),
+  }),
 );
 
 // Hook de conveniencia para acceder al store
@@ -90,6 +85,6 @@ export const useAuth = (): AuthState => {
     isTokenExpired: () => {
       if (!state.expiresAt) return true;
       return Date.now() >= state.expiresAt;
-    }
+    },
   };
 };

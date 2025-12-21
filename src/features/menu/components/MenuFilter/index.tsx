@@ -16,7 +16,7 @@ const MenuFilter: React.FC<MenuFilterProps> = ({ selectedFilter, onSelectFilter,
   return (
     <View style={styles.container}>
       <View style={styles.filterContainer}>
-        {filters.map((filter) => (
+        {filters.map(filter => (
           <TouchableOpacity
             key={filter.key}
             style={[
@@ -34,10 +34,12 @@ const MenuFilter: React.FC<MenuFilterProps> = ({ selectedFilter, onSelectFilter,
               {filter.label}
             </Text>
             <View style={styles.countContainer}>
-              <Text style={[
-                styles.countText,
-                selectedFilter === filter.key && styles.selectedCountText
-              ]}>
+              <Text
+                style={[
+                  styles.countText,
+                  selectedFilter === filter.key && styles.selectedCountText,
+                ]}
+              >
                 {filter.count}
               </Text>
             </View>

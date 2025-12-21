@@ -4,11 +4,11 @@ import { COLORS } from '../../../../shared/theme/colors';
 // Colores dinámicos basados en tipo de notificación
 const TYPE_COLORS = {
   default: '#4A90E2', // Azul
-  aviso: '#F5A623',   // Naranja
+  aviso: '#F5A623', // Naranja
   informativo: '#7ED321', // Verde
   celebración: '#BD10E0', // Púrpura
-  evento: '#50E3C2',  // Turquesa
-  cierre: '#D0021B',  // Rojo
+  evento: '#50E3C2', // Turquesa
+  cierre: '#D0021B', // Rojo
 };
 
 const styles = StyleSheet.create({

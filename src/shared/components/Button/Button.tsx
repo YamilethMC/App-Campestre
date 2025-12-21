@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, View, ViewStyle, TextStyle, StyleProp } from 'react-native';
-import { styles } from './Style'
+import { styles } from './Style';
 
 interface ButtonProps {
   text?: string;
@@ -62,14 +62,16 @@ const Button: React.FC<ButtonProps> = ({
   };
 
   // Combine both style props for backward compatibility
-  const combinedStyles = [styles.button, getVariantStyle(), disabled && styles.disabledButton, containerStyle, style];
+  const combinedStyles = [
+    styles.button,
+    getVariantStyle(),
+    disabled && styles.disabledButton,
+    containerStyle,
+    style,
+  ];
 
   return (
-    <TouchableOpacity
-      style={combinedStyles}
-      onPress={onPress}
-      disabled={disabled}
-    >
+    <TouchableOpacity style={combinedStyles} onPress={onPress} disabled={disabled}>
       <View style={styles.buttonContent}>
         {icon && iconPosition === 'left' && icon}
         {(text || title) && (

@@ -50,12 +50,9 @@ const Select: React.FC<SelectProps> = ({
       {label && <Text style={styles.label}>{label}</Text>}
       <TouchableOpacity
         style={[styles.selectContainer, error && styles.errorInput]}
-        onPress={() => setIsVisible(true)}>
-        <Text
-          style={[
-            styles.selectedText,
-            !selectedValue && { color: placeholderTextColor },
-          ]}>
+        onPress={() => setIsVisible(true)}
+      >
+        <Text style={[styles.selectedText, !selectedValue && { color: placeholderTextColor }]}>
           {selectedOption ? selectedOption.label : placeholder}
         </Text>
         <Icon name="arrow-drop-down" size={24} color={iconColor} />
@@ -66,23 +63,24 @@ const Select: React.FC<SelectProps> = ({
         visible={isVisible}
         transparent={true}
         animationType="fade"
-        onRequestClose={() => setIsVisible(false)}>
+        onRequestClose={() => setIsVisible(false)}
+      >
         <TouchableOpacity
           style={styles.modalOverlay}
           activeOpacity={1}
-          onPress={() => setIsVisible(false)}>
+          onPress={() => setIsVisible(false)}
+        >
           <View style={[styles.dropdown, dropdownStyle]}>
             <FlatList
               data={options}
-              keyExtractor={(item) => item.value.toString()}
+              keyExtractor={item => item.value.toString()}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   style={[styles.item, itemStyle]}
-                  onPress={() => handleSelect(item.value)}>
+                  onPress={() => handleSelect(item.value)}
+                >
                   <Text style={[styles.itemText, itemTextStyle]}>{item.label}</Text>
-                  {selectedValue === item.value && (
-                    <Icon name="check" size={20} color="#4A90E2" />
-                  )}
+                  {selectedValue === item.value && <Icon name="check" size={20} color="#4A90E2" />}
                 </TouchableOpacity>
               )}
             />

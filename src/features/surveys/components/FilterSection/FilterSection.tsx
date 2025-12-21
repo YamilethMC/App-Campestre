@@ -27,7 +27,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({
       {/* Category Filters */}
       <View style={styles.filterGroup}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>
-          {categories.map((category) => (
+          {categories.map(category => (
             <TouchableOpacity
               key={category.value}
               style={[
@@ -55,7 +55,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({
       {/* Status Filters */}
       <View style={styles.filterGroup}>
         <View style={styles.statusRow}>
-          {statusOptions.map((status) => (
+          {statusOptions.map(status => (
             <TouchableOpacity
               key={status.value}
               style={[

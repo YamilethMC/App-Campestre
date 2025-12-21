@@ -1,11 +1,64 @@
 {
   "auth": {
+    "login": "Login",
     "logout": "Logout",
-    "logoutConfirm": "Are you sure you want to log out?"
+    "logoutConfirm": "Are you sure you want to log out?",
+    "email": "Email",
+    "password": "Password"
   },
   "common": {
     "cancel": "Cancel",
-    "logout": "Log Out"
+    "logout": "Log Out",
+    "accept": "Accept",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "close": "Close",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "retry": "Retry"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "notifications": "Notifications",
+    "notificationsEnabled": "Notifications enabled"
+  },
+  "legal": {
+    "title": "Legal Documents",
+    "termsAndConditions": "Terms and Conditions",
+    "privacyPolicy": "Privacy Policy",
+    "accept": "I accept the",
+    "mustAccept": "You must accept this document to continue",
+    "version": "Version",
+    "document": "Document"
+  },
+  "member": {
+    "member": "Member",
+    "memberCode": "Member Number",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "reservations": {
+    "title": "Reservations",
+    "myReservations": "My Reservations",
+    "makeReservation": "Make Reservation",
+    "facility": "Facility",
+    "date": "Date",
+    "time": "Time",
+    "status": "Status"
+  },
+  "accountStatement": {
+    "title": "Account Statement",
+    "balance": "Balance",
+    "previousBalance": "Previous Balance",
+    "currentBalance": "Current Balance",
+    "dueDate": "Due Date"
   },
   "surveys": {
     "title": "Surveys",

@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.gray50,
-    paddingBottom: 50
+    paddingBottom: 50,
   },
   scrollView: {
     flex: 1,

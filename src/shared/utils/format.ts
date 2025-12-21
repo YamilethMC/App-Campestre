@@ -2,10 +2,10 @@
 
 // Format date to a more readable format
 export const formatDate = (dateString: string): string => {
-  const options: Intl.DateTimeFormatOptions = { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   };
   return new Date(dateString).toLocaleDateString('es-MX', options);
 };
@@ -15,7 +15,7 @@ export const formatTime = (timeString: string): string => {
   // Assuming timeString is in HH:MM format
   const [hours, minutes] = timeString.split(':');
   const hour = parseInt(hours, 10);
-  
+
   if (hour >= 12) {
     if (hour === 12) {
       return `${hour}:${minutes} PM`;
@@ -32,12 +32,12 @@ export const formatTime = (timeString: string): string => {
 // Get initials from a full name
 export const getInitials = (name: string): string => {
   if (!name) return '';
-  
+
   const names = name.split(' ');
   if (names.length === 1) {
     return names[0].charAt(0).toUpperCase();
   }
-  
+
   return names[0].charAt(0).toUpperCase() + names[1].charAt(0).toUpperCase();
 };
 

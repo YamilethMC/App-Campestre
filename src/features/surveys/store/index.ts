@@ -55,29 +55,29 @@ export const useSurveyStore = create<SurveyStore>((set, get) => ({
     totalPages: 1,
   },
 
-  setSurveys: (surveys) => set({ surveys }),
+  setSurveys: surveys => set({ surveys }),
 
-  setActiveSurveys: (activeSurveys) => set({ activeSurveys }),
+  setActiveSurveys: activeSurveys => set({ activeSurveys }),
 
-  setCompletedSurveys: (completedSurveys) => set({ completedSurveys }),
+  setCompletedSurveys: completedSurveys => set({ completedSurveys }),
 
-  setUserCompletedSurveys: (completedSurveyIds) => set({ userCompletedSurveys: completedSurveyIds }),
+  setUserCompletedSurveys: completedSurveyIds => set({ userCompletedSurveys: completedSurveyIds }),
 
-  setAverageRating: (averageRating) => set({ averageRating }),
+  setAverageRating: averageRating => set({ averageRating }),
 
-  setFilter: (currentFilter) => {
+  setFilter: currentFilter => {
     // When filter changes, reset to page 1
     set({
       currentFilter,
-      pagination: { ...get().pagination, page: 1 }
+      pagination: { ...get().pagination, page: 1 },
     });
   },
 
-  setLoading: (loading) => set({ loading }),
+  setLoading: loading => set({ loading }),
 
-  setError: (error) => set({ error }),
+  setError: error => set({ error }),
 
-  setPagination: (pagination) => set({ pagination }),
+  setPagination: pagination => set({ pagination }),
 
   resetPagination: () => {
     set({
@@ -85,8 +85,8 @@ export const useSurveyStore = create<SurveyStore>((set, get) => ({
         page: 1,
         limit: get().pagination.limit,
         total: 0,
-        totalPages: 1
-      }
+        totalPages: 1,
+      },
     });
   },
 
@@ -95,8 +95,8 @@ export const useSurveyStore = create<SurveyStore>((set, get) => ({
     set({
       pagination: {
         ...get().pagination,
-        page: page
-      }
+        page: page,
+      },
     });
     set({ loading: false });
   },
@@ -129,16 +129,14 @@ export const useSurveyStore = create<SurveyStore>((set, get) => ({
     const surveysWithUpdatedStatus = surveys.map(survey => ({
       ...survey,
       // Survey is active if it's originally active AND not completed by user
-      isActive: survey.isActive && !userCompletedSurveys.includes(survey.id)
+      isActive: survey.isActive && !userCompletedSurveys.includes(survey.id),
     }));
 
     return surveysWithUpdatedStatus.filter(survey => {
-      const matchesCategory = currentFilter.category === SurveyCategory.ALL ||
-                              survey.category === currentFilter.category;
+      const matchesCategory =
+        currentFilter.category === SurveyCategory.ALL || survey.category === currentFilter.category;
 
-      const matchesStatus = currentFilter.status === 'activas' ?
-                            survey.isActive :
-                            !survey.isActive;
+      const matchesStatus = currentFilter.status === 'activas' ? survey.isActive : !survey.isActive;
 
       return matchesCategory && matchesStatus;
     });
@@ -147,12 +145,13 @@ export const useSurveyStore = create<SurveyStore>((set, get) => ({
   updateSurveyStatus: (surveyId, status) => {
     set(state => {
       // In this implementation, we're tracking completed surveys by user in userCompletedSurveys
-      const updatedCompletedSurveys = status === 'completed'
-        ? [...state.userCompletedSurveys, surveyId]
-        : state.userCompletedSurveys.filter(id => id !== surveyId);
+      const updatedCompletedSurveys =
+        status === 'completed'
+          ? [...state.userCompletedSurveys, surveyId]
+          : state.userCompletedSurveys.filter(id => id !== surveyId);
 
-      const updatedActiveSurveys = state.surveys.filter(s =>
-        s.isActive && !updatedCompletedSurveys.includes(s.id)
+      const updatedActiveSurveys = state.surveys.filter(
+        s => s.isActive && !updatedCompletedSurveys.includes(s.id),
       ).length;
 
       const updatedCompletedSurveysCount = updatedCompletedSurveys.length;
@@ -161,42 +160,44 @@ export const useSurveyStore = create<SurveyStore>((set, get) => ({
       const activeRatings = state.surveys
         .filter(s => s.isActive && !updatedCompletedSurveys.includes(s.id) && s.averageRating)
         .map(s => s.averageRating as number);
-      const newAverageRating = activeRatings.length > 0
-        ? activeRatings.reduce((sum, rating) => sum + rating, 0) / activeRatings.length
-        : state.averageRating;
+      const newAverageRating =
+        activeRatings.length > 0
+          ? activeRatings.reduce((sum, rating) => sum + rating, 0) / activeRatings.length
+          : state.averageRating;
 
       return {
         userCompletedSurveys: updatedCompletedSurveys,
         activeSurveys: updatedActiveSurveys,
         completedSurveys: updatedCompletedSurveysCount,
-        averageRating: parseFloat(newAverageRating.toFixed(1))
+        averageRating: parseFloat(newAverageRating.toFixed(1)),
       };
     });
   },
 
-  incrementCompletedSurveys: (surveyId) => {
+  incrementCompletedSurveys: surveyId => {
     set(state => {
       const updatedCompletedSurveys = [...state.userCompletedSurveys, surveyId];
       const updatedCompletedCount = updatedCompletedSurveys.length;
 
       // Calculate new active surveys count
-      const updatedActiveSurveys = state.surveys.filter(s =>
-        s.isActive && !updatedCompletedSurveys.includes(s.id)
+      const updatedActiveSurveys = state.surveys.filter(
+        s => s.isActive && !updatedCompletedSurveys.includes(s.id),
       ).length;
 
       // Calculate average from active surveys that are not completed by user
       const activeRatings = state.surveys
         .filter(s => s.isActive && !updatedCompletedSurveys.includes(s.id) && s.averageRating)
         .map(s => s.averageRating as number);
-      const newAverageRating = activeRatings.length > 0
-        ? activeRatings.reduce((sum, rating) => sum + rating, 0) / activeRatings.length
-        : state.averageRating;
+      const newAverageRating =
+        activeRatings.length > 0
+          ? activeRatings.reduce((sum, rating) => sum + rating, 0) / activeRatings.length
+          : state.averageRating;
 
       return {
         userCompletedSurveys: updatedCompletedSurveys,
         completedSurveys: updatedCompletedCount,
         activeSurveys: updatedActiveSurveys,
-        averageRating: parseFloat(newAverageRating.toFixed(1))
+        averageRating: parseFloat(newAverageRating.toFixed(1)),
       };
     });
   },

@@ -12,7 +12,7 @@ interface UseQuickActionStates {
 export const useQuickActionStates = (): UseQuickActionStates => {
   const [vehicleRequested, setVehicleRequested] = useState(false);
   const [waiterCalled, setWaiterCalled] = useState(false);
-  
+
   // Use refs to store timeout IDs to clear them when component unmounts
   const vehicleTimeoutRef = useRef<number | null>(null);
   const waiterTimeoutRef = useRef<number | null>(null);
@@ -36,9 +36,12 @@ export const useQuickActionStates = (): UseQuickActionStates => {
       clearTimeout(vehicleTimeoutRef.current);
     }
     // Reset the state after 5 minutes (5 * 60 * 1000 ms)
-    vehicleTimeoutRef.current = setTimeout(() => {
-      setVehicleRequested(false);
-    }, 5 * 60 * 1000); // 5 minutes
+    vehicleTimeoutRef.current = setTimeout(
+      () => {
+        setVehicleRequested(false);
+      },
+      5 * 60 * 1000,
+    ); // 5 minutes
   }, []);
 
   const callWaiter = useCallback(() => {
@@ -48,9 +51,12 @@ export const useQuickActionStates = (): UseQuickActionStates => {
       clearTimeout(waiterTimeoutRef.current);
     }
     // Reset the state after 7 minutes (7 * 60 * 1000 ms)
-    waiterTimeoutRef.current = setTimeout(() => {
-      setWaiterCalled(false);
-    }, 7 * 60 * 1000); // 7 minutes
+    waiterTimeoutRef.current = setTimeout(
+      () => {
+        setWaiterCalled(false);
+      },
+      7 * 60 * 1000,
+    ); // 7 minutes
   }, []);
 
   const resetVehicleRequest = useCallback(() => {

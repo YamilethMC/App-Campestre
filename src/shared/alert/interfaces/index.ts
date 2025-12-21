@@ -3,7 +3,6 @@ interface AlertProps {
   type?: 'error' | 'success' | 'warning';
   visible: boolean;
   onClose?: () => void;
-
 }
 
 export default AlertProps;

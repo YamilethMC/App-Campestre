@@ -9,30 +9,26 @@ import { AuthStackParamList } from './types';
 const AuthScreen = () => {
   const { t } = useTranslation();
 
-const Stack = createNativeStackNavigator<AuthStackParamList>();
+  const Stack = createNativeStackNavigator<AuthStackParamList>();
 
-return (
+  return (
     <Stack.Navigator>
-      <Stack.Screen 
-        name="Login" 
-        component={LoginScreen} 
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen 
-        name="ChangePassword" 
-        component={ChangePasswordScreen} 
-        options={{ 
+      <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+      <Stack.Screen
+        name="ChangePassword"
+        component={ChangePasswordScreen}
+        options={{
           headerShown: true,
           title: 'Cambiar Contraseña',
-          headerBackVisible: false
+          headerBackVisible: false,
         }}
       />
-      <Stack.Screen 
-        name="ForgotPassword" 
-        component={ForgotPasswordScreen} 
-        options={{ 
+      <Stack.Screen
+        name="ForgotPassword"
+        component={ForgotPasswordScreen}
+        options={{
           headerShown: true,
-          title: 'Recuperar Contraseña'
+          title: 'Recuperar Contraseña',
         }}
       />
     </Stack.Navigator>

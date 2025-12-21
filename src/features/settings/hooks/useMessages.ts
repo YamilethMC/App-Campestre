@@ -11,7 +11,7 @@ const useMessages = () => {
       NOTIFICATIONS: t('settings.notifications'),
       ENABLE_NOTIFICATIONS: t('settings.enableNotifications'),
       LANGUAGE: t('settings.language'),
-    }
+    },
   };
 
   return { messages };

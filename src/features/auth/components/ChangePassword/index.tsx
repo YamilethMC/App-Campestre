@@ -84,7 +84,8 @@ export const ChangePasswordScreen: React.FC = () => {
     if (!validation.isValid) {
       Alert.alert(
         'Contraseña no válida',
-        'La contraseña debe cumplir con los siguientes requisitos:\n\n' + validation.errors.join('\n')
+        'La contraseña debe cumplir con los siguientes requisitos:\n\n' +
+          validation.errors.join('\n'),
       );
       return;
     }
@@ -100,25 +101,21 @@ export const ChangePasswordScreen: React.FC = () => {
       const result = await authService.changePassword(currentPassword, newPassword);
 
       if (result.success) {
-        Alert.alert(
-          'Éxito',
-          'Contraseña actualizada correctamente',
-          [
-            {
-              text: 'OK',
-              onPress: () => {
-                setPendingPasswordChange(false);
-                // Si es primer login, navegar a la pantalla principal
-                if (isFirstLogin) {
-                  // La navegación se manejará automáticamente al limpiar pendingPasswordChange
-                  // El MainNavigator detectará que ya no está pendiente y mostrará MainTabs
-                } else {
-                  navigation.goBack();
-                }
-              },
+        Alert.alert('Éxito', 'Contraseña actualizada correctamente', [
+          {
+            text: 'OK',
+            onPress: () => {
+              setPendingPasswordChange(false);
+              // Si es primer login, navegar a la pantalla principal
+              if (isFirstLogin) {
+                // La navegación se manejará automáticamente al limpiar pendingPasswordChange
+                // El MainNavigator detectará que ya no está pendiente y mostrará MainTabs
+              } else {
+                navigation.goBack();
+              }
             },
-          ]
-        );
+          },
+        ]);
       } else {
         Alert.alert('Error', result.error || 'No se pudo cambiar la contraseña');
       }
@@ -153,9 +150,7 @@ export const ChangePasswordScreen: React.FC = () => {
           {isFirstLogin ? 'Cambia tu contraseña' : 'Cambiar contraseña'}
         </Text>
         <Text style={styles.subtitle}>
-          {isFirstLogin
-            ? 'Crea una contraseña segura para tu cuenta'
-            : 'Actualiza tu contraseña'}
+          {isFirstLogin ? 'Crea una contraseña segura para tu cuenta' : 'Actualiza tu contraseña'}
         </Text>
 
         <View style={styles.inputContainer}>
@@ -196,30 +191,52 @@ export const ChangePasswordScreen: React.FC = () => {
               <Text>{showNewPassword ? '👁️' : '👁️‍🗨️'}</Text>
             </TouchableOpacity>
           </View>
-          
+
           {newPassword.length > 0 && (
             <View style={styles.passwordRequirements}>
               <View style={styles.strengthContainer}>
                 <Text style={styles.strengthLabel}>Fortaleza: </Text>
-                <Text style={[styles.strengthValue, { color: getPasswordStrength(newPassword).color }]}>
+                <Text
+                  style={[styles.strengthValue, { color: getPasswordStrength(newPassword).color }]}
+                >
                   {getPasswordStrength(newPassword).strength}
                 </Text>
               </View>
               <Text style={styles.requirementsTitle}>Requisitos:</Text>
               <View style={styles.requirementsList}>
-                <Text style={newPassword.length >= 8 ? styles.requirementMet : styles.requirementUnmet}>
+                <Text
+                  style={newPassword.length >= 8 ? styles.requirementMet : styles.requirementUnmet}
+                >
                   {newPassword.length >= 8 ? '✓' : '○'} Mínimo 8 caracteres
                 </Text>
-                <Text style={/[A-Z]/.test(newPassword) ? styles.requirementMet : styles.requirementUnmet}>
+                <Text
+                  style={
+                    /[A-Z]/.test(newPassword) ? styles.requirementMet : styles.requirementUnmet
+                  }
+                >
                   {/[A-Z]/.test(newPassword) ? '✓' : '○'} Una letra mayúscula
                 </Text>
-                <Text style={/[a-z]/.test(newPassword) ? styles.requirementMet : styles.requirementUnmet}>
+                <Text
+                  style={
+                    /[a-z]/.test(newPassword) ? styles.requirementMet : styles.requirementUnmet
+                  }
+                >
                   {/[a-z]/.test(newPassword) ? '✓' : '○'} Una letra minúscula
                 </Text>
-                <Text style={/[0-9]/.test(newPassword) ? styles.requirementMet : styles.requirementUnmet}>
+                <Text
+                  style={
+                    /[0-9]/.test(newPassword) ? styles.requirementMet : styles.requirementUnmet
+                  }
+                >
                   {/[0-9]/.test(newPassword) ? '✓' : '○'} Un número
                 </Text>
-                <Text style={/[!@#$%^&*(),.?":{}|<>]/.test(newPassword) ? styles.requirementMet : styles.requirementUnmet}>
+                <Text
+                  style={
+                    /[!@#$%^&*(),.?":{}|<>]/.test(newPassword)
+                      ? styles.requirementMet
+                      : styles.requirementUnmet
+                  }
+                >
                   {/[!@#$%^&*(),.?":{}|<>]/.test(newPassword) ? '✓' : '○'} Un carácter especial
                 </Text>
               </View>

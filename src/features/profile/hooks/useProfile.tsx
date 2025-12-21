@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import useLogout from '../../../hooks/useLogout';
 import { useAuthStore } from '../../../store';
-import useMessages from '../hooks/useMessages';
+import useMessages from './useMessages';
 import { userProfile } from '../interfaces/interfaces';
 import { memberService, updateUser } from '../services/memberService';
 import { useProfileStore } from '../store/useProfileStore';
@@ -13,11 +13,11 @@ export const useProfile = () => {
   const { profile, updateProfile } = useProfileStore();
   const { handleLogout } = useLogout();
   const messages = useMessages();
-  
+
   const { userId, token } = useAuthStore();
 
   const currentUser = profile as userProfile | null;
-  console.log('.......---.-.-.-.-. currentUser: ', currentUser)
+  console.log('.......---.-.-.-.-. currentUser: ', currentUser);
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingContactEmergency, setIsEditingContactEmergency] = useState(false);
 
@@ -25,7 +25,7 @@ export const useProfile = () => {
     const loadMember = async () => {
       if (userId && token) {
         const response = await memberService.getMemberById(userId, token);
-        console.log('---------------------------------response: ', response)
+        console.log('---------------------------------response: ', response);
         if (response.success && response.data) {
           updateProfile(response.data);
         } else {
@@ -36,7 +36,6 @@ export const useProfile = () => {
 
     loadMember();
   }, [userId, token, updateProfile]);
-
 
   const [formData, setFormData] = useState({
     name: '',
@@ -96,7 +95,7 @@ export const useProfile = () => {
   const handleInputChange = useCallback((field: string, value: string) => {
     setFormData(prev => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   }, []);
 
@@ -117,7 +116,7 @@ export const useProfile = () => {
           zipCode: formData.zipCode || '',
           state: formData.state || '',
           country: formData.country || '',
-        }
+        },
       };
 
       // Call the update service
@@ -134,16 +133,12 @@ export const useProfile = () => {
           }
           setIsEditing(false);
         } else {
-          Alert.alert(
-            'Error',
-            response.error || 'Ocurrió un error al actualizar el perfil.',
-            [
-              {
-                text: 'Aceptar',
-                style: 'default'
-              }
-            ]
-          );
+          Alert.alert('Error', response.error || 'Ocurrió un error al actualizar el perfil.', [
+            {
+              text: 'Aceptar',
+              style: 'default',
+            },
+          ]);
         }
       }
     }
@@ -152,7 +147,7 @@ export const useProfile = () => {
   const handleEmergencyContactChange = useCallback((field: string, value: string) => {
     setEmergencyContactFormData(prev => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   }, []);
 
@@ -164,7 +159,7 @@ export const useProfile = () => {
           name: emergencyContactFormData.name,
           relationship: emergencyContactFormData.relationship,
           phone: emergencyContactFormData.phone,
-        }
+        },
       };
       updateProfile(updatedProfile);
       setIsEditingContactEmergency(false);
@@ -235,9 +230,9 @@ export const useProfile = () => {
           [
             {
               text: 'Aceptar',
-              style: 'default'
-            }
-          ]
+              style: 'default',
+            },
+          ],
         );
       }
     }

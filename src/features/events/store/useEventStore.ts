@@ -31,7 +31,7 @@ interface EventState {
   resetEvents: () => void;
 }
 
-export const useEventStore = create<EventState>((set) => ({
+export const useEventStore = create<EventState>(set => ({
   events: [],
   loading: false,
   error: null,
@@ -46,27 +46,26 @@ export const useEventStore = create<EventState>((set) => ({
   selectedEventType: 'Todos',
   selectedDate: new Date().toISOString().slice(0, 7), // yyyy-mm format
 
-  setEvents: (events) => set({ events }),
-  setLoading: (loading) => set({ loading }),
-  setError: (error) => set({ error }),
-  setSelectedEvent: (selectedEvent) => set({ selectedEvent }),
-  setPagination: (pagination) => set({ pagination }),
-  setSearchQuery: (searchQuery) => set({ searchQuery }),
-  setSelectedEventType: (selectedEventType) => set({ selectedEventType }),
-  setSelectedDate: (selectedDate) => set({ selectedDate }),
-  resetEvents: () => set({ events: [], pagination: { page: 1, limit: 10, total: 0, totalPages: 1 } }),
+  setEvents: events => set({ events }),
+  setLoading: loading => set({ loading }),
+  setError: error => set({ error }),
+  setSelectedEvent: selectedEvent => set({ selectedEvent }),
+  setPagination: pagination => set({ pagination }),
+  setSearchQuery: searchQuery => set({ searchQuery }),
+  setSelectedEventType: selectedEventType => set({ selectedEventType }),
+  setSelectedDate: selectedDate => set({ selectedDate }),
+  resetEvents: () =>
+    set({ events: [], pagination: { page: 1, limit: 10, total: 0, totalPages: 1 } }),
 
   updateEvent: (eventId, updates) =>
     set(state => ({
-      events: state.events.map(event =>
-        event.id === eventId ? { ...event, ...updates } : event
-      )
+      events: state.events.map(event => (event.id === eventId ? { ...event, ...updates } : event)),
     })),
 
-  addEvents: (newEvents) =>
+  addEvents: newEvents =>
     set(state => {
       const existingIds = new Set(state.events.map(e => e.id));
       const uniqueNewEvents = newEvents.filter(e => !existingIds.has(e.id));
       return { events: [...state.events, ...uniqueNewEvents] };
-    })
+    }),
 }));

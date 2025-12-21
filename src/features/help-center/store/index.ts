@@ -21,9 +21,9 @@ export const useHelpCenterStore = create<HelpCenterStore>((set, get) => ({
   loading: false,
   error: null,
 
-  setFAQs: (faqs) => set({ faqs }),
-  setLoading: (loading) => set({ loading }),
-  setError: (error) => set({ error }),
+  setFAQs: faqs => set({ faqs }),
+  setLoading: loading => set({ loading }),
+  setError: error => set({ error }),
 
   fetchFAQs: async () => {
     set({ loading: true, error: null });
@@ -33,13 +33,13 @@ export const useHelpCenterStore = create<HelpCenterStore>((set, get) => ({
     if (response.success && response.data) {
       set({
         faqs: response.data,
-        loading: false
+        loading: false,
       });
     } else {
       set({
         error: response.error || 'Error al obtener las preguntas frecuentes',
-        loading: false
+        loading: false,
       });
     }
-  }
+  },
 }));

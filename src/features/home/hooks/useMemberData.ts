@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { Alert } from 'react-native';
-import { deleteGuest as deleteGuestFromService, getMemberData as getMemberDataFromService, MemberData } from '../services/homeService';
+import {
+  deleteGuest as deleteGuestFromService,
+  getMemberData as getMemberDataFromService,
+  MemberData,
+} from '../services/homeService';
 
 export const useMemberData = () => {
   const [loading, setLoading] = useState(false);

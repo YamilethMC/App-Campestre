@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginBottom: 15,
     lineHeight: 20,
-    fontStyle: 'italic'
+    fontStyle: 'italic',
   },
   closeButton: {
     padding: 4,

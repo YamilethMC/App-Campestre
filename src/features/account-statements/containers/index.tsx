@@ -21,7 +21,7 @@ const AccountStatementsContainer = () => {
     setShowDetail,
     setSelectedStatement,
     selectedStatement,
-    handleDownload
+    handleDownload,
   } = useAccountStatements();
 
   // const {
@@ -68,14 +68,15 @@ const AccountStatementsContainer = () => {
           <EmptyState message= {messages.CONTAINER.NO_STATEMENTS_FILTERS} />
         )} */}
 
-        {hasStatements && statements.map((statement) => (
-          <AccountStatementCard
-            key={statement.id}
-            statement={statement}
-            onPress={handleCardPress}
-            onDownload={handleDownload}
-          />
-        ))}
+        {hasStatements &&
+          statements.map(statement => (
+            <AccountStatementCard
+              key={statement.id}
+              statement={statement}
+              onPress={handleCardPress}
+              onDownload={handleDownload}
+            />
+          ))}
       </ScrollView>
 
       {/* Detail Modal */}

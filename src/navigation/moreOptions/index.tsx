@@ -24,38 +24,38 @@ const MoreOptionsScreen = () => {
   const { handleLogout } = useLogout();
 
   const menuItems = [
-    { 
-      title: t('profile.title'), 
+    {
+      title: t('profile.title'),
       icon: 'person-outline' as const,
-      onPress: () => navigation.navigate('Profile')
+      onPress: () => navigation.navigate('Profile'),
     },
-    // { 
-    //   title: t('surveys.title'), 
+    // {
+    //   title: t('surveys.title'),
     //   icon: 'chatbubble-ellipses-outline' as const,
     //   onPress: () => navigation.navigate('Surveys')
     // },
-    // { 
-    //   title: t('menus.title'), 
+    // {
+    //   title: t('menus.title'),
     //   icon: 'cafe-outline' as const,
     //   onPress: () => navigation.navigate('Menu')
     // },
-    { 
-      title: t('reservations.myReservations'), 
+    {
+      title: t('reservations.myReservations'),
       icon: 'calendar-outline' as const,
-      onPress: () => navigation.navigate('MyReservations')
+      onPress: () => navigation.navigate('MyReservations'),
     },
-    { 
-      title: t('accountStatements.title'), 
+    {
+      title: t('accountStatements.title'),
       icon: 'document-text-outline' as const,
-      onPress: () => navigation.navigate('AccountStatements')
+      onPress: () => navigation.navigate('AccountStatements'),
     },
-    { 
-      title: t('files.title'), 
+    {
+      title: t('files.title'),
       icon: 'newspaper-outline' as const,
-      onPress: () => navigation.navigate('Files')
+      onPress: () => navigation.navigate('Files'),
     },
-    { 
-      title: t('settings.title'), 
+    {
+      title: t('settings.title'),
       icon: 'settings-outline' as const,
       //onPress: () => navigation.navigate('Settings')
       onPress: () => {
@@ -68,17 +68,17 @@ const MoreOptionsScreen = () => {
               style: 'default',
             },
           ],
-          { cancelable: true }
+          { cancelable: true },
         );
-      }
+      },
     },
-    { 
-      title: t('help.title'), 
+    {
+      title: t('help.title'),
       icon: 'help-circle-outline' as const,
-      onPress: () => navigation.navigate('HelpCenter')
+      onPress: () => navigation.navigate('HelpCenter'),
     },
-    { 
-      title: t('auth.logout.title'), 
+    {
+      title: t('auth.logout.title'),
       icon: 'log-out-outline' as const,
       onPress: () => {
         Alert.alert(
@@ -95,9 +95,9 @@ const MoreOptionsScreen = () => {
               style: 'destructive',
             },
           ],
-          { cancelable: true }
+          { cancelable: true },
         );
-      }
+      },
     },
   ];
 
@@ -105,23 +105,10 @@ const MoreOptionsScreen = () => {
     <View style={styles.container}>
       <View style={styles.menuContainer}>
         {menuItems.map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.menuItem}
-            onPress={item.onPress}
-          >
-            <Ionicons 
-              name={item.icon} 
-              size={24} 
-              color={COLORS.primary} 
-              style={styles.icon} 
-            />
+          <TouchableOpacity key={index} style={styles.menuItem} onPress={item.onPress}>
+            <Ionicons name={item.icon} size={24} color={COLORS.primary} style={styles.icon} />
             <Text style={styles.menuText}>{item.title}</Text>
-            <Ionicons 
-              name="chevron-forward" 
-              size={20} 
-              color={COLORS.gray400} 
-            />
+            <Ionicons name="chevron-forward" size={20} color={COLORS.gray400} />
           </TouchableOpacity>
         ))}
       </View>

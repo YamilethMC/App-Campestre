@@ -40,21 +40,13 @@ const HomeHeader: React.FC<HeaderProps> = ({ navigation, memberData }) => {
               Socio {memberData?.memberCode || userId || 'N/A'}
             </Text>
           </View>
-          <TouchableOpacity
-            style={styles.qrButton}
-            onPress={handleOpenQRModal}
-            activeOpacity={0.8}
-          >
+          <TouchableOpacity style={styles.qrButton} onPress={handleOpenQRModal} activeOpacity={0.8}>
             <Ionicons name="qr-code" size={22} color={COLORS.white} />
           </TouchableOpacity>
         </View>
       </View>
 
-      <QRModal
-        visible={showQRModal}
-        onClose={handleCloseQRModal}
-        memberData={memberData}
-      />
+      <QRModal visible={showQRModal} onClose={handleCloseQRModal} memberData={memberData} />
     </>
   );
 };

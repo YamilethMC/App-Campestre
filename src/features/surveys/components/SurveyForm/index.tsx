@@ -13,7 +13,6 @@ import styles from './Style';
 
 // Import the styles directly since we can't import from containers
 
-
 interface SurveyFormProps {
   survey: {
     title: string;
@@ -64,24 +63,20 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({
             <Text style={styles.surveyDescription}>{survey.description}</Text>
           </Card>
         </View>
-        
+
         {/* Progress Bar */}
         <View style={styles.progressContainer}>
           <View style={styles.progressHeader}>
             <Text style={styles.progressText}>
-              {messages.CONTAINER.QUESTION} {currentQuestionIndex + 1} {messages.CONTAINER.OF} {questions.length}
+              {messages.CONTAINER.QUESTION} {currentQuestionIndex + 1} {messages.CONTAINER.OF}{' '}
+              {questions.length}
             </Text>
           </View>
           <View style={styles.progressBarContainer}>
-            <View 
-              style={[
-                styles.progressBarFill, 
-                { width: `${progress}%` }
-              ]} 
-            />
+            <View style={[styles.progressBarFill, { width: `${progress}%` }]} />
           </View>
         </View>
-        
+
         {/* Question Card */}
         {currentQuestion && (
           <View style={styles.questionSection}>
@@ -94,82 +89,86 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({
                   </View>
                 )}
               </View>
-              
+
               <View style={styles.answerContainer}>
                 {currentQuestion.type === 'SELECT' && currentQuestion.options && (
-                  <MultipleChoiceQuestion 
+                  <MultipleChoiceQuestion
                     question={currentQuestion}
                     answer={answers[currentQuestion.id] || ''}
-                    onAnswerChange={(value) => handleAnswerChange(currentQuestion.id, value)}
+                    onAnswerChange={value => handleAnswerChange(currentQuestion.id, value)}
                   />
                 )}
-                
+
                 {currentQuestion.type === 'NUMBER' && (
-                  <RatingQuestion 
+                  <RatingQuestion
                     question={currentQuestion}
                     answer={answers[currentQuestion.id] || 0}
-                    onAnswerChange={(value) => handleAnswerChange(currentQuestion.id, value)}
+                    onAnswerChange={value => handleAnswerChange(currentQuestion.id, value)}
                   />
                 )}
-                
+
                 {currentQuestion.type === 'TEXT' && (
-                  <TextQuestion 
+                  <TextQuestion
                     question={currentQuestion}
                     answer={answers[currentQuestion.id] || ''}
-                    onAnswerChange={(value) => handleAnswerChange(currentQuestion.id, value)}
+                    onAnswerChange={value => handleAnswerChange(currentQuestion.id, value)}
                   />
                 )}
-                
+
                 {currentQuestion.type === 'BOOLEAN' && (
-                  <YesNoQuestion 
+                  <YesNoQuestion
                     question={currentQuestion}
                     answer={answers[currentQuestion.id] || ''}
-                    onAnswerChange={(value) => handleAnswerChange(currentQuestion.id, value)}
+                    onAnswerChange={value => handleAnswerChange(currentQuestion.id, value)}
                   />
                 )}
               </View>
             </Card>
           </View>
         )}
-        
+
         {/* Navigation Buttons */}
         <View style={styles.navigationContainer}>
           <View style={styles.navButtonsRow}>
-            <Button 
-              text={messages.CONTAINER.PREVIOUS} 
+            <Button
+              text={messages.CONTAINER.PREVIOUS}
               variant="outline"
               onPress={goToPreviousQuestion}
               disabled={currentQuestionIndex === 0}
-              style={currentQuestionIndex === 0 ? [styles.navButton, styles.disabledNavButton] : styles.navButton}
+              style={
+                currentQuestionIndex === 0
+                  ? [styles.navButton, styles.disabledNavButton]
+                  : styles.navButton
+              }
               titleStyle={currentQuestionIndex === 0 ? styles.disabledNavButtonText : undefined}
             />
-            
+
             {currentQuestionIndex < questions.length - 1 ? (
-              <Button 
+              <Button
                 text={messages.CONTAINER.NEXT}
                 onPress={goToNextQuestion}
                 style={styles.navButton}
               />
             ) : (
-              <Button 
+              <Button
                 text={messages.CONTAINER.SUBMIT}
                 onPress={handleSubmit}
                 style={styles.navButton}
               />
             )}
           </View>
-          
+
           {/* Back to Surveys Button */}
-          <Button 
+          <Button
             text="Volver a encuestas"
             variant="outline"
             onPress={onBack}
             style={styles.backToSurveysButton}
             icon={
-              <Ionicons 
-                name="arrow-back" 
-                size={16} 
-                color={COLORS.primary} 
+              <Ionicons
+                name="arrow-back"
+                size={16}
+                color={COLORS.primary}
                 style={styles.backIcon}
               />
             }

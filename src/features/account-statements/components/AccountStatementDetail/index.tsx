@@ -10,16 +10,15 @@ import styles from './Style';
 const AccountStatementDetail: React.FC<AccountStatementDetailProps> = ({
   statement,
   onClose,
-  onDownload
+  onDownload,
 }) => {
-
   const { messages } = useMessages();
 
   if (!statement) {
     return null;
   }
 
-  console.log("datos de el estado de cuenta", statement)
+  console.log('datos de el estado de cuenta', statement);
 
   const formatCurrency = (amount: number | null) => {
     if (amount === null) return '-';
@@ -38,7 +37,7 @@ const AccountStatementDetail: React.FC<AccountStatementDetailProps> = ({
     return date.toLocaleDateString('es-MX', {
       day: '2-digit',
       month: '2-digit',
-      year: 'numeric'
+      year: 'numeric',
     });
   };
 
@@ -49,7 +48,7 @@ const AccountStatementDetail: React.FC<AccountStatementDetailProps> = ({
     return date.toLocaleDateString('es-MX', {
       day: '2-digit',
       month: 'long',
-      year: 'numeric'
+      year: 'numeric',
     });
   };
 
@@ -80,9 +79,9 @@ const AccountStatementDetail: React.FC<AccountStatementDetailProps> = ({
   };
 
   // Concatenate city and postal code
-  const fullCity = statement?.userInfo 
-  ? `${statement.userInfo.city || 'Ciudad'}${statement.userInfo.postalCode ? ` C.P. ${statement.userInfo.postalCode}` : ''}`
-  : 'Ciudad no disponible';
+  const fullCity = statement?.userInfo
+    ? `${statement.userInfo.city || 'Ciudad'}${statement.userInfo.postalCode ? ` C.P. ${statement.userInfo.postalCode}` : ''}`
+    : 'Ciudad no disponible';
 
   return (
     <View style={styles.container}>
@@ -96,83 +95,111 @@ const AccountStatementDetail: React.FC<AccountStatementDetailProps> = ({
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.description}>{statement.description || 'Descripción no especificada'}</Text>
+        <Text style={styles.description}>
+          {statement.description || 'Descripción no especificada'}
+        </Text>
 
         <ScrollView style={styles.content}>
-
           <View style={styles.infoContainer}>
             <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>{messages.ACCOUNTSTATEMENTDETAIL.DATE_PAY_LIMIT || 'Fecha límite de pago'}</Text>
-              <Text style={styles.infoValue}>{statement.dueDate || 'Fecha límite de pago no especificada'}</Text>
+              <Text style={styles.infoLabel}>
+                {messages.ACCOUNTSTATEMENTDETAIL.DATE_PAY_LIMIT || 'Fecha límite de pago'}
+              </Text>
+              <Text style={styles.infoValue}>
+                {statement.dueDate || 'Fecha límite de pago no especificada'}
+              </Text>
             </View>
           </View>
 
           <View style={styles.personalInfoContainer}>
-            <Text style={styles.personalInfoTitle}>{messages.ACCOUNTSTATEMENTDETAIL.PERSONAL_INFORMATION || 'Información Personal'}</Text>
+            <Text style={styles.personalInfoTitle}>
+              {messages.ACCOUNTSTATEMENTDETAIL.PERSONAL_INFORMATION || 'Información Personal'}
+            </Text>
             <View style={styles.personalInfoRow}>
-              <Text style={styles.infoLabel}>{messages.ACCOUNTSTATEMENTDETAIL.MEMBER_NUMBER || 'Número de socio'}</Text>
-              <Text style={styles.infoValue}>{statement.userInfo.memberCode || 'No disponible'}</Text>
+              <Text style={styles.infoLabel}>
+                {messages.ACCOUNTSTATEMENTDETAIL.MEMBER_NUMBER || 'Número de socio'}
+              </Text>
+              <Text style={styles.infoValue}>
+                {statement.userInfo.memberCode || 'No disponible'}
+              </Text>
             </View>
             <View style={styles.personalInfoRow}>
-              <Text style={styles.infoLabel}>{messages.ACCOUNTSTATEMENTDETAIL.NAME || 'Nombre'}</Text>
+              <Text style={styles.infoLabel}>
+                {messages.ACCOUNTSTATEMENTDETAIL.NAME || 'Nombre'}
+              </Text>
               <Text style={styles.infoValue}>{statement.userInfo.name || 'No disponible'}</Text>
             </View>
             <View style={styles.personalInfoRow}>
-              <Text style={styles.infoLabel}>{messages.ACCOUNTSTATEMENTDETAIL.ADDRES || 'Dirección'}</Text>
+              <Text style={styles.infoLabel}>
+                {messages.ACCOUNTSTATEMENTDETAIL.ADDRES || 'Dirección'}
+              </Text>
               <Text style={styles.infoValue}>{statement.userInfo.address || 'No disponible'}</Text>
             </View>
             <View style={styles.personalInfoRow}>
-              <Text style={styles.infoLabel}>{messages.ACCOUNTSTATEMENTDETAIL.CITY || 'Ciudad'}</Text>
+              <Text style={styles.infoLabel}>
+                {messages.ACCOUNTSTATEMENTDETAIL.CITY || 'Ciudad'}
+              </Text>
               <Text style={styles.infoValue}>{fullCity || 'No disponible'}</Text>
             </View>
           </View>
 
-          <Text style={styles.detailsTitle}>{messages.ACCOUNTSTATEMENTDETAIL.STATEMENT_DETAIL || 'Detalle del estado de cuenta'}</Text>
-          
+          <Text style={styles.detailsTitle}>
+            {messages.ACCOUNTSTATEMENTDETAIL.STATEMENT_DETAIL || 'Detalle del estado de cuenta'}
+          </Text>
+
           <View style={styles.tableHeader}>
-            <Text style={[styles.tableHeaderText, styles.conceptColumn]}>{messages.ACCOUNTSTATEMENTDETAIL.CONCEPT || 'Concepto'}</Text>
-            <Text style={[styles.tableHeaderText, styles.chargesColumn]}>{messages.ACCOUNTSTATEMENTDETAIL.CHARGES || 'Cargos'}</Text>
-            <Text style={[styles.tableHeaderText, styles.creditsColumn]}>{messages.ACCOUNTSTATEMENTDETAIL.CREDITS || 'Creditos'}</Text>
+            <Text style={[styles.tableHeaderText, styles.conceptColumn]}>
+              {messages.ACCOUNTSTATEMENTDETAIL.CONCEPT || 'Concepto'}
+            </Text>
+            <Text style={[styles.tableHeaderText, styles.chargesColumn]}>
+              {messages.ACCOUNTSTATEMENTDETAIL.CHARGES || 'Cargos'}
+            </Text>
+            <Text style={[styles.tableHeaderText, styles.creditsColumn]}>
+              {messages.ACCOUNTSTATEMENTDETAIL.CREDITS || 'Creditos'}
+            </Text>
           </View>
-          
+
           <View style={styles.tableBody}>
             {statement.details.map((detail, index) => (
               <View key={index} style={styles.tableRow}>
-                <Text style={[styles.tableText, styles.conceptColumn]}>{detail.concept || 'Concepto'}</Text>
-                <Text style={[styles.tableText, styles.chargesColumn, styles.rightAlign] }>
+                <Text style={[styles.tableText, styles.conceptColumn]}>
+                  {detail.concept || 'Concepto'}
+                </Text>
+                <Text style={[styles.tableText, styles.chargesColumn, styles.rightAlign]}>
                   {detail.charges !== null ? formatCurrency(detail.charges) : '-'}
                 </Text>
-                <Text style={[styles.tableText, styles.creditsColumn, styles.rightAlign] }>
+                <Text style={[styles.tableText, styles.creditsColumn, styles.rightAlign]}>
                   {detail.credits !== null ? formatCurrency(detail.credits) : '-'}
                 </Text>
               </View>
             ))}
           </View>
 
-          <Text style={styles.summaryTitle}>{messages.ACCOUNTSTATEMENTDETAIL.SUMMARY || 'Resumen'}</Text>
-          
+          <Text style={styles.summaryTitle}>
+            {messages.ACCOUNTSTATEMENTDETAIL.SUMMARY || 'Resumen'}
+          </Text>
+
           <View style={styles.summaryContainer}>
             {statement.summary.map((item, index) => (
               <View key={index} style={styles.summaryRow}>
                 <Text style={styles.summaryConcept}>{item.concept || 'Concepto'}</Text>
-                <Text style={styles.summaryAmount}>
-                  {formatCurrency(item.amount)}
-                </Text>
+                <Text style={styles.summaryAmount}>{formatCurrency(item.amount)}</Text>
               </View>
             ))}
           </View>
 
           <View style={styles.totalContainer}>
             <Text style={styles.totalLabel}>{messages.ACCOUNTSTATEMENTCARD.TOTAL || 'Total'}</Text>
-            <Text style={styles.totalAmount}>{formatCurrency(statement.totalAmount) || 'Total'}</Text>
+            <Text style={styles.totalAmount}>
+              {formatCurrency(statement.totalAmount) || 'Total'}
+            </Text>
           </View>
 
-          <TouchableOpacity 
-            style={styles.downloadButton} 
-            onPress={() => onDownload(statement)}
-          >
+          <TouchableOpacity style={styles.downloadButton} onPress={() => onDownload(statement)}>
             <Ionicons name="download-outline" size={20} color={COLORS.white} />
-            <Text style={styles.downloadButtonText}>{messages.ACCOUNTSTATEMENTCARD.DOWNLOAD} PDF</Text>
+            <Text style={styles.downloadButtonText}>
+              {messages.ACCOUNTSTATEMENTCARD.DOWNLOAD} PDF
+            </Text>
           </TouchableOpacity>
         </ScrollView>
       </Card>

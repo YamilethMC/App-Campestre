@@ -10,11 +10,7 @@ interface QRCodeComponentProps {
   memberCode?: number | string;
 }
 
-const QRCodeComponent: React.FC<QRCodeComponentProps> = ({
-  size = 200,
-  memberId,
-  memberCode
-}) => {
+const QRCodeComponent: React.FC<QRCodeComponentProps> = ({ size = 200, memberId, memberCode }) => {
   const { profile } = useProfileStore();
   const actualMemberCode = memberCode || profile?.memberCode;
   const actualMemberId = memberId || profile?.id;

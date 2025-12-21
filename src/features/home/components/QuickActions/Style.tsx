@@ -45,11 +45,11 @@ const styles = StyleSheet.create({
   },
   carActionItem: {
     backgroundColor: '#E0F2FE', // Pastel blue for car
-    shadowColor: '#0EA5E9',     // Blue shadow
+    shadowColor: '#0EA5E9', // Blue shadow
   },
   waiterActionItem: {
     backgroundColor: '#FFEDD5', // Pastel orange for waiter
-    shadowColor: '#F97316',     // Orange shadow
+    shadowColor: '#F97316', // Orange shadow
   },
   disabledActionItem: {
     backgroundColor: COLORS.gray300,

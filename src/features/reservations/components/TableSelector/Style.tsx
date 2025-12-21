@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   tablesContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   table: {
     flex: 1,

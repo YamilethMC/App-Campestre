@@ -24,7 +24,7 @@ const MainNavigator = (): React.JSX.Element => {
           component={AuthScreen}
           options={{
             headerShown: false,
-            title: 'Iniciar Sesión'
+            title: 'Iniciar Sesión',
           }}
         />
       ) : (
@@ -34,7 +34,7 @@ const MainNavigator = (): React.JSX.Element => {
             component={MainTabs}
             options={{
               headerShown: false,
-              title: 'Inicio'
+              title: 'Inicio',
             }}
           />
         </>

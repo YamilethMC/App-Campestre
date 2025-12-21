@@ -13,8 +13,8 @@ const Logo = () => {
     <View style={styles.logoContainer}>
       <Text style={styles.logoText}>{messages.LOGO.TITLE}</Text>
       <Text style={styles.subtitleText}>{messages.LOGO.SUBTITLE}</Text>
-      <Image 
-        source={require('../../../../../assets/images/auth/logo.png')} 
+      <Image
+        source={require('../../../../../assets/images/auth/logo.png')}
         style={styles.logoImage}
         resizeMode="contain"
       />

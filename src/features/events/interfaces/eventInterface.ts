@@ -5,7 +5,16 @@ export interface Event {
   date: string; // Formatted string for display
   time: string; // HH:MM format
   location: string;
-  eventType: 'SOCIAL' | 'SPORT' | 'FAMILY' | 'OTHER' | 'Deportivo' | 'Social' | 'Familiar' | 'Fitness' | 'Todos'; // Keeping both for compatibility
+  eventType:
+    | 'SOCIAL'
+    | 'SPORT'
+    | 'FAMILY'
+    | 'OTHER'
+    | 'Deportivo'
+    | 'Social'
+    | 'Familiar'
+    | 'Fitness'
+    | 'Todos'; // Keeping both for compatibility
   availableSpots: number;
   totalSpots: number;
   ocupedSpots: number; // Number of occupied spots
@@ -42,7 +51,16 @@ export interface EventCardProps {
 }
 
 export interface FilterSectionProps {
-  selectedEventType: 'Todos' | 'Deportivo' | 'Social' | 'Familiar' | 'Fitness' | 'SPORT' | 'SOCIAL' | 'FAMILY' | 'OTHER';
+  selectedEventType:
+    | 'Todos'
+    | 'Deportivo'
+    | 'Social'
+    | 'Familiar'
+    | 'Fitness'
+    | 'SPORT'
+    | 'SOCIAL'
+    | 'FAMILY'
+    | 'OTHER';
   onEventTypeChange: (type: 'Todos' | 'SPORT' | 'SOCIAL' | 'FAMILY' | 'OTHER') => void;
 }
 

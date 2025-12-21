@@ -47,24 +47,24 @@ export const passService = {
    */
   createPass: async (passData: CreatePassRequest): Promise<ServiceResponse<PassResponse>> => {
     const { token } = useAuthStore.getState();
-    
+
     if (!token) {
       return {
         success: false,
         error: 'No hay token de autenticación disponible.',
-        status: 401
+        status: 401,
       };
     }
 
     try {
       console.log('Creating pass with data:', passData);
-      
+
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/pass`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          'accept': '*/*',
+          accept: '*/*',
         },
         body: JSON.stringify(passData),
       });
@@ -73,7 +73,7 @@ export const passService = {
 
       if (!response.ok) {
         let errorMessage = 'Error al crear el pase de invitado';
-        
+
         try {
           const errorData = await response.json();
           errorMessage = errorData.message || errorMessage;
@@ -98,7 +98,7 @@ export const passService = {
         return {
           success: false,
           error: errorMessage,
-          status: response.status
+          status: response.status,
         };
       }
 
@@ -109,14 +109,14 @@ export const passService = {
         success: true,
         data: result,
         message: 'Pase de invitado creado exitosamente',
-        status: response.status
+        status: response.status,
       };
     } catch (error: any) {
       console.error('Error creating pass:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al crear el pase',
-        status: 500
+        status: 500,
       };
     }
   },
@@ -124,14 +124,16 @@ export const passService = {
   /**
    * Obtener pases disponibles del mes actual
    */
-  getAvailablePasses: async (): Promise<ServiceResponse<{ available: number; used: number; limit: number }>> => {
+  getAvailablePasses: async (): Promise<
+    ServiceResponse<{ available: number; used: number; limit: number }>
+  > => {
     const { token } = useAuthStore.getState();
-    
+
     if (!token) {
       return {
         success: false,
         error: 'No hay token de autenticación disponible.',
-        status: 401
+        status: 401,
       };
     }
 
@@ -139,9 +141,9 @@ export const passService = {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/pass/available`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          'accept': '*/*',
+          accept: '*/*',
         },
       });
 
@@ -149,7 +151,7 @@ export const passService = {
         return {
           success: false,
           error: 'Error al obtener pases disponibles',
-          status: response.status
+          status: response.status,
         };
       }
 
@@ -158,14 +160,14 @@ export const passService = {
       return {
         success: true,
         data: result,
-        status: response.status
+        status: response.status,
       };
     } catch (error: any) {
       console.error('Error getting available passes:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido',
-        status: 500
+        status: 500,
       };
     }
   },
@@ -175,24 +177,24 @@ export const passService = {
    */
   getUserPasses: async (includeInvalid: boolean = false): Promise<ServiceResponse<any[]>> => {
     const { token } = useAuthStore.getState();
-    
+
     if (!token) {
       return {
         success: false,
         error: 'No hay token de autenticación disponible.',
-        status: 401
+        status: 401,
       };
     }
 
     try {
       const url = `${process.env.EXPO_PUBLIC_API_URL}/pass${includeInvalid ? '?includeInvalid=true' : ''}`;
-      
+
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          'accept': '*/*',
+          accept: '*/*',
         },
       });
 
@@ -200,7 +202,7 @@ export const passService = {
         return {
           success: false,
           error: 'Error al obtener los pases',
-          status: response.status
+          status: response.status,
         };
       }
 
@@ -209,14 +211,14 @@ export const passService = {
       return {
         success: true,
         data: result,
-        status: response.status
+        status: response.status,
       };
     } catch (error: any) {
       console.error('Error getting user passes:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido',
-        status: 500
+        status: 500,
       };
     }
   },
@@ -226,12 +228,12 @@ export const passService = {
    */
   invalidatePass: async (passId: string): Promise<ServiceResponse<void>> => {
     const { token } = useAuthStore.getState();
-    
+
     if (!token) {
       return {
         success: false,
         error: 'No hay token de autenticación disponible.',
-        status: 401
+        status: 401,
       };
     }
 
@@ -239,9 +241,9 @@ export const passService = {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/pass/${passId}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          'accept': '*/*',
+          accept: '*/*',
         },
       });
 
@@ -249,22 +251,22 @@ export const passService = {
         return {
           success: false,
           error: 'Error al invalidar el pase',
-          status: response.status
+          status: response.status,
         };
       }
 
       return {
         success: true,
         message: 'Pase invalidado exitosamente',
-        status: response.status
+        status: response.status,
       };
     } catch (error: any) {
       console.error('Error invalidating pass:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido',
-        status: 500
+        status: 500,
       };
     }
-  }
+  },
 };

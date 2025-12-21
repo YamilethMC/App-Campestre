@@ -27,8 +27,7 @@ const styles = StyleSheet.create({
     color: COLORS.gray800,
     marginLeft: 8,
   },
-  hoursContainer: {
-  },
+  hoursContainer: {},
   hourRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',

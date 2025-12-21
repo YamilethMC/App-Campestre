@@ -30,7 +30,7 @@ export const useSurveyActions = () => {
     setPagination,
     setActiveSurveys,
     setCompletedSurveys,
-    setAverageRating
+    setAverageRating,
   } = useSurveyStore();
 
   const handleSurveyResponse = (surveyId: string) => {
@@ -49,7 +49,12 @@ export const useSurveyActions = () => {
   };
 
   // Cargar datos de encuesta
-  const loadSurveyData = async (surveyId: string, paginationPage: number, paginationLimit: number, currentFilter: string) => {
+  const loadSurveyData = async (
+    surveyId: string,
+    paginationPage: number,
+    paginationLimit: number,
+    currentFilter: string,
+  ) => {
     if (!surveyId) return;
 
     setLoading(true);
@@ -62,7 +67,10 @@ export const useSurveyActions = () => {
         setQuestions(questionsResponse.data.surveyQuestions);
       } else {
         console.error('Error loading survey questions:', questionsResponse.error);
-        Alert.alert('Error', questionsResponse.error || 'Error al cargar las preguntas de la encuesta');
+        Alert.alert(
+          'Error',
+          questionsResponse.error || 'Error al cargar las preguntas de la encuesta',
+        );
         return;
       }
     } catch (error: any) {
@@ -74,96 +82,99 @@ export const useSurveyActions = () => {
   };
 
   // Cargar encuestas
-  const loadSurveys = useCallback(async (currentPage: number = 1) => {
-    setStoreLoading(true);
-    setError(null);
+  const loadSurveys = useCallback(
+    async (currentPage: number = 1) => {
+      setStoreLoading(true);
+      setError(null);
 
-    try {
-      // Mapear categoría a string para la API
-      let category = '';
-      if (currentFilter.category !== SurveyCategory.ALL) {
-        switch(currentFilter.category) {
-          case SurveyCategory.SERVICES:
-            category = 'SERVICES';
-            break;
-          case SurveyCategory.RESTAURANT:
-            category = 'RESTAURANT';
-            break;
-          case SurveyCategory.SPORTS:
-            category = 'SPORTS';
-            break;
-          case SurveyCategory.EVENTS:
-            category = 'EVENTS';
-            break;
-          default:
-            category = '';
+      try {
+        // Mapear categoría a string para la API
+        let category = '';
+        if (currentFilter.category !== SurveyCategory.ALL) {
+          switch (currentFilter.category) {
+            case SurveyCategory.SERVICES:
+              category = 'SERVICES';
+              break;
+            case SurveyCategory.RESTAURANT:
+              category = 'RESTAURANT';
+              break;
+            case SurveyCategory.SPORTS:
+              category = 'SPORTS';
+              break;
+            case SurveyCategory.EVENTS:
+              category = 'EVENTS';
+              break;
+            default:
+              category = '';
+          }
         }
-      }
 
-      const order = 'asc';
-      const limit = pagination.limit;
+        const order = 'asc';
+        const limit = pagination.limit;
 
-      const response = await surveyService.getSurveys(
-        currentPage,
-        limit,
-        search,
-        order,
-        category
-      );
+        const response = await surveyService.getSurveys(
+          currentPage,
+          limit,
+          search,
+          order,
+          category,
+        );
 
-      if (response.success && response.data) {
-        // Usar los datos y la paginación correspondiente según el estado actual
-        let surveysData, meta;
+        if (response.success && response.data) {
+          // Usar los datos y la paginación correspondiente según el estado actual
+          let surveysData, meta;
 
-        if (status === 'activas') {
-          surveysData = response.data.unansweredSurveys;
-          meta = response.data.unansweredMeta;
-        } else if (status === 'completadas') {
-          surveysData = response.data.answeredSurveys;
-          meta = response.data.answeredMeta;
+          if (status === 'activas') {
+            surveysData = response.data.unansweredSurveys;
+            meta = response.data.unansweredMeta;
+          } else if (status === 'completadas') {
+            surveysData = response.data.answeredSurveys;
+            meta = response.data.answeredMeta;
+          } else {
+            // Por defecto, usar unanswered (encuestas activas)
+            surveysData = response.data.unansweredSurveys;
+            meta = response.data.unansweredMeta;
+          }
+
+          setSurveys(surveysData);
+          setPagination({
+            page: meta.page,
+            limit: meta.limit,
+            total: meta.total,
+            totalPages: meta.totalPages,
+          });
+
+          // Calcular estadísticas usando todos los datos
+          const activeSurveysCount = response.data.unansweredSurveys.length;
+          const completedSurveysCount = response.data.answeredSurveys.length;
+
+          setActiveSurveys(activeSurveysCount);
+          setCompletedSurveys(completedSurveysCount);
+          setAverageRating(0); // Valor por defecto, ya que la API no proporciona este dato
         } else {
-          // Por defecto, usar unanswered (encuestas activas)
-          surveysData = response.data.unansweredSurveys;
-          meta = response.data.unansweredMeta;
+          setError(response.error || 'Error al cargar las encuestas');
         }
-
-        setSurveys(surveysData);
-        setPagination({
-          page: meta.page,
-          limit: meta.limit,
-          total: meta.total,
-          totalPages: meta.totalPages,
-        });
-
-        // Calcular estadísticas usando todos los datos
-        const activeSurveysCount = response.data.unansweredSurveys.length;
-        const completedSurveysCount = response.data.answeredSurveys.length;
-
-        setActiveSurveys(activeSurveysCount);
-        setCompletedSurveys(completedSurveysCount);
-        setAverageRating(0); // Valor por defecto, ya que la API no proporciona este dato
-      } else {
-        setError(response.error || 'Error al cargar las encuestas');
+      } catch (error: any) {
+        console.error('Error loading surveys:', error);
+        setError(error.message || 'Error loading surveys');
+      } finally {
+        setStoreLoading(false);
       }
-    } catch (error: any) {
-      console.error('Error loading surveys:', error);
-      setError(error.message || 'Error loading surveys');
-    } finally {
-      setStoreLoading(false);
-    }
-  }, [
-    currentFilter.category,
-    search,
-    status,
-    pagination.limit,
-    setSurveys,
-    setStoreLoading,
-    setError,
-    setPagination,
-    setActiveSurveys,
-    setCompletedSurveys,
-    setAverageRating
-  ]);
+    },
+    [
+      currentFilter.category,
+      search,
+      status,
+      pagination.limit,
+      setSurveys,
+      setStoreLoading,
+      setError,
+      setPagination,
+      setActiveSurveys,
+      setCompletedSurveys,
+      setAverageRating,
+    ],
+  );
 
   // Set up auto-refresh every 30 minutes (1800000 ms)
   useEffect(() => {
@@ -181,17 +192,23 @@ export const useSurveyActions = () => {
   }, [page, status, search, loadSurveys]);
 
   // Filter handlers
-  const handleFilterChange = useCallback((filter: SurveyFilter) => {
-    setFilter(filter);
-    setPage(1); // Reset to first page when filter changes
-    loadSurveys(1); // Reload surveys with new filter
-  }, [setFilter, loadSurveys]);
+  const handleFilterChange = useCallback(
+    (filter: SurveyFilter) => {
+      setFilter(filter);
+      setPage(1); // Reset to first page when filter changes
+      loadSurveys(1); // Reload surveys with new filter
+    },
+    [setFilter, loadSurveys],
+  );
 
-  const handleStatusChange = useCallback((newStatus: 'activas' | 'completadas') => {
-    setStatus(newStatus);
-    setPage(1); // Reset to first page when status changes
-    loadSurveys(1); // Reload surveys with new status
-  }, [setStatus, loadSurveys]);
+  const handleStatusChange = useCallback(
+    (newStatus: 'activas' | 'completadas') => {
+      setStatus(newStatus);
+      setPage(1); // Reset to first page when status changes
+      loadSurveys(1); // Reload surveys with new status
+    },
+    [setStatus, loadSurveys],
+  );
 
   // Pagination handlers
   const handleNextPage = useCallback(() => {
@@ -210,19 +227,25 @@ export const useSurveyActions = () => {
     }
   }, [page, loadSurveys]);
 
-  const handleGoToPage = useCallback((pageNum: number) => {
-    if (pageNum >= 1 && pageNum <= pagination.totalPages) {
-      setPage(pageNum);
-      loadSurveys(pageNum);
-    }
-  }, [pagination.totalPages, loadSurveys]);
+  const handleGoToPage = useCallback(
+    (pageNum: number) => {
+      if (pageNum >= 1 && pageNum <= pagination.totalPages) {
+        setPage(pageNum);
+        loadSurveys(pageNum);
+      }
+    },
+    [pagination.totalPages, loadSurveys],
+  );
 
   // Search handler
-  const handleSearch = useCallback((searchQuery: string) => {
-    setSearch(searchQuery);
-    setPage(1); // Reset to first page when search changes
-    loadSurveys(1); // Reload surveys with new search query
-  }, [setSearch, loadSurveys]);
+  const handleSearch = useCallback(
+    (searchQuery: string) => {
+      setSearch(searchQuery);
+      setPage(1); // Reset to first page when search changes
+      loadSurveys(1); // Reload surveys with new search query
+    },
+    [setSearch, loadSurveys],
+  );
 
   // Enviar respuestas de la encuesta
   const submitSurveyResponse = async (surveyId: string, answers: any) => {

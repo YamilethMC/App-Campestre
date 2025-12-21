@@ -16,7 +16,7 @@ export interface Reservation {
   facilityId: number;
   clubMemberId: number;
   startTime: string; // ISO 8601 format
-  endTime: string;   // ISO 8601 format
+  endTime: string; // ISO 8601 format
   status: 'CONFIRMED' | 'PENDING' | 'CANCELLED' | string;
   createdAt: string;
   updatedAt: string;
@@ -34,7 +34,7 @@ export interface GetReservationsResponse {
 
 export interface CancelReservationRequest {
   startTime: string; // ISO 8601 format
-  endTime: string;   // ISO 8601 format
+  endTime: string; // ISO 8601 format
   status: 'CANCELLED';
 }
 

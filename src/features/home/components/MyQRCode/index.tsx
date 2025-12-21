@@ -28,19 +28,17 @@ const MyQRCode: React.FC<MyQRCodeProps> = ({ memberData }) => {
       <View style={styles.qrContainer}>
         {/* Código QR real en la tarjeta principal */}
         <View style={styles.qrPlaceholderContainer}>
-          <QRCodeComponent
-            size={100}
-            memberCode={memberData?.memberCode}
-          />
+          <QRCodeComponent size={100} memberCode={memberData?.memberCode} />
         </View>
 
-        <Text style={styles.userName}>{(memberData?.user?.name || 'Nombre') + ' ' + (memberData?.user?.lastName || 'del Socio')}</Text>
-        <Text style={styles.memberText}>Socio #{memberData?.memberCode ?? 'N/A'} | Desde {dateOfAdmission}</Text>
+        <Text style={styles.userName}>
+          {(memberData?.user?.name || 'Nombre') + ' ' + (memberData?.user?.lastName || 'del Socio')}
+        </Text>
+        <Text style={styles.memberText}>
+          Socio #{memberData?.memberCode ?? 'N/A'} | Desde {dateOfAdmission}
+        </Text>
 
-        <TouchableOpacity
-          style={styles.showQrButton}
-          onPress={() => setQrModalVisible(true)}
-        >
+        <TouchableOpacity style={styles.showQrButton} onPress={() => setQrModalVisible(true)}>
           <Text style={styles.showQrButtonText}>Mostrar QR completo</Text>
         </TouchableOpacity>
       </View>

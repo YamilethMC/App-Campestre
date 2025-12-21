@@ -11,11 +11,7 @@ interface QRModalProps {
   memberData: MemberData | null;
 }
 
-const QRModal: React.FC<QRModalProps> = ({
-  visible,
-  onClose,
-  memberData
-}) => {
+const QRModal: React.FC<QRModalProps> = ({ visible, onClose, memberData }) => {
   const dateOfAdmission = memberData?.dateOfAdmission
     ? new Date(memberData.dateOfAdmission).getFullYear()
     : '2020';
@@ -35,7 +31,7 @@ const QRModal: React.FC<QRModalProps> = ({
         borderRadius: 3,
         alignItems: 'center',
         marginHorizontal: -20, // Extiende el botón al borde del modal
-        marginBottom: -20,     // Elimina espacio adicional
+        marginBottom: -20, // Elimina espacio adicional
       }}
       confirmButtonTextStyle={{
         textAlign: 'center',
@@ -51,50 +47,55 @@ const QRModal: React.FC<QRModalProps> = ({
       }}
       contentStyle={{
         alignItems: 'center',
-        padding: 20
+        padding: 20,
       }}
     >
       {/* Componente QR real con el memberCode del socio */}
-      <QRCodeComponent
-        size={200}
-        memberCode={memberData?.memberCode}
-      />
+      <QRCodeComponent size={200} memberCode={memberData?.memberCode} />
 
       {/* Nombre del socio en negrita */}
-      <Text style={{
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: COLORS.gray800,
-        marginBottom: 5
-      }}>
+      <Text
+        style={{
+          fontSize: 18,
+          fontWeight: 'bold',
+          color: COLORS.gray800,
+          marginBottom: 5,
+        }}
+      >
         {(memberData?.user?.name || 'Nombre') + ' ' + (memberData?.user?.lastName || 'del Socio')}
       </Text>
 
       {/* Tipo de socio y ID */}
-      <Text style={{
-        fontSize: 16,
-        color: COLORS.gray600,
-        marginBottom: 5
-      }}>
+      <Text
+        style={{
+          fontSize: 16,
+          color: COLORS.gray600,
+          marginBottom: 5,
+        }}
+      >
         Socio #{memberData?.memberCode || memberData?.id}
       </Text>
 
       {/* Miembro desde */}
-      <Text style={{
-        fontSize: 14,
-        color: COLORS.gray500,
-        marginBottom: 15
-      }}>
+      <Text
+        style={{
+          fontSize: 14,
+          color: COLORS.gray500,
+          marginBottom: 15,
+        }}
+      >
         Socio desde {dateOfAdmission}
       </Text>
 
       {/* Leyenda */}
-      <Text style={{
-        fontSize: 14,
-        color: COLORS.gray700,
-        textAlign: 'center',
-        fontStyle: 'italic'
-      }}>
+      <Text
+        style={{
+          fontSize: 14,
+          color: COLORS.gray700,
+          textAlign: 'center',
+          fontStyle: 'italic',
+        }}
+      >
         Presenta este código en recepción o cualquier área del club
       </Text>
     </Modal>

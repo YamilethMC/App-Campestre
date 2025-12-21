@@ -16,7 +16,7 @@ const VehicleModal: React.FC<VehicleModalProps> = ({ visible, onClose, onVehicle
   const [selectedVehicle, setSelectedVehicle] = useState<string>('');
 
   const vehicles = profile?.vehicles?.filter(v => v.isActive) || [];
-  
+
   const vehicleOptions = vehicles.map(vehicle => ({
     label: `${vehicle.model} - ${vehicle.plate}`,
     value: vehicle.id.toString(),
@@ -35,7 +35,7 @@ const VehicleModal: React.FC<VehicleModalProps> = ({ visible, onClose, onVehicle
     if (!selectedVehicle) {
       return;
     }
-    
+
     // Find the selected vehicle to get its name
     const selectedVehicleData = vehicles.find(v => v.id.toString() === selectedVehicle);
     if (selectedVehicleData) {

@@ -32,13 +32,11 @@ const UserHeader: React.FC<UserHeaderProps> = ({ navigation }) => {
             <Text style={styles.greetingText} numberOfLines={1}>
               ¡Hola, {profile?.name || 'Usuario'}!
             </Text>
-            <Text style={styles.userInfoText}>
-              Socio {profile?.memberCode || userId || 'N/A'}
-            </Text>
+            <Text style={styles.userInfoText}>Socio {profile?.memberCode || userId || 'N/A'}</Text>
           </View>
           <View style={styles.rightContainer}>
-            <TouchableOpacity 
-              style={styles.qrButton} 
+            <TouchableOpacity
+              style={styles.qrButton}
               onPress={handleOpenQRModal}
               activeOpacity={0.7}
             >
@@ -61,7 +59,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ navigation }) => {
           <View style={styles.qrPlaceholder}>
             <Ionicons name="qr-code" size={100} color={COLORS.primary} />
           </View>
-          
+
           <Text style={styles.modalName}>{profile?.name || 'Nombre del Socio'}</Text>
           <Text style={styles.modalMemberId}>Socio {profile?.memberCode || userId || 'N/A'}</Text>
           <Text style={styles.modalDescription}>

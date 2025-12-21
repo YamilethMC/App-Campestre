@@ -11,48 +11,48 @@ export const useAccountStatements = () => {
   const [selectedStatement, setSelectedStatement] = useState<any>(null);
   const [showDetail, setShowDetail] = useState(false);
   const [statements, setStatements] = useState<any[]>([]);
-  const { 
-    // statements, 
-    filteredStatements, 
-    loading, 
+  const {
+    // statements,
+    filteredStatements,
+    loading,
     error,
     // setStatements,
     setLoading,
-    setError
+    setError,
   } = useAccountStatementStore();
 
   const formatDateRange = (startDate: Date, endDate: Date) => {
-  try {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+    try {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
 
-    // Format: "Ene 2023" (abbreviated month name in Spanish + year)
-    const formatOptions: Intl.DateTimeFormatOptions = { 
-      month: 'short', 
-      year: 'numeric' 
-    };
+      // Format: "Ene 2023" (abbreviated month name in Spanish + year)
+      const formatOptions: Intl.DateTimeFormatOptions = {
+        month: 'short',
+        year: 'numeric',
+      };
 
-    // Helper function to format and capitalize first letter
-    const formatAndCapitalize = (date: Date) => {
-      const formatted = date.toLocaleDateString('es-MX', formatOptions);
-      return formatted.charAt(0).toUpperCase() + formatted.slice(1);
-    };
+      // Helper function to format and capitalize first letter
+      const formatAndCapitalize = (date: Date) => {
+        const formatted = date.toLocaleDateString('es-MX', formatOptions);
+        return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+      };
 
-    const startFormatted = formatAndCapitalize(start);
-    const endFormatted = formatAndCapitalize(end);
+      const startFormatted = formatAndCapitalize(start);
+      const endFormatted = formatAndCapitalize(end);
 
-    // If same month and year, return just one date
-    if (startFormatted === endFormatted) {
-      return startFormatted;
+      // If same month and year, return just one date
+      if (startFormatted === endFormatted) {
+        return startFormatted;
+      }
+
+      // Otherwise return range
+      return `${startFormatted} - ${endFormatted}`;
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return `${startDate} - ${endDate}`; // Fallback to original format if there's an error
     }
-
-    // Otherwise return range
-    return `${startFormatted} - ${endFormatted}`;
-  } catch (error) {
-    console.error('Error formatting date:', error);
-    return `${startDate} - ${endDate}`; // Fallback to original format if there's an error
-  }
-};
+  };
 
   const fetchStatements = useCallback(async () => {
     if (!profile?.id) return;
@@ -61,14 +61,14 @@ export const useAccountStatements = () => {
     const response = await accountStatementService.getAccountStatements(parseInt(profile.id));
 
     if (response.success && response.data) {
-      const statementsArray = Array.isArray(response.data) 
-        ? response.data 
+      const statementsArray = Array.isArray(response.data)
+        ? response.data
         : response.data.data || [];
 
       // Process each statement
       const formattedStatements = statementsArray.map((statement: any) => ({
         ...statement,
-        period: formatDateRange(statement.periodStart, statement.periodEnd)
+        period: formatDateRange(statement.periodStart, statement.periodEnd),
       }));
 
       setStatements(formattedStatements);
@@ -85,7 +85,6 @@ export const useAccountStatements = () => {
     fetchStatements();
   }, [fetchStatements]);
 
-  
   const handleCardPress = async (statement: any) => {
     const response = await accountStatementService.getAccountStatementById(statement.id);
 
@@ -115,7 +114,7 @@ export const useAccountStatements = () => {
 
       if (!downloadUrl) {
         console.error('No se pudo obtener la URL de descarga');
-        Alert.alert('Error', "No se pudo obtener la URL de descarga del estado de cuenta");
+        Alert.alert('Error', 'No se pudo obtener la URL de descarga del estado de cuenta');
         setLoading?.(false);
         return;
       }
@@ -130,7 +129,7 @@ export const useAccountStatements = () => {
           await Sharing.shareAsync(downloadUrl, {
             mimeType: 'application/pdf',
             dialogTitle: `Compartir ${statement.fileName || 'documento'}`,
-            UTI: 'com.adobe.pdf'
+            UTI: 'com.adobe.pdf',
           });
         } else {
           Alert.alert('Error', 'No se pudo abrir el archivo');
@@ -138,7 +137,10 @@ export const useAccountStatements = () => {
       }
     } else {
       console.error('Error al descargar:', response.error);
-      Alert.alert('Error', response.error || 'No se pudo abrir el archivo. Por favor, inténtalo de nuevo más tarde.');
+      Alert.alert(
+        'Error',
+        response.error || 'No se pudo abrir el archivo. Por favor, inténtalo de nuevo más tarde.',
+      );
     }
 
     setLoading?.(false);
@@ -156,6 +158,6 @@ export const useAccountStatements = () => {
     handleCardPress,
     showDetail,
     setShowDetail,
-    handleDownload
+    handleDownload,
   };
 };

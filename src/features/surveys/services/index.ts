@@ -86,7 +86,8 @@ const mapCategory = (category: string): SurveyCategory => {
     case 'EVENTS':
     case 'EVENTOS': // Por si acaso viene en español
       return SurveyCategory.EVENTS;
-    default: return SurveyCategory.ALL; // Valor por defecto
+    default:
+      return SurveyCategory.ALL; // Valor por defecto
   }
 };
 
@@ -96,11 +97,15 @@ const mapPriority = (priority: string): SurveyPriority => {
     //case 'HIGH':
     //case 'URGENT': return SurveyPriority.URGENT;
     case 'HIGH':
-    case 'IMPORTANT': return SurveyPriority.IMPORTANT;
+    case 'IMPORTANT':
+      return SurveyPriority.IMPORTANT;
     case 'MEDIUM':
-    case 'NORMAL': return SurveyPriority.NORMAL;
-    case 'LOW': return SurveyPriority.LOW;
-    default: return SurveyPriority.NORMAL; // Valor por defecto
+    case 'NORMAL':
+      return SurveyPriority.NORMAL;
+    case 'LOW':
+      return SurveyPriority.LOW;
+    default:
+      return SurveyPriority.NORMAL; // Valor por defecto
   }
 };
 
@@ -120,20 +125,22 @@ export const surveyService = {
     limit: number = 1,
     search: string = '',
     order: string = 'asc',
-    category: string = ''
-  ): Promise<ServiceResponse<{
-    surveys: Survey[];
-    unansweredSurveys: Survey[];
-    answeredSurveys: Survey[];
-    unansweredMeta: any;
-    answeredMeta: any;
-  }>> => {
-    const {userId, token } = useAuthStore.getState();
+    category: string = '',
+  ): Promise<
+    ServiceResponse<{
+      surveys: Survey[];
+      unansweredSurveys: Survey[];
+      answeredSurveys: Survey[];
+      unansweredMeta: any;
+      answeredMeta: any;
+    }>
+  > => {
+    const { userId, token } = useAuthStore.getState();
     if (!token) {
       return {
         success: false,
         error: 'No authentication token available',
-        status: 401
+        status: 401,
       };
     }
 
@@ -144,17 +151,14 @@ export const surveyService = {
         url += `&category=${encodeURIComponent(category)}`;
       }
 
-      const response = await fetch(
-        url,
-        {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-            'accept': '*/*',
-          },
-        }
-      );
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          accept: '*/*',
+        },
+      });
 
       if (!response.ok) {
         let errorMessage = 'Error al cargar las encuestas';
@@ -178,7 +182,7 @@ export const surveyService = {
         return {
           success: false,
           error: errorMessage,
-          status: response.status
+          status: response.status,
         };
       }
 
@@ -225,29 +229,29 @@ export const surveyService = {
           unansweredSurveys,
           answeredSurveys,
           unansweredMeta: result.data.data.unanswered.meta,
-          answeredMeta: result.data.data.answered.meta
+          answeredMeta: result.data.data.answered.meta,
         },
         message: 'Encuestas cargadas exitosamente',
-        status: response.status
+        status: response.status,
       };
     } catch (error: any) {
       console.error('Error fetching surveys:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al cargar las encuestas',
-        status: 500
+        status: 500,
       };
     }
   },
 
   // Obtener preguntas de una encuesta específica
   getQuestionsBySurveyId: async (surveyId: string): Promise<ServiceResponse<FullSurvey>> => {
-    const {token } = useAuthStore.getState();
+    const { token } = useAuthStore.getState();
     if (!token) {
       return {
         success: false,
         error: 'No authentication token available',
-        status: 401
+        status: 401,
       };
     }
 
@@ -258,9 +262,9 @@ export const surveyService = {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/survey/${surveyId}`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          'accept': '*/*',
+          accept: '*/*',
         },
       });
 
@@ -288,7 +292,7 @@ export const surveyService = {
         return {
           success: false,
           error: errorMessage,
-          status: response.status
+          status: response.status,
         };
       }
 
@@ -299,7 +303,7 @@ export const surveyService = {
         return {
           success: false,
           error: 'No se encontraron datos de la encuesta',
-          status: response.status
+          status: response.status,
         };
       }
 
@@ -325,57 +329,64 @@ export const surveyService = {
           type: q.type ?? 'text',
           options: q.options,
           required: q.required ?? false,
-        }))
+        })),
       };
 
       return {
         success: true,
         data: fullSurvey,
         message: 'Preguntas de la encuesta cargadas exitosamente',
-        status: response.status
+        status: response.status,
       };
-
     } catch (error: any) {
       console.error('Error fetching questions:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al cargar las preguntas',
-        status: 500
+        status: 500,
       };
     }
   },
 
   // Enviar respuestas de encuesta - endpoint hipotético, revisar API real
   submitSurvey: async (surveyId: string, answers: any): Promise<ServiceResponse<boolean>> => {
-    const {token, userId } = useAuthStore.getState();
+    const { token, userId } = useAuthStore.getState();
     if (!token) {
       return {
         success: false,
         error: 'No authentication token available',
-        status: 401
+        status: 401,
       };
     }
 
-    console.log('Submitting survey with answers:', answers, 'and surveyId:', surveyId, 'for userId:', userId);
-
-    const formattedResponses = Object.entries(answers).map(
-      ([questionId, answer]) => ({
-        questionId,
-        answer,
-      })
+    console.log(
+      'Submitting survey with answers:',
+      answers,
+      'and surveyId:',
+      surveyId,
+      'for userId:',
+      userId,
     );
+
+    const formattedResponses = Object.entries(answers).map(([questionId, answer]) => ({
+      questionId,
+      answer,
+    }));
 
     console.log('Formatted responses for submission:', formattedResponses);
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/survey/${surveyId}/club-member/${userId}/submit`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-          'accept': '*/*',
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_API_URL}/survey/${surveyId}/club-member/${userId}/submit`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            accept: '*/*',
+          },
+          body: JSON.stringify({ responses: formattedResponses }),
         },
-        body: JSON.stringify({ responses: formattedResponses }),
-      });
+      );
 
       if (!response.ok) {
         let errorMessage = 'Error al enviar la encuesta';
@@ -404,7 +415,7 @@ export const surveyService = {
         return {
           success: false,
           error: errorMessage,
-          status: response.status
+          status: response.status,
         };
       }
 
@@ -415,14 +426,14 @@ export const surveyService = {
         success: true,
         data: data.success,
         message: 'Encuesta enviada exitosamente',
-        status: response.status
+        status: response.status,
       };
     } catch (error: any) {
       console.error('Error submitting survey:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al enviar la encuesta',
-        status: 500
+        status: 500,
       };
     }
   },

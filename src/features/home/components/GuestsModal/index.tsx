@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS } from '../../../../shared/theme/colors';
-import { Guest } from '../../../home/services/homeService';
+import { Guest } from '../../services/homeService';
 
 interface GuestsModalProps {
   visible: boolean;
@@ -25,7 +25,7 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
   guests,
   loading,
   onClose,
-  onDeleteGuest
+  onDeleteGuest,
 }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [guestToDelete, setGuestToDelete] = useState<number | null>(null);
@@ -44,12 +44,7 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
   const hasTemporales = guests.some(guest => guest.user?.type === 'TEMPORAL');
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={visible}
-      onRequestClose={onClose}
-    >
+    <Modal animationType="slide" transparent={true} visible={visible} onRequestClose={onClose}>
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
           <View style={styles.modalHeader}>
@@ -76,10 +71,16 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
               style={[styles.tab, activeTab === 'dependiente' && styles.activeTab]}
               onPress={() => setActiveTab('dependiente')}
             >
-              <Text style={[
-                styles.tabText,
-                activeTab === 'dependiente' ? styles.activeTabText : (hasDependientes ? styles.tabText : styles.disabledTabText)
-              ]}>
+              <Text
+                style={[
+                  styles.tabText,
+                  activeTab === 'dependiente'
+                    ? styles.activeTabText
+                    : hasDependientes
+                      ? styles.tabText
+                      : styles.disabledTabText,
+                ]}
+              >
                 Dependiente
               </Text>
             </TouchableOpacity>
@@ -87,10 +88,16 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
               style={[styles.tab, activeTab === 'temporal' && styles.activeTab]}
               onPress={() => setActiveTab('temporal')}
             >
-              <Text style={[
-                styles.tabText,
-                activeTab === 'temporal' ? styles.activeTabText : (hasTemporales ? styles.tabText : styles.disabledTabText)
-              ]}>
+              <Text
+                style={[
+                  styles.tabText,
+                  activeTab === 'temporal'
+                    ? styles.activeTabText
+                    : hasTemporales
+                      ? styles.tabText
+                      : styles.disabledTabText,
+                ]}
+              >
                 Temporal
               </Text>
             </TouchableOpacity>
@@ -107,16 +114,14 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
                   style={styles.guestsList}
                   contentContainerStyle={styles.guestsListContent}
                 >
-                  {filteredGuests.map((guest) => (
+                  {filteredGuests.map(guest => (
                     <View key={guest.id} style={styles.guestCard}>
                       <View style={styles.guestInfo}>
                         <Text style={styles.guestName}>
                           {guest.user?.name} {guest.user?.lastName}
                         </Text>
                         <Text style={styles.guestEmail}>{guest.user?.email}</Text>
-                        <Text style={styles.guestRelation}>
-                          {guest.relationship}
-                        </Text>
+                        <Text style={styles.guestRelation}>{guest.relationship}</Text>
                       </View>
                       {onDeleteGuest && (
                         <TouchableOpacity
@@ -136,9 +141,11 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
             ) : (
               <View style={styles.noGuestsContainer}>
                 <Text>
-                  {activeTab === 'invitado' ? 'No hay invitados registrados' :
-                   activeTab === 'dependiente' ? 'No hay socios dependientes registrados' :
-                   'No hay pases temporales registrados'}
+                  {activeTab === 'invitado'
+                    ? 'No hay invitados registrados'
+                    : activeTab === 'dependiente'
+                      ? 'No hay socios dependientes registrados'
+                      : 'No hay pases temporales registrados'}
                 </Text>
               </View>
             )}
@@ -160,7 +167,9 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
         <View style={styles.confirmationOverlay}>
           <View style={styles.confirmationContainer}>
             <Text style={styles.confirmationTitle}>Confirmar eliminación</Text>
-            <Text style={styles.confirmationMessage}>¿Estás seguro de que deseas eliminar a este invitado?</Text>
+            <Text style={styles.confirmationMessage}>
+              ¿Estás seguro de que deseas eliminar a este invitado?
+            </Text>
             <View style={styles.confirmationButtonsContainer}>
               <TouchableOpacity
                 style={[styles.confirmationButton, styles.cancelButton]}
@@ -179,7 +188,9 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
                   setShowConfirmation(false);
                 }}
               >
-                <Text style={[styles.confirmationButtonText, styles.confirmationButtonDeleteText]}>Eliminar</Text>
+                <Text style={[styles.confirmationButtonText, styles.confirmationButtonDeleteText]}>
+                  Eliminar
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -266,7 +277,7 @@ const styles = StyleSheet.create({
   },
   guestsContainer: {
     flex: 1,
-    minHeight: 100,  // Aumentar altura mínima
+    minHeight: 100, // Aumentar altura mínima
   },
   loadingContainer: {
     flex: 1,

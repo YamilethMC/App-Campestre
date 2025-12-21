@@ -15,7 +15,7 @@ export const helpCenterService = {
       return {
         success: false,
         error: 'No authentication token available',
-        status: 401
+        status: 401,
       };
     }
 
@@ -23,9 +23,9 @@ export const helpCenterService = {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/help-center`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          'accept': '*/*',
+          accept: '*/*',
         },
       });
 
@@ -54,7 +54,7 @@ export const helpCenterService = {
         return {
           success: false,
           error: errorMessage,
-          status: response.status
+          status: response.status,
         };
       }
 
@@ -64,14 +64,14 @@ export const helpCenterService = {
         success: true,
         data: result.data,
         message: 'Preguntas frecuentes cargadas exitosamente',
-        status: response.status
+        status: response.status,
       };
     } catch (error) {
       console.error('Error fetching FAQs:', error);
       return {
         success: false,
         error: 'Error desconocido al cargar las preguntas frecuentes',
-        status: 500
+        status: 500,
       };
     }
   },

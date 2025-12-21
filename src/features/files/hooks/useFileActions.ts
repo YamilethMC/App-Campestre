@@ -35,13 +35,7 @@ export const useFileActions = () => {
     setLoading(true);
 
     try {
-      const response = await fileService.getFiles(
-        page,
-        pagination.limit,
-        search,
-        'asc',
-        'name'
-      );
+      const response = await fileService.getFiles(page, pagination.limit, search, 'asc', 'name');
 
       if (!response.success) {
         Alert.alert('Error', response.error || 'Error al cargar los archivos');
@@ -112,7 +106,7 @@ export const useFileActions = () => {
 
       const downloadUrl = response.data;
 
-      console.log("downloadUrl", downloadUrl)
+      console.log('downloadUrl', downloadUrl);
 
       if (!downloadUrl) {
         Alert.alert('Error', 'No se pudo obtener la URL de descarga del archivo');
@@ -128,7 +122,7 @@ export const useFileActions = () => {
         if (await Sharing.isAvailableAsync()) {
           await Sharing.shareAsync(downloadUrl, {
             dialogTitle: `Compartir archivo`,
-            UTI: 'public.data'
+            UTI: 'public.data',
           });
         } else {
           Alert.alert('Error', 'No se pudo abrir el archivo');

@@ -6,11 +6,7 @@ import { COLORS } from '../../../../shared/theme/colors';
 import useMessages from '../../hooks/useMessages';
 import styles from './Style';
 
-const AccountStatementCard: React.FC<any> = ({
-  statement,
-  onPress,
-  onDownload,
-}) => {
+const AccountStatementCard: React.FC<any> = ({ statement, onPress, onDownload }) => {
   const { messages } = useMessages();
 
   const formatCurrency = (amount: number) => {
@@ -54,30 +50,40 @@ const AccountStatementCard: React.FC<any> = ({
             <Text style={styles.period}>{statement.period}</Text>
             <Text style={styles.concept}>{'Estado de Cuenta ' + statement.period}</Text>
           </View>
-          
+
           <View style={styles.statusContainer}>
-            <View style={[styles.statusBadge, { backgroundColor: getStatusColor(statement.currentBalance > 0 ? 'overdue' : 'paid') + '20' }]}>
-              <Text style={[styles.statusText, { color: getStatusColor(statement.currentBalance > 0 ? 'overdue' : 'paid') }]}>
+            <View
+              style={[
+                styles.statusBadge,
+                {
+                  backgroundColor:
+                    getStatusColor(statement.currentBalance > 0 ? 'overdue' : 'paid') + '20',
+                },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.statusText,
+                  { color: getStatusColor(statement.currentBalance > 0 ? 'overdue' : 'paid') },
+                ]}
+              >
                 {getStatusText(statement.currentBalance > 0 ? 'overdue' : 'paid')}
               </Text>
             </View>
           </View>
         </View>
-        
+
         <View style={styles.details}>
           <Text style={styles.totalLabel}>{messages.ACCOUNTSTATEMENTCARD.TOTAL}</Text>
           <Text style={styles.totalAmount}>{formatCurrency(statement.previousBalance)}</Text>
         </View>
-        
+
         <View style={styles.buttonsContainer}>
           <TouchableOpacity style={styles.viewButton} onPress={() => onPress(statement)}>
             <Text style={styles.viewButtonText}>{messages.ACCOUNTSTATEMENTCARD.VIEWDETAILS}</Text>
           </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={styles.downloadButton} 
-            onPress={() => onDownload(statement)}
-          >
+
+          <TouchableOpacity style={styles.downloadButton} onPress={() => onDownload(statement)}>
             <Ionicons name="download-outline" size={16} color={COLORS.white} />
             <Text style={styles.downloadButtonText}>{messages.ACCOUNTSTATEMENTCARD.DOWNLOAD}</Text>
           </TouchableOpacity>

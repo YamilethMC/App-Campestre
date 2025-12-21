@@ -8,7 +8,7 @@ import styles from './Style';
 const FileHeader: React.FC<FileHeaderProps> = ({
   title,
   description,
-  icon = 'newspaper-outline'
+  icon = 'newspaper-outline',
 }) => {
   return (
     <View style={styles.container}>

@@ -9,16 +9,33 @@ const NotificationCard: React.FC<NotificationCardProps> = ({ notification }) => 
   // Format the date to be more readable
   const formatDate = (dateString: string) => {
     const [y, m, d] = dateString.substring(0, 10).split('-');
-    const meses = ["ene", "feb", "mar", "abr", "may", "jun",
-                 "jul", "ago", "sep", "oct", "nov", "dic"];
+    const meses = [
+      'ene',
+      'feb',
+      'mar',
+      'abr',
+      'may',
+      'jun',
+      'jul',
+      'ago',
+      'sep',
+      'oct',
+      'nov',
+      'dic',
+    ];
     return `${d} ${meses[Number(m) - 1]} ${y}`;
   };
 
   // Get type color based on notification type
   const getTypeColor = (type: string) => {
     const lowerType = type.toLowerCase();
-    if (lowerType.includes('aviso')) return '#F5A623';   // Naranja
-    if (lowerType.includes('celebración') || lowerType.includes('celebracion') || lowerType.includes('festiv')) return '#BD10E0'; // Púrpura
+    if (lowerType.includes('aviso')) return '#F5A623'; // Naranja
+    if (
+      lowerType.includes('celebración') ||
+      lowerType.includes('celebracion') ||
+      lowerType.includes('festiv')
+    )
+      return '#BD10E0'; // Púrpura
     if (lowerType.includes('informativo')) return '#7ED321'; // Verde
     if (lowerType.includes('evento') || lowerType.includes('actividad')) return '#50E3C2'; // Turquesa
     if (lowerType.includes('cierre') || lowerType.includes('cerrado')) return '#D0021B'; // Rojo
@@ -29,7 +46,12 @@ const NotificationCard: React.FC<NotificationCardProps> = ({ notification }) => 
   const getIconName = (type: string) => {
     const lowerType = type.toLowerCase();
     if (lowerType.includes('aviso') || lowerType.includes('noticia')) return 'information-circle';
-    if (lowerType.includes('celebración') || lowerType.includes('celebracion') || lowerType.includes('festiv')) return 'gift';
+    if (
+      lowerType.includes('celebración') ||
+      lowerType.includes('celebracion') ||
+      lowerType.includes('festiv')
+    )
+      return 'gift';
     if (lowerType.includes('informativo')) return 'information-circle';
     if (lowerType.includes('evento') || lowerType.includes('actividad')) return 'calendar';
     if (lowerType.includes('cierre') || lowerType.includes('cerrado')) return 'lock-closed';
@@ -51,11 +73,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({ notification }) => 
     <View style={[styles.container, { borderLeftColor: typeColor }]}>
       {/* Mostrar imagen si está disponible */}
       {notification.image && (
-        <Image
-          source={{ uri: notification.image }}
-          style={styles.image}
-          resizeMode="cover"
-        />
+        <Image source={{ uri: notification.image }} style={styles.image} resizeMode="cover" />
       )}
 
       <View style={styles.header}>
@@ -73,7 +91,11 @@ const NotificationCard: React.FC<NotificationCardProps> = ({ notification }) => 
           </View>
         </View>
         <View style={[styles.typeContainer, { backgroundColor: typeColor }]}>
-          <Text style={[styles.type, { color: getTextColor(typeColor) }]} numberOfLines={1} ellipsizeMode="tail">
+          <Text
+            style={[styles.type, { color: getTextColor(typeColor) }]}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
             {notification.type}
           </Text>
         </View>

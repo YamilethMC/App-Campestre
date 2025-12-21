@@ -53,7 +53,7 @@ const formatDate = (dateString: string) => {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
-    year: 'numeric'
+    year: 'numeric',
   };
   return date.toLocaleDateString('es-ES', options);
 };
@@ -62,29 +62,28 @@ const EventCard: React.FC<EventCardProps> = ({
   event,
   isRegistered,
   onOpenRegisterScreen,
-  onUnregister
+  onUnregister,
 }) => {
   const { messages } = useMessages();
   const eventTypeColor = getEventTypeColor(event.eventType);
   const eventTypeDisplay = getEventTypeDisplayName(event.eventType);
-  const progressPercentage = event.totalSpots > 0 ? Math.round(((event.totalSpots - event.availableSpots) / event.totalSpots) * 100) : 0;
+  const progressPercentage =
+    event.totalSpots > 0
+      ? Math.round(((event.totalSpots - event.availableSpots) / event.totalSpots) * 100)
+      : 0;
 
   const handleReminderPress = () => {
     Alert.alert(
       'Funcionalidad no disponible',
       'La funcionalidad de recordatorios aún no está implementada.',
-      [{ text: 'OK' }]
+      [{ text: 'OK' }],
     );
   };
 
   return (
     <Card style={styles.card}>
       {event.image ? (
-        <Image
-          source={{ uri: event.image }}
-          style={styles.eventImage}
-          resizeMode="cover"
-        />
+        <Image source={{ uri: event.image }} style={styles.eventImage} resizeMode="cover" />
       ) : (
         <View style={styles.imagePlaceholder}>
           <Text style={styles.imagePlaceholderText}>Imagen del Evento</Text>
@@ -95,9 +94,7 @@ const EventCard: React.FC<EventCardProps> = ({
         <Text style={styles.eventName}>{event.name}</Text>
         <View style={styles.badgeContainer}>
           <View style={[styles.badge, { backgroundColor: eventTypeColor + '20' }]}>
-            <Text style={[styles.badgeText, { color: eventTypeColor }]}>
-              {eventTypeDisplay}
-            </Text>
+            <Text style={[styles.badgeText, { color: eventTypeColor }]}>{eventTypeDisplay}</Text>
           </View>
         </View>
       </View>
@@ -126,7 +123,8 @@ const EventCard: React.FC<EventCardProps> = ({
           <View style={styles.infoItem}>
             <Ionicons name="people" size={16} color={COLORS.gray500} />
             <Text style={styles.infoText}>
-              {event.totalSpots - event.availableSpots} {messages.EVENTCARD.REGISTERED} {event.totalSpots}
+              {event.totalSpots - event.availableSpots} {messages.EVENTCARD.REGISTERED}{' '}
+              {event.totalSpots}
             </Text>
           </View>
         )}
@@ -140,12 +138,14 @@ const EventCard: React.FC<EventCardProps> = ({
                 styles.progressFill,
                 {
                   width: `${progressPercentage}%`,
-                  backgroundColor: progressPercentage > 75 ? COLORS.warning : COLORS.primary
-                }
+                  backgroundColor: progressPercentage > 75 ? COLORS.warning : COLORS.primary,
+                },
               ]}
             />
           </View>
-          <Text style={styles.progressText}>{progressPercentage}% {messages.EVENTCARD.BUSY}</Text>
+          <Text style={styles.progressText}>
+            {progressPercentage}% {messages.EVENTCARD.BUSY}
+          </Text>
         </View>
       )}
 

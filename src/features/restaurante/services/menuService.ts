@@ -1,14 +1,11 @@
 import { Menu } from '../interfaces/menuInterface';
 
-
-const days = [
-  "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"
-];
+const days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
 // Datos de ejemplo para el menú
 const sampleMenus: Menu[] = [
   {
     id: '1',
-    name: `Menú del Día - ${days[new Date().getDay()]}`,  
+    name: `Menú del Día - ${days[new Date().getDay()]}`,
     date: new Date().toISOString(),
     type: 'daily',
     items: [
@@ -18,7 +15,7 @@ const sampleMenus: Menu[] = [
         description: 'Lechuga romana, crutones, queso parmesano, aderezo césar',
         price: 89,
         category: 'Entrada',
-        isVegetarian: true
+        isVegetarian: true,
       },
       {
         id: '102',
@@ -27,9 +24,9 @@ const sampleMenus: Menu[] = [
         price: 129,
         category: 'Plato Fuerte',
         isVegetarian: false,
-        isGlutenFree: false
-      }
-    ]
+        isGlutenFree: false,
+      },
+    ],
   },
   // Agrega más menús de ejemplo según sea necesario
 ];
@@ -40,7 +37,7 @@ export const menuService = {
 
   async getMenus(): Promise<Menu[]> {
     // Simular llamada a API
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       setTimeout(() => {
         resolve([...sampleMenus]);
       }, 500);

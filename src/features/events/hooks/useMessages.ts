@@ -11,13 +11,13 @@ const useMessages = () => {
       NOEVENTSREGISTERED: t('events.noEventsRegistered'),
     },
     EVENTCARD: {
-        REGISTERED: t('events.eventCard.registered'),
-        BUSY: t('events.eventCard.busy'),
-        SUCCESSREGISTERED: t('events.eventCard.successRegistered'),
-        CANCELREGISTRATION: t('events.eventCard.cancelRegistration'),
-        ACTIVATEREMINDER: t('events.eventCard.activateReminder'),
-        REGISTER: t('events.eventCard.register'),
-    }
+      REGISTERED: t('events.eventCard.registered'),
+      BUSY: t('events.eventCard.busy'),
+      SUCCESSREGISTERED: t('events.eventCard.successRegistered'),
+      CANCELREGISTRATION: t('events.eventCard.cancelRegistration'),
+      ACTIVATEREMINDER: t('events.eventCard.activateReminder'),
+      REGISTER: t('events.eventCard.register'),
+    },
   };
 
   return { messages };

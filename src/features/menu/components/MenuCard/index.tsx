@@ -24,18 +24,17 @@ const MenuCard: React.FC<MenuCardProps> = ({ menu, onDownloadPress, onViewPress 
             </View>
           )}
           {/* Overlay View Icon */}
-          <TouchableOpacity 
-            style={styles.overlayViewButton} 
-            onPress={onViewPress}
-          >
+          <TouchableOpacity style={styles.overlayViewButton} onPress={onViewPress}>
             <Ionicons name="eye-outline" size={16} color={COLORS.white} />
           </TouchableOpacity>
         </View>
-        
+
         {/* Menu Info */}
         <View style={styles.infoContainer}>
           <View style={styles.headerRow}>
-            <Text style={styles.menuName} numberOfLines={2}>{menu.name}</Text>
+            <Text style={styles.menuName} numberOfLines={2}>
+              {menu.name}
+            </Text>
             {menu.isFeatured && (
               <View style={styles.featuredTag}>
                 <Ionicons name="star" size={12} color={COLORS.white} />
@@ -43,26 +42,28 @@ const MenuCard: React.FC<MenuCardProps> = ({ menu, onDownloadPress, onViewPress 
               </View>
             )}
           </View>
-          
-          <Text style={styles.description} numberOfLines={2}>{menu.description}</Text>
-          
+
+          <Text style={styles.description} numberOfLines={2}>
+            {menu.description}
+          </Text>
+
           <View style={styles.metaContainer}>
             <View style={styles.metaItem}>
               <Ionicons name="calendar-outline" size={14} color={COLORS.gray500} />
               <Text style={styles.metaText}>{menu.uploadDate}</Text>
             </View>
-            
+
             <View style={styles.metaItem}>
               <Ionicons name="document-text-outline" size={14} color={COLORS.gray500} />
               <Text style={styles.metaText}>{menu.fileSize}</Text>
             </View>
-            
+
             <View style={styles.metaItem}>
               <Ionicons name="star" size={14} color={COLORS.warning} />
               <Text style={styles.metaText}>{menu.rating}</Text>
             </View>
           </View>
-          
+
           <View style={styles.buttonContainer}>
             <Button
               text={messages.MENUCARD.DOWNLOAD}

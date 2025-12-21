@@ -10,21 +10,18 @@ interface RatingQuestionProps {
   onAnswerChange: (value: number) => void;
 }
 
-export const RatingQuestion: React.FC<RatingQuestionProps> = ({
-  answer = 0,
-  onAnswerChange,
-}) => {
+export const RatingQuestion: React.FC<RatingQuestionProps> = ({ answer = 0, onAnswerChange }) => {
   const maxRating = 5;
-  
+
   return (
     <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 8 }}>
       {[...Array(maxRating)].map((_, index) => {
         const ratingValue = index + 1;
         const isFilled = ratingValue <= answer;
-        
+
         return (
-          <TouchableOpacity 
-            key={index} 
+          <TouchableOpacity
+            key={index}
             style={{ marginHorizontal: 4 }}
             onPress={() => onAnswerChange(ratingValue)}
             activeOpacity={0.7}

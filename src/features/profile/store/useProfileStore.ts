@@ -12,25 +12,25 @@ interface ProfileState {
 
 export const useProfileStore = create<ProfileState>()(
   persist(
-    (set) => ({
+    set => ({
       profile: null,
-      
-      setProfile: (profile) => set({ profile }),
-      
-      updateProfile: (updates) => 
-        set((state) => ({
-          profile: state.profile ? { ...state.profile, ...updates } : null
+
+      setProfile: profile => set({ profile }),
+
+      updateProfile: updates =>
+        set(state => ({
+          profile: state.profile ? { ...state.profile, ...updates } : null,
         })),
-        
+
       clearProfile: () => set({ profile: null }),
     }),
-    { 
+    {
       name: 'profile-storage',
       storage: createJSONStorage(() => AsyncStorage),
       // Solo persistir los datos necesarios del perfil
-      partialize: (state) => ({
-        profile: state.profile 
-          ? { 
+      partialize: state => ({
+        profile: state.profile
+          ? {
               id: state.profile.id,
               name: state.profile.name,
               email: state.profile.email,
@@ -46,13 +46,12 @@ export const useProfileStore = create<ProfileState>()(
               zipCode: state.profile.zipCode,
               city: state.profile.city,
               state: state.profile.state,
-              country: state.profile.country
-
-            } 
-          : null
-      })
-    }
-  )
+              country: state.profile.country,
+            }
+          : null,
+      }),
+    },
+  ),
 );
 
 // Hook de conveniencia para acceder al store

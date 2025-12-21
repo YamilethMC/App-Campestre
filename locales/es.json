@@ -1,11 +1,64 @@
 {
   "auth": {
+    "login": "Iniciar sesión",
     "logout": "Cerrar sesión",
-    "logoutConfirm": "¿Estás seguro de que quieres cerrar sesión?"
+    "logoutConfirm": "¿Estás seguro de que quieres cerrar sesión?",
+    "email": "Correo electrónico",
+    "password": "Contraseña"
   },
   "common": {
     "cancel": "Cancelar",
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "accept": "Aceptar",
+    "save": "Guardar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "close": "Cerrar",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "retry": "Reintentar"
+  },
+  "settings": {
+    "title": "Configuración",
+    "language": "Idioma",
+    "theme": "Tema",
+    "light": "Claro",
+    "dark": "Oscuro",
+    "notifications": "Notificaciones",
+    "notificationsEnabled": "Notificaciones habilitadas"
+  },
+  "legal": {
+    "title": "Documentos Legales",
+    "termsAndConditions": "Términos y Condiciones",
+    "privacyPolicy": "Aviso de Privacidad",
+    "accept": "Acepto los",
+    "mustAccept": "Debes aceptar este documento para continuar",
+    "version": "Versión",
+    "document": "Documento"
+  },
+  "member": {
+    "member": "Socio",
+    "memberCode": "Número de Socio",
+    "status": "Estado",
+    "active": "Activo",
+    "inactive": "Inactivo"
+  },
+  "reservations": {
+    "title": "Reservaciones",
+    "myReservations": "Mis Reservaciones",
+    "makeReservation": "Hacer Reservación",
+    "facility": "Instalación",
+    "date": "Fecha",
+    "time": "Hora",
+    "status": "Estado"
+  },
+  "accountStatement": {
+    "title": "Estado de Cuenta",
+    "balance": "Saldo",
+    "previousBalance": "Saldo Anterior",
+    "currentBalance": "Saldo Actual",
+    "dueDate": "Fecha de Vencimiento"
   },
   "surveys": {
     "title": "Encuestas",

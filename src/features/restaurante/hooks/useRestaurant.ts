@@ -22,61 +22,62 @@ export const useMenus = () => {
     deleteMenu,
     getMenuById,
     getMenusByType,
-    t
+    t,
   };
 };
 
 // Nuevo hook para el restaurante
 export const useRestaurant = () => {
   const { t } = useTranslation('restaurant');
-  
+
   // Función para filtrar platos por búsqueda
   const filterDishes = (dishes: Dish[], searchQuery: string) => {
     if (!searchQuery.trim()) return dishes;
-    
-    return dishes.filter(dish => 
-      dish.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      dish.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      dish.category.toLowerCase().includes(searchQuery.toLowerCase())
+
+    return dishes.filter(
+      dish =>
+        dish.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        dish.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        dish.category.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   };
 
   return {
     filterDishes,
-    t
+    t,
   };
 };
 
 export const useMenuForm = () => {
   const { t } = useTranslation('menus');
-  
+
   const validateMenu = (menu: any) => {
     const errors: Record<string, string> = {};
-    
+
     if (!menu.name?.trim()) {
       errors.name = t('errors.nameRequired');
     }
-    
+
     if (!menu.date) {
       errors.date = t('errors.dateRequired');
     }
-    
+
     if (!menu.type) {
       errors.type = t('errors.typeRequired');
     }
-    
+
     if (!menu.items?.length) {
       errors.items = t('errors.itemsRequired');
     }
-    
+
     return {
       isValid: Object.keys(errors).length === 0,
-      errors
+      errors,
     };
   };
-  
+
   return {
     validateMenu,
-    t
+    t,
   };
 };

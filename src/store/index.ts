@@ -21,44 +21,44 @@ export const useStore = () => {
   const menusStore = useMenusStore();
   const eventStore = useEventStore();
   const reservationStore = useReservationStore();
-  
+
   return {
     // Auth store
     isAuthenticated: authStore.isAuthenticated,
     user: authStore.userId, // Using userId as user
     login: authStore.setAuthData, // Alias for setAuthData
-    logout: authStore.clearAuth,  // Alias for clearAuth
-    
+    logout: authStore.clearAuth, // Alias for clearAuth
+
     // Profile store
     profile: profileStore.profile,
     updateProfile: profileStore.updateProfile,
     clearProfile: profileStore.clearProfile,
-    
+
     // Menus store
     menus: menusStore.menus,
     setMenus: menusStore.setMenus,
     addMenu: menusStore.addMenu,
     updateMenu: menusStore.updateMenu,
     deleteMenu: menusStore.deleteMenu,
-    
+
     // Events store
     events: eventStore.events,
     fetchEvents: eventStore.fetchEvents,
     registerForEvent: eventStore.registerForEvent,
     unregisterFromEvent: eventStore.unregisterFromEvent,
     toggleReminder: eventStore.toggleReminder,
-    
+
     // Reservations store
     reservations: reservationStore.reservations,
     addReservation: reservationStore.addReservation,
     updateReservation: reservationStore.updateReservation,
     deleteReservation: reservationStore.deleteReservation,
     getUserReservations: reservationStore.getUserReservations,
-    
+
     // For backward compatibility
     currentUser: profileStore.profile, // Alias for profile
     setProfile: profileStore.updateProfile, // Alias for updateProfile
-    
+
     // Include additional auth store properties (except those already defined)
     userId: authStore.userId,
     token: authStore.token,
@@ -66,6 +66,6 @@ export const useStore = () => {
     expiresAt: authStore.expiresAt,
     isTokenExpired: authStore.isTokenExpired,
     setAuthData: authStore.setAuthData,
-    clearAuth: authStore.clearAuth
+    clearAuth: authStore.clearAuth,
   };
 };

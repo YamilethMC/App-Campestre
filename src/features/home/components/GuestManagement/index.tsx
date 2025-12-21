@@ -13,10 +13,16 @@ interface GuestManagementProps {
   memberData: MemberData | null;
 }
 
-const GuestManagement: React.FC<GuestManagementProps> = ({ onNewPassPress, onNewTempPassPress, onViewGuestsPress, memberData }) => {
+const GuestManagement: React.FC<GuestManagementProps> = ({
+  onNewPassPress,
+  onNewTempPassPress,
+  onViewGuestsPress,
+  memberData,
+}) => {
   const [showGuestRestrictionModal, setShowGuestRestrictionModal] = useState(false);
 
-  const isSocioOrDependiente = memberData?.user?.type === 'SOCIO' || memberData?.user?.type === 'DEPENDIENTE';
+  const isSocioOrDependiente =
+    memberData?.user?.type === 'SOCIO' || memberData?.user?.type === 'DEPENDIENTE';
   const passesAvailable = memberData?.passesAvailable ? parseInt(memberData.passesAvailable) : 2;
   const hasPassesAvailable = passesAvailable > 0;
 
@@ -53,18 +59,30 @@ const GuestManagement: React.FC<GuestManagementProps> = ({ onNewPassPress, onNew
 
       <View style={styles.guestSection}>
         {isSocioOrDependiente ? (
-          <Text style={styles.pasesAvailableText}>Cuenta con {passesAvailable} pases disponibles</Text>
+          <Text style={styles.pasesAvailableText}>
+            Cuenta con {passesAvailable} pases disponibles
+          </Text>
         ) : (
-          <Text style={styles.restrictionText}>Disponible solo para socios o socios dependientes</Text>
+          <Text style={styles.restrictionText}>
+            Disponible solo para socios o socios dependientes
+          </Text>
         )}
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity
-            style={[styles.filledButton, (!isSocioOrDependiente || !hasPassesAvailable) ? styles.disabledButton : null]}
+            style={[
+              styles.filledButton,
+              !isSocioOrDependiente || !hasPassesAvailable ? styles.disabledButton : null,
+            ]}
             onPress={handleNewPassPress}
             disabled={!isSocioOrDependiente || !hasPassesAvailable}
           >
-            <Text style={[styles.filledButtonText, (!isSocioOrDependiente || !hasPassesAvailable) ? styles.disabledButtonText : null]}>
+            <Text
+              style={[
+                styles.filledButtonText,
+                !isSocioOrDependiente || !hasPassesAvailable ? styles.disabledButtonText : null,
+              ]}
+            >
               + Nuevo invitado
             </Text>
           </TouchableOpacity>
@@ -74,7 +92,12 @@ const GuestManagement: React.FC<GuestManagementProps> = ({ onNewPassPress, onNew
             onPress={handleNewTempPassPress}
             disabled={!isSocioOrDependiente}
           >
-            <Text style={[styles.outlineButtonTempText, !isSocioOrDependiente ? styles.disabledButtonText : null]}>
+            <Text
+              style={[
+                styles.outlineButtonTempText,
+                !isSocioOrDependiente ? styles.disabledButtonText : null,
+              ]}
+            >
               + Nuevo pase temporal
             </Text>
           </TouchableOpacity>
@@ -86,7 +109,12 @@ const GuestManagement: React.FC<GuestManagementProps> = ({ onNewPassPress, onNew
             onPress={handleViewGuestsPress}
             disabled={!isSocioOrDependiente}
           >
-            <Text style={[styles.outlineButtonText, !isSocioOrDependiente ? styles.disabledButtonText : null]}>
+            <Text
+              style={[
+                styles.outlineButtonText,
+                !isSocioOrDependiente ? styles.disabledButtonText : null,
+              ]}
+            >
               Socios relacionados
             </Text>
           </TouchableOpacity>

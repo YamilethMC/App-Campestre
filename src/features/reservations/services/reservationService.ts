@@ -51,8 +51,8 @@ export const mockServices = [
     name: 'Padel',
     description: 'Canchas para disfrutar del padel',
     icon: 'tennisball-outline',
-    color: '#10B981' // Verde
-  }
+    color: '#10B981', // Verde
+  },
 ];
 
 // Mock data for tennis courts (to be used for padel)
@@ -62,7 +62,7 @@ export const mockTennisCourts = [
   { id: 'tc3', name: 'Cancha 3', available: false },
   { id: 'tc4', name: 'Cancha 4', available: true },
   { id: 'tc5', name: 'Cancha 5', available: false },
-  { id: 'tc6', name: 'Cancha 6', available: true }
+  { id: 'tc6', name: 'Cancha 6', available: true },
 ];
 
 // Mock data for restaurant tables
@@ -74,18 +74,38 @@ export const mockRestaurantTables = [
   { id: 't5', name: 'Mesa 5', capacity: 8, available: true },
   { id: 't6', name: 'Mesa 6', capacity: 4, available: false },
   { id: 't7', name: 'Mesa 7', capacity: 6, available: true },
-  { id: 't8', name: 'Mesa 8', capacity: 10, available: true }
+  { id: 't8', name: 'Mesa 8', capacity: 10, available: true },
 ];
 
 // Mock data for time slots
 export const mockTimeSlots = [
-  '08:00', '08:30', '09:00', '09:30',
-  '10:00', '10:30', '11:00', '11:30',
-  '12:00', '12:30', '13:00', '13:30',
-  '14:00', '14:30', '15:00', '15:30',
-  '16:00', '16:30', '17:00', '17:30',
-  '18:00', '18:30', '19:00', '19:30',
-  '20:00', '20:30', '21:00'
+  '08:00',
+  '08:30',
+  '09:00',
+  '09:30',
+  '10:00',
+  '10:30',
+  '11:00',
+  '11:30',
+  '12:00',
+  '12:30',
+  '13:00',
+  '13:30',
+  '14:00',
+  '14:30',
+  '15:00',
+  '15:30',
+  '16:00',
+  '16:30',
+  '17:00',
+  '17:30',
+  '18:00',
+  '18:30',
+  '19:00',
+  '19:30',
+  '20:00',
+  '20:30',
+  '21:00',
 ];
 
 // Export the facility service functions
