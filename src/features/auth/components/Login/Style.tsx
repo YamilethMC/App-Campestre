@@ -17,20 +17,22 @@ const styles = StyleSheet.create({
       fontWeight: '500',
     },
     input: {
-      borderWidth: 1,
+      borderWidth: 2,
       borderColor: COLORS.gray300,
       borderRadius: 8,
       padding: 12,
       fontSize: 16,
       backgroundColor: COLORS.white,
+      color: COLORS.gray900,
     },
     inputError: {
-      borderWidth: 1,
+      borderWidth: 2,
       borderColor: COLORS.warning,
       borderRadius: 8,
       padding: 12,
       fontSize: 16,
       backgroundColor: COLORS.white,
+      color: COLORS.gray900,
     },
     loginButton: {
       backgroundColor: COLORS.primaryExtraDark,
@@ -62,13 +64,17 @@ const styles = StyleSheet.create({
     },
     passwordInput: {
       flex: 1,
-      borderWidth: 1,
+      borderWidth: 2,
       borderColor: COLORS.gray300,
       borderRadius: 8,
       padding: 12,
       fontSize: 16,
       backgroundColor: COLORS.white,
       paddingRight: 48,
+      color: COLORS.gray900,
+    },
+    passwordInputError: {
+      borderColor: COLORS.warning,
     },
     eyeIcon: {
       position: 'absolute',
@@ -77,6 +83,14 @@ const styles = StyleSheet.create({
     },
     eyeIconText: {
       fontSize: 20,
+    },
+    errorText: {
+      color: COLORS.error,
+      fontSize: 12,
+      marginTop: 4,
+    },
+    loginButtonDisabled: {
+      opacity: 0.6,
     },
   });
 

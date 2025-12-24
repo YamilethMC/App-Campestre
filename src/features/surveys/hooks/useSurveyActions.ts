@@ -80,7 +80,7 @@ export const useSurveyActions = () => {
 
     try {
       // Mapear categoría a string para la API
-      let category = '';
+      let category = 'SERVICES';
       if (currentFilter.category !== SurveyCategory.ALL) {
         switch(currentFilter.category) {
           case SurveyCategory.SERVICES:
@@ -96,7 +96,7 @@ export const useSurveyActions = () => {
             category = 'EVENTS';
             break;
           default:
-            category = '';
+            category = 'SERVICES';
         }
       }
 

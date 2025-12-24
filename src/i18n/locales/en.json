@@ -38,7 +38,9 @@
     "alert": {
       "title": "Error",
       "message": "Invalid email or password",
-      "requiredFields": "Email and password are required"
+      "requiredFields": "Email and password are required",
+      "loginError": "Login failed. Please check your credentials",
+      "connectionError": "Could not connect to server. Please check your internet connection"
     }
   },
   "profile": {

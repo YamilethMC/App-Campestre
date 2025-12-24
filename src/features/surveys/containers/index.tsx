@@ -17,7 +17,6 @@ import SurveyCard from '../components/SurveyCard/SurveyCard';
 import useMessages from '../hooks/useMessage';
 import { useSurveyActions } from '../hooks/useSurveyActions';
 import { SurveyCategory } from '../interfaces';
-import { surveyService } from '../services';
 import { useSurveyStore } from '../store';
 import styles from './Style';
 

@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useEffect, useRef, useState } from 'react';
+import { Dimensions, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Banner } from '../interfaces/Banner';
 
 const { width } = Dimensions.get('window');
@@ -125,9 +124,9 @@ const BannerCarousel: React.FC<BannerCarouselProps> = ({ banners, loading = fals
       </ScrollView>
 
       {/* Navigation Controls */}
-      <View style={styles.navigationContainer}>
+      {/* <View style={styles.navigationContainer}> */}
         {/* Previous Button */}
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.navButton}
           onPress={() => {
             const prevIndex = (currentIndex - 1 + banners.length) % banners.length;
@@ -140,10 +139,10 @@ const BannerCarousel: React.FC<BannerCarouselProps> = ({ banners, loading = fals
             size={24}
             color={banners.length <= 1 ? '#ccc' : '#fff'}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         {/* Indicators */}
-        <View style={styles.indicatorsContainer}>
+        {/* <View style={styles.indicatorsContainer}>
           {banners.map((_, index) => (
             <TouchableOpacity
               key={index}
@@ -154,10 +153,10 @@ const BannerCarousel: React.FC<BannerCarouselProps> = ({ banners, loading = fals
               onPress={() => scrollToIndex(index)}
             />
           ))}
-        </View>
+        </View> */}
 
         {/* Next Button */}
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.navButton}
           onPress={() => {
             const nextIndex = (currentIndex + 1) % banners.length;
@@ -171,7 +170,7 @@ const BannerCarousel: React.FC<BannerCarouselProps> = ({ banners, loading = fals
             color={banners.length <= 1 ? '#ccc' : '#fff'}
           />
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 };

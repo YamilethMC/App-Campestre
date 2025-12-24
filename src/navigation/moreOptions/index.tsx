@@ -54,24 +54,11 @@ const MoreOptionsScreen = () => {
       icon: 'newspaper-outline' as const,
       onPress: () => navigation.navigate('Files')
     },
-    { 
-      title: t('settings.title'), 
-      icon: 'settings-outline' as const,
-      //onPress: () => navigation.navigate('Settings')
-      onPress: () => {
-        Alert.alert(
-          t('settings.title'),
-          t('Función no disponible por el momento'),
-          [
-            {
-              text: t('common.ok'),
-              style: 'default',
-            },
-          ],
-          { cancelable: true }
-        );
-      }
-    },
+    // { 
+    //   title: t('settings.title'), 
+    //   icon: 'settings-outline' as const,
+    //   onPress: () => navigation.navigate('Settings')
+    // },
     { 
       title: t('help.title'), 
       icon: 'help-circle-outline' as const,
@@ -109,6 +96,8 @@ const MoreOptionsScreen = () => {
             key={index}
             style={styles.menuItem}
             onPress={item.onPress}
+            activeOpacity={0.7}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
             <Ionicons 
               name={item.icon} 

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text } from 'react-native';
 import Modal from '../../../../shared/components/Modal/Modal';
 import { COLORS } from '../../../../shared/theme/colors';
-import QRCodeComponent from '../QRCodeComponent';
 import { MemberData } from '../../services/homeService';
+import QRCodeComponent from '../QRCodeComponent';
 
 interface QRModalProps {
   visible: boolean;
@@ -17,7 +17,7 @@ const QRModal: React.FC<QRModalProps> = ({
   memberData
 }) => {
   const dateOfAdmission = memberData?.dateOfAdmission
-    ? new Date(memberData.dateOfAdmission).getFullYear()
+    ? new Date(memberData.dateOfAdmission).getUTCFullYear()
     : '2020';
 
   return (

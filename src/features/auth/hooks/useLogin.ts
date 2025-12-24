@@ -16,8 +16,8 @@ import { authService } from '../services/authService';
 import { userProfile } from '../interfaces';
 
 // Hooks
-import useMessages from './useMessages';
 import { AuthStackNavigationProp } from '../../../navigation/authScreen/types';
+import useMessages from './useMessages';
 
 export const useLogin = () => {
   const { messages } = useMessages();
@@ -38,34 +38,18 @@ export const useLogin = () => {
 
   // Función para manejar el login
   const login = async (email: string, password: string): Promise<boolean> => {
-
-    if (!validateEmail(email)) {
-      console.log('Email invalido');
-      return false;
-    }
-
-    if (!email || !password) {
-      setError(messages.ALERTS.REQUIRED_FIELDS);
-      return false;
-    }
-
     setIsLoading(true);
     setError(null);
 
     try {
-      // 1. Llamar al servicio de autenticación
       const { success, token, user, error: authError } = await authService.login(email, password);
 
       if (success && user) {
-        // 2. Separar datos de autenticación y perfil
         const profileData = { ...user};
         
-        // 3. Actualizar los stores
         setAuthData(user.id, token ?? '');
-        // Asegurarse de que profileData cumpla con UserProfile
         setProfile(profileData as userProfile);
         
-        // 4. Verificar si debe cambiar contraseña
         const numericUserId = typeof user.id === 'number' ? user.id : Number(user.id);
 
         if (user.mustChangePassword) {
@@ -80,19 +64,38 @@ export const useLogin = () => {
         }
         setPendingPasswordChange(false);
         
-        // 5. Navegar a la pantalla principal
-        // @ts-ignore - asumiendo que existe la ruta 'MainTabs'
-        // navigation.navigate('Main');
         return true;
       } else {
-        // 5. Manejar error de autenticación
-        setError(authError || 'Error en la autenticación');
+        const errorMessage = authError || messages.ALERTS.LOGIN_ERROR || 'Error en la autenticación';
+        setError(errorMessage);
+        Alert.alert(
+          messages.ALERTS.ERROR,
+          errorMessage,
+          [
+            {
+              text: messages.ALERTS.OK,
+              onPress: () => setError(null),
+            },
+          ],
+          { cancelable: false }
+        );
         return false;
       }
     } catch (err) {
-      // 6. Manejar errores inesperados
       console.error('Login error:', err);
-      setError('Error al conectar con el servidor');
+      const errorMessage = messages.ALERTS.CONNECTION_ERROR || 'Error al conectar con el servidor';
+      setError(errorMessage);
+      Alert.alert(
+        messages.ALERTS.ERROR,
+        errorMessage,
+        [
+          {
+            text: messages.ALERTS.OK,
+            onPress: () => setError(null),
+          },
+        ],
+        { cancelable: false }
+      );
       return false;
     } finally {
       setIsLoading(false);
@@ -134,20 +137,6 @@ export const useLogin = () => {
     }
   };
 
-  // Mostrar alerta de error si existe
-  if (error) {
-    Alert.alert(
-      messages.ALERTS.ERROR,
-      error,
-      [
-        {
-          text: messages.ALERTS.OK,
-          onPress: clearError,
-        },
-      ],
-      { cancelable: false }
-    );
-  }
 
   return {
     email,

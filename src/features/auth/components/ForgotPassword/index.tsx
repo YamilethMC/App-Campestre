@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { authService } from '../../services/authService';
 
 export const ForgotPasswordScreen: React.FC = () => {
@@ -128,14 +128,14 @@ export const ForgotPasswordScreen: React.FC = () => {
                   📧 Email
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={[styles.methodButton, method === 'whatsapp' && styles.methodButtonActive]}
                 onPress={() => setMethod('whatsapp')}
               >
                 <Text style={[styles.methodButtonText, method === 'whatsapp' && styles.methodButtonTextActive]}>
                   📱 WhatsApp
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
 
@@ -149,14 +149,6 @@ export const ForgotPasswordScreen: React.FC = () => {
             ) : (
               <Text style={styles.buttonText}>Enviar código</Text>
             )}
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            // @ts-ignore
-            onPress={() => navigation.navigate('Login')} 
-            style={styles.backButton}
-          >
-            <Text style={styles.backButtonText}>← Volver al inicio de sesión</Text>
           </TouchableOpacity>
         </View>
       </View>

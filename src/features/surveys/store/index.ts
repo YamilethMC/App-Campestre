@@ -43,7 +43,7 @@ export const useSurveyStore = create<SurveyStore>((set, get) => ({
   completedSurveys: 0,
   averageRating: 0,
   currentFilter: {
-    category: SurveyCategory.ALL,
+    category: SurveyCategory.SERVICES,
     status: 'activas',
   },
   loading: false,

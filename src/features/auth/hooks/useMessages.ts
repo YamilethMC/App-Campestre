@@ -24,7 +24,9 @@ const useMessages = () => {
         MESSAGE: t('auth.alert.message'),
         REQUIRED_FIELDS: t('auth.alert.requiredFields'),
         ERROR: t('common.error'),
-        OK: t('common.ok')
+        OK: t('common.ok'),
+        LOGIN_ERROR: t('auth.alert.loginError'),
+        CONNECTION_ERROR: t('auth.alert.connectionError')
       }
     };
   
