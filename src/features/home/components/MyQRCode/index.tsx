@@ -2,10 +2,10 @@ import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { COLORS } from '../../../../shared/theme/colors';
+import { MemberData } from '../../services/homeService';
 import QRCodeComponent from '../QRCodeComponent';
 import QRModal from '../QRModal';
 import styles from './Style';
-import { MemberData } from '../../services/homeService';
 
 interface MyQRCodeProps {
   memberData: MemberData | null;
@@ -15,7 +15,7 @@ const MyQRCode: React.FC<MyQRCodeProps> = ({ memberData }) => {
   const [qrModalVisible, setQrModalVisible] = useState(false);
   console.log('Member data in QR component:', memberData);
   const dateOfAdmission = memberData?.dateOfAdmission
-    ? new Date(memberData.dateOfAdmission).getFullYear()
+    ? new Date(memberData.dateOfAdmission).getUTCFullYear()
     : '2020';
 
   return (

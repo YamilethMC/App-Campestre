@@ -10,7 +10,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({
   onStatusChange,
 }) => {
   const categories = [
-    { value: SurveyCategory.ALL, label: 'Todas' },
+    // { value: SurveyCategory.ALL, label: 'Todas' },
     { value: SurveyCategory.SERVICES, label: 'Servicios' },
     { value: SurveyCategory.RESTAURANT, label: 'Restaurante' },
     { value: SurveyCategory.SPORTS, label: 'Deportes' },

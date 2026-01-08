@@ -54,6 +54,7 @@ const MoreOptionsScreen = () => {
       icon: 'newspaper-outline' as const,
       onPress: () => navigation.navigate('Files'),
     },
+<<<<<<< HEAD
     {
       title: t('settings.title'),
       icon: 'settings-outline' as const,
@@ -74,6 +75,15 @@ const MoreOptionsScreen = () => {
     },
     {
       title: t('help.title'),
+=======
+    // { 
+    //   title: t('settings.title'), 
+    //   icon: 'settings-outline' as const,
+    //   onPress: () => navigation.navigate('Settings')
+    // },
+    { 
+      title: t('help.title'), 
+>>>>>>> d251b39a25dc3ac690b806c8c15ba4a0f6985b99
       icon: 'help-circle-outline' as const,
       onPress: () => navigation.navigate('HelpCenter'),
     },
@@ -105,8 +115,24 @@ const MoreOptionsScreen = () => {
     <View style={styles.container}>
       <View style={styles.menuContainer}>
         {menuItems.map((item, index) => (
+<<<<<<< HEAD
           <TouchableOpacity key={index} style={styles.menuItem} onPress={item.onPress}>
             <Ionicons name={item.icon} size={24} color={COLORS.primary} style={styles.icon} />
+=======
+          <TouchableOpacity
+            key={index}
+            style={styles.menuItem}
+            onPress={item.onPress}
+            activeOpacity={0.7}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Ionicons 
+              name={item.icon} 
+              size={24} 
+              color={COLORS.primary} 
+              style={styles.icon} 
+            />
+>>>>>>> d251b39a25dc3ac690b806c8c15ba4a0f6985b99
             <Text style={styles.menuText}>{item.title}</Text>
             <Ionicons name="chevron-forward" size={20} color={COLORS.gray400} />
           </TouchableOpacity>

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Platform, KeyboardAvoidingView, ScrollView, SafeAreaView, View, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 // Styles
 import styles from './Style';
@@ -15,6 +15,20 @@ import useMessages from '../hooks/useMessages';
 const LoginContainer = () => {
   const { email, password, isLoading, emailError, setEmail, setPassword, handleLogin } = useLogin();
   const { messages } = useMessages();
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const onShow = () => setKeyboardVisible(true);
+    const onHide = () => setKeyboardVisible(false);
+
+    const showSub = Keyboard.addListener('keyboardDidShow', onShow);
+    const hideSub = Keyboard.addListener('keyboardDidHide', onHide);
+
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -28,7 +42,7 @@ const LoginContainer = () => {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <Logo />
+          {!keyboardVisible && <Logo />}
           <Text style={styles.title}>{messages.CONTAINER.TITLE}</Text>
           <View style={styles.formContainer}>
             <LoginForm

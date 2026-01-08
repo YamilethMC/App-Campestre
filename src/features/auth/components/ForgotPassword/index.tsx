@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
 import {
   View,
@@ -8,7 +9,11 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
+=======
+>>>>>>> d251b39a25dc3ac690b806c8c15ba4a0f6985b99
 import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { authService } from '../../services/authService';
 
 export const ForgotPasswordScreen: React.FC = () => {
@@ -137,7 +142,7 @@ export const ForgotPasswordScreen: React.FC = () => {
                   📧 Email
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={[styles.methodButton, method === 'whatsapp' && styles.methodButtonActive]}
                 onPress={() => setMethod('whatsapp')}
               >
@@ -149,7 +154,7 @@ export const ForgotPasswordScreen: React.FC = () => {
                 >
                   📱 WhatsApp
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
 
@@ -164,6 +169,7 @@ export const ForgotPasswordScreen: React.FC = () => {
               <Text style={styles.buttonText}>Enviar código</Text>
             )}
           </TouchableOpacity>
+<<<<<<< HEAD
 
           <TouchableOpacity
             // @ts-ignore
@@ -172,6 +178,8 @@ export const ForgotPasswordScreen: React.FC = () => {
           >
             <Text style={styles.backButtonText}>← Volver al inicio de sesión</Text>
           </TouchableOpacity>
+=======
+>>>>>>> d251b39a25dc3ac690b806c8c15ba4a0f6985b99
         </View>
       </View>
     );

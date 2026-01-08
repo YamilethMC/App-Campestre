@@ -2,10 +2,10 @@ import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import QRModal from '../QRModal';
 import { COLORS } from '../../../../shared/theme/colors';
 import { useAuthStore } from '../../../auth/store/useAuthStore';
 import { MemberData } from '../../services/homeService';
+import QRModal from '../QRModal';
 
 interface HeaderProps {
   navigation?: any;
@@ -25,7 +25,7 @@ const HomeHeader: React.FC<HeaderProps> = ({ navigation, memberData }) => {
   };
 
   const memberSinceYear = memberData?.dateOfAdmission
-    ? new Date(memberData.dateOfAdmission).getFullYear()
+    ? new Date(memberData.dateOfAdmission).getUTCFullYear()
     : '2020';
 
   return (

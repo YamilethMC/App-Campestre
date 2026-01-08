@@ -3,22 +3,26 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import AccountStatementsScreen from '../../features/account-statements/containers';
+import { ChangePasswordScreen } from '../../features/auth/components/ChangePassword';
 import EventsScreen from '../../features/events/containers';
+import FilesScreen from '../../features/files';
+import HelpCenterScreen from '../../features/help-center';
 import HomeScreen from '../../features/home';
+<<<<<<< HEAD
 import MenuScreen from '../../features/menu/containers';
+=======
+import MenuScreen from '../../features/menu/containers/';
+import MyReservationsScreen from '../../features/my-reservations';
+import NotificationsScreen from '../../features/notify';
+>>>>>>> d251b39a25dc3ac690b806c8c15ba4a0f6985b99
 import ProfileScreen from '../../features/profile/containers';
 import ReservationScreen from '../../features/reservations';
 import SurveysScreen from '../../features/surveys';
-import AccountStatementsScreen from '../../features/account-statements/containers';
-import NotificationsScreen from '../../features/notify';
 import MainHeader from '../../shared/components/MainHeader/Container';
 import { COLORS } from '../../shared/theme/colors';
 import MoreOptionsScreen from '../moreOptions';
 import UserHeader from './UserHeader';
-import HelpCenterScreen from '../../features/help-center';
-import FilesScreen from '../../features/files';
-import MyReservationsScreen from '../../features/my-reservations';
-import { ChangePasswordScreen } from '../../features/auth/components/ChangePassword';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -135,8 +139,26 @@ const MoreStack = () => (
       options={{ headerShown: false }}
     />
 
+<<<<<<< HEAD
     <Stack.Screen name="HelpCenter" component={HelpCenterScreen} options={{ headerShown: false }} />
     <Stack.Screen name="Files" component={FilesScreen} options={{ headerShown: false }} />
+=======
+    <Stack.Screen
+      name="HelpCenter"
+      component={HelpCenterScreen}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="Files"
+      component={FilesScreen}
+      options={{ headerShown: false }}
+    />
+    {/* <Stack.Screen
+      name="Settings"
+      component={SettingsScreen}
+      options={{ headerShown: false }}
+    /> */}
+>>>>>>> d251b39a25dc3ac690b806c8c15ba4a0f6985b99
     <Stack.Screen
       name="ChangePassword"
       component={ChangePasswordScreen}

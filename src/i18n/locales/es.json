@@ -42,7 +42,9 @@
     "alert": {
       "title": "Error",
       "message": "Correo electrónico o contraseña inválidos",
-      "requiredFields": "Se requieren el correo electrónico y la contraseña"
+      "requiredFields": "Se requieren el correo electrónico y la contraseña",
+      "loginError": "Error al iniciar sesión. Por favor verifica tus credenciales",
+      "connectionError": "No se pudo conectar con el servidor. Verifica tu conexión a internet"
     }
   },
   "profile": {

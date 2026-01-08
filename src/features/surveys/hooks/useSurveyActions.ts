@@ -87,6 +87,7 @@ export const useSurveyActions = () => {
       setStoreLoading(true);
       setError(null);
 
+<<<<<<< HEAD
       try {
         // Mapear categoría a string para la API
         let category = '';
@@ -107,6 +108,27 @@ export const useSurveyActions = () => {
             default:
               category = '';
           }
+=======
+    try {
+      // Mapear categoría a string para la API
+      let category = 'SERVICES';
+      if (currentFilter.category !== SurveyCategory.ALL) {
+        switch(currentFilter.category) {
+          case SurveyCategory.SERVICES:
+            category = 'SERVICES';
+            break;
+          case SurveyCategory.RESTAURANT:
+            category = 'RESTAURANT';
+            break;
+          case SurveyCategory.SPORTS:
+            category = 'SPORTS';
+            break;
+          case SurveyCategory.EVENTS:
+            category = 'EVENTS';
+            break;
+          default:
+            category = 'SERVICES';
+>>>>>>> d251b39a25dc3ac690b806c8c15ba4a0f6985b99
         }
 
         const order = 'asc';
