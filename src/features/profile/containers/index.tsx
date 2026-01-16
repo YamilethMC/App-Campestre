@@ -47,8 +47,6 @@ const ProfileContainer = () => {
 
   const [showAddFamilyForm, setShowAddFamilyForm] = useState(false);
   const [showGuestRestrictionModal, setShowGuestRestrictionModal] = useState(false);
-console.log('el profile esssssssssss: ', profile);
-console.log('el phone es en containerrrrrrrrrrrrr: ', profile?.phone)
   if (!currentUser) {
     return (
       <SafeAreaView style={styles.container}>

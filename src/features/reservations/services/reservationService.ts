@@ -1,3 +1,5 @@
+import { COLORS } from '../../../shared/theme/colors';
+
 // Mock data for services - Commented out as per requirements
 /*export const mockServices = [
   {
@@ -12,14 +14,14 @@
     name: 'Golf',
     description: 'Campo de golf y equipamiento',
     icon: 'golf-outline',
-    color: '#3B82F6' // Azul
+    color: COLORS.info // Azul
   },
   {
     id: 'restaurante',
     name: 'Restaurante',
     description: 'Reserva de mesas y menú gourmet',
     icon: 'restaurant-outline',
-    color: '#EF4444' // Rojo
+    color: COLORS.error // Rojo
   },
   {
     id: 'spa',
@@ -33,14 +35,14 @@
     name: 'Gimnasio',
     description: 'Equipos y clases de fitness',
     icon: 'barbell-outline',
-    color: '#F59E0B' // Naranja
+    color: COLORS.warning // Naranja
   },
   {
     id: 'lockers',
     name: 'Lockers',
     description: 'Almacenamiento seguro para pertenencias',
     icon: 'briefcase-outline',
-    color: '#6B7280' // Gris
+    color: COLORS.gray500 // Gris
   }
 ];*/
 
@@ -51,7 +53,7 @@ export const mockServices = [
     name: 'Padel',
     description: 'Canchas para disfrutar del padel',
     icon: 'tennisball-outline',
-    color: '#10B981' // Verde
+    color: COLORS.primary // Verde
   }
 ];
 

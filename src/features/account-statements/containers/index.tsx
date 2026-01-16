@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, SafeAreaView, ScrollView } from 'react-native';
+import { COLORS } from '../../../shared/theme/colors';
 import AccountStatementCard from '../components/AccountStatementCard';
 import AccountStatementDetail from '../components/AccountStatementDetail';
 import AccountStatementHeader from '../components/AccountStatementHeader';
@@ -24,50 +25,17 @@ const AccountStatementsContainer = () => {
     handleDownload
   } = useAccountStatements();
 
-  // const {
-  //   statements,
-  //   getFilteredStatements,
-  //   setFilter,
-  //   setLoading,
-  //   setError,
-  //   setStatements,
-  // } = useAccountStatementStore();
-
-  // if (error) {
-  //   Alert.alert('Error', error);
-  // }
-
-  // const handleCardPress = (statement: any) => {
-  //   // setSelectedStatement(statement);
-  //   // setShowDetail(true);
-  //   console.log('statement', statement);
-  // };
-
   const handleCloseDetail = () => {
     setShowDetail(false);
-    // setSelectedStatement(null);
   };
 
   const hasStatements = statements.length > 0;
-  // const hasNoFilteredStatements = statements.length > 0 && filteredStatements.length === 0;
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#F9FAFB' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.gray50 }}>
       <ScrollView>
         {/* Header */}
         <AccountStatementHeader />
-
-        {/* List of Account Statements */}
-        {/* {!loading && !hasStatements && (
-          <EmptyState
-            message={statements.length > 0 ? messages.CONTAINER.NO_STATEMENTS1 : messages.CONTAINER.NO_STATEMENTS2}
-          />
-        )} */}
-
-        {/* {hasNoFilteredStatements && (
-          <EmptyState message= {messages.CONTAINER.NO_STATEMENTS_FILTERS} />
-        )} */}
-
         {hasStatements && statements.map((statement) => (
           <AccountStatementCard
             key={statement.id}

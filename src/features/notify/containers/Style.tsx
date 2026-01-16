@@ -4,7 +4,7 @@ import { COLORS } from '../../../shared/theme/colors';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9f9f9', // Fondo más cálido que el blanco puro
+    backgroundColor: COLORS.gray50,
   },
   scrollContent: {
     flexGrow: 1,
@@ -18,11 +18,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#ffffff',
+    backgroundColor: COLORS.white,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: COLORS.gray200,
     elevation: 3,
-    shadowColor: '#000',
+    shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -31,11 +31,11 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#2c3e50',
+    color: COLORS.gray900,
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#7f8c8d',
+    color: COLORS.gray500,
     marginTop: 4,
   },
   notificationsList: {
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   },
   noNotificationsText: {
     fontSize: 18,
-    color: '#95a5a6',
+    color: COLORS.gray400,
     marginTop: 16,
     textAlign: 'center',
     fontWeight: '600',
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   },
   loadingMoreText: {
     fontSize: 16,
-    color: '#7f8c8d',
+    color: COLORS.gray500,
     fontStyle: 'italic',
     fontWeight: '500',
   },
@@ -92,15 +92,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     borderRadius: 21,
     borderWidth: 1,
-    borderColor: '#e74c3c', // Rojo más vibrante
+    borderColor: COLORS.error,
     backgroundColor: 'transparent',
   },
   currentPageButton: {
-    backgroundColor: '#e74c3c', // Rojo más vibrante
-    borderColor: '#e74c3c',
+    backgroundColor: COLORS.error,
+    borderColor: COLORS.error,
   },
   currentPageButtonText: {
-    color: '#ffffff',
+    color: COLORS.white,
     fontWeight: '700',
   },
   paginationArrowButton: {
@@ -108,19 +108,19 @@ const styles = StyleSheet.create({
     height: 42,
     borderRadius: 21,
     borderWidth: 1,
-    borderColor: '#3498db', // Azul más vibrante
+    borderColor: COLORS.info,
     backgroundColor: 'transparent',
   },
   paginationArrowButtonDisabled: {
-    backgroundColor: '#bdc3c7',
-    borderColor: '#bdc3c7',
+    backgroundColor: COLORS.gray400,
+    borderColor: COLORS.gray400,
   },
   paginationArrowButtonText: {
-    color: '#3498db', // Azul más vibrante
+    color: COLORS.info,
     fontWeight: '700',
   },
   paginationArrowButtonTextDisabled: {
-    color: '#7f8c8d',
+    color: COLORS.gray500,
   },
   pageNumberButtonText: {
     fontSize: 15,

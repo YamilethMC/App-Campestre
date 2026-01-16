@@ -36,8 +36,6 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
   // Filter guests by type
   const filteredGuests = guests.filter(guest => guest.user?.type === activeGuestType);
 
-  console.log('filteredGuests', filteredGuests);
-
   // Check if we have any guests of a specific type
   // const hasInvitados = guests.some(guest => guest.type === 'INVITADO');
   const hasDependientes = guests.some(guest => guest.user?.type === 'DEPENDIENTE');

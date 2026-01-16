@@ -5,35 +5,64 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.white,
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 12,
     marginBottom: 16,
   },
-  row: {
+  filterGroup: {
+    marginVertical: 8,
+  },
+  scrollWrapper: {
+    position: 'relative',
+  },
+  categoryScroll: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 8,
+  },
+  categoryScrollContent: {
+    paddingRight: 16,
   },
   filterButton: {
-    flex: 1,
-    marginHorizontal: 4,
-    paddingHorizontal: 12,
+    paddingHorizontal: 14,
     paddingVertical: 10,
     borderWidth: 1,
     borderColor: COLORS.gray300,
-    borderRadius: 8,
+    borderRadius: 20,
+    marginRight: 8,
+  },
+  filterButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  filterIcon: {
+    marginRight: 2,
   },
   activeFilterButton: {
     backgroundColor: COLORS.primary,
     borderColor: COLORS.primary,
   },
   filterButtonText: {
-    fontSize: 14,
+    fontSize: 13,
     color: COLORS.gray700,
-    textAlign: 'center',
   },
   activeFilterButtonText: {
     color: COLORS.white,
     fontWeight: '600',
+  },
+  fadeLeft: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: 20,
+    backgroundColor: 'transparent',
+  },
+  fadeRight: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    bottom: 0,
+    width: 20,
+    backgroundColor: 'transparent',
   },
 });
 

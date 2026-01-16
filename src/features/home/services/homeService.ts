@@ -196,7 +196,6 @@ export const deleteGuest = async (guestId: number): Promise<{ success: boolean; 
       status: 401
     };
   }
-console.log('guestId:', guestId);
   try {
     const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/club-members/${guestId}`, {
       method: 'DELETE',

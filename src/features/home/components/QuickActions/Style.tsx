@@ -44,12 +44,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   carActionItem: {
-    backgroundColor: '#E0F2FE', // Pastel blue for car
-    shadowColor: '#0EA5E9',     // Blue shadow
+    backgroundColor: '#E0F2FE',
+    shadowColor: COLORS.info,
   },
   waiterActionItem: {
-    backgroundColor: '#FFEDD5', // Pastel orange for waiter
-    shadowColor: '#F97316',     // Orange shadow
+    backgroundColor: '#FFEDD5',
+    shadowColor: COLORS.warning,
   },
   disabledActionItem: {
     backgroundColor: COLORS.gray300,
@@ -65,10 +65,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   carIconContainer: {
-    backgroundColor: 'rgba(16, 185, 129, 0.3)', // Green tint for car (transportation)
+    backgroundColor: 'rgba(16, 185, 129, 0.3)',
   },
   waiterIconContainer: {
-    backgroundColor: 'rgba(249, 115, 22, 0.3)', // Orange tint for waiter (service)
+    backgroundColor: 'rgba(249, 115, 22, 0.3)',
   },
   quickActionText: {
     fontSize: 14,
@@ -76,10 +76,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   carActionText: {
-    color: '#0369A1', // Darker blue for car text
+    color: '#0369A1',
   },
   waiterActionText: {
-    color: '#B45309', // Darker orange for waiter text
+    color: '#B45309',
   },
   disabledActionText: {
     color: COLORS.gray600,

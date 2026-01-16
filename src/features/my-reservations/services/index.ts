@@ -51,7 +51,6 @@ export const reservationService = {
       }
 
       const result: GetReservationsResponse = await response.json();
-      console.log('result en getReservations', result);
       return {
         success: true,
         data: result.data,

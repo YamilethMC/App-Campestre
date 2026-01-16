@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
   logoText: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: COLORS.primaryExtraDark,
+    color: COLORS.primaryDark,
   },
   subtitleText: {
     fontSize: 16,

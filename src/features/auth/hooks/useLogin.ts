@@ -53,7 +53,6 @@ export const useLogin = () => {
         const numericUserId = typeof user.id === 'number' ? user.id : Number(user.id);
 
         if (user.mustChangePassword) {
-          console.log('Debe cambiar contraseña');
           setPendingPasswordChange(true);
           // @ts-ignore
           navigation.navigate('ChangePassword', { 

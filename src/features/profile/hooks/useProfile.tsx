@@ -17,7 +17,6 @@ export const useProfile = () => {
   const { userId, token } = useAuthStore();
 
   const currentUser = profile as userProfile | null;
-  console.log('.......---.-.-.-.-. currentUser: ', currentUser)
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingContactEmergency, setIsEditingContactEmergency] = useState(false);
 
@@ -25,7 +24,6 @@ export const useProfile = () => {
     const loadMember = async () => {
       if (userId && token) {
         const response = await memberService.getMemberById(userId, token);
-        console.log('---------------------------------response: ', response)
         if (response.success && response.data) {
           updateProfile(response.data);
         } else {

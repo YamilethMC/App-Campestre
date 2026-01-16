@@ -72,11 +72,11 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderBottomWidth: 1,
-    borderBottomColor: '#EDF2F7',
+    borderBottomColor: COLORS.gray100,
   },
   itemText: {
     fontSize: 16,
-    color: '#1A202C',
+    color: COLORS.gray900,
     flex: 1,
   },
 });

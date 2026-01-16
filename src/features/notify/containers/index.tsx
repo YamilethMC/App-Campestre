@@ -1,11 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import Button from '../../../shared/components/Button';
 import { COLORS } from '../../../shared/theme/colors';
 import NotificationCard from '../components/NotificationCard';
+import NotificationDetailModal from '../components/NotificationDetailModal';
 import SearchBar from '../components/SearchBar';
 import { useNotifications } from '../hooks';
+import { Notification } from '../interfaces';
 import styles from './Style';
 
 const NotificationsScreen: React.FC = () => {
@@ -20,6 +22,19 @@ const NotificationsScreen: React.FC = () => {
     handleGoToPage,
     handleSearch,
   } = useNotifications();
+
+  const [selectedNotification, setSelectedNotification] = useState<Notification | null>(null);
+  const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
+
+  const handleNotificationPress = (notification: Notification) => {
+    setSelectedNotification(notification);
+    setIsDetailModalVisible(true);
+  };
+
+  const handleCloseDetailModal = () => {
+    setIsDetailModalVisible(false);
+    setSelectedNotification(null);
+  };
 
   // Show error if there's an error
   useEffect(() => {
@@ -92,6 +107,7 @@ const NotificationsScreen: React.FC = () => {
                 <NotificationCard
                   key={notification.id}
                   notification={notification}
+                  onPress={handleNotificationPress}
                 />
               ))
             ) : (
@@ -167,6 +183,13 @@ const NotificationsScreen: React.FC = () => {
           )}
         </View>
       </ScrollView>
+
+      {/* Notification Detail Modal */}
+      <NotificationDetailModal
+        visible={isDetailModalVisible}
+        notification={selectedNotification}
+        onClose={handleCloseDetailModal}
+      />
     </SafeAreaView>
   );
 };

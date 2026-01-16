@@ -4,7 +4,7 @@ import { COLORS } from '../../../shared/theme/colors';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: COLORS.gray50,
     paddingBottom: 100,
   },
   header: {
@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
     borderBottomRightRadius: 20,
   },
   headerText: {
-    color: 'white',
+    color: COLORS.white,
     fontSize: 18,
     fontWeight: '600',
     textAlign: 'center',
@@ -31,13 +31,13 @@ export const styles = StyleSheet.create({
     marginBottom: 10,
   },
   searchInput: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     borderRadius: 10,
     paddingHorizontal: 15,
     paddingVertical: 12,
     fontSize: 16,
     elevation: 2,
-    shadowColor: '#000',
+    shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,

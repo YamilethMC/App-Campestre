@@ -12,6 +12,7 @@ import {
   Platform,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { COLORS } from '../../../../shared/theme/colors';
 import { authService } from '../../services/authService';
 import { useAuth } from '../../store/useAuthStore';
 
@@ -61,9 +62,9 @@ export const ChangePasswordScreen: React.FC = () => {
     const validation = validatePassword(password);
     const validCount = 5 - validation.errors.length;
 
-    if (validCount === 5) return { strength: 'Fuerte', color: '#10b981' };
-    if (validCount >= 3) return { strength: 'Media', color: '#f59e0b' };
-    return { strength: 'Débil', color: '#ef4444' };
+    if (validCount === 5) return { strength: 'Fuerte', color: COLORS.success };
+    if (validCount >= 3) return { strength: 'Media', color: COLORS.warning };
+    return { strength: 'Débil', color: COLORS.error };
   };
 
   const { setPendingPasswordChange } = useAuth();
@@ -272,7 +273,7 @@ export const ChangePasswordScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: COLORS.gray100,
   },
   content: {
     flexGrow: 1,
@@ -282,7 +283,7 @@ const styles = StyleSheet.create({
   warningBox: {
     backgroundColor: '#fff3cd',
     borderWidth: 1,
-    borderColor: '#ffc107',
+    borderColor: COLORS.warning,
     borderRadius: 8,
     padding: 16,
     marginBottom: 24,
@@ -337,7 +338,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   button: {
-    backgroundColor: '#2c5f2d',
+    backgroundColor: COLORS.primaryDark,
     borderRadius: 8,
     padding: 16,
     alignItems: 'center',
@@ -362,10 +363,10 @@ const styles = StyleSheet.create({
   passwordRequirements: {
     marginTop: 12,
     padding: 12,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: COLORS.gray50,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#e9ecef',
+    borderColor: COLORS.gray200,
   },
   strengthContainer: {
     flexDirection: 'row',
@@ -392,12 +393,12 @@ const styles = StyleSheet.create({
   },
   requirementMet: {
     fontSize: 13,
-    color: '#10b981',
+    color: COLORS.success,
     marginBottom: 4,
   },
   requirementUnmet: {
     fontSize: 13,
-    color: '#6b7280',
+    color: COLORS.gray500,
     marginBottom: 4,
   },
 });

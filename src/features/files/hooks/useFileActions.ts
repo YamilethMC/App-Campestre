@@ -112,8 +112,6 @@ export const useFileActions = () => {
 
       const downloadUrl = response.data;
 
-      console.log("downloadUrl", downloadUrl)
-
       if (!downloadUrl) {
         Alert.alert('Error', 'No se pudo obtener la URL de descarga del archivo');
         return;

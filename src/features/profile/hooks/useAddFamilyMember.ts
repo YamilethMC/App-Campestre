@@ -159,7 +159,6 @@ export const useAddFamilyMember = ({ memberId, guestType = 'INVITADO', onAddSucc
           type: 'GUEST'
         };
 
-        console.log('Creating guest pass with /pass endpoint:', passData);
         const result = await passService.createPass(passData);
 
         if (result.success && result.data) {
@@ -195,7 +194,6 @@ export const useAddFamilyMember = ({ memberId, guestType = 'INVITADO', onAddSucc
           expireAt: formData.expireAt && formData.expireAt.trim() !== '' ? formData.expireAt : undefined,
           RFC: formData.RFC && formData.RFC.trim() !== '' ? formData.RFC : undefined,
         };
-        console.log('Creating temporal pass with /club-members endpoint:', submitData);
         const result = await memberService.addFamilyMember(submitData, token);
 
         if (result.success && result.data) {

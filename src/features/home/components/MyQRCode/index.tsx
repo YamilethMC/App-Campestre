@@ -13,7 +13,6 @@ interface MyQRCodeProps {
 
 const MyQRCode: React.FC<MyQRCodeProps> = ({ memberData }) => {
   const [qrModalVisible, setQrModalVisible] = useState(false);
-  console.log('Member data in QR component:', memberData);
   const dateOfAdmission = memberData?.dateOfAdmission
     ? new Date(memberData.dateOfAdmission).getUTCFullYear()
     : '2020';

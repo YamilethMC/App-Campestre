@@ -231,7 +231,7 @@ const EventsContainer = () => {
         )}
 
         {/* Pagination controls - only show if there are pages to display */}
-        {pagination.totalPages > 1 && (
+        {pagination.totalPages > 0 && (
           <View style={styles.paginationControlsContainer}>
             <View style={styles.paginationRow}>
               <Button

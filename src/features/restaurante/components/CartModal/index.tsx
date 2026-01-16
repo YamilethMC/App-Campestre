@@ -2,6 +2,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { Alert, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { COLORS } from '../../../../shared/theme/colors';
 import useMessages from '../../hooks/useRestaurantMessages';
 import { CartItem, CartModalProps } from '../../interfaces/dishInterface';
 import { useCartStore } from '../../store/useCartStore';
@@ -115,7 +116,7 @@ const CartModal: React.FC<CartModalProps> = ({ visible, onClose }) => {
                   style={styles.removeItemButton} 
                   onPress={() => handleRemoveItem(item.id)}
                 >
-                  <Ionicons name="trash-outline" size={20} color="#EF4444" />
+                  <Ionicons name="trash-outline" size={20} color={COLORS.error} />
                 </TouchableOpacity>
               </View>
             ))
@@ -164,15 +165,15 @@ const CartModal: React.FC<CartModalProps> = ({ visible, onClose }) => {
 const getCategoryIcon = (category: string) => {
   const categoryLower = category.toLowerCase();
   if (categoryLower.includes('ropa') || categoryLower.includes('camisa') || categoryLower.includes('pantalon')) {
-    return <Ionicons name="shirt-outline" size={14} color="#6B7280" />;
+    return <Ionicons name="shirt-outline" size={14} color={COLORS.gray500} />;
   } else if (categoryLower.includes('accesorio') || categoryLower.includes('anillo') || categoryLower.includes('collar')) {
-    return <Ionicons name="bag-handle-outline" size={14} color="#6B7280" />;
+    return <Ionicons name="bag-handle-outline" size={14} color={COLORS.gray500} />;
   } else if (categoryLower.includes('evento') || categoryLower.includes('boleto') || categoryLower.includes('entrada')) {
-    return <Ionicons name="ticket-outline" size={14} color="#6B7280" />;
+    return <Ionicons name="ticket-outline" size={14} color={COLORS.gray500} />;
   } else if (categoryLower.includes('deporte') || categoryLower.includes('balon') || categoryLower.includes('raqueta')) {
-    return <Ionicons name="football-outline" size={14} color="#6B7280" />;
+    return <Ionicons name="football-outline" size={14} color={COLORS.gray500} />;
   } else {
-    return <Ionicons name="restaurant-outline" size={14} color="#6B7280" />; // Default for restaurant items
+    return <Ionicons name="restaurant-outline" size={14} color={COLORS.gray500} />; // Default for restaurant items
   }
 };
 

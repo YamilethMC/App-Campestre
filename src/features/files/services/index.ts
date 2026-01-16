@@ -115,7 +115,6 @@ export const fileService = {
 
       // Parse the JSON response to get the signed URL
       const result = await response.json();
-      console.log('Download API response:', result);
 
       // Return the signed URL from the response
       if (result.data && result.data.signedUrl) {
@@ -147,7 +146,6 @@ export const fileService = {
           status: response.status
         };
       } else {
-        console.log('Response structure:', JSON.stringify(result, null, 2));
         return {
           success: false,
           error: 'No se encontró la URL de descarga en la respuesta',

@@ -29,7 +29,6 @@ export const bannerService = {
       }
 
       const data = await response.json();
-      console.log('el response en banner es: ', data)
 
       // Transform the API response to match the expected format
       const transformedData = {

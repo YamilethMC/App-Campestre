@@ -12,7 +12,6 @@ export const useSurveyActions = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
-  const [status, setStatus] = useState<'activas' | 'completadas'>('activas');
 
   const {
     surveys,
@@ -80,7 +79,7 @@ export const useSurveyActions = () => {
 
     try {
       // Mapear categoría a string para la API
-      let category = 'SERVICES';
+      let category = '';
       if (currentFilter.category !== SurveyCategory.ALL) {
         switch(currentFilter.category) {
           case SurveyCategory.SERVICES:
@@ -96,7 +95,7 @@ export const useSurveyActions = () => {
             category = 'EVENTS';
             break;
           default:
-            category = 'SERVICES';
+            category = '';
         }
       }
 
@@ -115,10 +114,10 @@ export const useSurveyActions = () => {
         // Usar los datos y la paginación correspondiente según el estado actual
         let surveysData, meta;
 
-        if (status === 'activas') {
+        if (currentFilter.status === 'activas') {
           surveysData = response.data.unansweredSurveys;
           meta = response.data.unansweredMeta;
-        } else if (status === 'completadas') {
+        } else if (currentFilter.status === 'completadas') {
           surveysData = response.data.answeredSurveys;
           meta = response.data.answeredMeta;
         } else {
@@ -153,8 +152,8 @@ export const useSurveyActions = () => {
     }
   }, [
     currentFilter.category,
+    currentFilter.status,
     search,
-    status,
     pagination.limit,
     setSurveys,
     setStoreLoading,
@@ -178,7 +177,7 @@ export const useSurveyActions = () => {
     return () => {
       clearInterval(autoRefreshInterval);
     };
-  }, [page, status, search, loadSurveys]);
+  }, [page, search, loadSurveys]);
 
   // Filter handlers
   const handleFilterChange = useCallback((filter: SurveyFilter) => {
@@ -188,10 +187,13 @@ export const useSurveyActions = () => {
   }, [setFilter, loadSurveys]);
 
   const handleStatusChange = useCallback((newStatus: 'activas' | 'completadas') => {
-    setStatus(newStatus);
     setPage(1); // Reset to first page when status changes
+    setFilter({
+      ...currentFilter,
+      status: newStatus,
+    });
     loadSurveys(1); // Reload surveys with new status
-  }, [setStatus, loadSurveys]);
+  }, [loadSurveys, setFilter, currentFilter]);
 
   // Pagination handlers
   const handleNextPage = useCallback(() => {
@@ -257,7 +259,6 @@ export const useSurveyActions = () => {
     completedSurveys,
     averageRating,
     currentFilter,
-    status,
     selectedSurveyId,
     showSurveyForm,
     surveyData,
@@ -280,7 +281,6 @@ export const useSurveyActions = () => {
     handleGoToPage,
     handleSearch,
     setPage,
-    setStatus,
     setSearch,
   };
 };

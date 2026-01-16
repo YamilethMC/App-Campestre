@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 4,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.gray200,
   },
   cardHeader: {
     flexDirection: 'row',
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     marginBottom: 15,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: COLORS.gray200,
   },
   rewardsHeader: {
     alignItems: 'center',
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
   rewardsSubtitle: {
     fontSize: 13,
-    color: '#A78BFA', // Soft lavender
+    color: '#A78BFA',
   },
   pointsContainer: {
     flexDirection: 'row',
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingVertical: 15,
     paddingHorizontal: 15,
-    backgroundColor: '#F0FDF9', // Very soft green background
+    backgroundColor: '#F0FDF9',
     borderRadius: 12,
   },
   pointsInfo: {
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   },
   validityText: {
     fontSize: 13,
-    color: '#059669', // Soft green
+    color: COLORS.primaryDark,
     fontWeight: '500',
   },
   pointsValueContainer: {
@@ -81,23 +81,23 @@ const styles = StyleSheet.create({
   pointsValue: {
     fontSize: 14,
     fontWeight: '800',
-    color: '#059669', // Soft green
+    color: COLORS.primaryDark,
   },
   starIcon: {
     marginRight: 8,
-    textShadowColor: '#10B981',
+    textShadowColor: COLORS.primary,
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 2,
   },
   catalogButton: {
     marginTop: 10,
-    backgroundColor: '#10B981', // Soft green
+    backgroundColor: COLORS.primary,
     borderRadius: 8,
     paddingVertical: 10,
     paddingHorizontal: 16,
     alignItems: 'center',
     alignSelf: 'center',
-    shadowColor: '#047857',
+    shadowColor: COLORS.primaryDark,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.25,
     shadowRadius: 5,
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   infoLabel: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F8FAFC', // Light blue-tinged background
+    backgroundColor: COLORS.gray50,
     padding: 14,
     borderRadius: 2,
     marginTop: 10,
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   infoText: {
-    color: '#7C3AED', // Soft lavender
+    color: '#7C3AED',
     fontSize: 13,
     fontWeight: '500',
     flex: 1,

@@ -475,7 +475,6 @@ const MultipleChoiceQuestion: React.FC<{
   answer: string;
   onAnswerChange: (value: string) => void;
 }> = ({ question, answer, onAnswerChange }) => {
-  console.log('question', question, 'answer', answer);
   return (
     <View>
       {question.options?.map((option: any) => (
@@ -538,7 +537,6 @@ const YesNoQuestion: React.FC<{
   answer: boolean;
   onAnswerChange: (value: boolean) => void;
 }> = ({ question, answer, onAnswerChange }) => {
-  console.log('answer', answer);
   const { messages } = useMessages();
   return (
     <View style={styles.yesNoContainer}>

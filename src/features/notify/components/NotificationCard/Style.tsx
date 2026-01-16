@@ -3,107 +3,74 @@ import { COLORS } from '../../../../shared/theme/colors';
 
 // Colores dinámicos basados en tipo de notificación
 const TYPE_COLORS = {
-  default: '#4A90E2', // Azul
-  aviso: '#F5A623',   // Naranja
-  informativo: '#7ED321', // Verde
-  celebración: '#BD10E0', // Púrpura
-  evento: '#50E3C2',  // Turquesa
-  cierre: '#D0021B',  // Rojo
+  default: COLORS.info,
+  aviso: COLORS.warning,
+  informativo: COLORS.primary,
+  celebración: '#BD10E0',
+  evento: '#50E3C2',
+  cierre: COLORS.error,
 };
 
 const styles = StyleSheet.create({
-  image: {
-    width: '100%',
-    height: 120,
-    borderRadius: 8,
-    marginBottom: 10,
-  },
   container: {
     backgroundColor: COLORS.white,
-    borderRadius: 16,
-    padding: 14,
-    marginBottom: 14,
-    elevation: 5,
-    shadowColor: '#000',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    elevation: 3,
+    shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 2,
     },
-    shadowOpacity: 0.12,
-    shadowRadius: 8,
-    borderLeftWidth: 5,
-    borderLeftColor: TYPE_COLORS.default, // Color por defecto, se sobreescribe en el componente
-    position: 'relative',
-    overflow: 'hidden',
-  },
-  header: {
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    borderLeftWidth: 4,
+    borderLeftColor: TYPE_COLORS.default,
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 10,
   },
-  titleContainer: {
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
     flex: 1,
-    marginRight: 10,
+  },
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: COLORS.gray50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  textContainer: {
+    flex: 1,
+    marginRight: 12,
   },
   title: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: COLORS.gray800,
-    lineHeight: 21,
-    marginBottom: 4,
+    fontSize: 15,
+    fontWeight: '600',
+    color: COLORS.gray900,
+    lineHeight: 20,
   },
-  typeContainer: {
-    backgroundColor: TYPE_COLORS.default, // Color por defecto, se sobreescribe en el componente
-    borderRadius: 6,
+  badge: {
     paddingHorizontal: 10,
     paddingVertical: 4,
-    alignSelf: 'flex-start',
-    flex: 0,
-    flexShrink: 1,
-    minWidth: 65,
-    maxWidth: 110,
+    borderRadius: 12,
+    minWidth: 70,
+    maxWidth: 100,
   },
-  type: {
+  badgeText: {
     fontSize: 10,
     fontWeight: '700',
     color: COLORS.white,
     textTransform: 'uppercase',
     textAlign: 'center',
-    overflow: 'hidden',
   },
-  message: {
-    fontSize: 14,
-    color: COLORS.gray800,
-    lineHeight: 20,
-    marginBottom: 12,
-    textAlign: 'justify',
-    fontStyle: 'normal',
-  },
-  footer: {
-    flexDirection: 'column',
-    borderTopWidth: 1,
-    borderTopColor: COLORS.gray200,
-    paddingTop: 10,
-    marginTop: 4,
-  },
-  dateContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 5,
-  },
-  dateLabel: {
-    fontSize: 11,
-    color: COLORS.gray600,
-    fontWeight: '500',
-    marginRight: 6,
-    minWidth: 80,
-  },
-  dateValue: {
-    fontSize: 11,
-    color: COLORS.gray800,
-    flex: 1,
-    fontWeight: '600',
+  chevron: {
+    marginLeft: 8,
   },
 });
 

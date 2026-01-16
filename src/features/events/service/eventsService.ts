@@ -209,7 +209,6 @@ export const eventsService = {
     status: number;
     error?: string;
   }> {
-    console.log('HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
     const { token } = useAuthStore.getState();
     if (!token) {
       return {
@@ -223,7 +222,7 @@ export const eventsService = {
       // Construir la URL con los parámetros
       const params = new URLSearchParams({
         page: page.toString(),
-        limit: '1', // Límite fijo
+        limit: '10', // Límite fijo (match surveys)
         search,
         order: 'asc', // Orden fijo
         orderBy: 'name', // Orden por nombre fijo
@@ -238,7 +237,6 @@ export const eventsService = {
       }
 
       const url = `${process.env.EXPO_PUBLIC_API_URL}/events?${params.toString()}`;
-      console.log('URL DE EVENTOS:', url);
       const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -280,7 +278,6 @@ export const eventsService = {
       }
 
       const result: EventsApiResponse = await response.json();
-      console.log('Result de eventos:', result.data.events);
       // Convertir los datos de la API al formato de Event
       const events: Event[] = result.data.events.map(apiEvent => ({
         id: apiEvent.id.toString(),
@@ -298,7 +295,6 @@ export const eventsService = {
         inscritedShow: apiEvent.inscritedShow,
         progressShow: apiEvent.progressShow,
       }));
-      console.log('EVENTOS:', events);
 
       return {
         success: true,
@@ -418,7 +414,6 @@ export const eventsService = {
         status: 401
       };
     }
-    console.log('REGISTRANDO EVENTO:', { eventId, clubMemberId, totalRegistrations });
     try {
       const response = await fetch(
         `${process.env.EXPO_PUBLIC_API_URL}/events/${eventId}/registration`,

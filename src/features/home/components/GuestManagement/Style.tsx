@@ -3,7 +3,7 @@ import { COLORS } from '../../../../shared/theme/colors';
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#F8FAFC', // Light blue-tinged background
+    backgroundColor: COLORS.gray50,
     borderRadius: 16,
     padding: 20,
     marginBottom: 16,
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 4,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: COLORS.gray200,
   },
   cardHeader: {
     flexDirection: 'row',
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   activeLabel: {
-    backgroundColor: '#93C5FD', // Soft blue
+    backgroundColor: COLORS.info,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
@@ -139,12 +139,12 @@ const styles = StyleSheet.create({
   infoLabel: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEF3C7', // Light yellow pastel background
+    backgroundColor: '#FEF3C7',
     padding: 14,
     borderRadius: 10,
     marginTop: 10,
     borderWidth: 1,
-    borderColor: '#F59E0B',
+    borderColor: COLORS.warning,
   },
   infoIcon: {
     marginRight: 10,
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
   },
   pasesAvailableText: {
     fontSize: 14,
-    color: '#10B981',
+    color: COLORS.primary,
     fontWeight: '600',
     textAlign: 'center',
     marginBottom: 15,
@@ -207,11 +207,11 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#A7F3D0',
+    borderColor: COLORS.primaryLight,
   },
   restrictionText: {
     fontSize: 14,
-    color: '#EF4444',
+    color: COLORS.error,
     fontWeight: '600',
     textAlign: 'center',
     marginBottom: 15,

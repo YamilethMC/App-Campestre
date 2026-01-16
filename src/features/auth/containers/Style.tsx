@@ -15,7 +15,7 @@ export default StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: COLORS.primaryExtraDark,
+    color: COLORS.primaryDark,
     marginBottom: 20,
   },
   formContainer: {

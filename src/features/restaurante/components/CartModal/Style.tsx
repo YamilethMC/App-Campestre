@@ -5,7 +5,7 @@ import { COLORS } from '../../../../shared/theme/colors';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: COLORS.gray50,
   },
   header: {
     backgroundColor: COLORS.primary,
@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: 'white',
+    color: COLORS.white,
   },
   headerSubtitle: {
     fontSize: 14,
@@ -50,12 +50,12 @@ export const styles = StyleSheet.create({
   itemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     borderRadius: 10,
     padding: 10,
     marginBottom: 10,
     elevation: 2,
-    shadowColor: '#000',
+    shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
@@ -115,7 +115,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   quantityButtonText: {
-    color: 'white',
+    color: COLORS.white,
     fontSize: 14,
     fontWeight: 'bold',
   },
@@ -132,7 +132,7 @@ export const styles = StyleSheet.create({
     fontSize: 20,
   },
   summaryContainer: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     padding: 15,
     borderTopWidth: 1,
     borderTopColor: COLORS.gray200,
@@ -195,6 +195,6 @@ export const styles = StyleSheet.create({
   payButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'white',
+    color: COLORS.white,
   },
 });

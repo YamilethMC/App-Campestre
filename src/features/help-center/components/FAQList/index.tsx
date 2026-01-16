@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { FAQ } from '../../interfaces';
+import { COLORS } from '../../../../shared/theme/colors';
 import styles from './Style';
 
 interface FAQListProps {
@@ -27,7 +28,7 @@ const FAQList: React.FC<FAQListProps> = ({ faqs }) => {
             <Ionicons
               name={expandedId === faq.id ? 'chevron-up' : 'chevron-down'}
               size={20}
-              color="#10B981"
+              color={COLORS.primary}
             />
           </TouchableOpacity>
 

@@ -19,8 +19,6 @@ const AccountStatementDetail: React.FC<AccountStatementDetailProps> = ({
     return null;
   }
 
-  console.log("datos de el estado de cuenta", statement)
-
   const formatCurrency = (amount: number | null) => {
     if (amount === null) return '-';
     return new Intl.NumberFormat('es-MX', {

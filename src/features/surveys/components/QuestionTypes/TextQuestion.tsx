@@ -1,6 +1,7 @@
 import React from 'react';
 import { TextInput, View } from 'react-native';
 import { SurveyQuestion } from '../../interfaces';
+import { COLORS } from '../../../../shared/theme/colors';
 
 interface TextQuestionProps {
   question: SurveyQuestion;
@@ -22,7 +23,7 @@ export const TextQuestion: React.FC<TextQuestionProps> = ({
         numberOfLines={4}
         style={{
           borderWidth: 1,
-          borderColor: '#D1D5DB',
+          borderColor: COLORS.gray300,
           borderRadius: 8,
           padding: 12,
           textAlignVertical: 'top',

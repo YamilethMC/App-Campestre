@@ -27,11 +27,9 @@ const ReservationCard = ({ reservation, onCancel }: ReservationCardProps) => {
   };
 
   const formatTime = (dateString: string) => {
-    console.log('dateString: ', dateString);
     // Extract time part from ISO string (HH:MM:SS.sss format) and get only HH:MM
     const timePart = dateString.split('T')[1].split('.')[0]; // Get HH:MM:SS part
     const [hour, minute] = timePart.split(':');
-    console.log('extracted time: ', `${hour}:${minute}`);
     return `${hour}:${minute}`;
   };
 

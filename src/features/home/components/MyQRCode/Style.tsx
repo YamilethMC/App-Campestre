@@ -55,14 +55,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   showQrButton: {
-    backgroundColor: '#D1FAE5', // Pastel green
+    backgroundColor: '#D1FAE5',
     paddingHorizontal: 24,
     paddingVertical: 14,
     borderRadius: 8,
     marginTop: 8,
     width: '100%',
     alignItems: 'center',
-    shadowColor: '#D1FAE5',
+    shadowColor: COLORS.primaryLight,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 6,

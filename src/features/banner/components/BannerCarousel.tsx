@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Dimensions, Image, ScrollView, StyleSheet, Text, View, TouchableOpacity, Modal } from 'react-native';
+import { COLORS } from '../../../shared/theme/colors';
 import { Banner } from '../interfaces/Banner';
 
 const { width } = Dimensions.get('window');
@@ -183,7 +184,7 @@ const styles = StyleSheet.create({
     height: 200,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f0f0f0',
+    backgroundColor: COLORS.gray100,
   },
   errorContainer: {
     height: 200,
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: COLORS.gray100,
   },
   bannerImage: {
     width: '100%',
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
   placeholderImage: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#e0e0e0',
+    backgroundColor: COLORS.gray200,
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -10,12 +10,9 @@ export const useMemberData = () => {
   const getMemberData = async (memberId: number): Promise<MemberData | null> => {
     setLoading(true);
     setError(null);
-    console.log(',,,,,,,,,,,Fetching member data for member ID:', memberId);
     const result = await getMemberDataFromService(memberId);
-    console.log('--------------------------------------Member data result:', result);
     if (result.success && result.data) {
       setMemberData(result.data);
-      console.log('Member data set:', result.data);
       setLoading(false);
       return result.data;
     } else {

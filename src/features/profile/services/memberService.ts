@@ -246,7 +246,6 @@ export const memberService = {
 
       const result: GetMemberResponse = await response.json();
       const data = result.data;
-console.log('data is::::::::::::::::::::::::::::::, ', data.user.phone)
       const memberProfile: userProfile = {
         id: data.id.toString(),
         memberCode: data.memberCode ? Number(data.memberCode) : undefined,
@@ -325,7 +324,6 @@ console.log('data is::::::::::::::::::::::::::::::, ', data.user.phone)
     }
 
     try {
-      console.log('memberData issssssssssssssssssssss: ', memberData);
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/club-members`, {
         method: 'POST',
         headers: {
@@ -335,7 +333,6 @@ console.log('data is::::::::::::::::::::::::::::::, ', data.user.phone)
         },
         body: JSON.stringify(memberData),
       });
-      console.log('response issssssssssssssssssssss: ', response);
       if (!response.ok) {
         let errorMessage = 'Error al agregar miembro de la familia';
 
@@ -362,7 +359,6 @@ console.log('data is::::::::::::::::::::::::::::::, ', data.user.phone)
       }
 
       const result: AddFamilyMemberResponse = await response.json();
-      console.log('result al agregar familiar: ', result);
 
       return {
         success: true,
@@ -469,7 +465,6 @@ export const updateUser = async (userId: number, userData: UpdateUserRequest, to
       status: 401
     };
   }
-console.log('data para actualizaaaaaaar: ', userData)
   try {
     const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/users/${userId}`, {
       method: 'PATCH',
@@ -480,7 +475,6 @@ console.log('data para actualizaaaaaaar: ', userData)
       },
       body: JSON.stringify(userData),
     });
-    console.log('response al actualizar: ', response)
     if (!response.ok) {
       let errorMessage = 'Error al actualizar el perfil';
 
@@ -510,7 +504,6 @@ console.log('data para actualizaaaaaaar: ', userData)
     }
 
     const result: UpdateUserResponse = await response.json();
-    console.log('result al actualizar: ', result)
     return {
       success: true,
       data: result,

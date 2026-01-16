@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Card from '../../../../shared/components/Card';
+import { COLORS } from '../../../../shared/theme/colors';
 import useMessages from '../../hooks/useRestaurantMessages';
 import { RestaurantDishCardProps } from '../../interfaces/dishInterface';
 import { useCartStore } from '../../store/useCartStore';
@@ -78,11 +79,11 @@ const RestaurantDishCard: React.FC<RestaurantDishCardProps> = ({ dish }) => {
         <View style={styles.metaRow}>
           <Text style={styles.category}>{dish.category}</Text>
           <View style={styles.timeContainer}>
-            <Ionicons name="time-outline" size={14} color="#6B7280" style={styles.timeIcon} />
+            <Ionicons name="time-outline" size={14} color={COLORS.gray500} style={styles.timeIcon} />
             <Text style={styles.preparationTime}> {dish.preparationTime}</Text>
           </View>
           <View style={styles.ratingContainer}>
-            <Ionicons name="star" size={14} color="#FBBF24" style={styles.starIcon} />
+            <Ionicons name="star" size={14} color={COLORS.warning} style={styles.starIcon} />
             <Text style={styles.rating}> {dish.rating}</Text>
           </View>
         </View>
@@ -91,25 +92,25 @@ const RestaurantDishCard: React.FC<RestaurantDishCardProps> = ({ dish }) => {
         <View style={styles.tagsContainer}>
           {dish.isPopular && (
             <View style={styles.tagContainer}>
-              <Ionicons name="star" size={12} color="#FBBF24" />
+              <Ionicons name="star" size={12} color={COLORS.warning} />
               <Text style={styles.tag}> {messages.TAGS.POPULAR}</Text>
             </View>
           )}
           {dish.isSpicy && (
             <View style={styles.tagContainer}>
-              <Ionicons name="flame-outline" size={12} color="#EF4444" />
+              <Ionicons name="flame-outline" size={12} color={COLORS.error} />
               <Text style={styles.tag}> {messages.TAGS.SPICY}</Text>
             </View>
           )}
           {dish.isVegetarian && (
             <View style={styles.tagContainer}>
-              <Ionicons name="leaf-outline" size={12} color="#10B981" />
+              <Ionicons name="leaf-outline" size={12} color={COLORS.primary} />
               <Text style={styles.tag}> {messages.TAGS.VEGETARIAN}</Text>
             </View>
           )}
           {dish.isGlutenFree && (
             <View style={styles.tagContainer}>
-              <Ionicons name="nutrition-outline" size={12} color="#8B5CF6" />
+              <Ionicons name="nutrition-outline" size={12} color={COLORS.info} />
               <Text style={styles.tag}> {messages.TAGS.GLUTEN_FREE}</Text>
             </View>
           )}

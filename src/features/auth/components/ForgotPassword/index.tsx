@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { COLORS } from '../../../../shared/theme/colors';
 import { authService } from '../../services/authService';
 
 export const ForgotPasswordScreen: React.FC = () => {
@@ -230,7 +231,7 @@ export const ForgotPasswordScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: COLORS.gray100,
   },
   content: {
     flex: 1,
@@ -292,8 +293,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   methodButtonActive: {
-    borderColor: '#2c5f2d',
-    backgroundColor: '#e8f5e9',
+    borderColor: COLORS.primaryDark,
+    backgroundColor: COLORS.gray50,
   },
   methodButtonText: {
     fontSize: 14,
@@ -301,10 +302,10 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   methodButtonTextActive: {
-    color: '#2c5f2d',
+    color: COLORS.primaryDark,
   },
   button: {
-    backgroundColor: '#2c5f2d',
+    backgroundColor: COLORS.primaryDark,
     borderRadius: 8,
     padding: 16,
     alignItems: 'center',
@@ -323,7 +324,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   backButtonText: {
-    color: '#2c5f2d',
+    color: COLORS.primaryDark,
     fontSize: 16,
     fontWeight: '600',
   },

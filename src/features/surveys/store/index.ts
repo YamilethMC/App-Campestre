@@ -50,7 +50,7 @@ export const useSurveyStore = create<SurveyStore>((set, get) => ({
   error: null,
   pagination: {
     page: 1,
-    limit: 1,
+    limit: 10,
     total: 0,
     totalPages: 1,
   },

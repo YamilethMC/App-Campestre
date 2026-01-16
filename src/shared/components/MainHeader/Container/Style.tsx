@@ -3,7 +3,7 @@ import { COLORS } from '../../../../shared/theme/colors';
 
 const styles = StyleSheet.create({
     container: {
-      backgroundColor: COLORS.primaryExtraDark,
+      backgroundColor: COLORS.primary,
       borderBottomWidth: 1,
       borderBottomColor: COLORS.gray200,
       height: 110,

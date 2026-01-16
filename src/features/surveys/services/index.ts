@@ -117,7 +117,7 @@ export const surveyService = {
   // Obtener las encuestas activas paginadas con filtros
   getSurveys: async (
     page: number = 1,
-    limit: number = 1,
+    limit: number = 10,
     search: string = '',
     order: string = 'asc',
     category: string = ''
@@ -293,7 +293,6 @@ export const surveyService = {
       }
 
       const data = await response.json();
-      console.log('Survey questions data:', data);
 
       if (!data.success || !data.data) {
         return {
@@ -356,16 +355,12 @@ export const surveyService = {
       };
     }
 
-    console.log('Submitting survey with answers:', answers, 'and surveyId:', surveyId, 'for userId:', userId);
-
     const formattedResponses = Object.entries(answers).map(
       ([questionId, answer]) => ({
         questionId,
         answer,
       })
     );
-
-    console.log('Formatted responses for submission:', formattedResponses);
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/survey/${surveyId}/club-member/${userId}/submit`, {
         method: 'POST',
@@ -409,7 +404,6 @@ export const surveyService = {
       }
 
       const data = await response.json();
-      console.log('Survey submission response data:', data);
 
       return {
         success: true,

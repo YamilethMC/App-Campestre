@@ -27,8 +27,8 @@ const QRCodeComponent: React.FC<QRCodeComponentProps> = ({
       <QRCode
         value={qrData}
         size={size - 20} // Ajustar tamaño para el padding
-        backgroundColor="white"
-        color={COLORS.primaryExtraDark}
+        backgroundColor={COLORS.white}
+        color={COLORS.primaryDark}
         ecl="H" // Error correction level alto para mejor lectura
       />
     </View>
@@ -37,13 +37,13 @@ const QRCodeComponent: React.FC<QRCodeComponentProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     borderRadius: 8,
     padding: 10,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#dae1e7',
+    borderColor: COLORS.gray200,
   },
 });
 

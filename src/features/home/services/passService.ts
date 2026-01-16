@@ -57,7 +57,6 @@ export const passService = {
     }
 
     try {
-      console.log('Creating pass with data:', passData);
       
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/pass`, {
         method: 'POST',
@@ -68,8 +67,6 @@ export const passService = {
         },
         body: JSON.stringify(passData),
       });
-
-      console.log('Pass creation response status:', response.status);
 
       if (!response.ok) {
         let errorMessage = 'Error al crear el pase de invitado';
@@ -103,7 +100,6 @@ export const passService = {
       }
 
       const result = await response.json();
-      console.log('Pass created successfully:', result);
 
       return {
         success: true,

@@ -4,7 +4,7 @@ import { COLORS } from '../../../../shared/theme/colors';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc', // Fondo más suave y moderno
+    backgroundColor: COLORS.gray50,
   },
   scrollContent: {
     flexGrow: 1,
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     padding: 24,
     marginBottom: 20,
     elevation: 6,
-    shadowColor: '#000',
+    shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 12,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: COLORS.gray200,
   },
   sectionTitle: {
     fontSize: 22,
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#374151',
+    color: COLORS.gray700,
     marginBottom: 10,
     textTransform: 'uppercase',
     letterSpacing: 0.3,
@@ -62,14 +62,14 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 2,
-    borderColor: '#e2e8f0',
+    borderColor: COLORS.gray200,
     borderRadius: 14,
     padding: 16,
     fontSize: 16,
     color: COLORS.gray700,
     backgroundColor: COLORS.white,
     elevation: 2,
-    shadowColor: '#000',
+    shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 3,
@@ -112,14 +112,14 @@ const styles = StyleSheet.create({
     bottom: 80, // Aproximadamente la altura del menú inferior
     left: 0,
     right: 0,
-    backgroundColor: '#f8fafc',
+    backgroundColor: COLORS.gray50,
     padding: 24,
     paddingTop: 18,
     paddingBottom: 28,
     borderTopWidth: 1,
-    borderTopColor: '#e2e8f0',
+    borderTopColor: COLORS.gray200,
     elevation: 10,
-    shadowColor: '#000',
+    shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.1,
     shadowRadius: 10,
@@ -135,11 +135,11 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 14,
     borderWidth: 2,
-    borderColor: '#d1d5db',
-    backgroundColor: '#f9fafb',
+    borderColor: COLORS.gray300,
+    backgroundColor: COLORS.gray50,
   },
   cancelButtonText: {
-    color: '#4b5563',
+    color: COLORS.gray600,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     width: '92%',
     maxWidth: 440,
     elevation: 25,
-    shadowColor: '#000',
+    shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 12 },
     shadowOpacity: 0.25,
     shadowRadius: 24,
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   },
   modalMessage: {
     fontSize: 16,
-    color: '#6b7280',
+    color: COLORS.gray500,
     marginBottom: 28,
     textAlign: 'center',
     lineHeight: 24,
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.gray50, // Light background for selected option
   },
   requiredIndicator: {
-    color: '#ef4444',
+    color: COLORS.error,
     marginLeft: 4,
     fontSize: 15,
     fontWeight: '600',
