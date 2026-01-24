@@ -63,7 +63,6 @@ export class NotificationService {
       }
 
       const data = await response.json();
-      console.log('Notifications data:', data);
 
       return {
         success: true,
