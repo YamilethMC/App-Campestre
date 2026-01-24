@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.white,
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    marginTop: -10,
     marginBottom: 16,
   },
   filterGroup: {
@@ -21,10 +21,10 @@ const styles = StyleSheet.create({
     paddingRight: 16,
   },
   filterButton: {
-    paddingHorizontal: 14,
+    paddingHorizontal: 20,
     paddingVertical: 10,
     borderWidth: 1,
-    borderColor: COLORS.gray300,
+    borderColor: COLORS.gray100,
     borderRadius: 20,
     marginRight: 8,
   },
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.primary,
   },
   filterButtonText: {
-    fontSize: 13,
+    fontSize: 15,
     color: COLORS.gray700,
   },
   activeFilterButtonText: {

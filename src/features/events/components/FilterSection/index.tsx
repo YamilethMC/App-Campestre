@@ -1,8 +1,6 @@
 import React from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { FilterSectionProps } from '../../interfaces/eventInterface';
-import { COLORS } from '../../../../shared/theme/colors';
 import styles from './Style';
 
 const FilterSection: React.FC<FilterSectionProps> = ({
@@ -44,12 +42,12 @@ const FilterSection: React.FC<FilterSectionProps> = ({
                   activeOpacity={0.7}
                 >
                   <View style={styles.filterButtonContent}>
-                    <Ionicons 
+                    {/*<Ionicons 
                       name={eventType.icon as any} 
                       size={16} 
                       color={isSelected ? COLORS.white : COLORS.gray600}
                       style={styles.filterIcon}
-                    />
+                    />*/}
                     <Text
                       style={[
                         styles.filterButtonText,

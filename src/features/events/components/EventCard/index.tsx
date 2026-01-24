@@ -47,6 +47,18 @@ const getEventTypeColor = (eventType: string) => {
   }
 };
 
+const toPastel = (hex: string, amount = 0.7) => {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+
+  const pastel = (c: number) =>
+    Math.round(c + (255 - c) * amount);
+
+  return `rgb(${pastel(r)}, ${pastel(g)}, ${pastel(b)})`;
+};
+
+
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   const options: Intl.DateTimeFormatOptions = {
@@ -79,22 +91,22 @@ const EventCard: React.FC<EventCardProps> = ({
 
   return (
     <Card style={styles.card}>
-      {event.image ? (
-        <Image
-          source={{ uri: event.image }}
-          style={styles.eventImage}
-          resizeMode="cover"
-        />
-      ) : (
-        <View style={styles.imagePlaceholder}>
-          <Text style={styles.imagePlaceholderText}>Imagen del Evento</Text>
-        </View>
-      )}
+      <View style={styles.imageWrapper}>
+        {event.image ? (
+          <Image
+            source={{ uri: event.image }}
+            style={styles.eventImage}
+            resizeMode="cover"
+          />
+        ) : (
+          <View style={styles.imagePlaceholder}>
+            <Text style={styles.imagePlaceholderText}>Imagen del Evento</Text>
+          </View>
+        )}
 
-      <View style={styles.eventNameContainer}>
-        <Text style={styles.eventName}>{event.name}</Text>
+        {/* Badge sobre la imagen */}
         <View style={styles.badgeContainer}>
-          <View style={[styles.badge, { backgroundColor: eventTypeColor + '20' }]}>
+          <View style={[styles.badge, { backgroundColor: toPastel(eventTypeColor) }]}>
             <Text style={[styles.badgeText, { color: eventTypeColor }]}>
               {eventTypeDisplay}
             </Text>
@@ -102,7 +114,11 @@ const EventCard: React.FC<EventCardProps> = ({
         </View>
       </View>
 
-      <Text style={styles.eventDescription} numberOfLines={2}>
+      <View style={styles.eventNameContainer}>
+        <Text style={styles.eventName}>{event.name}</Text>
+      </View>
+
+      <Text style={styles.eventDescription} numberOfLines={10}>
         {event.description}
       </Text>
 
@@ -114,7 +130,7 @@ const EventCard: React.FC<EventCardProps> = ({
 
         <View style={styles.infoItem}>
           <Ionicons name="time-outline" size={16} color={COLORS.gray500} />
-          <Text style={styles.infoText}>{event.time}</Text>
+          <Text style={styles.infoText}>{event.time} hrs.</Text>
         </View>
 
         <View style={styles.infoItem}>

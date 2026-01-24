@@ -3,33 +3,45 @@ import { COLORS } from '../../../../shared/theme/colors';
 
 const styles = StyleSheet.create({
   card: {
-    marginVertical: 8,
+    /*marginVertical: 8,
     marginHorizontal: 16,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.white,*/
+    borderRadius: 35,
+    
+  },
+  imageWrapper: {
+    position: 'relative', // base para el absolute
   },
   eventImage: {
-    height: 120,
-    width: '100%',
-    borderRadius: 8,
+    height: 200,
+    width: '110%',
+    borderTopLeftRadius: 35,
+    borderTopRightRadius: 35,
     marginBottom: 12,
+    marginLeft: -16,
+    marginTop: -16,
   },
   imagePlaceholder: {
-    height: 120,
+    height: 200,
     backgroundColor: COLORS.gray100,
-    borderRadius: 8,
+    borderTopLeftRadius: 35,
+    borderTopRightRadius: 35,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
+    marginLeft: -16,
+    marginTop: -16,
   },
   imagePlaceholderText: {
     color: COLORS.gray500,
     fontSize: 14,
   },
   eventName: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     color: COLORS.gray800,
     flex: 1,
+    textAlign: 'center',
   },
   eventNameContainer: {
     flexDirection: 'row',
@@ -38,19 +50,26 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   badgeContainer: {
-    marginLeft: 8,
+    position: 'absolute',
+    top: -5,
+    right: 10,
+    alignItems: 'flex-end',
   },
+
   badge: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 10,
+    alignSelf: 'flex-end',
   },
+
   badgeText: {
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '700',
+    textAlign: 'center',
   },
   eventDescription: {
-    fontSize: 14,
+    fontSize: 15,
     color: COLORS.gray600,
     marginBottom: 12,
     lineHeight: 18,
@@ -65,7 +84,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   infoText: {
-    fontSize: 13,
+    fontSize: 14,
     color: COLORS.gray600,
     marginLeft: 8,
   },
@@ -86,7 +105,7 @@ const styles = StyleSheet.create({
     borderRadius: 3,
   },
   progressText: {
-    fontSize: 12,
+    fontSize: 14,
     color: COLORS.gray600,
     minWidth: 70,
   },
