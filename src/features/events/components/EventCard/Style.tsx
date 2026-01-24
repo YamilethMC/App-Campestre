@@ -1,13 +1,26 @@
 import { StyleSheet } from 'react-native';
 import { COLORS } from '../../../../shared/theme/colors';
 
+import { Dimensions } from 'react-native';
+
+const windowWidth = Dimensions.get('window').width;
+
 const styles = StyleSheet.create({
   card: {
-    /*marginVertical: 8,
+    marginVertical: 8,
     marginHorizontal: 16,
-    backgroundColor: COLORS.white,*/
+    backgroundColor: COLORS.white,
     borderRadius: 35,
-    
+    overflow: 'hidden',
+    width: windowWidth - 32, // Ajustar al ancho de la pantalla menos márgenes
+    maxWidth: 600, // Limitar el ancho máximo para pantallas grandes
+    alignSelf: 'center',
+    elevation: 8,
+    shadowColor: COLORS.black,
+    shadowOpacity: 50,
+    shadowRadius: 120,
+    borderWidth: 1,
+    borderColor: COLORS.gray100,
   },
   imageWrapper: {
     position: 'relative', // base para el absolute
@@ -18,8 +31,8 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 35,
     borderTopRightRadius: 35,
     marginBottom: 12,
-    marginLeft: -16,
     marginTop: -16,
+    marginLeft: -16,
   },
   imagePlaceholder: {
     height: 200,
@@ -29,7 +42,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
-    marginLeft: -16,
     marginTop: -16,
   },
   imagePlaceholderText: {

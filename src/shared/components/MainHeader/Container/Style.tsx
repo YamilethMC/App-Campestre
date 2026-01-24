@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
     container: {
       backgroundColor: COLORS.primary,
       borderBottomWidth: 1,
-      borderBottomColor: COLORS.gray200,
+      borderBottomColor: COLORS.primary,
       height: 110,
     },
     headerContent: {
@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'space-between',
       paddingHorizontal: 16,
+      marginTop: 15,
     },
     leftContainer: {
       width: 40,

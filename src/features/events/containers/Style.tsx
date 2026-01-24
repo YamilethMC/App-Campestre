@@ -4,13 +4,13 @@ import { COLORS } from '../../../shared/theme/colors';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.gray50,
     paddingBottom: 20,
   },
   searchInput: {
     backgroundColor: COLORS.white,
     borderRadius: 10,
-    width: '90%',
+    width: '92%',
     alignSelf: 'center',
     paddingHorizontal: 15,
     paddingVertical: 12,
@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
+    backgroundColor: COLORS.gray50,
   },
   scrollContent: {
     padding: 16,
@@ -30,28 +31,9 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     backgroundColor: COLORS.primary,
-    paddingBottom: 2,
-  },
-  headerSection: {
-    alignItems: 'center',
-    marginBottom: 20,
-    paddingHorizontal: 16,
-  },
-  headerIcon: {
-    marginBottom: 8,
-  },
-  headerTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: COLORS.gray800,
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  headerDescription: {
-    fontSize: 16,
-    color: COLORS.gray600,
-    textAlign: 'center',
-    paddingHorizontal: 20,
+    paddingBottom: 10,
+    paddingTop: 10,
+    marginTop: -10,
   },
   filterButton: {
     marginHorizontal: 4,
@@ -77,12 +59,15 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     paddingVertical: 12,
     borderRadius: 12,
-    marginHorizontal: 8,
+    marginHorizontal: 16,
     shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 8,
     elevation: 3,
+    width: '100%',
+    maxWidth: 568, // Ancho similar al de la card
+    alignSelf: 'center',
   },
   navButton: {
     paddingHorizontal: 10,
@@ -106,6 +91,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     marginBottom: 15,
+    width: '100%',
+    maxWidth: 568, // Ancho similar al de la card
+    alignSelf: 'center',
   },
   eventsTitle: {
     fontSize: 20,

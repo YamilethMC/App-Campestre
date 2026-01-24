@@ -108,7 +108,7 @@ const EventCard: React.FC<EventCardProps> = ({
         <View style={styles.badgeContainer}>
           <View style={[styles.badge, { backgroundColor: toPastel(eventTypeColor) }]}>
             <Text style={[styles.badgeText, { color: eventTypeColor }]}>
-              {eventTypeDisplay}
+              {eventTypeDisplay.toUpperCase()}
             </Text>
           </View>
         </View>

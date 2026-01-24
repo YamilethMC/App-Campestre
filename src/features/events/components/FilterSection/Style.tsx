@@ -3,9 +3,9 @@ import { COLORS } from '../../../../shared/theme/colors';
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.white,
+    backgroundColor: 'transparent',
     paddingHorizontal: 16,
-    marginTop: -10,
+    marginTop: 0,
     marginBottom: 16,
   },
   filterGroup: {
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderWidth: 1,
-    borderColor: COLORS.gray100,
+    borderColor: COLORS.gray200,
     borderRadius: 20,
     marginRight: 8,
   },
