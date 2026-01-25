@@ -39,11 +39,11 @@ const MoreOptionsScreen = () => {
     //   icon: 'cafe-outline' as const,
     //   onPress: () => navigation.navigate('Menu')
     // },
-    { 
+    /*{ 
       title: t('reservations.myReservations'), 
       icon: 'calendar-outline' as const,
       onPress: () => navigation.navigate('MyReservations')
-    },
+    },*/
     { 
       title: t('accountStatements.title'), 
       icon: 'document-text-outline' as const,
@@ -54,11 +54,11 @@ const MoreOptionsScreen = () => {
       icon: 'newspaper-outline' as const,
       onPress: () => navigation.navigate('Files')
     },
-    // { 
-    //   title: t('settings.title'), 
-    //   icon: 'settings-outline' as const,
-    //   onPress: () => navigation.navigate('Settings')
-    // },
+    /*{ 
+      title: t('settings.title'), 
+      icon: 'settings-outline' as const,
+      onPress: () => navigation.navigate('Settings')
+    },*/
     { 
       title: t('help.title'), 
       icon: 'help-circle-outline' as const,
@@ -94,25 +94,43 @@ const MoreOptionsScreen = () => {
         {menuItems.map((item, index) => (
           <TouchableOpacity
             key={index}
-            style={styles.menuItem}
+            style={[
+              styles.menuItem,
+              {
+                borderBottomWidth: index < menuItems.length - 1 ? 1 : 0,
+                borderBottomColor: COLORS.gray100, // Almost invisible line
+              }
+            ]}
             onPress={item.onPress}
             activeOpacity={0.7}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Ionicons 
-              name={item.icon} 
-              size={24} 
-              color={COLORS.primary} 
-              style={styles.icon} 
+            <Ionicons
+              name={item.icon}
+              size={24}
+              color={item.title === t('auth.logout.title') ? COLORS.error : COLORS.primary}
+              style={styles.icon}
             />
-            <Text style={styles.menuText}>{item.title}</Text>
-            <Ionicons 
-              name="chevron-forward" 
-              size={20} 
-              color={COLORS.gray400} 
+            <Text
+              style={[
+                styles.menuText,
+                { color: item.title === t('auth.logout.title') ? COLORS.error : COLORS.gray900 }
+              ]}
+            >
+              {item.title}
+            </Text>
+            <Ionicons
+              name="chevron-forward"
+              size={20}
+              color={COLORS.gray200} // Lighter color for chevron
             />
           </TouchableOpacity>
         ))}
+      </View>
+
+      {/* Version info - appears separately after the options */}
+      <View style={styles.versionContainer}>
+        <Text style={styles.versionText}>VERSIÓN 1.0.1 (2025)</Text>
       </View>
     </View>
   );
@@ -127,7 +145,7 @@ const styles = StyleSheet.create({
   menuContainer: {
     backgroundColor: COLORS.white,
     borderRadius: 8,
-    padding: 16,
+    paddingHorizontal: 16,
     shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -137,9 +155,9 @@ const styles = StyleSheet.create({
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.gray200,
+    borderBottomColor: COLORS.gray100,
   },
   icon: {
     marginRight: 8,
@@ -150,6 +168,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: COLORS.gray900,
     fontFamily: 'System',
+  },
+  versionContainer: {
+    marginTop: 32,
+    alignItems: 'center',
+    paddingVertical: 16,
+  },
+  versionText: {
+    fontSize: 14,
+    color: COLORS.gray400,
+    textTransform: 'uppercase',
   },
 });
 
