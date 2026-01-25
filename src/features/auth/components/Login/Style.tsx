@@ -4,7 +4,7 @@ import { COLORS } from '../../../../shared/theme/colors';
 const styles = StyleSheet.create({
     content: {
       flex: 1,
-      padding: 24,
+      //padding: 24,
       justifyContent: 'center',
     },
     inputContainer: {

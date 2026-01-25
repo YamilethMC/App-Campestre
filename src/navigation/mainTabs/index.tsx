@@ -166,7 +166,7 @@ const MoreStack = () => (
       name="ChangePassword"
       component={ChangePasswordScreen}
       options={{ 
-        headerShown: true,
+        headerShown: false, //true,
         title: 'Cambiar Contraseña',
         headerBackVisible: true
       }}

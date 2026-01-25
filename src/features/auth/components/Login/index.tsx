@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
@@ -94,7 +95,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                   style={styles.eyeIcon}
                   disabled={isLoading}
                 >
-                  <Text style={styles.eyeIconText}>{showPassword ? '👁️' : '👁️‍🗨️'}</Text>
+                  <Ionicons
+                    name={showPassword ? 'eye-outline' : 'eye-off-outline'}
+                    size={20}
+                    color={COLORS.gray500}
+                  />
                 </TouchableOpacity>
               </View>
               {errors.password && (

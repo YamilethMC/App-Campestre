@@ -31,7 +31,7 @@ return (
         name="ForgotPassword" 
         component={ForgotPasswordScreen} 
         options={{ 
-          headerShown: true,
+          headerShown: false, //true,
           title: 'Recuperar Contraseña'
         }}
       />

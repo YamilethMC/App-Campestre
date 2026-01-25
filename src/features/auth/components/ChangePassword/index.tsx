@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
 import {
-  View,
+  ActivityIndicator,
+  Alert,
+  Keyboard,
+  KeyboardAvoidingView,
+  KeyboardEvent,
+  Platform,
+  ScrollView,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
-  Alert,
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  ScrollView,
-  Platform,
+  View,
 } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import { COLORS } from '../../../../shared/theme/colors';
 import { authService } from '../../services/authService';
 import { useAuth } from '../../store/useAuthStore';
@@ -32,6 +35,22 @@ export const ChangePasswordScreen: React.FC = () => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', (e: KeyboardEvent) => {
+      setKeyboardHeight(e.endCoordinates.height);
+    });
+
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardHeight(0);
+    });
+
+    return () => {
+      showSubscription?.remove();
+      hideSubscription?.remove();
+    };
+  }, []);
 
   const validatePassword = (password: string): { isValid: boolean; errors: string[] } => {
     const errors: string[] = [];
@@ -137,7 +156,7 @@ export const ChangePasswordScreen: React.FC = () => {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
     >
       <ScrollView
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[styles.content, { paddingBottom: keyboardHeight * 0.5 }]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
@@ -168,13 +187,18 @@ export const ChangePasswordScreen: React.FC = () => {
               onChangeText={setCurrentPassword}
               secureTextEntry={!showCurrentPassword}
               placeholder="Ingresa tu contraseña actual"
+              placeholderTextColor={COLORS.gray500}
               autoCapitalize="none"
             />
             <TouchableOpacity
               onPress={() => setShowCurrentPassword(!showCurrentPassword)}
               style={styles.eyeIcon}
             >
-              <Text>{showCurrentPassword ? '👁️' : '👁️‍🗨️'}</Text>
+              <Ionicons
+                name={showCurrentPassword ? 'eye-outline' : 'eye-off-outline'}
+                size={20}
+                color={COLORS.gray500}
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -188,13 +212,18 @@ export const ChangePasswordScreen: React.FC = () => {
               onChangeText={setNewPassword}
               secureTextEntry={!showNewPassword}
               placeholder="Mínimo 8 caracteres"
+              placeholderTextColor={COLORS.gray500}
               autoCapitalize="none"
             />
             <TouchableOpacity
               onPress={() => setShowNewPassword(!showNewPassword)}
               style={styles.eyeIcon}
             >
-              <Text>{showNewPassword ? '👁️' : '👁️‍🗨️'}</Text>
+              <Ionicons
+                name={showNewPassword ? 'eye-outline' : 'eye-off-outline'}
+                size={20}
+                color={COLORS.gray500}
+              />
             </TouchableOpacity>
           </View>
           
@@ -237,13 +266,18 @@ export const ChangePasswordScreen: React.FC = () => {
               onChangeText={setConfirmPassword}
               secureTextEntry={!showConfirmPassword}
               placeholder="Repite la nueva contraseña"
+              placeholderTextColor={COLORS.gray500}
               autoCapitalize="none"
             />
             <TouchableOpacity
               onPress={() => setShowConfirmPassword(!showConfirmPassword)}
               style={styles.eyeIcon}
             >
-              <Text>{showConfirmPassword ? '👁️' : '👁️‍🗨️'}</Text>
+              <Ionicons
+                name={showConfirmPassword ? 'eye-outline' : 'eye-off-outline'}
+                size={20}
+                color={COLORS.gray500}
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -278,7 +312,8 @@ const styles = StyleSheet.create({
   content: {
     flexGrow: 1,
     padding: 20,
-    justifyContent: 'center',
+    paddingTop: 15, // Reduced top padding
+    justifyContent: 'flex-start', // Changed from 'center' to 'flex-start'
   },
   warningBox: {
     backgroundColor: '#fff3cd',
@@ -299,7 +334,7 @@ const styles = StyleSheet.create({
     color: '#856404',
   },
   title: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 8,
@@ -331,6 +366,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
+    color: '#333',
   },
   eyeIcon: {
     position: 'absolute',
@@ -355,9 +391,14 @@ const styles = StyleSheet.create({
   cancelButton: {
     marginTop: 16,
     alignItems: 'center',
+    borderColor: COLORS.error,
+    borderWidth: 0.5,
+    borderRadius: 8,
+    padding: 12,
+    backgroundColor: '#fff',
   },
   cancelButtonText: {
-    color: '#666',
+    color: 'red',
     fontSize: 16,
   },
   passwordRequirements: {

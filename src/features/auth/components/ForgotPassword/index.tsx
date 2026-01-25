@@ -1,6 +1,7 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
-import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Alert, Keyboard, KeyboardAvoidingView, KeyboardEvent, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { COLORS } from '../../../../shared/theme/colors';
 import { authService } from '../../services/authService';
 
@@ -14,6 +15,22 @@ export const ForgotPasswordScreen: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', (e: KeyboardEvent) => {
+      setKeyboardHeight(e.endCoordinates.height);
+    });
+
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardHeight(0);
+    });
+
+    return () => {
+      showSubscription?.remove();
+      hideSubscription?.remove();
+    };
+  }, []);
 
   const handleRequestCode = async () => {
     if (!identifier) {
@@ -99,132 +116,183 @@ export const ForgotPasswordScreen: React.FC = () => {
 
   if (step === 'request') {
     return (
-      <View style={styles.container}>
-        <View style={styles.content}>
-          <Text style={styles.title}>¿Olvidaste tu contraseña?</Text>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
+      >
+        <View style={{ flex: 1 }}>
+          <ScrollView
+            contentContainerStyle={styles.content}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            <Text style={styles.title}>¿Olvidaste tu contraseña?</Text>
+            <Text style={styles.subtitle}>
+              Ingresa tu email o teléfono y te enviaremos un código para recuperar tu cuenta
+            </Text>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Email o Teléfono</Text>
+              <TextInput
+                style={styles.input}
+                value={identifier}
+                onChangeText={setIdentifier}
+                placeholder="usuario@ejemplo.com o 8331234567"
+                placeholderTextColor={COLORS.gray500}
+                autoCapitalize="none"
+                keyboardType="email-address"
+              />
+            </View>
+
+            <View style={styles.methodContainer}>
+              <Text style={styles.label}>Enviar código por:</Text>
+              <View style={styles.methodButtons}>
+                <TouchableOpacity
+                  style={[styles.methodButton, method === 'email' && styles.methodButtonActive]}
+                  onPress={() => setMethod('email')}
+                >
+                  <Text style={[styles.methodButtonText, method === 'email' && styles.methodButtonTextActive]}>
+                    📧 Email
+                  </Text>
+                </TouchableOpacity>
+                {/* <TouchableOpacity
+                  style={[styles.methodButton, method === 'whatsapp' && styles.methodButtonActive]}
+                  onPress={() => setMethod('whatsapp')}
+                >
+                  <Text style={[styles.methodButtonText, method === 'whatsapp' && styles.methodButtonTextActive]}>
+                    📱 WhatsApp
+                  </Text>
+                </TouchableOpacity> */}
+              </View>
+            </View>
+
+            {/* Buttons container right after the method selection */}
+            <View style={[styles.buttonContainer, { paddingBottom: keyboardHeight * 0.4 }]}>
+              <TouchableOpacity
+                style={[styles.button, loading && styles.buttonDisabled]}
+                onPress={handleRequestCode}
+                disabled={loading}
+              >
+                {loading ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text style={styles.buttonText}>Enviar código</Text>
+                )}
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => navigation.goBack()}
+                style={styles.cancelButton}
+              >
+                <Text style={styles.cancelButtonText}>Cancelar</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </View>
+      </KeyboardAvoidingView>
+    );
+  }
+
+  return (
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
+    >
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          contentContainerStyle={styles.content}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <Text style={styles.title}>Ingresa el código</Text>
           <Text style={styles.subtitle}>
-            Ingresa tu email o teléfono y te enviaremos un código para recuperar tu cuenta
+            Hemos enviado un código de 6 dígitos a tu {method === 'email' ? 'correo' : 'WhatsApp'}
           </Text>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Email o Teléfono</Text>
+            <Text style={styles.label}>Código de verificación</Text>
             <TextInput
               style={styles.input}
-              value={identifier}
-              onChangeText={setIdentifier}
-              placeholder="usuario@ejemplo.com o 8331234567"
-              autoCapitalize="none"
-              keyboardType="email-address"
+              value={code}
+              onChangeText={(text) => setCode(text.replace(/\D/g, '').slice(0, 6))}
+              placeholder="123456"
+              placeholderTextColor={COLORS.gray500}
+              keyboardType="number-pad"
+              maxLength={6}
             />
           </View>
 
-          <View style={styles.methodContainer}>
-            <Text style={styles.label}>Enviar código por:</Text>
-            <View style={styles.methodButtons}>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Nueva contraseña</Text>
+            <View style={styles.passwordInputContainer}>
+              <TextInput
+                style={styles.input}
+                value={newPassword}
+                onChangeText={setNewPassword}
+                secureTextEntry={!showPassword}
+                placeholder="Mínimo 8 caracteres"
+                placeholderTextColor={COLORS.gray500}
+                autoCapitalize="none"
+              />
               <TouchableOpacity
-                style={[styles.methodButton, method === 'email' && styles.methodButtonActive]}
-                onPress={() => setMethod('email')}
+                onPress={() => setShowPassword(!showPassword)}
+                style={styles.eyeIcon}
               >
-                <Text style={[styles.methodButtonText, method === 'email' && styles.methodButtonTextActive]}>
-                  📧 Email
-                </Text>
+                <Ionicons
+                  name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                  size={20}
+                  color={COLORS.gray500}
+                />
               </TouchableOpacity>
-              {/* <TouchableOpacity
-                style={[styles.methodButton, method === 'whatsapp' && styles.methodButtonActive]}
-                onPress={() => setMethod('whatsapp')}
-              >
-                <Text style={[styles.methodButtonText, method === 'whatsapp' && styles.methodButtonTextActive]}>
-                  📱 WhatsApp
-                </Text>
-              </TouchableOpacity> */}
             </View>
           </View>
 
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Confirmar contraseña</Text>
+            <TextInput
+              style={styles.input}
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              secureTextEntry={!showPassword}
+              placeholder="Repite la nueva contraseña"
+              placeholderTextColor={COLORS.gray500}
+              autoCapitalize="none"
+            />
+          </View>
+        </ScrollView>
+
+        {/* Buttons container at the bottom */}
+        <View style={[styles.buttonContainer, { paddingBottom: keyboardHeight * 0.4 }]}>
           <TouchableOpacity
             style={[styles.button, loading && styles.buttonDisabled]}
-            onPress={handleRequestCode}
+            onPress={handleResetPassword}
             disabled={loading}
           >
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text style={styles.buttonText}>Enviar código</Text>
+              <Text style={styles.buttonText}>Restablecer contraseña</Text>
             )}
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => setStep('request')}
+            style={styles.backButton}
+          >
+            <Text style={styles.backButtonText}>← Solicitar nuevo código</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.cancelButton}
+          >
+            <Text style={styles.cancelButtonText}>Cancelar</Text>
           </TouchableOpacity>
         </View>
       </View>
-    );
-  }
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>Ingresa el código</Text>
-        <Text style={styles.subtitle}>
-          Hemos enviado un código de 6 dígitos a tu {method === 'email' ? 'correo' : 'WhatsApp'}
-        </Text>
-
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Código de verificación</Text>
-          <TextInput
-            style={styles.input}
-            value={code}
-            onChangeText={(text) => setCode(text.replace(/\D/g, '').slice(0, 6))}
-            placeholder="123456"
-            keyboardType="number-pad"
-            maxLength={6}
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Nueva contraseña</Text>
-          <View style={styles.passwordInputContainer}>
-            <TextInput
-              style={styles.input}
-              value={newPassword}
-              onChangeText={setNewPassword}
-              secureTextEntry={!showPassword}
-              placeholder="Mínimo 8 caracteres"
-              autoCapitalize="none"
-            />
-            <TouchableOpacity
-              onPress={() => setShowPassword(!showPassword)}
-              style={styles.eyeIcon}
-            >
-              <Text>{showPassword ? '👁️' : '👁️‍🗨️'}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Confirmar contraseña</Text>
-          <TextInput
-            style={styles.input}
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            secureTextEntry={!showPassword}
-            placeholder="Repite la nueva contraseña"
-            autoCapitalize="none"
-          />
-        </View>
-
-        <TouchableOpacity
-          style={[styles.button, loading && styles.buttonDisabled]}
-          onPress={handleResetPassword}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
-            <Text style={styles.buttonText}>Restablecer contraseña</Text>
-          )}
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => setStep('request')} style={styles.backButton}>
-          <Text style={styles.backButtonText}>← Solicitar nuevo código</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -236,10 +304,11 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: 20,
-    justifyContent: 'center',
+    paddingTop: 90, // Reduced top padding
+    justifyContent: 'flex-start', // Changed from 'center' to 'flex-start'
   },
   title: {
-    fontSize: 28,
+    fontSize: 25,
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 8,
@@ -265,6 +334,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
+    color: '#333', // Added text color for better visibility
   },
   passwordInputContainer: {
     flexDirection: 'row',
@@ -309,7 +379,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 16,
     alignItems: 'center',
-    marginTop: 20,
   },
   buttonDisabled: {
     opacity: 0.6,
@@ -327,6 +396,22 @@ const styles = StyleSheet.create({
     color: COLORS.primaryDark,
     fontSize: 16,
     fontWeight: '600',
+  },
+  buttonContainer: {
+    paddingTop: 20,
+    paddingBottom: 20,
+  },
+  cancelButton: {
+    marginTop: 16,
+    alignItems: 'center',
+    borderColor: COLORS.error,
+    borderWidth: 0.5,
+    borderRadius: 8,
+    padding: 12,
+  },
+  cancelButtonText: {
+    color: 'red',
+    fontSize: 16,
   },
 });
 
