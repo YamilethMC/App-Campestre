@@ -1,8 +1,6 @@
 import React from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { FilterSectionProps, SurveyCategory } from '../../interfaces';
-import { COLORS } from '../../../../shared/theme/colors';
 import styles from './Style';
 
 const FilterSection: React.FC<FilterSectionProps> = ({
@@ -12,7 +10,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({
   onStatusChange,
 }) => {
   const categories = [
-    { value: SurveyCategory.ALL, label: 'Todas', icon: 'apps-outline' },
+    /*{ value: SurveyCategory.ALL, label: 'Todas', icon: 'apps-outline' },*/
     { value: SurveyCategory.SERVICES, label: 'Servicios', icon: 'construct-outline' },
     { value: SurveyCategory.RESTAURANT, label: 'Restaurante', icon: 'restaurant-outline' },
     { value: SurveyCategory.SPORTS, label: 'Deportes', icon: 'football-outline' },
@@ -20,14 +18,55 @@ const FilterSection: React.FC<FilterSectionProps> = ({
   ];
 
   const statusOptions = [
-    { value: 'activas', label: 'Encuestas activas' },
+    { value: 'abiertas', label: 'Abiertas' },
     { value: 'completadas', label: 'Completadas' },
+    { value: 'cerradas', label: 'Cerradas' },
   ];
 
   return (
     <View style={styles.container}>
       {/* Category Filters */}
+      {/* Status Filters - Segmented Control */}
       <View style={styles.filterGroup}>
+        <View style={styles.segmentedControl}>
+          {statusOptions.map((status, index) => {
+            const isSelected = selectedStatus === status.value;
+            const isFirst = index === 0;
+            const isLast = index === statusOptions.length - 1;
+            
+            return (
+              <TouchableOpacity
+                key={status.value}
+                style={[
+                  styles.segmentButton,
+                  isFirst && styles.segmentButtonFirst,
+                  isLast && styles.segmentButtonLast,
+                  isSelected && styles.segmentButtonActive,
+                ]}
+                onPress={() => onStatusChange(status.value as 'abiertas' | 'completadas' | 'cerradas')}
+                accessibilityRole="button"
+                accessibilityLabel={status.label}
+                accessibilityState={{ selected: isSelected }}
+                activeOpacity={0.7}
+              >
+                <Text
+                  style={[
+                    styles.segmentButtonText,
+                    isSelected && styles.segmentButtonTextActive,
+                  ]}
+                >
+                  {status.label}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </View>
+
+      {/* Divider Line */}
+      {/*<View style={styles.divider} />*/}
+
+      <View style={[styles.filterGroup, styles.filterCategory]}>
         <View style={styles.scrollWrapper}>
           <ScrollView 
             horizontal 
@@ -51,19 +90,19 @@ const FilterSection: React.FC<FilterSectionProps> = ({
                   activeOpacity={0.7}
                 >
                   <View style={styles.filterButtonContent}>
-                    <Ionicons 
+                    {/*<Ionicons 
                       name={category.icon as any} 
                       size={16} 
                       color={isSelected ? COLORS.white : COLORS.gray600}
                       style={styles.filterIcon}
-                    />
+                    />*/}
                     <Text
                       style={[
                         styles.filterButtonText,
                         isSelected && styles.activeFilterButtonText,
                       ]}
                     >
-                      {category.label}
+                      {category.label.toUpperCase()}
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -73,46 +112,6 @@ const FilterSection: React.FC<FilterSectionProps> = ({
           {/* Scroll fade indicators */}
           <View style={styles.fadeLeft} pointerEvents="none" />
           <View style={styles.fadeRight} pointerEvents="none" />
-        </View>
-      </View>
-
-      {/* Divider Line */}
-      <View style={styles.divider} />
-
-      {/* Status Filters - Segmented Control */}
-      <View style={styles.filterGroup}>
-        <View style={styles.segmentedControl}>
-          {statusOptions.map((status, index) => {
-            const isSelected = selectedStatus === status.value;
-            const isFirst = index === 0;
-            const isLast = index === statusOptions.length - 1;
-            
-            return (
-              <TouchableOpacity
-                key={status.value}
-                style={[
-                  styles.segmentButton,
-                  isFirst && styles.segmentButtonFirst,
-                  isLast && styles.segmentButtonLast,
-                  isSelected && styles.segmentButtonActive,
-                ]}
-                onPress={() => onStatusChange(status.value as 'activas' | 'completadas')}
-                accessibilityRole="button"
-                accessibilityLabel={status.label}
-                accessibilityState={{ selected: isSelected }}
-                activeOpacity={0.7}
-              >
-                <Text
-                  style={[
-                    styles.segmentButtonText,
-                    isSelected && styles.segmentButtonTextActive,
-                  ]}
-                >
-                  {status.label}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
         </View>
       </View>
     </View>

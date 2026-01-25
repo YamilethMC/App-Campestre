@@ -3,13 +3,12 @@ import { COLORS } from '../../../../shared/theme/colors';
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.white,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    marginBottom: 16,
   },
   filterGroup: {
-    marginVertical: 8,
+
+  },
+  filterCategory: {
+    marginTop: 20,
   },
   divider: {
     height: 1,
@@ -27,12 +26,13 @@ const styles = StyleSheet.create({
     paddingRight: 16,
   },
   filterButton: {
-    paddingHorizontal: 14,
+    paddingHorizontal: 30,
     paddingVertical: 10,
     borderWidth: 1,
-    borderColor: COLORS.gray300,
+    borderColor: COLORS.gray200,
     borderRadius: 20,
     marginRight: 8,
+    backgroundColor: COLORS.white,
   },
   filterButtonContent: {
     flexDirection: 'row',
@@ -47,12 +47,13 @@ const styles = StyleSheet.create({
     borderColor: COLORS.primary,
   },
   filterButtonText: {
-    fontSize: 13,
-    color: COLORS.gray700,
+    fontSize: 12,
+    color: COLORS.gray400,
+    fontWeight: '700',
   },
   activeFilterButtonText: {
     color: COLORS.white,
-    fontWeight: '600',
+    fontWeight: '700',
   },
   fadeLeft: {
     position: 'absolute',
@@ -102,12 +103,12 @@ const styles = StyleSheet.create({
   },
   segmentButtonText: {
     fontSize: 14,
-    fontWeight: '500',
-    color: COLORS.gray600,
+    fontWeight: '700',
+    color: COLORS.gray400,
   },
   segmentButtonTextActive: {
     color: COLORS.primary,
-    fontWeight: '600',
+    fontWeight: '700',
   },
 });
 

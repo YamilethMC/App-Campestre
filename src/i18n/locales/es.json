@@ -172,7 +172,7 @@
   },
   "surveys": {
     "title": "Voz del Socio",
-    "subtitle": "Ayúdanos a mejorar nuestros servicios",
+    "subtitle": "ENCUESTAS DE CALIDAD",
     "loading": "Cargando encuesta...",
     "question": "Pregunta",
     "of": "de",
@@ -200,12 +200,12 @@
     "surveyCard": {
       "people": "personas",
       "questions": "preguntas",
-      "start": "Responder"
+      "start": "Comenzar Encuesta"
     }
   },
   "reservation": {
     "title": "Reservaciones",
-    "question": "¿Qué deseas reservar?",
+    "question": "Nueva Reservación",
     "noHoursAvailable": "No hay disponibilidad de horarios",
     "noCourtsAvailable": "No hay disponibilidad de canchas",
     "diners": "Comensales",

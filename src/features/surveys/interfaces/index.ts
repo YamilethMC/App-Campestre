@@ -8,6 +8,7 @@ export interface Survey {
   participantCount: number; // e.g. 156 people
   questionCount: number; // e.g. 8 questions
   isActive: boolean;
+  isAnswered?: boolean; // Whether the survey has been answered by the user
   image?: string; // Image URL (replaces imageUrl)
   responsesShow?: boolean; // Whether to show response count
   averageRating?: number; // Average rating for completed surveys
@@ -65,7 +66,7 @@ export enum SurveyPriority {
 
 export interface SurveyFilter {
   category: SurveyCategory;
-  status: 'activas' | 'completadas';
+  status: 'abiertas' | 'completadas' | 'cerradas';
 }
 
 export interface SurveyCardProps {
@@ -82,7 +83,7 @@ export interface HeaderWithStatsProps {
 
 export interface FilterSectionProps {
   selectedCategory: SurveyCategory;
-  selectedStatus: 'activas' | 'completadas';
+  selectedStatus: 'abiertas' | 'completadas' | 'cerradas';
   onCategoryChange: (category: SurveyCategory) => void;
-  onStatusChange: (status: 'activas' | 'completadas') => void;
+  onStatusChange: (status: 'abiertas' | 'completadas' | 'cerradas') => void;
 }

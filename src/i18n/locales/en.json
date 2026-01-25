@@ -167,7 +167,7 @@
   "reservation": {
     "title": "Reservations",
     "myReservations": "My reservations",
-    "question": "What would you like to reserve?",
+    "question": "New Reservation",
     "noHoursAvailable": "No available time slots",
     "noCourtsAvailable": "No available courts",
     "diners": "Diners",
@@ -211,7 +211,7 @@
   },
   "surveys": {
     "title": "Member’s Voice",
-    "subtitle": "Help us improve our services",
+    "subtitle": "QUALITY SURVEYS",
     "loading": "Loading survey...",
     "question": "Question",
     "of": "of",
@@ -239,7 +239,7 @@
     "surveyCard": {
       "people": "people",
       "questions": "questions",
-      "start": "Start"
+      "start": "Start Survey"
     }
   },
   "accountStatements": {

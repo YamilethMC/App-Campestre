@@ -44,7 +44,7 @@ export const useSurveyStore = create<SurveyStore>((set, get) => ({
   averageRating: 0,
   currentFilter: {
     category: SurveyCategory.SERVICES,
-    status: 'activas',
+    status: 'abiertas', /* "abiertas"*/
   },
   loading: false,
   error: null,
@@ -128,17 +128,28 @@ export const useSurveyStore = create<SurveyStore>((set, get) => ({
     // Create a copy of surveys with updated status based on user completion
     const surveysWithUpdatedStatus = surveys.map(survey => ({
       ...survey,
-      // Survey is active if it's originally active AND not completed by user
-      isActive: survey.isActive && !userCompletedSurveys.includes(survey.id)
+      // Survey is considered open if it's originally active AND not completed by user
+      isOpen: survey.isActive && !userCompletedSurveys.includes(survey.id),
+      // Track if the survey has been answered by the user
+      isAnswered: userCompletedSurveys.includes(survey.id)
     }));
 
     return surveysWithUpdatedStatus.filter(survey => {
-      const matchesCategory = currentFilter.category === SurveyCategory.ALL ||
+      const matchesCategory = currentFilter.category === SurveyCategory.SERVICES /*SurveyCategory.ALL*/ ||
                               survey.category === currentFilter.category;
 
-      const matchesStatus = currentFilter.status === 'activas' ?
-                            survey.isActive :
-                            !survey.isActive;
+      let matchesStatus = false;
+
+      if (currentFilter.status === 'abiertas') {
+        // Encuestas abiertas: activas y no respondidas
+        matchesStatus = survey.isOpen;
+      } else if (currentFilter.status === 'completadas') {
+        // Encuestas completadas: ya respondidas
+        matchesStatus = survey.isAnswered === true;
+      } else if (currentFilter.status === 'cerradas') {
+        // Encuestas cerradas: inactivas (no disponibles)
+        matchesStatus = !survey.isActive;
+      }
 
       return matchesCategory && matchesStatus;
     });

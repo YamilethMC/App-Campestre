@@ -80,11 +80,11 @@ export const useSurveyActions = () => {
     try {
       // Mapear categoría a string para la API
       let category = '';
-      if (currentFilter.category !== SurveyCategory.ALL) {
+      if (currentFilter.category !== SurveyCategory.SERVICES /*SurveyCategory.ALL*/) {
         switch(currentFilter.category) {
-          case SurveyCategory.SERVICES:
+          /*case SurveyCategory.SERVICES:
             category = 'SERVICES';
-            break;
+            break;*/
           case SurveyCategory.RESTAURANT:
             category = 'RESTAURANT';
             break;
@@ -109,20 +109,30 @@ export const useSurveyActions = () => {
         order,
         category
       );
-
+console.log('---------------------------HOLAGOLA2', response);
       if (response.success && response.data) {
         // Usar los datos y la paginación correspondiente según el estado actual
         let surveysData, meta;
 
-        if (currentFilter.status === 'activas') {
-          surveysData = response.data.unansweredSurveys;
+        const unansweredSurveys = response.data.unansweredSurveys || [];
+        const answeredSurveys = response.data.answeredSurveys || [];
+        const closedSurveys = response.data.closedSurveys || [];
+        console.log('---------------------------HOLAGOLA');
+        if (currentFilter.status === 'abiertas') {
+          surveysData = unansweredSurveys;
+          console.log('---------------------------surveysData', surveysData);
           meta = response.data.unansweredMeta;
         } else if (currentFilter.status === 'completadas') {
-          surveysData = response.data.answeredSurveys;
+          console.log('---------------------------completadas', answeredSurveys);
+          surveysData = answeredSurveys;
           meta = response.data.answeredMeta;
+        } else if (currentFilter.status === 'cerradas') {
+          // Para encuestas cerradas, usar las encuestas cerradas directamente
+          surveysData = closedSurveys;
+          meta = response.data.closedMeta;
         } else {
           // Por defecto, usar unanswered (encuestas activas)
-          surveysData = response.data.unansweredSurveys;
+          surveysData = unansweredSurveys;
           meta = response.data.unansweredMeta;
         }
 
@@ -135,8 +145,8 @@ export const useSurveyActions = () => {
         });
 
         // Calcular estadísticas usando todos los datos
-        const activeSurveysCount = response.data.unansweredSurveys.length;
-        const completedSurveysCount = response.data.answeredSurveys.length;
+        const activeSurveysCount = response.data.unansweredSurveys?.length || 0;
+        const completedSurveysCount = response.data.answeredSurveys?.length || 0;
 
         setActiveSurveys(activeSurveysCount);
         setCompletedSurveys(completedSurveysCount);
@@ -186,7 +196,7 @@ export const useSurveyActions = () => {
     loadSurveys(1); // Reload surveys with new filter
   }, [setFilter, loadSurveys]);
 
-  const handleStatusChange = useCallback((newStatus: 'activas' | 'completadas') => {
+  const handleStatusChange = useCallback((newStatus: 'abiertas' | 'completadas' | 'cerradas') => {
     setPage(1); // Reset to first page when status changes
     setFilter({
       ...currentFilter,

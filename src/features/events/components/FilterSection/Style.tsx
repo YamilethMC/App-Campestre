@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.gray200,
     borderRadius: 20,
     marginRight: 8,
+    backgroundColor: COLORS.white,
   },
   filterButtonContent: {
     flexDirection: 'row',

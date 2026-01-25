@@ -12,7 +12,6 @@ import Button from '../../../shared/components/Button';
 import Card from '../../../shared/components/Card/Card';
 import { COLORS } from '../../../shared/theme/colors';
 import FilterSection from '../components/FilterSection/FilterSection';
-import HeaderWithStats from '../components/HeaderWithStats/HeaderWithStats';
 import SurveyCard from '../components/SurveyCard/SurveyCard';
 import useMessages from '../hooks/useMessage';
 import { useSurveyActions } from '../hooks/useSurveyActions';
@@ -136,7 +135,7 @@ const SurveysScreen: React.FC = () => {
     });
   };
 
-  const handleStatusChange = (status: 'activas' | 'completadas') => {
+  const handleStatusChange = (status: 'abiertas' | 'completadas' | 'cerradas') => {
     setFilter({
       ...currentFilter,
       status,
@@ -151,9 +150,19 @@ const SurveysScreen: React.FC = () => {
   const filteredSurveys = surveys.filter(survey => {
     const matchesCategory = currentFilter.category === SurveyCategory.ALL ||
                             survey.category === currentFilter.category;
-    const matchesStatus = currentFilter.status === 'activas'
-      ? survey.isActive 
-      : !survey.isActive;
+
+    let matchesStatus = false;
+
+    if (currentFilter.status === 'abiertas') {
+      // Encuestas abiertas: activas y no respondidas
+      matchesStatus = survey.isActive && !survey.isAnswered;
+    } else if (currentFilter.status === 'completadas') {
+      // Encuestas completadas: ya respondidas
+      matchesStatus = survey.isAnswered === true;
+    } else if (currentFilter.status === 'cerradas') {
+      // Encuestas cerradas: inactivas
+      matchesStatus = !survey.isActive;
+    }
 
     return matchesCategory && matchesStatus;
   });
@@ -353,11 +362,11 @@ const SurveysScreen: React.FC = () => {
       >
         <View style={styles.contentContainer}>
           {/* Header with Stats */}
-          <HeaderWithStats
+          {/* <HeaderWithStats
             activeSurveys={activeSurveys}
             completedSurveys={completedSurveys}
             averageRating={averageRating}
-          />
+          />*/}
 
           {/* Filter Section */}
           <FilterSection
@@ -381,9 +390,11 @@ const SurveysScreen: React.FC = () => {
             ) : (
               <View style={styles.noSurveysContainer}>
                 <Text style={styles.noSurveysText}>
-                  {currentFilter.status === 'activas'
+                  {currentFilter.status === 'abiertas'
                     ? 'No hay encuestas disponibles'
-                    : 'Aún no has contestado ninguna encuesta'}
+                    : currentFilter.status === 'completadas'
+                      ? 'Aún no has contestado ninguna encuesta'
+                      : 'No hay encuestas cerradas'}
                 </Text>
               </View>
             )}

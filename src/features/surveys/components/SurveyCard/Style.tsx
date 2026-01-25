@@ -1,59 +1,107 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { COLORS } from '../../../../shared/theme/colors';
+
+const windowWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   card: {
-    marginVertical: 8,
+    marginVertical: 12,
     marginHorizontal: 16,
-    padding: 16,
+    backgroundColor: COLORS.white,
+    borderRadius: 35,
+    overflow: 'hidden',
+    width: windowWidth - 32, // Ajustar al ancho de la pantalla menos márgenes
+    maxWidth: 600, // Limitar el ancho máximo para pantallas grandes
+    alignSelf: 'center',
+    elevation: 16,
+    shadowColor: COLORS.black,
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.25,
+    shadowRadius: 20,
+    borderWidth: 4,
+    borderColor: COLORS.white,
   },
-  imageContainer: {
-    marginBottom: 12,
+  imageWrapper: {
+    position: 'relative', // base para el absolute
   },
   image: {
-    width: '100%',
-    height: 120,
-    borderRadius: 8,
+    height: 200,
+    width: windowWidth * 1.1, // 110% del ancho de la pantalla
+    borderTopLeftRadius: 35,
+    borderTopRightRadius: 35,
+    marginBottom: 0,
+    marginTop: -16,
+    marginLeft: -16,
   },
   imagePlaceholder: {
-    width: '100%',
-    height: 120,
-    backgroundColor: COLORS.gray200,
-    borderRadius: 8,
+    height: 200,
+    backgroundColor: COLORS.gray100,
+    borderTopLeftRadius: 35,
+    borderTopRightRadius: 35,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 0,
+    marginTop: -16,
   },
   placeholderText: {
     color: COLORS.gray500,
     fontSize: 14,
   },
+  badgeContainer: {
+    position: 'absolute',
+    top: -5,
+    left: 10,
+    alignItems: 'flex-start',
+  },
+  badge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 10,
+    alignSelf: 'flex-start',
+  },
+  badgeText: {
+    fontSize: 12,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
   content: {
     flex: 1,
   },
   title: {
-    fontSize: 16,
+    fontSize: 21,
     fontWeight: 'bold',
-    color: COLORS.gray900,
+    color: COLORS.gray800,
+    flex: 1,
     marginBottom: 6,
+    marginTop: 10,
   },
   description: {
-    fontSize: 14,
+    fontSize: 15,
     color: COLORS.gray600,
     marginBottom: 12,
+    lineHeight: 18,
   },
   iconsRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     marginBottom: 12,
+    marginHorizontal: -8,
   },
-  iconContainer: {
-    flexDirection: 'row',
+  iconBox: {
     alignItems: 'center',
+    padding: 15,
+    backgroundColor: COLORS.gray50,
+    borderRadius: 8,
+    minWidth: 70,
+    width: '30%'
+  },
+  icon: {
+    marginBottom: 6,
   },
   iconText: {
     fontSize: 12,
     color: COLORS.gray600,
-    marginLeft: 6,
+    textAlign: 'center',
   },
   tagsRow: {
     flexDirection: 'row',

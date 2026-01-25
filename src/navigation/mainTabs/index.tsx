@@ -248,7 +248,7 @@ const MainTabs = () => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="calendar-outline" size={size} color={color} />
           ),
-          ...headerOptions(t('reservation.title'), 'Selecciona tu servicio'),
+          ...headerOptions(t('reservation.title'), 'CLUB CAMPESTRE'),
         }} 
       />
       <Tab.Screen 
@@ -259,7 +259,7 @@ const MainTabs = () => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="document-text-outline" size={size} color={color} />
           ),
-          ...headerOptions(t('surveys.title') || 'Encuestas', t('surveys.subtitle') || 'Tu opinión nos ayuda a mejorar'),
+          ...headerOptions(t('surveys.title') || 'Encuestas', t('surveys.subtitle') || 'ENCUESTAS DE CALIDAD'),
         }} 
       />
       {/* <Tab.Screen 

@@ -60,6 +60,33 @@ interface SurveyApiResponse {
           totalPages: number;
         };
       };
+      closed: {
+        data: Array<{
+          id: number;
+          title: string;
+          description: string;
+          active?: boolean;
+          priority?: string;
+          category: string;
+          timeStimed: string;
+          createdAt: string;
+          updatedAt?: string;
+          endDate: string;
+          questionCount?: number;
+          participantCount?: number;
+          isAnswered: boolean;
+          responseCount?: number;
+          responsePercentage?: number;
+          image?: string; // Nueva propiedad para la imagen
+          responsesShow?: boolean; // Nueva propiedad para mostrar conteo de respuestas
+        }>;
+        meta: {
+          total: number;
+          page: number;
+          limit: number;
+          totalPages: number;
+        };
+      };
       stats: {
         totalMembers: number;
         totalResponses: number;
@@ -125,8 +152,10 @@ export const surveyService = {
     surveys: Survey[];
     unansweredSurveys: Survey[];
     answeredSurveys: Survey[];
+    closedSurveys: Survey[];
     unansweredMeta: any;
     answeredMeta: any;
+    closedMeta: any;
   }>> => {
     const {userId, token } = useAuthStore.getState();
     if (!token) {
@@ -143,7 +172,7 @@ export const surveyService = {
       if (category) {
         url += `&category=${encodeURIComponent(category)}`;
       }
-
+console.log('---------------------------HOLAGOLA3', url);
       const response = await fetch(
         url,
         {
@@ -217,15 +246,34 @@ export const surveyService = {
         responsesShow: apiSurvey.responsesShow, // Nuevo campo para mostrar conteo de respuestas
       }));
 
+      // Mapear encuestas cerradas
+      const closedSurveys: Survey[] = result.data.data.closed?.data.map(apiSurvey => ({
+        id: apiSurvey.id.toString(),
+        title: apiSurvey.title,
+        description: apiSurvey.description,
+        category: mapCategory(apiSurvey.category),
+        priority: apiSurvey.priority ? mapPriority(apiSurvey.priority) : SurveyPriority.NORMAL,
+        estimatedTime: apiSurvey.timeStimed,
+        participantCount: apiSurvey.participantCount || apiSurvey.responseCount || 0,
+        questionCount: apiSurvey.questionCount || 0,
+        isActive: false, // Cerrada, por lo tanto no activa
+        dateCreated: apiSurvey.createdAt,
+        dateCompleted: apiSurvey.endDate,
+        image: apiSurvey.image, // Nuevo campo para la imagen
+        responsesShow: apiSurvey.responsesShow, // Nuevo campo para mostrar conteo de respuestas
+      })) || [];
+
       // Devolver ambos conjuntos de datos y la información de paginación
       return {
         success: true,
         data: {
-          surveys: [...unansweredSurveys, ...answeredSurveys],
+          surveys: [...unansweredSurveys, ...answeredSurveys, ...closedSurveys],
           unansweredSurveys,
           answeredSurveys,
+          closedSurveys,
           unansweredMeta: result.data.data.unanswered.meta,
-          answeredMeta: result.data.data.answered.meta
+          answeredMeta: result.data.data.answered.meta,
+          closedMeta: result.data.data.closed?.meta
         },
         message: 'Encuestas cargadas exitosamente',
         status: response.status
