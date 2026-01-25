@@ -17,8 +17,8 @@ const styles = StyleSheet.create({
       fontWeight: '500',
     },
     input: {
-      borderWidth: 2,
-      borderColor: COLORS.gray300,
+      borderWidth: 1,
+      borderColor: COLORS.gray200,
       borderRadius: 8,
       padding: 12,
       fontSize: 16,
@@ -64,8 +64,8 @@ const styles = StyleSheet.create({
     },
     passwordInput: {
       flex: 1,
-      borderWidth: 2,
-      borderColor: COLORS.gray300,
+      borderWidth: 1,
+      borderColor: COLORS.gray200,
       borderRadius: 8,
       padding: 12,
       fontSize: 16,
