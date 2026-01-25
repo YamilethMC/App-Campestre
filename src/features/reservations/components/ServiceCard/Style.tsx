@@ -43,6 +43,36 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  // New grid styles for the service card
+  gridCard: {
+    width: '48%', // Two items per row with some space
+    backgroundColor: COLORS.white,
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: COLORS.gray200,
+    elevation: 2,
+    shadowColor: COLORS.black,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  gridIconContainer: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  gridServiceName: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: COLORS.gray900,
+    textAlign: 'center',
+  },
 });
 
 export default styles;

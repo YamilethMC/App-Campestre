@@ -11,6 +11,8 @@ const useMessages = () => {
       NO_TABLES_AVAILABLE: t('reservation.noTablesAvailable'),
       CONFIRM_RESERVATION: t('reservation.confirmReservation'),
       OTHER_SELECT: t('reservation.otherSelect'),
+      TITLE: t('reservation.title') || 'Reservaciones',
+      MY_RESERVATIONS: t('reservations.myReservations') || 'Mis Reservas',
     },
     CALENDARCOMPONENT: {
         DATE: t('reservation.calendarComponent.date'),
