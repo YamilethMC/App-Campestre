@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Dimensions, Image, ScrollView, StyleSheet, Text, View, TouchableOpacity, Modal } from 'react-native';
+import { Dimensions, Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS } from '../../../shared/theme/colors';
 import { Banner } from '../interfaces/Banner';
 
@@ -124,6 +124,25 @@ const BannerCarousel: React.FC<BannerCarouselProps> = ({ banners, loading = fals
                 <Text style={styles.placeholderText}>Imagen no disponible</Text>
               </View>
             )}
+            
+            {/* Floating content card */}
+            <View style={styles.floatingCard}>
+              <View style={styles.cardContent}>
+                <View style={styles.iconContainer}>
+                  <Text style={styles.iconText}>📢</Text>
+                </View>
+                <View style={styles.textContent}>
+                  <Text style={styles.cardTitle} numberOfLines={1}>
+                    {banner.title}
+                  </Text>
+                  {banner.description && (
+                    <Text style={styles.cardDescription} numberOfLines={2}>
+                      {banner.description}
+                    </Text>
+                  )}
+                </View>
+              </View>
+            </View>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -280,6 +299,51 @@ const styles = StyleSheet.create({
   modalDetailValue: {
     fontSize: 14,
     color: '#666',
+  },
+  floatingCard: {
+    position: 'absolute',
+    bottom: 16,
+    left: 16,
+    right: 16,
+    backgroundColor: COLORS.white,
+    borderRadius: 12,
+    shadowColor: COLORS.gray800,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  cardContent: {
+    flexDirection: 'row',
+    padding: 16,
+    alignItems: 'flex-start',
+  },
+  iconContainer: {
+    width: 36,
+    height: 36,
+    borderRadius: 8,
+    backgroundColor: COLORS.primaryLight + '40',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+    marginTop: 2,
+  },
+  iconText: {
+    fontSize: 16,
+  },
+  textContent: {
+    flex: 1,
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: COLORS.gray800,
+    marginBottom: 4,
+  },
+  cardDescription: {
+    fontSize: 14,
+    color: COLORS.gray600,
+    lineHeight: 18,
   },
 });
 

@@ -129,7 +129,7 @@ const EventCard: React.FC<EventCardProps> = ({
         </View>
 
         <View style={styles.infoItem}>
-          <Ionicons name="time-outline" size={16} color={COLORS.gray500} />
+          <Ionicons name="time" size={16} color={COLORS.gray500} />
           <Text style={styles.infoText}>{event.time} hrs.</Text>
         </View>
 

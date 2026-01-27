@@ -23,7 +23,7 @@ const QRModal: React.FC<QRModalProps> = ({
   return (
     <Modal
       visible={visible}
-      title="Mi código QR"
+      title="MI QR DE ACCESO"
       onCancel={onClose}
       onConfirm={onClose}
       confirmText="Cerrar"
@@ -31,11 +31,11 @@ const QRModal: React.FC<QRModalProps> = ({
       confirmButtonStyle={{
         width: '100%',
         paddingVertical: 14,
-        backgroundColor: COLORS.primary,
+        backgroundColor: COLORS.gray400,
         borderRadius: 3,
         alignItems: 'center',
-        marginHorizontal: -20, // Extiende el botón al borde del modal
-        marginBottom: -20,     // Elimina espacio adicional
+        marginHorizontal: -20,
+        marginBottom: -20,
       }}
       confirmButtonTextStyle={{
         textAlign: 'center',
@@ -51,7 +51,7 @@ const QRModal: React.FC<QRModalProps> = ({
       }}
       contentStyle={{
         alignItems: 'center',
-        padding: 20
+        padding: 10
       }}
     >
       {/* Componente QR real con el memberCode del socio */}
@@ -65,28 +65,32 @@ const QRModal: React.FC<QRModalProps> = ({
         fontSize: 18,
         fontWeight: 'bold',
         color: COLORS.gray800,
-        marginBottom: 5
+        marginBottom: 5,
+        marginTop: 15,
       }}>
         {(memberData?.user?.name || 'Nombre') + ' ' + (memberData?.user?.lastName || 'del Socio')}
       </Text>
 
       {/* Tipo de socio y ID */}
       <Text style={{
-        fontSize: 16,
-        color: COLORS.gray600,
-        marginBottom: 5
+        fontSize: 13,
+        fontWeight: '500',
+        color: COLORS.gray500,
+        textAlign: 'center',
+        letterSpacing: 0.5,
+        marginBottom: 15,
       }}>
-        Socio #{memberData?.memberCode || memberData?.id}
+        SOCIO TITULAR · #{memberData?.memberCode || memberData?.id}
       </Text>
 
       {/* Miembro desde */}
-      <Text style={{
+      {/* <Text style={{
         fontSize: 14,
         color: COLORS.gray500,
         marginBottom: 15
       }}>
         Socio desde {dateOfAdmission}
-      </Text>
+      </Text>*/}
 
       {/* Leyenda */}
       <Text style={{

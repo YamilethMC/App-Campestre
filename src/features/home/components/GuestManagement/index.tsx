@@ -1,8 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { Modal as RNModal, Text, TouchableOpacity, View } from 'react-native';
 import Button from '../../../../shared/components/Button/Button';
-import { COLORS } from '../../../../shared/theme/colors';
 import { MemberData } from '../../services/homeService';
 import styles from './Style';
 
@@ -46,10 +44,7 @@ const GuestManagement: React.FC<GuestManagementProps> = ({ onNewPassPress, onNew
 
   return (
     <View style={styles.card}>
-      <View style={styles.cardHeader}>
-        <Ionicons name="people-outline" size={24} color={COLORS.primary} />
-        <Text style={styles.cardTitle}>Gestión de Invitados</Text>
-      </View>
+      <Text style={styles.cardTitle}>GESTIÓN DE INVITADOS</Text>
 
       <View style={styles.guestSection}>
         {isSocioOrDependiente ? (
@@ -65,7 +60,7 @@ const GuestManagement: React.FC<GuestManagementProps> = ({ onNewPassPress, onNew
             disabled={!isSocioOrDependiente || !hasPassesAvailable}
           >
             <Text style={[styles.filledButtonText, (!isSocioOrDependiente || !hasPassesAvailable) ? styles.disabledButtonText : null]}>
-              + Nuevo invitado
+              + Invitado
             </Text>
           </TouchableOpacity>
 
@@ -75,7 +70,7 @@ const GuestManagement: React.FC<GuestManagementProps> = ({ onNewPassPress, onNew
             disabled={!isSocioOrDependiente}
           >
             <Text style={[styles.outlineButtonTempText, !isSocioOrDependiente ? styles.disabledButtonText : null]}>
-              + Nuevo pase temporal
+              + Pase temporal
             </Text>
           </TouchableOpacity>
         </View>

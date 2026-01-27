@@ -5,13 +5,14 @@ import styles from './Style';
 
 // Components
 import AddFamilyMemberForm from '../../profile/components/AddFamilyMemberForm';
+import CustomHeader from '../components/CustomHeader';
 import GuestManagement from '../components/GuestManagement';
 import GuestsModal from '../components/GuestsModal';
 import MyQRCode from '../components/MyQRCode';
 import { useMemberData } from '../hooks/useMemberData';
 
-// Banner component
-import BannerContainer from '../../banner';
+// Banner hooks and components
+import { useBanners } from '../../banner/hooks/useBanners';
 
 // Modal from shared components
 import Modal from '../../../shared/components/Modal/Modal';
@@ -57,6 +58,7 @@ const HomeScreen = () => {
   const [showGuestsModal, setShowGuestsModal] = useState(false);
 
   const { getMemberData, loading, memberData, deleteGuest } = useMemberData();
+  const { banners } = useBanners();
   const handleGuestPassSuccess = useCallback(async () => {
     // Refresh the member data to get updated passes available and guests
     if (userId) {
@@ -117,19 +119,18 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/*<Header memberData={memberData} />*/}
+      <CustomHeader memberData={memberData} banners={banners || []} />
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.cardsContainer}>
-          <BannerContainer />
-          {/*<QuickActions
-            onVehicleSelect={handleVehicleSelect}
-            onWaiterCall={handleCallWaiter}
-          />
-          <ActiveOrders />*/}
+          {/* Carrusel de banners adicional si hay múltiples banners */}
+          {/*{banners && banners.length > 1 && (
+            <BannerContainer banners={banners.slice(1)} />
+          )}*/}
+          
           <MyQRCode memberData={memberData} />
           <GuestManagement
             onNewPassPress={handleShowGuestPassForm}

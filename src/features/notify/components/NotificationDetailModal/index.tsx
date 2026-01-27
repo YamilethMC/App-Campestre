@@ -1,6 +1,6 @@
-import React from 'react';
-import { Modal, View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS } from '../../../../shared/theme/colors';
 import { Notification } from '../../interfaces';
 import styles from './Style';
@@ -65,7 +65,7 @@ const NotificationDetailModal: React.FC<NotificationDetailModalProps> = ({
                 color={typeColor}
                 style={styles.headerIcon}
               />
-              <Text style={styles.title} numberOfLines={2}>
+              <Text style={styles.title} numberOfLines={10}>
                 {notification.title}
               </Text>
             </View>

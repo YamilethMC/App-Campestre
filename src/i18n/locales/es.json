@@ -172,6 +172,7 @@
   },
   "surveys": {
     "title": "Voz del Socio",
+    "titleMenu": "voz",
     "subtitle": "ENCUESTAS DE CALIDAD",
     "loading": "Cargando encuesta...",
     "question": "Pregunta",
@@ -205,6 +206,7 @@
   },
   "reservation": {
     "title": "Reservaciones",
+    "titleMenu": "Reserva",
     "question": "Nueva Reservación",
     "noHoursAvailable": "No hay disponibilidad de horarios",
     "noCourtsAvailable": "No hay disponibilidad de canchas",

@@ -166,6 +166,7 @@
   },
   "reservation": {
     "title": "Reservations",
+    "titleMenu": "Reservation",
     "myReservations": "My reservations",
     "question": "New Reservation",
     "noHoursAvailable": "No available time slots",
@@ -210,7 +211,8 @@
     }
   },
   "surveys": {
-    "title": "Member’s Voice",
+    "title": "Voice of the member",
+    "titleMenu": "Voice",
     "subtitle": "QUALITY SURVEYS",
     "loading": "Loading survey...",
     "question": "Question",

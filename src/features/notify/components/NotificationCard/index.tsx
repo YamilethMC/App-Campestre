@@ -1,6 +1,6 @@
-import React from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { COLORS } from '../../../../shared/theme/colors';
 import { Notification, NotificationCardProps } from '../../interfaces';
 import styles from './Style';
@@ -49,7 +49,7 @@ const NotificationCard: React.FC<NotificationCardPropsExtended> = ({ notificatio
         </View>
         
         <View style={styles.textContainer}>
-          <Text style={styles.title} numberOfLines={2}>
+          <Text style={styles.title} numberOfLines={10}>
             {notification.title}
           </Text>
         </View>

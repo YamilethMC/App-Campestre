@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import { useProfileStore } from '../../../profile/store/useProfileStore';
 import { COLORS } from '../../../../shared/theme/colors';
+import { useProfileStore } from '../../../profile/store/useProfileStore';
 
 interface QRCodeComponentProps {
   size?: number;
@@ -28,7 +28,7 @@ const QRCodeComponent: React.FC<QRCodeComponentProps> = ({
         value={qrData}
         size={size - 20} // Ajustar tamaño para el padding
         backgroundColor={COLORS.white}
-        color={COLORS.primaryDark}
+        color={COLORS.gray500}
         ecl="H" // Error correction level alto para mejor lectura
       />
     </View>

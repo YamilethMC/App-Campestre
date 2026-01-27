@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { View } from 'react-native';
 import AccountStatementsScreen from '../../features/account-statements/containers';
 import { ChangePasswordScreen } from '../../features/auth/components/ChangePassword';
 import EventsScreen from '../../features/events/containers';
@@ -200,7 +201,7 @@ const MainTabs = () => {
           height: 82,
           paddingBottom: 8,
           paddingTop: 8,
-          backgroundColor: COLORS.white,
+          backgroundColor: COLORS.gray50 + 'E6', // gray50 with transparency
           borderTopWidth: 0,
           elevation: 10,
           shadowColor: COLORS.gray900,
@@ -224,9 +225,9 @@ const MainTabs = () => {
         options={{
           title: t('home.title'),
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" size={size} color={color} />
+            <Ionicons name="home" size={size} color={color} />
           ),
-          ...headerOptions(t('home.title'), '')
+          headerShown: false
         }} 
       />
       <Tab.Screen 
@@ -235,7 +236,7 @@ const MainTabs = () => {
         options={{
           title: t('events.title'),
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="book-outline" size={size} color={color} />
+            <Ionicons name="calendar-outline" size={size} color={color} />
           ),
           ...headerOptions(t('events.title'), 'Descubre y regístrate a nuestras actividades'),
         }} 
@@ -244,9 +245,24 @@ const MainTabs = () => {
         name="Reservation" 
         component={ReservationStack} 
         options={{
-          title: t('reservation.title'),
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="calendar-outline" size={size} color={color} />
+          title: t('reservation.titleMenu'),
+          tabBarIcon: ({ color, size, focused }) => (
+            <View style={{
+              backgroundColor: focused ? COLORS.primary : COLORS.primary,
+              borderRadius: 15,
+              width: 50,
+              height: 50,
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginBottom: 20,
+              shadowColor: COLORS.primary,
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.3,
+              shadowRadius: 8,
+              elevation: 8,
+            }}>
+              <Ionicons name="add-circle" size={30} color={COLORS.white} />
+            </View>
           ),
           ...headerOptions(t('reservation.title'), 'CLUB CAMPESTRE'),
         }} 
@@ -255,9 +271,9 @@ const MainTabs = () => {
         name="Surveys" 
         component={SurveysStack} 
         options={{
-          title: t('surveys.title'),
+          title: t('surveys.titleMenu'),
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="document-text-outline" size={size} color={color} />
+            <Ionicons name="chatbubbles" size={size} color={color} />
           ),
           ...headerOptions(t('surveys.title') || 'Encuestas', t('surveys.subtitle') || 'ENCUESTAS DE CALIDAD'),
         }} 
@@ -279,7 +295,7 @@ const MainTabs = () => {
         options={{
           title: t('more.title'),
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="ellipsis-horizontal" size={size} color={color} />
+            <Ionicons name="menu" size={size} color={color} />
           ),
           ...headerOptions(t('more.title'), ''),
         }} 

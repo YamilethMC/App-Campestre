@@ -1,7 +1,5 @@
-import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { COLORS } from '../../../../shared/theme/colors';
 import { MemberData } from '../../services/homeService';
 import QRCodeComponent from '../QRCodeComponent';
 import QRModal from '../QRModal';
@@ -13,35 +11,34 @@ interface MyQRCodeProps {
 
 const MyQRCode: React.FC<MyQRCodeProps> = ({ memberData }) => {
   const [qrModalVisible, setQrModalVisible] = useState(false);
-  const dateOfAdmission = memberData?.dateOfAdmission
-    ? new Date(memberData.dateOfAdmission).getUTCFullYear()
-    : '2020';
+
+  const handleCardPress = () => {
+    setQrModalVisible(true);
+  };
 
   return (
-    <View style={styles.card}>
-      <View style={styles.cardHeader}>
-        <Ionicons name="qr-code-outline" size={24} color={COLORS.primary} />
-        <Text style={styles.cardTitle}>Mi código QR</Text>
-      </View>
+    <TouchableOpacity style={styles.card} onPress={handleCardPress} activeOpacity={0.7}>
+      {/* Título centrado */}
+      <Text style={styles.cardTitle}>MI QR DE ACCESO</Text>
 
+      {/* QR Code enmarcado */}
       <View style={styles.qrContainer}>
-        {/* Código QR real en la tarjeta principal */}
-        <View style={styles.qrPlaceholderContainer}>
+        <View style={styles.qrFrame}>
           <QRCodeComponent
-            size={100}
+            size={120}
             memberCode={memberData?.memberCode}
           />
         </View>
+      </View>
 
-        <Text style={styles.userName}>{(memberData?.user?.name || 'Nombre') + ' ' + (memberData?.user?.lastName || 'del Socio')}</Text>
-        <Text style={styles.memberText}>Socio #{memberData?.memberCode ?? 'N/A'} | Desde {dateOfAdmission}</Text>
-
-        <TouchableOpacity
-          style={styles.showQrButton}
-          onPress={() => setQrModalVisible(true)}
-        >
-          <Text style={styles.showQrButtonText}>Mostrar QR completo</Text>
-        </TouchableOpacity>
+      {/* Información del socio */}
+      <View style={styles.memberInfo}>
+        <Text style={styles.memberName}>
+          {(memberData?.user?.name || 'Nombre') + ' ' + (memberData?.user?.lastName || 'del Socio')}
+        </Text>
+        <Text style={styles.memberDetails}>
+          SOCIO TITULAR · #{memberData?.memberCode ?? 'N/A'}
+        </Text>
       </View>
 
       <QRModal
@@ -49,7 +46,7 @@ const MyQRCode: React.FC<MyQRCodeProps> = ({ memberData }) => {
         onClose={() => setQrModalVisible(false)}
         memberData={memberData}
       />
-    </View>
+    </TouchableOpacity>
   );
 };
 

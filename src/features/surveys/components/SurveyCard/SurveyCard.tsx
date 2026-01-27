@@ -75,20 +75,20 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onPress, surveyId }) =>
         {/* Icons Row - Changed to boxes with icon on top and text below */}
         <View style={styles.iconsRow}>
           <View style={styles.iconBox}>
-            <Ionicons name="time-outline" size={16} color={COLORS.gray600} style={styles.icon} />
+            <Ionicons name="time" size={16} color={COLORS.gray500} style={styles.icon} />
             <Text style={styles.iconText}>{survey.estimatedTime} min</Text>
           </View>
 
           {/* Mostrar el contador de personas solo si showResponseCount es true */}
           {survey.responsesShow !== false && (
             <View style={styles.iconBox}>
-              <Ionicons name="people-outline" size={16} color={COLORS.gray600} style={styles.icon} />
+              <Ionicons name="people" size={16} color={COLORS.gray500} style={styles.icon} />
               <Text style={styles.iconText}>{survey.participantCount} {messages.SURVEYCARD.PEOPLE}</Text>
             </View>
           )}
 
           <View style={styles.iconBox}>
-            <Ionicons name="chatbubble-ellipses-outline" size={16} color={COLORS.gray600} style={styles.icon} />
+            <Ionicons name="chatbubble-ellipses" size={16} color={COLORS.gray500} style={styles.icon} />
             <Text style={styles.iconText}>{survey.questionCount} {messages.SURVEYCARD.QUESTIONS}</Text>
           </View>
         </View>

@@ -48,7 +48,7 @@ const MainHeader: React.FC<MainHeaderProps> = ({
         <View style={styles.rightContainer}>
           {showNotifications && (
             <TouchableOpacity onPress={handleNotifications} style={styles.iconContainer}>
-              <Ionicons name="notifications-outline" size={24} color={COLORS.white} />
+              <Ionicons name="notifications" size={24} color={COLORS.white} />
             </TouchableOpacity>
           )}
         </View>

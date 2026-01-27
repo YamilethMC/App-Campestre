@@ -26,7 +26,7 @@ const MoreOptionsScreen = () => {
   const menuItems = [
     { 
       title: t('profile.title'), 
-      icon: 'person-outline' as const,
+      icon: 'person' as const,
       onPress: () => navigation.navigate('Profile')
     },
     // { 
@@ -46,12 +46,12 @@ const MoreOptionsScreen = () => {
     },*/
     { 
       title: t('accountStatements.title'), 
-      icon: 'document-text-outline' as const,
+      icon: 'document-text' as const,
       onPress: () => navigation.navigate('AccountStatements')
     },
     { 
       title: t('files.title'), 
-      icon: 'newspaper-outline' as const,
+      icon: 'newspaper' as const,
       onPress: () => navigation.navigate('Files')
     },
     /*{ 
@@ -61,7 +61,7 @@ const MoreOptionsScreen = () => {
     },*/
     { 
       title: t('help.title'), 
-      icon: 'help-circle-outline' as const,
+      icon: 'help-circle' as const,
       onPress: () => navigation.navigate('HelpCenter')
     },
     { 
