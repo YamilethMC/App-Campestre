@@ -160,14 +160,14 @@
         "activateReminder": "Activar recordatorio",
         "register": "Registrarse"
     },
-
     "upcomingEvents": "Próximos Eventos",
     "makeReservation": "Hacer Reserva",
     "eventName": "Nombre del Evento",
     "eventDate": "Fecha del Evento",
     "eventTime": "Hora del Evento",
     "availableSpots": "Lugares Disponibles",
-    "bookEvent": "Reservar Evento"
+    "bookEvent": "Reservar Evento",
+    "filter": "Filtros"
     
   },
   "surveys": {

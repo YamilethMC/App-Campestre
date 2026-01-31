@@ -1,14 +1,23 @@
 import { useState, useEffect } from 'react';
 import { bannerService } from '../services';
 import { Banner } from '../interfaces/Banner';
+import { useAuthStore } from '../../auth/store/useAuthStore';
 
 export const useBanners = () => {
   const [banners, setBanners] = useState<Banner[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const { token, isAuthenticated } = useAuthStore();
   const refreshInterval = 30 * 60 * 1000; // 30 minutos en milisegundos
 
   const loadBanners = async () => {
+    // No cargar banners si no hay autenticación
+    if (!token || !isAuthenticated) {
+      setLoading(false);
+      setBanners([]);
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
@@ -25,6 +34,12 @@ export const useBanners = () => {
   };
 
   useEffect(() => {
+    // Solo cargar banners si el usuario está autenticado
+    if (!isAuthenticated || !token) {
+      setLoading(false);
+      return;
+    }
+
     loadBanners();
 
     // Configurar intervalo para actualizar banners cada 30 minutos
@@ -38,7 +53,7 @@ export const useBanners = () => {
         clearInterval(intervalId);
       }
     };
-  }, []);
+  }, [isAuthenticated, token]);
 
   return {
     banners,

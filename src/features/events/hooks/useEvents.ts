@@ -11,9 +11,11 @@ export const useEvents = () => {
   const {
     events,
     loading,
+    refreshing,
     error,
     setEvents,
     setLoading,
+    setRefreshing,
     setError,
     updateEvent,
     pagination,
@@ -24,7 +26,19 @@ export const useEvents = () => {
     setSearchQuery: setStoreSearchQuery,
     setSelectedEventType: setStoreSelectedEventType,
     setSelectedDate: setStoreSelectedDate,
-    resetEvents
+    resetEvents,
+    // Cache management
+    markFetched,
+    isCacheValid,
+    // Advanced filters
+    availableOnly,
+    popularitySort,
+    startDateFilter,
+    endDateFilter,
+    setAvailableOnly,
+    setPopularitySort,
+    setDateRange,
+    resetFilters
   } = useEventStore();
 
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
@@ -56,22 +70,47 @@ export const useEvents = () => {
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
   ];
 
-  // Fetch events with pagination
-  const fetchEvents = useCallback(async (page: number = 1) => {
+  // Fetch events with pagination and stale-while-revalidate pattern
+  const fetchEvents = useCallback(async (
+    page: number = 1,
+    forceRefresh: boolean = false,
+    overrideEventType?: 'Todos' | 'SOCIAL' | 'SPORT' | 'FAMILY' | 'OTHER'
+  ) => {
     // Evitar múltiples ejecuciones simultáneas
     if (fetchRef.current) return;
 
+    // Check cache validity - if valid and not forcing refresh, skip fetch
+    const cacheValid = isCacheValid();
+    if (!overrideEventType && cacheValid && !forceRefresh && events.length > 0) {
+      // Cache is valid and we have data, use cached data
+      return;
+    }
+
     fetchRef.current = true;
+    
+    // If we have cached data, show it while refreshing in background
+    const hasExistingData = events.length > 0;
+    if (hasExistingData && !forceRefresh) {
+      setRefreshing(true); // Background refresh indicator
+    } else {
+      setLoading(true); // Full loading state
+    }
+    
     try {
       // Format the date as 'yyyy-mm'
       const dateParam = selectedDate || `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}`;
-      const eventTypeParam = selectedEventType === 'Todos' ? '' : selectedEventType;
+      const requestedEventType = overrideEventType ?? selectedEventType;
+      const eventTypeParam = requestedEventType === 'Todos' ? '' : requestedEventType;
 
       const result = await eventsService.getEvents(
         page,
         searchQuery,
         eventTypeParam,
-        dateParam
+        dateParam,
+        availableOnly,
+        popularitySort,
+        startDateFilter,
+        endDateFilter
       );
 
       if (result.success && result.data) {
@@ -82,16 +121,25 @@ export const useEvents = () => {
           total: result.data.meta.total,
           totalPages: result.data.meta.totalPages,
         });
+        markFetched(); // Mark cache as fresh
       } else {
-        Alert.alert('Error', result.error || 'Error al cargar los eventos');
+        // Only show error if we don't have cached data
+        if (!hasExistingData) {
+          setError(result.error || 'Error al cargar los eventos');
+        }
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Error al cargar los eventos';
-      Alert.alert('Error', errorMessage);
+      // Only show error if we don't have cached data
+      if (!hasExistingData) {
+        setError(errorMessage);
+      }
     } finally {
       fetchRef.current = false;
+      setLoading(false);
+      setRefreshing(false);
     }
-  }, [searchQuery, selectedEventType, selectedDate, currentMonth, currentYear, setEvents, setError, setPagination]);
+  }, [searchQuery, selectedEventType, selectedDate, currentMonth, currentYear, setEvents, setError, setPagination, setLoading, setRefreshing, markFetched, isCacheValid, events.length, availableOnly, popularitySort, startDateFilter, endDateFilter]);
 
   // Set up auto-refresh every 30 minutes (1800000 ms)
   useEffect(() => {
@@ -209,7 +257,7 @@ export const useEvents = () => {
     setSelectedEventType(storeType as 'Todos' | 'SOCIAL' | 'SPORT' | 'FAMILY' | 'OTHER');
     setStoreSelectedEventType(storeType as 'Todos' | 'SOCIAL' | 'SPORT' | 'FAMILY' | 'OTHER');
     // Reset to page 1 when changing filters and fetch new data
-    fetchEvents(1);
+    fetchEvents(1, false, storeType as 'Todos' | 'SOCIAL' | 'SPORT' | 'FAMILY' | 'OTHER');
   }, [setStoreSelectedEventType, fetchEvents]);
 
   // Function to handle opening the registration screen
@@ -295,6 +343,7 @@ export const useEvents = () => {
     // State
     events,
     loading: loading && fetchRef.current, // Show loading only when fetch is in progress
+    refreshing, // Background refresh indicator
     error,
     currentMonth,
     currentYear,
@@ -323,6 +372,12 @@ export const useEvents = () => {
     currentEventId,
     selectedParticipants,
     setSelectedParticipants,
+    
+    // Advanced filters state
+    availableOnly,
+    popularitySort,
+    startDateFilter,
+    endDateFilter,
 
     // Actions
     setSearchQuery: handleSearchChange,
@@ -341,5 +396,11 @@ export const useEvents = () => {
     registerParticipants,
     getMemberDetails,
     cancelRegistration,
+    
+    // Advanced filter actions
+    setAvailableOnly,
+    setPopularitySort,
+    setDateRange,
+    resetFilters,
   };
 };

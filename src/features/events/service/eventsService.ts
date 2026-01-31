@@ -187,13 +187,17 @@ const parseTime = (dateISOString: string): string => {
 
 export const eventsService = {
   /**
-   * Obtener eventos con paginación y filtros
+   * Obtener eventos con paginación y filtros avanzados
    */
   async getEvents(
     page: number = 1,
     search: string = '',
     type: string = '',
-    date: string = '' // formato 'yyyy-mm'
+    date: string = '', // formato 'yyyy-mm'
+    availableOnly: boolean = false,
+    popularitySort: 'none' | 'asc' | 'desc' = 'none',
+    startDateFilter: string | null = null,
+    endDateFilter: string | null = null
   ): Promise<{
     success: boolean;
     data?: {
@@ -224,9 +228,16 @@ export const eventsService = {
         page: page.toString(),
         limit: '10', // Límite fijo (match surveys)
         search,
-        order: 'asc', // Orden fijo
-        orderBy: 'name', // Orden por nombre fijo
       });
+
+      // Dynamic ordering based on popularity sort
+      if (popularitySort !== 'none') {
+        params.append('order', popularitySort);
+        params.append('orderBy', 'popularity');
+      } else {
+        params.append('order', 'asc');
+        params.append('orderBy', 'name');
+      }
 
       if (type) {
         params.append('type', type.toUpperCase());
@@ -234,6 +245,19 @@ export const eventsService = {
 
       if (date) {
         params.append('date', date);
+      }
+      
+      // Advanced filters
+      if (availableOnly) {
+        params.append('availableOnly', 'true');
+      }
+      
+      if (startDateFilter) {
+        params.append('startDate', startDateFilter);
+      }
+      
+      if (endDateFilter) {
+        params.append('endDate', endDateFilter);
       }
 
       const url = `${process.env.EXPO_PUBLIC_API_URL}/events?${params.toString()}`;

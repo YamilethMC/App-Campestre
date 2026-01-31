@@ -11,6 +11,7 @@ import Button from '../../../shared/components/Button/Button';
 import Search from '../../../shared/components/Search/Search';
 import { COLORS } from '../../../shared/theme/colors';
 import EventCard from '../components/EventCard';
+import EventCardSkeleton from '../components/EventCardSkeleton';
 import FilterSection from '../components/FilterSection';
 import RegisterScreen from '../components/RegisterScreen';
 import baseStyles from './Style';
@@ -46,6 +47,7 @@ const EventsContainer = () => {
   const {
     events = [],
     loading = false,
+    refreshing = false,
     error = null,
     currentMonth = new Date().getMonth(),
     currentYear = new Date().getFullYear(),
@@ -67,6 +69,9 @@ const EventsContainer = () => {
     showRegistrationScreen,
     currentEventId,
     selectedParticipants,
+    // Advanced filters
+    availableOnly = false,
+    popularitySort = 'none',
     // Actions
     setSearchQuery,
     setSelectedEventType,
@@ -84,6 +89,10 @@ const EventsContainer = () => {
     registerParticipants,
     getMemberDetails,
     cancelRegistration,
+    // Advanced filter actions
+    setAvailableOnly,
+    setPopularitySort,
+    resetFilters,
   } = useEvents();
 
   // Si se está mostrando la pantalla de registro, solo mostrarla
@@ -131,11 +140,32 @@ const EventsContainer = () => {
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   };
 
-  // Show loading state
+  // Show loading state with skeleton loaders
   if (loading && pagination.page === 1) {
     return (
-      <View style={[styles.container, styles.loadingContainer]}>
-        {/* Loading indicator removed */}
+      <View style={styles.container}>
+        <View style={styles.searchContainer}>
+          <Search
+            placeholder="Buscar eventos..."
+            onSearch={setSearchQuery}
+            inputStyle={styles.searchInput}
+          />
+        </View>
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <FilterSection
+            selectedEventType={selectedEventType}
+            onEventTypeChange={setSelectedEventType as (type: 'Todos' | 'SPORT' | 'SOCIAL' | 'FAMILY' | 'OTHER') => void}
+          />
+          <View style={styles.eventsList}>
+            <EventCardSkeleton />
+            <EventCardSkeleton />
+            <EventCardSkeleton />
+          </View>
+        </ScrollView>
       </View>
     );
   }
@@ -167,6 +197,11 @@ const EventsContainer = () => {
         <FilterSection
           selectedEventType={selectedEventType}
           onEventTypeChange={setSelectedEventType as (type: 'Todos' | 'Deportivo' | 'Social' | 'Familiar' | 'Fitness' | 'SPORT' | 'SOCIAL' | 'FAMILY' | 'OTHER') => void}
+          availableOnly={availableOnly}
+          popularitySort={popularitySort}
+          onAvailableOnlyChange={setAvailableOnly}
+          onPopularitySortChange={setPopularitySort}
+          onResetFilters={resetFilters}
         />
 
         <View style={styles.monthSelectorContainer}>

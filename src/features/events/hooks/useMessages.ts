@@ -2,7 +2,28 @@ import { useTranslation } from 'react-i18next';
 
 const useMessages = () => {
   const { t } = useTranslation();
-  const messages = {
+    type EventsMessages = {
+    CONTAINER: {
+      PLACEHOLDER: string;
+      UPCOMINGEVENTS: string;
+      TITLESINGULAR: string;
+      NOEVENTS: string;
+      NOEVENTSREGISTERED: string;
+    };
+    EVENTCARD: {
+      REGISTERED: string;
+      BUSY: string;
+      SUCCESSREGISTERED: string;
+      CANCELREGISTRATION: string;
+      ACTIVATEREMINDER: string;
+      REGISTER: string;
+    };
+    FILTERS: {
+      LABEL: string;
+    };
+  };
+
+  const messages: EventsMessages = {
     CONTAINER: {
       PLACEHOLDER: t('events.placeholderSearch'),
       UPCOMINGEVENTS: t('events.upcomingEvents'),
@@ -11,13 +32,16 @@ const useMessages = () => {
       NOEVENTSREGISTERED: t('events.noEventsRegistered'),
     },
     EVENTCARD: {
-        REGISTERED: t('events.eventCard.registered'),
-        BUSY: t('events.eventCard.busy'),
-        SUCCESSREGISTERED: t('events.eventCard.successRegistered'),
-        CANCELREGISTRATION: t('events.eventCard.cancelRegistration'),
-        ACTIVATEREMINDER: t('events.eventCard.activateReminder'),
-        REGISTER: t('events.eventCard.register'),
-    }
+      REGISTERED: t('events.eventCard.registered'),
+      BUSY: t('events.eventCard.busy'),
+      SUCCESSREGISTERED: t('events.eventCard.successRegistered'),
+      CANCELREGISTRATION: t('events.eventCard.cancelRegistration'),
+      ACTIVATEREMINDER: t('events.eventCard.activateReminder'),
+      REGISTER: t('events.eventCard.register'),
+    },
+    FILTERS: {
+      LABEL: t('events.filter'),
+    },
   };
 
   return { messages };

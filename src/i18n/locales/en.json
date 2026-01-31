@@ -162,7 +162,8 @@
     "eventDate": "Event Date",
     "eventTime": "Event Time",
     "availableSpots": "Available Spots",
-    "bookEvent": "Book Event"
+    "bookEvent": "Book Event",
+    "filter": "Filters"
   },
   "reservation": {
     "title": "Reservations",

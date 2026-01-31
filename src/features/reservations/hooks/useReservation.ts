@@ -15,6 +15,10 @@ export const useReservation = () => {
       const [partySize, setPartySize] = useState<number>(2);
       const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false);
 
+      // Estados para manejar los servicios disponibles
+      const [services, setServices] = useState<any[]>([]);
+      const [loadingServices, setLoadingServices] = useState<boolean>(false);
+
       // Estados para manejar las instalaciones y horarios
       const [facilities, setFacilities] = useState<any[]>([]);
       const [availableTimeSlots, setAvailableTimeSlots] = useState<string[]>([]);
@@ -23,6 +27,29 @@ export const useReservation = () => {
 
       // Obtener la función para agregar reservas del store
       const { addReservation } = useReservationStore();
+
+      // Cargar servicios disponibles desde la API
+      const loadServices = async () => {
+        setLoadingServices(true);
+        const response = await facilityService.getServices();
+
+        console.log('loadServices response:', response);
+        if (response.success) {
+          const flatten = (obj: any): any[] => {
+            if (!obj) return [];
+            if (Array.isArray(obj)) return obj;
+            if (Array.isArray(obj.data)) return obj.data;
+            return flatten(obj.data?.data);
+          };
+          const payload = flatten(response);
+          setServices(payload);
+        } else {
+          alert(response.error || 'No se pudieron cargar los servicios');
+          setServices([]);
+        }
+
+        setLoadingServices(false);
+      };
 
       // Manejar la selección de un servicio
       const handleSelectService = async (service: any) => {
@@ -36,9 +63,9 @@ export const useReservation = () => {
         setFacilities([]);
         setAvailableTimeSlots([]);
 
-        // Si el servicio es padel, obtener las canchas
-        if (service.id === 'padel') {
-          await loadFacilitiesForService(service.id);
+        // Cargar las instalaciones para el tipo de servicio seleccionado
+        if (service.type) {
+          await loadFacilitiesForService(service.type);
         }
       };
 
@@ -300,8 +327,8 @@ export const useReservation = () => {
             return;
           }
 
-          // Si es Padel, usar el servicio de reservas para instalaciones
-          if (selectedService.id === 'padel' && selectedCourtId) {
+          // Si hay una instalación seleccionada, crear la reserva
+          if (selectedCourtId) {
             const reservationData = {
               startTime: startTimeISO,
               endTime: endTimeISO
@@ -330,6 +357,8 @@ export const useReservation = () => {
 
               // Mostrar modal de confirmación
               setShowConfirmationModal(true);
+              resetSelection();
+              loadServices();
             } else {
               alert(response.message || 'Error al confirmar la reserva');
             }
@@ -354,17 +383,20 @@ export const useReservation = () => {
       };
 
       return {
+        services,
+        loadingServices,
+        loadServices,
         selectedService,
         date,
         time,
         selectedCourt,
-        selectedCourtId, // Add selectedCourtId to the return
+        selectedCourtId,
         selectedTable,
         partySize,
         showConfirmationModal,
-        facilities, // Add facilities to the return
-        availableTimeSlots, // Add availableTimeSlots to the return
-        loading, // Add loading state to the return
+        facilities,
+        availableTimeSlots,
+        loading,
         loadingTimeSlots, // Add loadingTimeSlots to the return
         setTime,
         setSelectedCourt,

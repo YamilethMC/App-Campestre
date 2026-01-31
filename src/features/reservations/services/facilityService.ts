@@ -78,6 +78,73 @@ interface ServiceResponse<T = any> {
 // Service functions for facilities API
 export const facilityService = {
   /**
+   * Get available facility types as services
+   */
+  getServices: async (): Promise<ServiceResponse<{ data: any[]; meta: { total: number } }>> => {
+    const token = useAuthStore.getState().token;
+    if (!token) {
+      return {
+        success: false,
+        error: 'No authentication token available',
+        status: 401
+      };
+    }
+
+    const url = `${process.env.EXPO_PUBLIC_API_URL}/facilities/types?status=ACTIVE`;
+
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'accept': '*/*',
+        },
+      });
+
+      if (!response.ok) {
+        let errorMessage = 'Error al cargar los servicios';
+
+        switch (response.status) {
+          case 400:
+            errorMessage = 'Petición inválida';
+            break;
+          case 404:
+            errorMessage = 'No se encontraron servicios disponibles';
+            break;
+          case 500:
+            errorMessage = 'Error interno del servidor';
+            break;
+          default:
+            const errorText = await response.text();
+            errorMessage = `Error en la solicitud: ${response.status}. ${errorText}`;
+        }
+
+        return {
+          success: false,
+          error: errorMessage,
+          status: response.status
+        };
+      }
+
+      const result = await response.json();
+
+      return {
+        success: true,
+        data: result,
+        message: 'Servicios cargados exitosamente',
+        status: response.status
+      };
+    } catch (error: any) {
+      console.error('Error fetching services:', error);
+      return {
+        success: false,
+        error: error.message || 'Error desconocido al cargar los servicios',
+        status: 500
+      };
+    }
+  },
+  /**
    * Get list of facilities
    */
   getFacilities: async (params: {

@@ -43,10 +43,9 @@ export const useStore = () => {
     
     // Events store
     events: eventStore.events,
-    fetchEvents: eventStore.fetchEvents,
-    registerForEvent: eventStore.registerForEvent,
-    unregisterFromEvent: eventStore.unregisterFromEvent,
-    toggleReminder: eventStore.toggleReminder,
+    setEvents: eventStore.setEvents,
+    updateEvent: eventStore.updateEvent,
+    resetEvents: eventStore.resetEvents,
     
     // Reservations store
     reservations: reservationStore.reservations,

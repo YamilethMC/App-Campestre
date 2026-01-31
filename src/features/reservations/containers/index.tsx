@@ -37,6 +37,9 @@ const ReservationsContainer = () => {
   const { userId } = useAuthStore.getState();
   const { getReservations, cancelReservation } = useMyReservations();
   const {
+    services,
+    loadingServices,
+    loadServices,
     selectedService,
     date,
     time,
@@ -73,38 +76,10 @@ const ReservationsContainer = () => {
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
   const [showReservationModal, setShowReservationModal] = useState(false);
 
-  // Available services for new reservations
-  const availableServices = [
-    {
-      id: 'padel',
-      name: 'Padel',
-      description: 'Canchas para disfrutar del padel',
-      icon: 'tennisball-outline',
-      color: '#10B981' //COLORS.primary
-    }/*,
-    {
-      id: 'golf',
-      name: 'Golf',
-      description: 'Campo de golf y equipamiento',
-      icon: 'golf-outline',
-      color: '#10B981' //COLORS.info
-    },
-    {
-      id: 'tenis',
-      name: 'Tenis',
-      description: 'Canchas y equipos para disfrutar del tenis',
-      icon: 'tennisball-outline',
-      color: '#10B981'
-    },
-    {
-      id: 'gimnasio',
-      name: 'Gimnasio',
-      description: 'Equipos y clases de fitness',
-      icon: 'barbell-outline',
-      color: '#10B981' //COLORS.warning
-    }*/
-    
-  ];
+  // Load services on mount
+  useEffect(() => {
+    loadServices();
+  }, []);
 
   useEffect(() => {
     if (!selectedService) {
@@ -268,8 +243,8 @@ const ReservationsContainer = () => {
             onDateChange={handleDateChange}
           />
 
-          {/* Componente de canchas - Mostrar solo para padel */}
-          {selectedService.id === 'padel' && (
+          {/* Componente de canchas - Mostrar para servicios con instalaciones */}
+          {selectedService.type && facilities.length > 0 && (
             <CourtSelector
               selectedCourt={selectedCourt}
               onCourtChange={(courtId) => {
@@ -289,7 +264,7 @@ const ReservationsContainer = () => {
           )}
 
           {/* Componentes adicionales para otros servicios */}
-          {selectedService.id === 'restaurante' && (
+          {selectedService.id === 'restaurante' && selectedService.type === 'RESTAURANT' && (
             <>
               <View style={styles.numberSelector}>
                 <Ionicons name="people-outline" size={24} color={COLORS.gray600} />
@@ -318,8 +293,8 @@ const ReservationsContainer = () => {
             </>
           )}
 
-          {/* Componente de horarios - Mostrar solo para padel y cuando se haya seleccionado cancha y fecha */}
-          {selectedService.id === 'padel' && (
+          {/* Componente de horarios - Mostrar cuando se haya seleccionado instalación y fecha */}
+          {selectedService.type && selectedCourtId && date && (
             <TimeSlots
               selectedTime={time}
               onTimeChange={setTime}
@@ -336,8 +311,8 @@ const ReservationsContainer = () => {
               date={date}
               time={time}
               details={{
-                ...(selectedService.id === 'padel' && selectedCourt && { court: getCourtName(selectedCourt), courtId: selectedCourtId }),
-                ...(selectedService.id === 'restaurante' && selectedTable && { table: getTableName(selectedTable), tableId: selectedTable, partySize }),
+                ...(selectedCourt && { court: getCourtName(selectedCourt), courtId: selectedCourtId }),
+                ...(selectedTable && { table: getTableName(selectedTable), tableId: selectedTable, partySize }),
               }}
             />
           )}
@@ -347,9 +322,7 @@ const ReservationsContainer = () => {
             <Button
               text={messages.CONTAINER.CONFIRM_RESERVATION}
               onPress={confirmReservation}
-              disabled={!date || !time ||
-                (selectedService.id === 'padel' && !selectedCourtId) ||
-                (selectedService.id === 'restaurante' && !selectedTable)}
+              disabled={!date || !time || !selectedCourtId}
             />
           </View>
 
@@ -400,15 +373,25 @@ const ReservationsContainer = () => {
           </Text>
 
           {/* Services Grid - 2 per row */}
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-            {availableServices.map((service) => (
-              <ServiceCard
-                key={service.id}
-                service={service}
-                onPress={() => handleSelectService(service)}
-              />
-            ))}
-          </View>
+          {loadingServices ? (
+            <View style={{ padding: 20, alignItems: 'center' }}>
+              <Text style={{ color: COLORS.gray600 }}>Cargando servicios...</Text>
+            </View>
+          ) : !services || services.length === 0 ? (
+            <View style={{ padding: 20, alignItems: 'center' }}>
+              <Text style={{ color: COLORS.gray600 }}>No hay servicios disponibles</Text>
+            </View>
+          ) : (
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+              {services.map((service: any) => (
+                <ServiceCard
+                  key={service.id}
+                  service={service}
+                  onPress={() => handleSelectService(service)}
+                />
+              ))}
+            </View>
+          )}
         </View>
       </ScrollView>
 
@@ -506,14 +489,20 @@ const ReservationsContainer = () => {
                     [
                       { text: 'Cancelar', style: 'cancel' },
                       {
-                        text: 'Confirmar',
-                        style: 'destructive',
-                        onPress: () => handleCancelReservation(
-                          selectedReservation.id,
-                          selectedReservation.startTime,
-                          selectedReservation.endTime
-                        )
-                      }
+                        text: 'Aceptar',
+                        onPress: async () => {
+                          const success = await handleCancelReservation(
+                            selectedReservation.id,
+                            selectedReservation.startTime,
+                            selectedReservation.endTime
+                          );
+                          if (success) {
+                            await loadReservations();
+                            loadServices();
+                            setShowReservationModal(false);
+                          }
+                        },
+                      },
                     ]
                   );
                 }}
