@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View, TouchableOpacity, Alert } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { Text, View, TouchableOpacity, Alert, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Modal from '../../../../shared/components/Modal/Modal';
 import { COLORS } from '../../../../shared/theme/colors';
 import { MemberData } from '../../services/homeService';
 import QRCodeComponent from '../QRCodeComponent';
 import qrCacheService, { CachedQRData } from '../../services/qrCacheService';
+import ViewShot from 'react-native-view-shot';
+import * as FileSystem from 'expo-file-system';
+import * as MediaLibrary from 'expo-media-library';
+import * as Sharing from 'expo-sharing';
 
 interface QRModalProps {
   visible: boolean;
@@ -20,8 +24,9 @@ const QRModal: React.FC<QRModalProps> = ({
 }) => {
   const [isOffline, setIsOffline] = useState(false);
   const [cachedData, setCachedData] = useState<CachedQRData | null>(null);
-  const [isSaved, setIsSaved] = useState(false);
-  const [lastSavedDate, setLastSavedDate] = useState<string | null>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [lastDownloadDate, setLastDownloadDate] = useState<string | null>(null);
+  const viewShotRef = useRef<ViewShot>(null);
 
   const dateOfAdmission = memberData?.dateOfAdmission
     ? new Date(memberData.dateOfAdmission).getUTCFullYear()
@@ -41,8 +46,6 @@ const QRModal: React.FC<QRModalProps> = ({
     const cached = await qrCacheService.getCachedQRData();
     if (cached) {
       setCachedData(cached);
-      setIsSaved(true);
-      setLastSavedDate(qrCacheService.formatCachedDate(cached.cachedAt));
     }
 
     // If online and have member data, auto-save for offline use
@@ -68,18 +71,93 @@ const QRModal: React.FC<QRModalProps> = ({
 
     const saved = await qrCacheService.saveQRData(dataToCache);
     if (saved) {
-      setIsSaved(true);
       setCachedData(dataToCache);
-      setLastSavedDate(qrCacheService.formatCachedDate(dataToCache.cachedAt));
-      if (showAlert) {
-        Alert.alert(
-          'QR Guardado',
-          'Tu código QR ha sido guardado para uso offline. Podrás acceder a él sin conexión a internet.',
-          [{ text: 'Entendido', style: 'default' }]
-        );
-      }
     } else if (showAlert) {
       Alert.alert('Error', 'No se pudo guardar el QR. Intenta de nuevo.');
+    }
+  };
+
+  const downloadQRCode = async () => {
+    try {
+      setIsDownloading(true);
+
+      // Request media library permissions
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert(
+          'Permisos requeridos',
+          'Necesitamos permiso para guardar imágenes en tu galería. Por favor, habilita los permisos en la configuración de tu dispositivo.',
+          [{ text: 'Entendido', style: 'default' }]
+        );
+        setIsDownloading(false);
+        return;
+      }
+
+      // Capture the QR code as image
+      if (!viewShotRef.current) {
+        Alert.alert('Error', 'No se pudo capturar el código QR');
+        setIsDownloading(false);
+        return;
+      }
+
+      const captureTarget = viewShotRef.current;
+      if (!captureTarget) {
+        Alert.alert('Error', 'No se pudo capturar el código QR');
+        setIsDownloading(false);
+        return;
+      }
+      const captureFn = captureTarget.capture;
+      if (!captureFn) {
+        Alert.alert('Error', 'No se pudo capturar el código QR');
+        setIsDownloading(false);
+        return;
+      }
+      const uri = await captureFn();
+
+      // Generate filename with member info
+      const memberName = displayMemberName.replace(/\s+/g, '_');
+      const timestamp = new Date().getTime();
+      const filename = `QR_${memberName}_${timestamp}.png`;
+
+      // Move temporary capture into cache directory so media library can access it reliably
+      const cachedFileUri = `${FileSystem.cacheDirectory}${filename}`;
+      await FileSystem.copyAsync({ from: uri, to: cachedFileUri });
+
+      try {
+        const asset = await MediaLibrary.createAssetAsync(cachedFileUri);
+        await MediaLibrary.createAlbumAsync('Campestre', asset, false);
+
+        const downloadDate = new Date().toISOString();
+        setLastDownloadDate(qrCacheService.formatCachedDate(downloadDate));
+
+        Alert.alert(
+          '¡Descarga exitosa!',
+          'Tu código QR ha sido guardado en tu galería. Ahora puedes acceder a él sin necesidad de abrir la app.',
+          [{ text: 'Entendido', style: 'default' }]
+        );
+      } catch (mediaError: any) {
+        // console.error('Error saving QR to media library:', mediaError);
+        // Alert.alert(
+        //   'No se pudo guardar automáticamente',
+        //   'Vamos a abrir el menú de compartir para que puedas guardar el QR manualmente o enviarlo a otro dispositivo.',
+        //   [{ text: 'Entendido', style: 'default' }]
+        // );
+
+        if (await Sharing.isAvailableAsync()) {
+          await Sharing.shareAsync(cachedFileUri, {
+            dialogTitle: 'Guardar código QR',
+          });
+        }
+      }
+    } catch (error: any) {
+      console.error('Error downloading QR:', error);
+      Alert.alert(
+        'Error al descargar',
+        error.message || 'No se pudo descargar el código QR. Por favor intenta de nuevo.',
+        [{ text: 'Entendido', style: 'default' }]
+      );
+    } finally {
+      setIsDownloading(false);
     }
   };
 
@@ -144,72 +222,85 @@ const QRModal: React.FC<QRModalProps> = ({
         </View>
       )}
 
-      {/* Componente QR real con el memberCode del socio */}
-      <QRCodeComponent
-        size={200}
-        memberCode={displayMemberCode}
-      />
+      {/* Componente QR real con el memberCode del socio - wrapped in ViewShot for capture */}
+      <ViewShot
+        ref={viewShotRef}
+        options={{
+          format: 'png',
+          quality: 1.0,
+          result: 'tmpfile',
+        }}
+        style={{
+          backgroundColor: COLORS.white,
+          padding: 20,
+          borderRadius: 12,
+          alignItems: 'center',
+        }}
+      >
+        <QRCodeComponent
+          size={200}
+          memberCode={displayMemberCode}
+        />
+        <Text style={{
+          fontSize: 16,
+          fontWeight: 'bold',
+          color: COLORS.gray800,
+          marginTop: 12,
+          textAlign: 'center',
+        }}>
+          {displayMemberName}
+        </Text>
+        <Text style={{
+          fontSize: 12,
+          fontWeight: '500',
+          color: COLORS.gray500,
+          textAlign: 'center',
+          marginTop: 4,
+        }}>
+          SOCIO TITULAR · #{displayMemberCode || memberData?.id}
+        </Text>
+      </ViewShot>
 
-      {/* Nombre del socio en negrita */}
-      <Text style={{
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: COLORS.gray800,
-        marginBottom: 5,
-        marginTop: 15,
-      }}>
-        {displayMemberName}
-      </Text>
-
-      {/* Tipo de socio y ID */}
-      <Text style={{
-        fontSize: 13,
-        fontWeight: '500',
-        color: COLORS.gray500,
-        textAlign: 'center',
-        letterSpacing: 0.5,
-        marginBottom: 10,
-      }}>
-        SOCIO TITULAR · #{displayMemberCode || memberData?.id}
-      </Text>
-
-      {/* Save for offline button */}
+      {/* Download QR button */}
       <TouchableOpacity
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-          backgroundColor: isSaved ? '#D1FAE5' : COLORS.primary,
-          paddingHorizontal: 16,
-          paddingVertical: 10,
-          borderRadius: 20,
-          marginBottom: 12,
+          backgroundColor: isDownloading ? COLORS.gray300 : COLORS.primary,
+          paddingHorizontal: 20,
+          paddingVertical: 12,
+          borderRadius: 24,
+          marginTop: 20,
+          marginBottom: 8,
+          minWidth: 200,
+          justifyContent: 'center',
         }}
-        onPress={() => saveQRForOffline(true)}
-        disabled={isSaved}
+        onPress={downloadQRCode}
+        disabled={isDownloading}
       >
         <Ionicons
-          name={isSaved ? 'checkmark-circle' : 'download-outline'}
-          size={18}
-          color={isSaved ? '#059669' : COLORS.white}
+          name={isDownloading ? 'hourglass-outline' : 'download-outline'}
+          size={20}
+          color={COLORS.white}
         />
         <Text style={{
-          marginLeft: 8,
-          color: isSaved ? '#059669' : COLORS.white,
-          fontWeight: '600',
-          fontSize: 14,
+          marginLeft: 10,
+          color: COLORS.white,
+          fontWeight: '700',
+          fontSize: 15,
         }}>
-          {isSaved ? 'Guardado para offline' : 'Guardar para uso offline'}
+          {isDownloading ? 'Descargando...' : 'Descargar QR'}
         </Text>
       </TouchableOpacity>
 
-      {/* Last saved date */}
-      {isSaved && lastSavedDate && (
+      {/* Last download date */}
+      {lastDownloadDate && (
         <Text style={{
           fontSize: 11,
           color: COLORS.gray500,
-          marginBottom: 10,
+          marginBottom: 8,
         }}>
-          Última actualización: {lastSavedDate}
+          Última descarga: {lastDownloadDate}
         </Text>
       )}
 
