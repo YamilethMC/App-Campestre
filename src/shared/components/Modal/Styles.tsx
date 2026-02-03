@@ -71,11 +71,12 @@ export const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   button: {
-    paddingVertical: spacing.sm,
+    paddingVertical: 14,
     paddingHorizontal: spacing.lg,
     borderRadius: 8,
     minWidth: 100,
     alignItems: 'center',
+    minHeight: 48,
   },
   cancelButton: {
     backgroundColor: COLORS.gray200,

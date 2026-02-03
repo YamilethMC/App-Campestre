@@ -268,11 +268,12 @@ const QRModal: React.FC<QRModalProps> = ({
           alignItems: 'center',
           backgroundColor: isDownloading ? COLORS.gray300 : COLORS.primary,
           paddingHorizontal: 20,
-          paddingVertical: 12,
+          paddingVertical: 14,
           borderRadius: 24,
           marginTop: 20,
           marginBottom: 8,
           minWidth: 200,
+          minHeight: 48,
           justifyContent: 'center',
         }}
         onPress={downloadQRCode}

@@ -245,9 +245,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 12,
+    paddingVertical: 14,
     borderRadius: 8,
     borderWidth: 1,
+    minHeight: 48,
   },
   loadingMoreContainer: {
     alignItems: 'center',

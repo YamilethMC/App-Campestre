@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
   },
   tab: {
     flex: 1,
-    paddingVertical: 12,
+    paddingVertical: 14,
     alignItems: 'center',
     borderBottomWidth: 2,
     borderBottomColor: 'transparent',
@@ -380,10 +380,11 @@ const styles = StyleSheet.create({
   },
   confirmationButton: {
     flex: 1,
-    paddingVertical: 12,
+    paddingVertical: 14,
     paddingHorizontal: 20,
     borderRadius: 8,
     alignItems: 'center',
+    minHeight: 48,
   },
   cancelButton: {
     backgroundColor: COLORS.gray200,

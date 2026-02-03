@@ -137,12 +137,24 @@ console.log('---------------------------HOLAGOLA2', response);
         }
 
         setSurveys(surveysData);
-        setPagination({
-          page: meta.page,
-          limit: meta.limit,
-          total: meta.total,
-          totalPages: meta.totalPages,
-        });
+        
+        // Handle pagination safely - provide defaults if meta is undefined
+        if (meta) {
+          setPagination({
+            page: meta.page || 1,
+            limit: meta.limit || 10,
+            total: meta.total || 0,
+            totalPages: meta.totalPages || 1,
+          });
+        } else {
+          // Fallback pagination when meta is not available
+          setPagination({
+            page: 1,
+            limit: 10,
+            total: surveysData.length,
+            totalPages: 1,
+          });
+        }
 
         // Calcular estadísticas usando todos los datos
         const activeSurveysCount = response.data.unansweredSurveys?.length || 0;

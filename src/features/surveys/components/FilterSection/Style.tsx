@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   },
   filterButton: {
     paddingHorizontal: 30,
-    paddingVertical: 10,
+    paddingVertical: 12,
     borderWidth: 1,
     borderColor: COLORS.gray200,
     borderRadius: 20,
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   segmentButton: {
     flex: 1,
-    paddingVertical: 10,
+    paddingVertical: 12,
     paddingHorizontal: 16,
     alignItems: 'center',
     justifyContent: 'center',

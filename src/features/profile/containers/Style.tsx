@@ -21,8 +21,7 @@ const styles = StyleSheet.create({
       marginBottom: 24,
     },
     editButton: {
-      paddingHorizontal: 12,
-      paddingVertical: 6,
+      paddingHorizontal: 20,
       borderRadius: 6,
     },
     editActions: {

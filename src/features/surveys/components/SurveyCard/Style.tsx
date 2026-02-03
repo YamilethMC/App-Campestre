@@ -132,9 +132,10 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: COLORS.primary,
-    paddingVertical: 12,
+    paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
+    minHeight: 48,
   },
   buttonText: {
     color: COLORS.white,

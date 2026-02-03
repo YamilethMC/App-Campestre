@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
   filterButton: {
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingVertical: 12,
     borderWidth: 1,
     borderColor: COLORS.gray200,
     borderRadius: 20,
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
   },
   sortOption: {
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingVertical: 12,
     borderRadius: 20,
     borderWidth: 1,
     borderColor: COLORS.gray200,

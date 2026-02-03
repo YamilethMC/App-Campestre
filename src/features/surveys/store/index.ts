@@ -135,7 +135,8 @@ export const useSurveyStore = create<SurveyStore>((set, get) => ({
     }));
 
     return surveysWithUpdatedStatus.filter(survey => {
-      const matchesCategory = currentFilter.category === SurveyCategory.SERVICES /*SurveyCategory.ALL*/ ||
+      const matchesCategory = currentFilter.category === SurveyCategory.ALL ||
+                              currentFilter.category === SurveyCategory.SERVICES /*Legacy fallback*/ ||
                               survey.category === currentFilter.category;
 
       let matchesStatus = false;
