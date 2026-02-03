@@ -282,8 +282,8 @@ export const useEvents = () => {
     setCurrentEventId('');
     setSelectedParticipants([]);
 
-    // Refresh events to update registration status
-    await fetchEvents(1);
+    // Force refresh events to update registration status, bypassing cache
+    await fetchEvents(1, true);
   }, [fetchEvents]);
 
   // Function to toggle participant selection
@@ -313,12 +313,17 @@ export const useEvents = () => {
     const result = await eventsService.registerForEvent(currentEventId, memberId.toString(), totalRegistrations);
 
     if (result.success) {
+      // Update event locally in store for instant UI feedback
+      updateEvent(currentEventId, { 
+        isRegistered: true,
+        availableSpots: result.data?.availableSpots ?? 0
+      });
       return true;
     } else {
       Alert.alert('Error', result.error || 'Error al registrar en el evento');
       return false;
     }
-  }, [currentEventId]);
+  }, [currentEventId, updateEvent]);
 
   // Function to cancel registration from an event
   const cancelRegistration = useCallback(async (eventId: string) => {
@@ -331,13 +336,18 @@ export const useEvents = () => {
     const result = await eventsService.cancelEventRegistration(eventId, userId);
 
     if (result.success) {
-      await fetchEvents(1);
+      // Update event locally in store for instant UI feedback
+      updateEvent(eventId, { 
+        isRegistered: false
+      });
+      // Force refresh events to update registration status, bypassing cache
+      await fetchEvents(1, true);
       return true;
     } else {
       Alert.alert('Error', result.error || 'Error al cancelar el registro');
       return false;
     }
-  }, [fetchEvents]);
+  }, [fetchEvents, updateEvent]);
 
   return {
     // State

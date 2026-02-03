@@ -3,12 +3,13 @@ import { COLORS } from '../../theme/colors';
 
 export const styles = StyleSheet.create({
     button: {
-      paddingVertical: 12,
-      paddingHorizontal: 20,
-      borderRadius: 8,
+      paddingVertical: 14,
+      paddingHorizontal: 24,
+      borderRadius: 10,
       alignItems: 'center',
       justifyContent: 'center',
       borderWidth: 1,
+      minHeight: 48,
     },
     buttonContent: {
       flexDirection: 'row',
@@ -46,8 +47,9 @@ export const styles = StyleSheet.create({
       borderColor: COLORS.gray400,
     },
     buttonText: {
-      fontSize: 16,
+      fontSize: 17,
       fontWeight: '600',
+      letterSpacing: 0.3,
     },
     primaryButtonText: {
       color: COLORS.white,

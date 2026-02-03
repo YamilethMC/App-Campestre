@@ -49,6 +49,8 @@ const SurveysScreen: React.FC = () => {
     loading: hookLoading,
     loadSurveyData,
     submitSurveyResponse,
+    handleFilterChange,
+    handleStatusChange: handleStatusChangeHook,
   } = useSurveyActions();
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -128,20 +130,6 @@ const SurveysScreen: React.FC = () => {
     setModalVisible(null);
   };
 
-  const handleCategoryChange = (category: SurveyCategory) => {
-    setFilter({
-      ...currentFilter,
-      category,
-    });
-  };
-
-  const handleStatusChange = (status: 'abiertas' | 'completadas' | 'cerradas') => {
-    setFilter({
-      ...currentFilter,
-      status,
-    });
-  };
-
   const handleCardPress = (surveyId: string) => {
     handleSurveyResponse(surveyId);
   };
@@ -169,6 +157,19 @@ const SurveysScreen: React.FC = () => {
 
   const currentQuestion = questions[currentQuestionIndex];
   const progress = selectedSurveyId ? ((currentQuestionIndex + 1) / questions.length) * 100 : 0;
+  
+  // Calculate ETA based on average time per question (approximately 30 seconds per question)
+  const SECONDS_PER_QUESTION = 30;
+  const remainingQuestions = questions.length - (currentQuestionIndex + 1);
+  const estimatedSecondsRemaining = remainingQuestions * SECONDS_PER_QUESTION;
+  const estimatedMinutesRemaining = Math.ceil(estimatedSecondsRemaining / 60);
+  
+  const getETAText = () => {
+    if (remainingQuestions === 0) return 'Última pregunta';
+    if (estimatedMinutesRemaining < 1) return '< 1 min restante';
+    if (estimatedMinutesRemaining === 1) return '~1 min restante';
+    return `~${estimatedMinutesRemaining} min restantes`;
+  };
 
   const getVisiblePages = () => {
     const total = pagination.totalPages;
@@ -214,11 +215,14 @@ const SurveysScreen: React.FC = () => {
             </Card>
           </View>
           
-          {/* Progress Bar */}
+          {/* Enhanced Progress Bar with ETA */}
           <View style={styles.progressContainer}>
             <View style={styles.progressHeader}>
               <Text style={styles.progressText}>
                 {messages.CONTAINER.QUESTION} {currentQuestionIndex + 1} {messages.CONTAINER.OF} {questions.length}
+              </Text>
+              <Text style={styles.progressPercentage}>
+                {Math.round(progress)}%
               </Text>
             </View>
             <View style={styles.progressBarContainer}>
@@ -228,6 +232,11 @@ const SurveysScreen: React.FC = () => {
                   { width: `${progress}%` }
                 ]} 
               />
+            </View>
+            <View style={styles.progressFooter}>
+              <Text style={styles.etaText}>
+                {getETAText()}
+              </Text>
             </View>
           </View>
           
@@ -372,8 +381,10 @@ const SurveysScreen: React.FC = () => {
           <FilterSection
             selectedCategory={currentFilter.category}
             selectedStatus={currentFilter.status}
-            onCategoryChange={handleCategoryChange}
-            onStatusChange={handleStatusChange}
+            onCategoryChange={(category) =>
+              handleFilterChange({ ...currentFilter, category })
+            }
+            onStatusChange={handleStatusChangeHook}
           />
 
           {/* Surveys List */}

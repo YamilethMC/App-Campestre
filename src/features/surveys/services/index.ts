@@ -224,6 +224,7 @@ console.log('---------------------------HOLAGOLA3', url);
         participantCount: apiSurvey.participantCount || apiSurvey.responseCount || 0,
         questionCount: apiSurvey.questionCount || 0,
         isActive: false, // Respondida, por lo tanto no activa
+        isAnswered: true,
         dateCreated: apiSurvey.createdAt,
         dateCompleted: apiSurvey.endDate,
         image: apiSurvey.image, // Nuevo campo para la imagen
@@ -240,6 +241,7 @@ console.log('---------------------------HOLAGOLA3', url);
         participantCount: apiSurvey.participantCount || apiSurvey.responseCount || 0,
         questionCount: apiSurvey.questionCount || 0,
         isActive: true, // No respondida, por lo tanto activa
+        isAnswered: false,
         dateCreated: apiSurvey.createdAt,
         dateCompleted: apiSurvey.endDate,
         image: apiSurvey.image, // Nuevo campo para la imagen
@@ -257,6 +259,7 @@ console.log('---------------------------HOLAGOLA3', url);
         participantCount: apiSurvey.participantCount || apiSurvey.responseCount || 0,
         questionCount: apiSurvey.questionCount || 0,
         isActive: false, // Cerrada, por lo tanto no activa
+        isAnswered: false,
         dateCreated: apiSurvey.createdAt,
         dateCompleted: apiSurvey.endDate,
         image: apiSurvey.image, // Nuevo campo para la imagen

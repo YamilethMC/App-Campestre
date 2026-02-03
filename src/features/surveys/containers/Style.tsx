@@ -120,6 +120,21 @@ const styles = StyleSheet.create({
   progressBarFill: {
     height: '100%',
     backgroundColor: COLORS.primary,
+    borderRadius: 4,
+  },
+  progressPercentage: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: COLORS.primary,
+  },
+  progressFooter: {
+    marginTop: 8,
+    alignItems: 'flex-end',
+  },
+  etaText: {
+    fontSize: 12,
+    color: COLORS.gray500,
+    fontStyle: 'italic',
   },
   questionSection: {
     marginBottom: 16,

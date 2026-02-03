@@ -40,6 +40,39 @@ const styles = StyleSheet.create({
   selectedLanguage: {
     fontWeight: '600',
   },
+  subsectionTitle: {
+    fontSize: 14,
+    fontWeight: '500',
+    marginBottom: 12,
+    opacity: 0.7,
+  },
+  settingLabelContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  pickerButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  pickerOptions: {
+    backgroundColor: '#f5f5f5',
+    borderRadius: 8,
+    marginBottom: 12,
+    overflow: 'hidden',
+  },
+  pickerOption: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  pickerOptionText: {
+    fontSize: 14,
+  },
 });
 
 export default styles;
