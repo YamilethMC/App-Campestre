@@ -158,19 +158,6 @@ const SurveysScreen: React.FC = () => {
   const currentQuestion = questions[currentQuestionIndex];
   const progress = selectedSurveyId ? ((currentQuestionIndex + 1) / questions.length) * 100 : 0;
   
-  // Calculate ETA based on average time per question (approximately 30 seconds per question)
-  const SECONDS_PER_QUESTION = 30;
-  const remainingQuestions = questions.length - (currentQuestionIndex + 1);
-  const estimatedSecondsRemaining = remainingQuestions * SECONDS_PER_QUESTION;
-  const estimatedMinutesRemaining = Math.ceil(estimatedSecondsRemaining / 60);
-  
-  const getETAText = () => {
-    if (remainingQuestions === 0) return 'Última pregunta';
-    if (estimatedMinutesRemaining < 1) return '< 1 min restante';
-    if (estimatedMinutesRemaining === 1) return '~1 min restante';
-    return `~${estimatedMinutesRemaining} min restantes`;
-  };
-
   const getVisiblePages = () => {
     const total = pagination.totalPages;
     const current = pagination.page;
@@ -232,11 +219,6 @@ const SurveysScreen: React.FC = () => {
                   { width: `${progress}%` }
                 ]} 
               />
-            </View>
-            <View style={styles.progressFooter}>
-              <Text style={styles.etaText}>
-                {getETAText()}
-              </Text>
             </View>
           </View>
           
