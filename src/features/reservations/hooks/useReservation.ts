@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { Alert } from 'react-native';
 import { useAuthStore } from '../../auth/store/useAuthStore';
 import { facilityService, mockRestaurantTables } from '../services/reservationService';
 import { useReservationStore } from '../store';
@@ -44,7 +45,12 @@ export const useReservation = () => {
           const payload = flatten(response);
           setServices(payload);
         } else {
-          alert(response.error || 'No se pudieron cargar los servicios');
+          // Verificar si es un error de autenticación
+          if (response.status === 401) {
+            // No mostramos alerta aquí porque el servicio ya la maneja
+            return;
+          }
+          Alert.alert('Error', response.error || 'No se pudieron cargar los servicios');
           setServices([]);
         }
 
@@ -88,7 +94,12 @@ export const useReservation = () => {
         if (response.success && response.data) {
           setFacilities(response.data.data);
         } else {
-          alert(response.error || 'No se encontraron instalaciones');
+          // Verificar si es un error de autenticación
+          if (response.status === 401) {
+            // No mostramos alerta aquí porque el servicio ya la maneja
+            return;
+          }
+          Alert.alert(response.error || 'No se encontraron instalaciones');
         }
 
         setLoading(false);
@@ -122,7 +133,7 @@ export const useReservation = () => {
                 setSelectedCourt('');
                 setSelectedCourtId(null);
                 setTime('');
-                alert(`La cancha cierra a las ${closeTime}`);
+                Alert.alert(`La cancha cierra a las ${closeTime}`);
                 setDate(newDate);
                 return;
               }
@@ -265,8 +276,12 @@ export const useReservation = () => {
 
           setAvailableTimeSlots(timeSlotStrings);
         } else {
-          console.error('Error loading time slots:', response.error);
-          alert(response.error || 'No se encontraron horarios disponibles');
+          // Verificar si es un error de autenticación
+          if (response.status === 401) {
+            // No mostramos alerta aquí porque el servicio ya la maneja
+            return;
+          }
+          Alert.alert(response.error || 'No se encontraron horarios disponibles');
         }
 
         setLoadingTimeSlots(false);
@@ -291,24 +306,24 @@ export const useReservation = () => {
       // Confirmar la reserva
       const confirmReservation = async () => {
         if (!date || !time || !selectedService) {
-          alert('Por favor complete todos los campos requeridos');
+          Alert.alert('Por favor complete todos los campos requeridos');
           return;
         }
 
         // Validar que se hayan seleccionado elementos adicionales si es necesario
         if (selectedService.id === 'padel' && !selectedCourtId) {
-          alert('Por favor seleccione una cancha');
+          Alert.alert('Por favor seleccione una cancha');
           return;
         }
 
         if (selectedService.id === 'restaurante' && !selectedTable) {
-          alert('Por favor seleccione una mesa');
+          Alert.alert('Por favor seleccione una mesa');
           return;
         }
 
         // Extraer hora de inicio y fin del time seleccionado (formato "HH:MM-HH:MM")
         if (!time.includes('-')) {
-          alert('Formato de hora inválido');
+          Alert.alert('Formato de hora inválido');
           return;
         }
         const fixedDate = new Date(date);
@@ -323,7 +338,7 @@ export const useReservation = () => {
           const clubMemberId = memberInfo.userId ? parseInt(memberInfo.userId) : 1; // Default to 1 if needed
 
           if (!memberInfo.userId) {
-            alert('No se pudo obtener el ID del miembro. Por favor inicie sesión.');
+            Alert.alert('No se pudo obtener el ID del miembro. Por favor inicie sesión.');
             return;
           }
 
@@ -360,12 +375,16 @@ export const useReservation = () => {
               resetSelection();
               loadServices();
             } else {
-              alert(response.message || 'Error al confirmar la reserva');
+              // Verificar si es un error de autenticación
+              if (response.status === 401) {
+                // No mostramos alerta aquí porque el servicio ya la maneja
+                return;
+              }
+              Alert.alert(response.message || 'Error al confirmar la reserva');
             }
           }
         } catch (error: any) {
-          console.error('Error confirming reservation:', error);
-          alert(error.message || 'Error al confirmar la reserva');
+          Alert.alert(error.message || 'Error al confirmar la reserva');
         }
       };
     

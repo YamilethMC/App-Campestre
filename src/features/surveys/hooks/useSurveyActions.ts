@@ -60,12 +60,15 @@ export const useSurveyActions = () => {
         setSurveyData(questionsResponse.data);
         setQuestions(questionsResponse.data.surveyQuestions);
       } else {
-        console.error('Error loading survey questions:', questionsResponse.error);
+        // Verificar si es un error de autenticación
+        if (questionsResponse.status === 401) {
+          // No mostramos alerta aquí porque el servicio ya la maneja
+          return;
+        }
         Alert.alert('Error', questionsResponse.error || 'Error al cargar las preguntas de la encuesta');
         return;
       }
     } catch (error: any) {
-      console.error('Error loading survey data:', error);
       Alert.alert('Error', error.message || 'Error al cargar los datos de la encuesta');
     } finally {
       setLoading(false);
@@ -109,7 +112,6 @@ export const useSurveyActions = () => {
         order,
         category
       );
-console.log('---------------------------HOLAGOLA2', response);
       if (response.success && response.data) {
         // Usar los datos y la paginación correspondiente según el estado actual
         let surveysData, meta;
@@ -117,13 +119,10 @@ console.log('---------------------------HOLAGOLA2', response);
         const unansweredSurveys = response.data.unansweredSurveys || [];
         const answeredSurveys = response.data.answeredSurveys || [];
         const closedSurveys = response.data.closedSurveys || [];
-        console.log('---------------------------HOLAGOLA');
         if (currentFilter.status === 'abiertas') {
           surveysData = unansweredSurveys;
-          console.log('---------------------------surveysData', surveysData);
           meta = response.data.unansweredMeta;
         } else if (currentFilter.status === 'completadas') {
-          console.log('---------------------------completadas', answeredSurveys);
           surveysData = answeredSurveys;
           meta = response.data.answeredMeta;
         } else if (currentFilter.status === 'cerradas') {
@@ -137,7 +136,7 @@ console.log('---------------------------HOLAGOLA2', response);
         }
 
         setSurveys(surveysData);
-        
+
         // Handle pagination safely - provide defaults if meta is undefined
         if (meta) {
           setPagination({
@@ -164,11 +163,14 @@ console.log('---------------------------HOLAGOLA2', response);
         setCompletedSurveys(completedSurveysCount);
         setAverageRating(0); // Valor por defecto, ya que la API no proporciona este dato
       } else {
-        setError(response.error || 'Error al cargar las encuestas');
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // No mostramos alerta aquí porque el servicio ya la maneja
+          return;
+        }
       }
     } catch (error: any) {
-      console.error('Error loading surveys:', error);
-      setError(error.message || 'Error loading surveys');
+      Alert.alert('Error', error.message || 'Error al cargar las encuestas');
     } finally {
       setStoreLoading(false);
     }
@@ -260,12 +262,15 @@ console.log('---------------------------HOLAGOLA2', response);
         loadSurveys(page);
         return true;
       } else {
-        console.error('Error submitting survey:', response.error);
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // No mostramos alerta aquí porque el servicio ya la maneja
+          return false;
+        }
         Alert.alert('Error', response.error || 'Error al enviar la encuesta');
         return false;
       }
     } catch (error: any) {
-      console.error('Error submitting survey:', error);
       Alert.alert('Error', error.message || 'Error al enviar la encuesta');
       return false;
     }

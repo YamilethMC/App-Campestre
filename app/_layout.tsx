@@ -1,14 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
-import { I18nextProvider } from 'react-i18next';
-import 'react-native-reanimated';
-import 'react-native-gesture-handler';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { StyleSheet } from 'react-native';
-import { useEffect, useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { Ionicons } from '@expo/vector-icons';
+import { StatusBar } from 'expo-status-bar';
+import { useEffect, useState } from 'react';
+import { I18nextProvider } from 'react-i18next';
+import { StyleSheet } from 'react-native';
+import 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import 'react-native-reanimated';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import i18n from '../src/i18n/i18n';
 import MainNavigator from '../src/navigation';
 
@@ -25,7 +25,6 @@ export default function RootLayout() {
         });
         setFontsLoaded(true);
       } catch (error) {
-        console.error('Error loading fonts:', error);
       } finally {
         await SplashScreen.hideAsync();
       }

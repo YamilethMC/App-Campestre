@@ -58,7 +58,6 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({
       setMemberDetails(response);
     } catch (err: any) {
       const errorMessage = err.message || 'Error al cargar los detalles del miembro';
-      setError(errorMessage);
     } finally {
       setLoading(false);
     }

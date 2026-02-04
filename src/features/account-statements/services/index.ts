@@ -1,5 +1,6 @@
 
 //Obtener el toekn
+import { handleAuthError } from '../../../shared/utils/authErrorHandler';
 import { useAuthStore } from '../../auth/store/useAuthStore';
 
 // Interface para service responses
@@ -50,10 +51,24 @@ export const accountStatementService = {
       );
 
       if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
         let errorMessage = 'Error al cargar los estados de cuenta';
 
         // Manejar códigos de error específicos en el servicio
         switch (response.status) {
+          case 401:
+            errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
+            break;
           case 404:
             errorMessage = 'Estados de cuenta no encontrados';
             break;
@@ -82,7 +97,6 @@ export const accountStatementService = {
       };
 
     } catch (error: any) {
-      console.error('Error en getAccountStatements:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al cargar los estados de cuenta',
@@ -111,10 +125,24 @@ export const accountStatementService = {
       });
 
       if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
         let errorMessage = 'Error al cargar el estado de cuenta';
 
         // Manejar códigos de error específicos en el servicio
         switch (response.status) {
+          case 401:
+            errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
+            break;
           case 404:
             errorMessage = 'Estado de cuenta no encontrado';
             break;
@@ -142,7 +170,6 @@ export const accountStatementService = {
         status: response.status
       }
     } catch (error: any) {
-      console.error('Error en getAccountStatementById:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al cargar el estado de cuenta',
@@ -171,6 +198,16 @@ export const accountStatementService = {
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+        
         let errorMessage = 'Error al descargar el estado de cuenta';
 
         // Manejar códigos de error específicos en el servicio
@@ -211,7 +248,6 @@ export const accountStatementService = {
         status: response.status
       }
     } catch (error: any) {
-      console.error('Error al descargar:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al descargar el estado de cuenta',

@@ -14,5 +14,8 @@ export interface Banner {
 }
 
 export interface GetAvailableBannersResponse {
+  success: boolean;
   banners: Banner[];
+  error?: string;
+  status: number;
 }

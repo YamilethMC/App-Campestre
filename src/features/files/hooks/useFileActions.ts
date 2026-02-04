@@ -44,6 +44,11 @@ export const useFileActions = () => {
       );
 
       if (!response.success) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // No mostramos alerta aquí porque el servicio ya la maneja
+          return;
+        }
         Alert.alert('Error', response.error || 'Error al cargar los archivos');
         setFiles([]);
         return;
@@ -106,6 +111,11 @@ export const useFileActions = () => {
       const response = await fileService.downloadFile(fileId);
 
       if (!response.success) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // No mostramos alerta aquí porque el servicio ya la maneja
+          return;
+        }
         Alert.alert('Error', response.error || 'Error al descargar el archivo');
         return;
       }

@@ -36,6 +36,14 @@ export const useHelpCenterStore = create<HelpCenterStore>((set, get) => ({
         loading: false
       });
     } else {
+      // Verificar si es un error de autenticación
+      if (response.status === 401) {
+        // No mostramos error aquí porque el servicio ya lo maneja
+        set({
+          loading: false
+        });
+        return;
+      }
       set({
         error: response.error || 'Error al obtener las preguntas frecuentes',
         loading: false

@@ -1,3 +1,4 @@
+import { handleAuthError } from '../../../shared/utils/authErrorHandler';
 import { useAuthStore } from '../../auth/store/useAuthStore';
 
 // Types for the API responses
@@ -103,11 +104,25 @@ export const facilityService = {
       });
 
       if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
         let errorMessage = 'Error al cargar los servicios';
 
         switch (response.status) {
           case 400:
             errorMessage = 'Petición inválida';
+            break;
+          case 401:
+            errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
             break;
           case 404:
             errorMessage = 'No se encontraron servicios disponibles';
@@ -136,7 +151,6 @@ export const facilityService = {
         status: response.status
       };
     } catch (error: any) {
-      console.error('Error fetching services:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al cargar los servicios',
@@ -177,12 +191,26 @@ export const facilityService = {
       });
 
       if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
         let errorMessage = 'Error al cargar las instalaciones';
 
         // Manejar códigos de error específicos en el servicio
         switch (response.status) {
           case 400:
             errorMessage = 'Petición inválida. Verifica los parámetros.';
+            break;
+          case 401:
+            errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
             break;
           case 404:
             errorMessage = 'No se encontraron instalaciones';
@@ -211,7 +239,6 @@ export const facilityService = {
         status: response.status
       };
     } catch (error: any) {
-      console.error('Error fetching facilities:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al cargar las instalaciones',
@@ -258,12 +285,26 @@ export const facilityService = {
       });
 
       if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
         let errorMessage = 'Error al cargar la disponibilidad de la instalación';
 
         // Manejar códigos de error específicos en el servicio
         switch (response.status) {
           case 400:
             errorMessage = 'Formato de fecha inválido. Use YYYY-MM-DD';
+            break;
+          case 401:
+            errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
             break;
           case 404:
             errorMessage = 'Instalación no encontrada';
@@ -292,7 +333,6 @@ export const facilityService = {
         status: response.status
       };
     } catch (error: any) {
-      console.error('Error fetching facility availability:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al cargar la disponibilidad de la instalación',
@@ -328,12 +368,26 @@ export const facilityService = {
       });
 
       if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
         let errorMessage = 'Error al crear la reserva';
 
         // Manejar códigos de error específicos en el servicio
         switch (response.status) {
           case 400:
             errorMessage = 'Rango de tiempo inválido o instalación no disponible';
+            break;
+          case 401:
+            errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
             break;
           case 404:
             errorMessage = 'Miembro o instalación no encontrado';
@@ -365,7 +419,6 @@ export const facilityService = {
         status: response.status
       };
     } catch (error: any) {
-      console.error('Error creating reservation:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al crear la reserva',

@@ -109,8 +109,7 @@ const ReservationsContainer = () => {
       } else {
         setReservations([]);
       }
-    } catch (error) {
-      console.error('Error loading reservations:', error);
+    } catch (error) { 
     } finally {
       setLoadingReservations(false);
     }

@@ -1,4 +1,5 @@
 import { useAuthStore } from '../../../features/auth/store/useAuthStore';
+import { handleAuthError } from '../../../shared/utils/authErrorHandler';
 import { CancelReservationRequest, CancelReservationResponse, GetReservationsResponse, Reservation, ServiceResponse } from '../interfaces';
 
 export const reservationService = {
@@ -28,10 +29,24 @@ export const reservationService = {
       });
 
       if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
         let errorMessage = 'Error al cargar las reservaciones';
 
         // Handle specific error codes
         switch (response.status) {
+          case 401:
+            errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
+            break;
           case 404:
             errorMessage = 'Socio no encontrado';
             break;
@@ -58,7 +73,6 @@ export const reservationService = {
         status: response.status
       };
     } catch (error: any) {
-      console.error('Error fetching reservations:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al cargar las reservaciones',
@@ -98,12 +112,26 @@ export const reservationService = {
       });
 
       if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
         let errorMessage = 'Error al cancelar la reservación';
 
         // Handle specific error codes
         switch (response.status) {
           case 400:
             errorMessage = 'Rango de tiempo inválido o instalación no disponible';
+            break;
+          case 401:
+            errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
             break;
           case 403:
             errorMessage = 'No autorizado para actualizar esta reservación';
@@ -138,7 +166,6 @@ export const reservationService = {
         status: response.status
       };
     } catch (error: any) {
-      console.error('Error canceling reservation:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al cancelar la reservación',

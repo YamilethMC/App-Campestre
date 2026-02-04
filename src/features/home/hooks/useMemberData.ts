@@ -16,6 +16,12 @@ export const useMemberData = () => {
       setLoading(false);
       return result.data;
     } else {
+      // Verificar si es un error de autenticación
+      if (result.status === 401) {
+        // No mostramos alerta aquí porque el servicio ya la maneja
+        setLoading(false);
+        return null;
+      }
       Alert.alert('Error', result.error || 'Error al obtener los datos del socio');
       setLoading(false);
       return null;
@@ -26,6 +32,11 @@ export const useMemberData = () => {
     const result = await deleteGuestFromService(guestId);
 
     if (!result.success) {
+      // Verificar si es un error de autenticación
+      if (result.status === 401) {
+        // No mostramos alerta aquí porque el servicio ya la maneja
+        return false;
+      }
       Alert.alert('Error', result.error || 'Error al eliminar el invitado');
       return false;
     }

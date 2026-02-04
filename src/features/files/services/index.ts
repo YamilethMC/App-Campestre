@@ -1,3 +1,4 @@
+import { handleAuthError } from '../../../shared/utils/authErrorHandler';
 import { useAuthStore } from '../../auth/store/useAuthStore';
 import { ServiceResponse } from '../interfaces';
 
@@ -32,12 +33,26 @@ export const fileService = {
       });
 
       if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
         let errorMessage = 'Error al cargar los archivos';
 
         // Manejar códigos de error específicos
         switch (response.status) {
           case 400:
             errorMessage = 'Petición inválida. Verifica los parámetros.';
+            break;
+          case 401:
+            errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
             break;
           case 500:
             errorMessage = 'Error interno del servidor. Detalles: ' + (await response.text());
@@ -63,7 +78,6 @@ export const fileService = {
         status: response.status
       };
     } catch (error: any) {
-      console.error('Error fetching files:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al obtener los archivos',
@@ -92,10 +106,24 @@ export const fileService = {
       });
 
       if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
         let errorMessage = 'Error al descargar el archivo';
 
         // Manejar códigos de error específicos
         switch (response.status) {
+          case 401:
+            errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
+            break;
           case 404:
             errorMessage = 'Archivo no encontrado.';
             break;
@@ -153,7 +181,6 @@ export const fileService = {
         };
       }
     } catch (error: any) {
-      console.error('Error downloading file:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al descargar el archivo',

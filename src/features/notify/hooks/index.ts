@@ -1,7 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import { notificationService } from '../services';
-import { Notification, PaginationMeta } from '../interfaces';
 import { useNotificationStore } from '../store';
 
 // Hook to handle notification data and API calls
@@ -42,11 +41,15 @@ export const useNotifications = () => {
         setNotifications(response.data.notifications);
         setPagination(response.data.meta);
       } else {
-        setError(response.error || 'Error en la respuesta del servidor');
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // No mostramos error aquí porque el servicio ya lo maneja
+          return;
+        }
+        Alert.alert('Error', response.error);
       }
     } catch (error: any) {
-      console.error('Error loading notifications:', error);
-      setError(error.message || 'Error desconocido al obtener las notificaciones');
+      Alert.alert('Error', error.message || 'Error desconocido al obtener las notificaciones');
     } finally {
       setLoading(false);
     }

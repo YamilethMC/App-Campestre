@@ -3,13 +3,14 @@ import { userProfile } from "../interfaces";
 
 // Servicio de autenticación
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { handleAuthError } from '../../../shared/utils/authErrorHandler';
 
 
 export const authService = {
   /**
    * Iniciar sesión con email y contraseña
    */
-  login: async (email: string, password: string): Promise<{ success: boolean; user?: userProfile; token?: string; error?: string }> => {
+  login: async (email: string, password: string): Promise<{ success: boolean; user?: userProfile; token?: string; error?: string, status?: number }> => {
       try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/login`, {
         method: 'POST',
@@ -20,10 +21,33 @@ export const authService = {
       const data = await response.json();
 
       if (!response.ok) {
-        return {
-          success: false,
-          error: data.message || "Credenciales inválidas",
-        };
+        // Manejar códigos de error específicos
+        switch (response.status) {
+          case 400:
+            return {
+              success: false,
+              error: data.message || "Petición inválida. Verifica los parámetros.",
+              status: response.status
+            };
+          case 401:
+            return {
+              success: false,
+              error: data.message || "No autorizado: Por favor inicia sesión para continuar",
+              status: response.status
+            };
+          case 500:
+            return {
+              success: false,
+              error: data.message || "Error interno del servidor: Por favor intenta más tarde",
+              status: response.status
+            };
+          default:
+            return {
+              success: false,
+              error: data.message || `Error en la solicitud: ${response.status}`,
+              status: response.status
+            };
+        }
       }
 
       return {
@@ -96,7 +120,7 @@ export const authService = {
   /**
    * Cambiar contraseña (usuario autenticado)
    */
-  changePassword: async (currentPassword: string, newPassword: string): Promise<{ success: boolean; message?: string; error?: string }> => {
+  changePassword: async (currentPassword: string, newPassword: string): Promise<{ success: boolean; message?: string; error?: string , status?: number}> => {
     try {
       const token = await AsyncStorage.getItem('authToken');
       if (!token) {
@@ -120,10 +144,43 @@ export const authService = {
       const data = await response.json();
 
       if (!response.ok) {
-        return {
-          success: false,
-          error: data.error || 'No se pudo cambiar la contraseña',
-        };
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
+        // Manejar códigos de error específicos
+        switch (response.status) {
+          case 400:
+            return {
+              success: false,
+              error: data.error || "Petición inválida. Verifica los parámetros.",
+              status: response.status
+            };
+          case 401:
+            return {
+              success: false,
+              error: data.error || "No autorizado: Por favor inicia sesión para continuar",
+              status: response.status
+            };
+          case 500:
+            return {
+              success: false,
+              error: data.error || "Error interno del servidor: Por favor intenta más tarde",
+              status: response.status
+            };
+          default:
+            return {
+              success: false,
+              error: data.error || `Error en la solicitud: ${response.status}`,
+              status: response.status
+            };
+        }
       }
 
       return {
@@ -142,7 +199,7 @@ export const authService = {
   /**
    * Solicitar código de recuperación de contraseña
    */
-  forgotPassword: async (identifier: string, method: 'email' | 'whatsapp'): Promise<{ success: boolean; message?: string; error?: string }> => {
+  forgotPassword: async (identifier: string, method: 'email' | 'whatsapp'): Promise<{ success: boolean; message?: string; error?: string, status?: number }> => {
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/forgot-password`, {
         method: 'POST',
@@ -155,10 +212,43 @@ export const authService = {
       const data = await response.json();
 
       if (!response.ok) {
-        return {
-          success: false,
-          error: data.error || 'No se pudo enviar el código',
-        };
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
+        // Manejar códigos de error específicos
+        switch (response.status) {
+          case 400:
+            return {
+              success: false,
+              error: data.error || "Petición inválida. Verifica los parámetros.",
+              status: response.status
+            };
+          case 401:
+            return {
+              success: false,
+              error: data.error || "No autorizado: Por favor inicia sesión para continuar",
+              status: response.status
+            };
+          case 500:
+            return {
+              success: false,
+              error: data.error || "Error interno del servidor: Por favor intenta más tarde",
+              status: response.status
+            };
+          default:
+            return {
+              success: false,
+              error: data.error || `Error en la solicitud: ${response.status}`,
+              status: response.status
+            };
+        }
       }
 
       return {
@@ -177,7 +267,7 @@ export const authService = {
   /**
    * Restablecer contraseña con código
    */
-  resetPassword: async (identifier: string, code: string, newPassword: string): Promise<{ success: boolean; message?: string; error?: string }> => {
+  resetPassword: async (identifier: string, code: string, newPassword: string): Promise<{ success: boolean; message?: string; error?: string, status?: number }> => {
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/reset-password`, {
         method: 'POST',
@@ -190,10 +280,43 @@ export const authService = {
       const data = await response.json();
 
       if (!response.ok) {
-        return {
-          success: false,
-          error: data.error || 'No se pudo restablecer la contraseña',
-        };
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
+        // Manejar códigos de error específicos
+        switch (response.status) {
+          case 400:
+            return {
+              success: false,
+              error: data.error || "Petición inválida. Verifica los parámetros.",
+              status: response.status
+            };
+          case 401:
+            return {
+              success: false,
+              error: data.error || "No autorizado: Por favor inicia sesión para continuar",
+              status: response.status
+            };
+          case 500:
+            return {
+              success: false,
+              error: data.error || "Error interno del servidor: Por favor intenta más tarde",
+              status: response.status
+            };
+          default:
+            return {
+              success: false,
+              error: data.error || `Error en la solicitud: ${response.status}`,
+              status: response.status
+            };
+        }
       }
 
       return {

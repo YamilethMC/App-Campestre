@@ -19,7 +19,6 @@ const useLogout = () => {
       navigation.navigate('Auth');
     } catch (error) {
       Alert.alert('Error', messages?.CONTAINER?.TEXT_LOGOUT || 'Error al cerrar sesión');
-      console.error('Logout error:', error);
     }
   }, [clearAuth, clearProfile, navigation, messages]);
 

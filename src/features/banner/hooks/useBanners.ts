@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
-import { bannerService } from '../services';
-import { Banner } from '../interfaces/Banner';
+import { useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 import { useAuthStore } from '../../auth/store/useAuthStore';
+import { Banner } from '../interfaces/Banner';
+import { bannerService } from '../services';
 
 export const useBanners = () => {
   const [banners, setBanners] = useState<Banner[]>([]);
@@ -23,11 +24,22 @@ export const useBanners = () => {
       setError(null);
 
       const response = await bannerService.getAvailableBanners();
+      // Verificar si es un error de autenticación
+      if (!response.success) {
+        if (response.status === 401) {
+          // No mostramos error aquí porque el servicio ya lo maneja
+          return;
+        }
+        Alert.alert('Error', response.error);
+        setBanners([]);
+        return;
+      }
       setBanners(response.banners || []);
     } catch (err) {
-      console.error('Error loading banners:', err);
       // No mostrar error en UI al usuario, simplemente no mostrar banners
       setBanners([]); // Asegurarse de que banners es un array vacío en caso de error
+      // Mostrar alerta para errores del catch
+      Alert.alert('Error', 'Error al cargar los banners');
     } finally {
       setLoading(false);
     }

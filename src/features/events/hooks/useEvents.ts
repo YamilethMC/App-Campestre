@@ -123,16 +123,22 @@ export const useEvents = () => {
         });
         markFetched(); // Mark cache as fresh
       } else {
+        // Verificar si es un error de autenticación
+        if (result.status === 401) {
+          // No mostramos alerta aquí porque el servicio ya la maneja
+          return;
+        }
         // Only show error if we don't have cached data
         if (!hasExistingData) {
-          setError(result.error || 'Error al cargar los eventos');
         }
+        const errorMessage = result.error || 'Error al cargar los eventos';
+        Alert.alert('Error', errorMessage);
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Error al cargar los eventos';
       // Only show error if we don't have cached data
       if (!hasExistingData) {
-        setError(errorMessage);
+        Alert.alert('Error', errorMessage);
       }
     } finally {
       fetchRef.current = false;
@@ -304,6 +310,11 @@ export const useEvents = () => {
     if (result.success && result.data) {
       return result.data;
     } else {
+      // Verificar si es un error de autenticación
+      if (result.status === 401) {
+        // No mostramos alerta aquí porque el servicio ya la maneja
+        return null;
+      }
       Alert.alert('Error', result.error || 'Error al cargar los detalles del miembro');
     }
   }, []);
@@ -314,12 +325,17 @@ export const useEvents = () => {
 
     if (result.success) {
       // Update event locally in store for instant UI feedback
-      updateEvent(currentEventId, { 
+      updateEvent(currentEventId, {
         isRegistered: true,
         availableSpots: result.data?.availableSpots ?? 0
       });
       return true;
     } else {
+      // Verificar si es un error de autenticación
+      if (result.status === 401) {
+        // No mostramos alerta aquí porque el servicio ya la maneja
+        return false;
+      }
       Alert.alert('Error', result.error || 'Error al registrar en el evento');
       return false;
     }
@@ -337,13 +353,18 @@ export const useEvents = () => {
 
     if (result.success) {
       // Update event locally in store for instant UI feedback
-      updateEvent(eventId, { 
+      updateEvent(eventId, {
         isRegistered: false
       });
       // Force refresh events to update registration status, bypassing cache
       await fetchEvents(1, true);
       return true;
     } else {
+      // Verificar si es un error de autenticación
+      if (result.status === 401) {
+        // No mostramos alerta aquí porque el servicio ya la maneja
+        return false;
+      }
       Alert.alert('Error', result.error || 'Error al cancelar el registro');
       return false;
     }

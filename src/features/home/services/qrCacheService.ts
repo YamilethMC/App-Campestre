@@ -18,7 +18,6 @@ export const qrCacheService = {
       await AsyncStorage.setItem(QR_CACHE_KEY, JSON.stringify(data));
       return true;
     } catch (error) {
-      console.error('Error saving QR data to cache:', error);
       return false;
     }
   },
@@ -34,7 +33,6 @@ export const qrCacheService = {
       }
       return null;
     } catch (error) {
-      console.error('Error reading cached QR data:', error);
       return null;
     }
   },
@@ -59,7 +57,6 @@ export const qrCacheService = {
       await AsyncStorage.removeItem(QR_CACHE_KEY);
       return true;
     } catch (error) {
-      console.error('Error clearing cached QR data:', error);
       return false;
     }
   },
