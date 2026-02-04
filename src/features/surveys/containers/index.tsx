@@ -119,7 +119,6 @@ const SurveysScreen: React.FC = () => {
         setSubmitSuccess(true);
       }
     } catch (error) {
-      console.error('Error submitting survey:', error);
       Alert.alert('Error', 'Hubo un error al enviar la encuesta. Por favor intenta de nuevo.');
     }
   };

@@ -71,7 +71,6 @@ const PersonalInfo: React.FC<userProfile> = ({
 
       return `${day} de ${months[month]} de ${year}`;
     } catch (error) {
-      console.error('Error formatting date:', error);
       return messages.CONTAINER.NO_SPECIFIED;
     }
   };

@@ -1,3 +1,4 @@
+import { handleAuthError } from '../../../shared/utils/authErrorHandler';
 import { useAuthStore } from '../../auth/store/useAuthStore';
 import { FullSurvey, Survey, SurveyCategory, SurveyPriority } from '../interfaces';
 
@@ -185,6 +186,17 @@ export const surveyService = {
       );
 
       if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
         let errorMessage = 'Error al cargar las encuestas';
 
         // Manejar códigos de error específicos en el servicio
@@ -283,7 +295,6 @@ export const surveyService = {
         status: response.status
       };
     } catch (error: any) {
-      console.error('Error fetching surveys:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al cargar las encuestas',
@@ -304,9 +315,6 @@ export const surveyService = {
     }
 
     try {
-      // Este endpoint es hipotético, ya que no tenemos información exacta
-      // del endpoint para obtener las preguntas de una encuesta específica
-      // En la práctica, necesitarías revisar la documentación de la API
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/survey/${surveyId}`, {
         method: 'GET',
         headers: {
@@ -317,6 +325,17 @@ export const surveyService = {
       });
 
       if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
         let errorMessage = 'Error al cargar las preguntas de la encuesta';
 
         // Manejar códigos de error específicos en el servicio
@@ -387,7 +406,6 @@ export const surveyService = {
       };
 
     } catch (error: any) {
-      console.error('Error fetching questions:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al cargar las preguntas',
@@ -425,6 +443,17 @@ export const surveyService = {
       });
 
       if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
         let errorMessage = 'Error al enviar la encuesta';
 
         // Manejar códigos de error específicos en el servicio
@@ -464,7 +493,6 @@ export const surveyService = {
         status: response.status
       };
     } catch (error: any) {
-      console.error('Error submitting survey:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al enviar la encuesta',

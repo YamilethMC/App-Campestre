@@ -42,7 +42,7 @@ export const useLogin = () => {
     setError(null);
 
     try {
-      const { success, token, user, error: authError } = await authService.login(email, password);
+      const { success, token, user, error: authError, status } = await authService.login(email, password);
 
       if (success && user) {
         const profileData = { ...user};
@@ -66,35 +66,12 @@ export const useLogin = () => {
         return true;
       } else {
         const errorMessage = authError || messages.ALERTS.LOGIN_ERROR || 'Error en la autenticación';
-        setError(errorMessage);
-        Alert.alert(
-          messages.ALERTS.ERROR,
-          errorMessage,
-          [
-            {
-              text: messages.ALERTS.OK,
-              onPress: () => setError(null),
-            },
-          ],
-          { cancelable: false }
-        );
+        Alert.alert('Error', errorMessage);
         return false;
       }
     } catch (err) {
-      console.error('Login error:', err);
       const errorMessage = messages.ALERTS.CONNECTION_ERROR || 'Error al conectar con el servidor';
-      setError(errorMessage);
-      Alert.alert(
-        messages.ALERTS.ERROR,
-        errorMessage,
-        [
-          {
-            text: messages.ALERTS.OK,
-            onPress: () => setError(null),
-          },
-        ],
-        { cancelable: false }
-      );
+      Alert.alert('Error', errorMessage);
       return false;
     } finally {
       setIsLoading(false);
@@ -132,7 +109,6 @@ export const useLogin = () => {
       // Opcional: Navegar a la pantalla de login
       // navigation.navigate('Login');
     } catch (err) {
-      console.error('Logout error:', err);
     }
   };
 

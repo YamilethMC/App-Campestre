@@ -1,3 +1,4 @@
+import { handleAuthError } from '../../../shared/utils/authErrorHandler';
 import { useAuthStore } from '../../auth/store/useAuthStore';
 import { FAQ, HelpCenterResponse } from '../interfaces';
 
@@ -30,6 +31,17 @@ export const helpCenterService = {
       });
 
       if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
         let errorMessage = 'Error al cargar las preguntas frecuentes';
 
         // Manejar códigos de error específicos en el servicio
@@ -67,7 +79,6 @@ export const helpCenterService = {
         status: response.status
       };
     } catch (error) {
-      console.error('Error fetching FAQs:', error);
       return {
         success: false,
         error: 'Error desconocido al cargar las preguntas frecuentes',

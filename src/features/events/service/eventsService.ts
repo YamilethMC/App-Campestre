@@ -1,3 +1,4 @@
+import { handleAuthError } from '../../../shared/utils/authErrorHandler';
 import { useAuthStore } from '../../auth/store/useAuthStore';
 import { Event } from '../interfaces/eventInterface';
 
@@ -270,6 +271,17 @@ export const eventsService = {
       });
 
       if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
         let errorMessage = 'Error al cargar los eventos';
 
         // Manejar códigos de error específicos en el servicio
@@ -330,7 +342,6 @@ export const eventsService = {
         status: response.status
       };
     } catch (error) {
-      console.error('Error fetching events:', error);
       return {
         success: false,
         error: 'Error desconocido al cargar los eventos',
@@ -371,6 +382,17 @@ export const eventsService = {
       );
 
       if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
         let errorMessage = 'Error al cargar los detalles del miembro';
 
         // Manejar códigos de error específicos en el servicio
@@ -411,7 +433,6 @@ export const eventsService = {
         status: response.status
       };
     } catch (error) {
-      console.error('Error fetching member details:', error);
       return {
         success: false,
         error: 'Error desconocido al cargar los detalles del miembro',
@@ -456,6 +477,17 @@ export const eventsService = {
       );
 
       if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
         let errorMessage = 'Error al registrar en el evento';
 
         // Manejar códigos de error específicos en el servicio
@@ -513,7 +545,6 @@ export const eventsService = {
         status: response.status
       };
     } catch (error) {
-      console.error('Error registering for event:', error);
       return {
         success: false,
         error: 'Error desconocido al registrar en el evento',
@@ -558,10 +589,24 @@ export const eventsService = {
       );
 
       if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
         let errorMessage = 'Error al cancelar el registro';
 
         // Manejar códigos de error específicos en el servicio
         switch (response.status) {
+          case 401:
+            errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
+            break;
           case 404:
             errorMessage = 'Registro no encontrado';
             break;
@@ -589,7 +634,6 @@ export const eventsService = {
         status: response.status
       };
     } catch (error) {
-      console.error('Error canceling event registration:', error);
       return {
         success: false,
         error: 'Error desconocido al cancelar el registro',

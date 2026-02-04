@@ -27,7 +27,22 @@ export const useProfile = () => {
         if (response.success && response.data) {
           updateProfile(response.data);
         } else {
+          // Verificar si es un error de autenticación
+          if (response.status === 401) {
+            // No mostramos alerta aquí porque el servicio ya la maneja
+            return;
+          }
           console.log('Error loading member:', response.error);
+          Alert.alert(
+            'Error',
+            response.error || 'Ocurrió un error al cargar la información del perfil.',
+            [
+              {
+                text: 'Aceptar',
+                style: 'default'
+              }
+            ]
+          );
         }
       }
     };
@@ -132,6 +147,11 @@ export const useProfile = () => {
           }
           setIsEditing(false);
         } else {
+          // Verificar si es un error de autenticación
+          if (response.status === 401) {
+            // No mostramos alerta aquí porque el servicio ya la maneja
+            return;
+          }
           Alert.alert(
             'Error',
             response.error || 'Ocurrió un error al actualizar el perfil.',
@@ -226,7 +246,11 @@ export const useProfile = () => {
       if (response.success && response.data) {
         updateProfile(response.data);
       } else {
-        console.error('Error reloading member:', response.error);
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // No mostramos alerta aquí porque el servicio ya la maneja
+          return;
+        }
         Alert.alert(
           'Error',
           response.error || 'Ocurrió un error al cargar la información del perfil.',

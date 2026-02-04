@@ -1,9 +1,7 @@
-import { Alert, RefreshControl, SafeAreaView, ScrollView, View, Text } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Alert, RefreshControl, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { useAuthStore } from '../../../features/auth/store/useAuthStore';
-import { COLORS } from '../../../shared/theme/colors';
 import Header from '../components/Header';
 import NoReservations from '../components/NoReservations';
 import ReservationCard from '../components/ReservationCard';
@@ -47,7 +45,7 @@ const MyReservationsContainer: React.FC<MyReservationsContainerProps> = ({ navig
         setReservations([]);
       }
     } catch (error) {
-      console.error('Error loading reservations:', error);
+      Alert.alert('Error', 'Error al cargar las reservaciones');
     } finally {
       setLoading(false);
     }

@@ -108,7 +108,6 @@ export const passService = {
         status: response.status
       };
     } catch (error: any) {
-      console.error('Error creating pass:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al crear el pase',
@@ -157,7 +156,6 @@ export const passService = {
         status: response.status
       };
     } catch (error: any) {
-      console.error('Error getting available passes:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido',
@@ -208,7 +206,6 @@ export const passService = {
         status: response.status
       };
     } catch (error: any) {
-      console.error('Error getting user passes:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido',
@@ -255,7 +252,6 @@ export const passService = {
         status: response.status
       };
     } catch (error: any) {
-      console.error('Error invalidating pass:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido',

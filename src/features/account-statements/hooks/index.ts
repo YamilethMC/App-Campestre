@@ -49,7 +49,6 @@ export const useAccountStatements = () => {
     // Otherwise return range
     return `${startFormatted} - ${endFormatted}`;
   } catch (error) {
-    console.error('Error formatting date:', error);
     return `${startDate} - ${endDate}`; // Fallback to original format if there's an error
   }
 };
@@ -61,8 +60,8 @@ export const useAccountStatements = () => {
     const response = await accountStatementService.getAccountStatements(parseInt(profile.id));
 
     if (response.success && response.data) {
-      const statementsArray = Array.isArray(response.data) 
-        ? response.data 
+      const statementsArray = Array.isArray(response.data)
+        ? response.data
         : response.data.data || [];
 
       // Process each statement
@@ -73,7 +72,11 @@ export const useAccountStatements = () => {
 
       setStatements(formattedStatements);
     } else {
-      console.error('Error al cargar estados de cuenta:', response.error);
+      // Verificar si es un error de autenticación
+      if (response.status === 401) {
+        // No mostramos alerta aquí porque el servicio ya la maneja
+        return;
+      }
       Alert.alert('Error', response.error || 'Error al cargar los estados de cuenta');
     }
 
@@ -93,7 +96,11 @@ export const useAccountStatements = () => {
       setSelectedStatement(response.data);
       setShowDetail(true);
     } else {
-      console.error('Error al cargar el estado de cuenta:', response.error);
+      // Verificar si es un error de autenticación
+      if (response.status === 401) {
+        // No mostramos alerta aquí porque el servicio ya la maneja
+        return;
+      }
       Alert.alert('Error', response.error || 'Error al cargar el estado de cuenta');
     }
   };
@@ -114,7 +121,6 @@ export const useAccountStatements = () => {
       }
 
       if (!downloadUrl) {
-        console.error('No se pudo obtener la URL de descarga');
         Alert.alert('Error', "No se pudo obtener la URL de descarga del estado de cuenta");
         setLoading?.(false);
         return;
@@ -137,7 +143,12 @@ export const useAccountStatements = () => {
         }
       }
     } else {
-      console.error('Error al descargar:', response.error);
+      // Verificar si es un error de autenticación
+      if (response.status === 401) {
+        // No mostramos alerta aquí porque el servicio ya la maneja
+        setLoading?.(false);
+        return;
+      }
       Alert.alert('Error', response.error || 'No se pudo abrir el archivo. Por favor, inténtalo de nuevo más tarde.');
     }
 

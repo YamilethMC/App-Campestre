@@ -1,7 +1,7 @@
 import { Alert } from 'react-native';
 import { useAuthStore } from '../../../features/auth/store/useAuthStore';
-import { reservationService } from '../services';
 import { CancelReservationRequest, Reservation } from '../interfaces';
+import { reservationService } from '../services';
 
 export const useMyReservations = () => {
   const { userId } = useAuthStore.getState();
@@ -16,13 +16,17 @@ export const useMyReservations = () => {
       const response = await reservationService.getReservations(userId);
 
       if (!response.success || !response.data) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // No mostramos alerta aquí porque el servicio ya la maneja
+          return null;
+        }
         Alert.alert('Error', response.error || 'Error al cargar las reservaciones');
         return null;
       }
 
       return response.data;
     } catch (error) {
-      console.error('Error in getReservations hook:', error);
       Alert.alert('Error', 'Error inesperado al cargar las reservaciones');
       return null;
     }
@@ -44,13 +48,17 @@ export const useMyReservations = () => {
       const response = await reservationService.cancelReservation(reservationId, userId, cancelData);
 
       if (!response.success) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // No mostramos alerta aquí porque el servicio ya la maneja
+          return false;
+        }
         Alert.alert('Error', response.error || 'Error al cancelar la reservación');
         return false;
       }
       return true;
     } catch (error) {
-        console.error('Error in cancelReservation hook:', error);
-        Alert.alert('Error', 'Error inesperado al cancelar la reservación');
+      Alert.alert('Error', 'Error inesperado al cancelar la reservación');
       return false;
     }
   };

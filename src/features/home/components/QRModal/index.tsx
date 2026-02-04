@@ -1,15 +1,15 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Text, View, TouchableOpacity, Alert, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Modal from '../../../../shared/components/Modal/Modal';
-import { COLORS } from '../../../../shared/theme/colors';
-import { MemberData } from '../../services/homeService';
-import QRCodeComponent from '../QRCodeComponent';
-import qrCacheService, { CachedQRData } from '../../services/qrCacheService';
-import ViewShot from 'react-native-view-shot';
 import * as FileSystem from 'expo-file-system';
 import * as MediaLibrary from 'expo-media-library';
 import * as Sharing from 'expo-sharing';
+import React, { useEffect, useRef, useState } from 'react';
+import { Alert, Text, TouchableOpacity, View } from 'react-native';
+import ViewShot from 'react-native-view-shot';
+import Modal from '../../../../shared/components/Modal/Modal';
+import { COLORS } from '../../../../shared/theme/colors';
+import { MemberData } from '../../services/homeService';
+import qrCacheService, { CachedQRData } from '../../services/qrCacheService';
+import QRCodeComponent from '../QRCodeComponent';
 
 interface QRModalProps {
   visible: boolean;
@@ -136,7 +136,6 @@ const QRModal: React.FC<QRModalProps> = ({
           [{ text: 'Entendido', style: 'default' }]
         );
       } catch (mediaError: any) {
-        // console.error('Error saving QR to media library:', mediaError);
         // Alert.alert(
         //   'No se pudo guardar automáticamente',
         //   'Vamos a abrir el menú de compartir para que puedas guardar el QR manualmente o enviarlo a otro dispositivo.',
@@ -150,7 +149,6 @@ const QRModal: React.FC<QRModalProps> = ({
         }
       }
     } catch (error: any) {
-      console.error('Error downloading QR:', error);
       Alert.alert(
         'Error al descargar',
         error.message || 'No se pudo descargar el código QR. Por favor intenta de nuevo.',

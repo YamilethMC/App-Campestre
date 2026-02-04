@@ -1,4 +1,5 @@
 // Mock service for home-related data
+import { handleAuthError } from '../../../shared/utils/authErrorHandler';
 import { authService } from '../../auth/services/authService';
 import { useAuthStore } from '../../auth/store/useAuthStore';
 
@@ -106,10 +107,24 @@ export const getMemberData = async (memberId: number): Promise<{
       },
     });
     if (!response.ok) {
+      // Verificar si es un error de autenticación
+      if (response.status === 401) {
+        // Llamar a la función global para manejar el error de autenticación
+        handleAuthError();
+        return {
+          success: false,
+          error: 'No autorizado: Sesión expirada',
+          status: response.status
+        };
+      }
+
       let errorMessage = 'Error al cargar los datos del socio';
 
       // Manejar códigos de error específicos en el servicio
       switch (response.status) {
+        case 401:
+          errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
+          break;
         case 404:
           errorMessage = 'Socio no encontrado';
           break;
@@ -145,7 +160,6 @@ export const getMemberData = async (memberId: number): Promise<{
       };
     }
   } catch (error) {
-    console.error('Error fetching member data:', error);
     return {
       success: false,
       error: 'Error desconocido al cargar los datos del socio',
@@ -207,10 +221,24 @@ export const deleteGuest = async (guestId: number): Promise<{ success: boolean; 
     });
 
     if (!response.ok) {
+      // Verificar si es un error de autenticación
+      if (response.status === 401) {
+        // Llamar a la función global para manejar el error de autenticación
+        handleAuthError();
+        return {
+          success: false,
+          error: 'No autorizado: Sesión expirada',
+          status: response.status
+        };
+      }
+
       let errorMessage = 'Error al eliminar el invitado';
 
       // Manejar códigos de error específicos
       switch (response.status) {
+        case 401:
+          errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
+          break;
         case 404:
           errorMessage = 'Miembro no encontrado';
           break;

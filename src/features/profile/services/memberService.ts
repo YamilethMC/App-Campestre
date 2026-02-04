@@ -1,3 +1,4 @@
+import { handleAuthError } from '../../../shared/utils/authErrorHandler';
 import { userProfile } from "../interfaces/interfaces";
 
 export interface MemberData {
@@ -223,10 +224,24 @@ export const memberService = {
       });
 
       if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
         let errorMessage = 'Error al cargar los datos del miembro';
 
         // Manejar códigos de error específicos en el servicio
         switch (response.status) {
+          case 401:
+            errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
+            break;
           case 404:
             errorMessage = 'Socio no encontrado';
             break;
@@ -302,7 +317,6 @@ export const memberService = {
         status: response.status
       };
     } catch (error: any) {
-      console.error('Error fetching member data:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al cargar los datos del miembro',
@@ -334,12 +348,26 @@ export const memberService = {
         body: JSON.stringify(memberData),
       });
       if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
         let errorMessage = 'Error al agregar miembro de la familia';
 
         // Manejar códigos de error específicos en el servicio
         switch (response.status) {
           case 400:
             errorMessage = 'Datos de entrada inválidos';
+            break;
+          case 401:
+            errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
             break;
           case 409:
             errorMessage = 'El correo electrónico ya está en uso';
@@ -367,7 +395,6 @@ export const memberService = {
         status: response.status
       };
     } catch (error: any) {
-      console.error('Error adding family member:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al agregar miembro de la familia',
@@ -476,12 +503,26 @@ export const updateUser = async (userId: number, userData: UpdateUserRequest, to
       body: JSON.stringify(userData),
     });
     if (!response.ok) {
+      // Verificar si es un error de autenticación
+      if (response.status === 401) {
+        // Llamar a la función global para manejar el error de autenticación
+        handleAuthError();
+        return {
+          success: false,
+          error: 'No autorizado: Sesión expirada',
+          status: response.status
+        };
+      }
+
       let errorMessage = 'Error al actualizar el perfil';
 
       // Manejar códigos de error específicos
       switch (response.status) {
         case 400:
           errorMessage = 'Datos de entrada inválidos';
+          break;
+        case 401:
+          errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
           break;
         case 404:
           errorMessage = 'Usuario no encontrado';
@@ -511,7 +552,6 @@ export const updateUser = async (userId: number, userData: UpdateUserRequest, to
       status: response.status
     };
   } catch (error: any) {
-    console.error('Error updating user profile:', error);
     return {
       success: false,
       error: error.message || 'Error desconocido al actualizar el perfil',

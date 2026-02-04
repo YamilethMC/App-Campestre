@@ -1,5 +1,6 @@
+import { handleAuthError } from '../../../shared/utils/authErrorHandler';
 import { useAuthStore } from '../../auth/store/useAuthStore';
-import { Notification, PaginationMeta, ServiceResponse } from '../interfaces';
+import { ServiceResponse } from '../interfaces';
 
 // Service class for handling notification API calls
 export class NotificationService {
@@ -37,6 +38,17 @@ export class NotificationService {
       });
 
       if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
         let errorMessage = 'Error al cargar las notificaciones';
 
         // Manejar códigos de error específicos en el servicio
@@ -71,7 +83,6 @@ export class NotificationService {
         status: response.status
       };
     } catch (error: any) {
-      console.error('Error fetching notifications:', error);
       return {
         success: false,
         error: error.message || 'Error desconocido al obtener las notificaciones',
