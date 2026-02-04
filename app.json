@@ -12,20 +12,25 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "mx.wipple.clubcampestretampico",
-      "buildNumber": "10",
+      "buildNumber": "20",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
       "package": "mx.wipple.clubcampestretampico",
-      "versionCode": 1,
+      "versionCode": 19,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon-campestre.png",
         "backgroundColor": "#1C1C1C"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+       "permissions": [
+        "INTERNET",
+        "VIBRATE",
+        "SYSTEM_ALERT_WINDOW"
+      ]
     },
     "web": {
       "output": "static",
