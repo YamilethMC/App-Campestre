@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 import Button from '../../../shared/components/Button/Button';
 import Modal from '../../../shared/components/Modal/Modal';
@@ -91,7 +91,8 @@ const ProfileContainer = () => {
         {/* Información personal */}
         <SectionCard
           title={messages.PERSONAL.TITLE}
-          rightAction={
+          rightAction={null}
+          /*rightAction={
             isEditing ? (
               null
             ) : (
@@ -102,7 +103,7 @@ const ProfileContainer = () => {
                 style={styles.editButton}
               />
             )
-          }
+          }*/
         >
           <PersonalInfo
             id={profile?.id || ''}

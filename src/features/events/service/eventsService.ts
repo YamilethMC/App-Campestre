@@ -172,14 +172,21 @@ const parseDate = (dateString: string): string => {
   }
 };
 
-// Parsear la hora de dateISO
+// Parsear la hora de dateISO sin conversión de zona horaria
 const parseTime = (dateISOString: string): string => {
   try {
+    // Extraer la hora directamente del string ISO sin conversión de zona horaria
+    // El formato ISO es: YYYY-MM-DDTHH:mm:ss.SSSZ
+    const timeMatch = dateISOString.match(/\d{4}-\d{2}-\d{2}T(\d{2}:\d{2}):\d{2}/);
+    if (timeMatch && timeMatch[1]) {
+      return timeMatch[1];
+    }
+    // Si no se encuentra el patrón, usar el método tradicional como fallback
     const date = new Date(dateISOString);
-    return date.toLocaleTimeString('es-ES', { 
-      hour: '2-digit', 
+    return date.toLocaleTimeString('es-ES', {
+      hour: '2-digit',
       minute: '2-digit',
-      hour12: false 
+      hour12: false
     });
   } catch (error) {
     return '00:00';

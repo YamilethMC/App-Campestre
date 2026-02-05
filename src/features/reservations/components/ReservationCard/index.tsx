@@ -39,10 +39,28 @@ const ReservationCard: React.FC<ReservationCardProps> = ({ reservation, onPress 
 
   // Format time to show HH:MM hrs
   const formatTime = (dateString: string) => {
+    console.log('dateString', dateString);
+    try {
+    // Extrae HH:mm directamente del ISO (sin timezone)
+    const match = dateString.match(/\d{4}-\d{2}-\d{2}T(\d{2}:\d{2})/);
+
+    if (match && match[1]) {
+      return `${match[1]} hrs`;
+    }
+
+    // Fallback por si no cumple el formato esperado
     const date = new Date(dateString);
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes} hrs`;
+  } catch {
+    return '00:00 hrs';
+  }
+
+    /*const date = new Date(dateString);
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes} hrs`;*/
   };
 
   // Get service icon based on type
