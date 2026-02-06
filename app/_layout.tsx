@@ -9,8 +9,19 @@ import 'react-native-gesture-handler';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import i18n from '../src/i18n/i18n';
 import MainNavigator from '../src/navigation';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // Datos válidos por 5 minutos
+      gcTime: 10 * 60 * 1000,   // Mantener en caché por 10 minutos
+      refetchOnWindowFocus: true, // Refrescar al volver a la app
+    },
+  },
+});
 
 SplashScreen.preventAutoHideAsync();
 
@@ -39,12 +50,14 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={styles.container}>
-      <I18nextProvider i18n={i18n}>
-        <SafeAreaProvider>
-          <MainNavigator />
-          <StatusBar style="auto" />
-        </SafeAreaProvider>
-      </I18nextProvider>
+      <QueryClientProvider client={queryClient}>
+        <I18nextProvider i18n={i18n}>
+          <SafeAreaProvider>
+            <MainNavigator />
+            <StatusBar style="auto" />
+          </SafeAreaProvider>
+        </I18nextProvider>
+      </QueryClientProvider>
     </GestureHandlerRootView>
   );
 }

@@ -1,76 +1,54 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Alert } from 'react-native';
 import { useAuthStore } from '../../auth/store/useAuthStore';
 import { Banner } from '../interfaces/Banner';
 import { bannerService } from '../services';
 
+const fetchBanners = async (): Promise<Banner[]> => {
+  const { token, isAuthenticated } = useAuthStore.getState();
+  
+  // No cargar banners si no hay autenticación
+  if (!token || !isAuthenticated) {
+    return [];
+  }
+
+  const response = await bannerService.getAvailableBanners();
+  
+  // Verificar si es un error de autenticación
+  if (!response.success) {
+    if (response.status === 401) {
+      // El servicio ya maneja el error de autenticación
+      return [];
+    }
+    // Mostrar alerta solo para otros tipos de errores
+    if (response.error) {
+      Alert.alert('Error', response.error);
+    }
+    return [];
+  }
+  
+  return response.banners || [];
+};
+
 export const useBanners = () => {
-  const [banners, setBanners] = useState<Banner[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const { token, isAuthenticated } = useAuthStore();
-  const refreshInterval = 30 * 60 * 1000; // 30 minutos en milisegundos
-
-  const loadBanners = async () => {
-    // No cargar banners si no hay autenticación
-    if (!token || !isAuthenticated) {
-      setLoading(false);
-      setBanners([]);
-      return;
-    }
-
-    try {
-      setLoading(true);
-      setError(null);
-
-      const response = await bannerService.getAvailableBanners();
-      // Verificar si es un error de autenticación
-      if (!response.success) {
-        if (response.status === 401) {
-          // No mostramos error aquí porque el servicio ya lo maneja
-          return;
-        }
-        Alert.alert('Error', response.error);
-        setBanners([]);
-        return;
-      }
-      setBanners(response.banners || []);
-    } catch (err) {
-      // No mostrar error en UI al usuario, simplemente no mostrar banners
-      setBanners([]); // Asegurarse de que banners es un array vacío en caso de error
-      // Mostrar alerta para errores del catch
-      Alert.alert('Error', 'Error al cargar los banners');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    // Solo cargar banners si el usuario está autenticado
-    if (!isAuthenticated || !token) {
-      setLoading(false);
-      return;
-    }
-
-    loadBanners();
-
-    // Configurar intervalo para actualizar banners cada 30 minutos
-    const intervalId = setInterval(() => {
-      loadBanners();
-    }, refreshInterval);
-
-    // Limpiar intervalo cuando el componente se desmonte
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
-  }, [isAuthenticated, token]);
+  
+  const queryResult = useQuery({
+    queryKey: ['banners'],
+    queryFn: fetchBanners,
+    enabled: !!token && !!isAuthenticated, // Solo ejecutar si hay token y está autenticado
+    staleTime: 60000, // Datos considerados frescos por 1 minuto
+    gcTime: 5 * 60 * 1000, // Mantener en caché por 5 minutos
+    refetchInterval: 60000, // Refrescar cada 1 minuto para detectar nuevos banners
+    refetchOnWindowFocus: true, // Refrescar cuando la app vuelva al foco
+    retry: 1, // Reintentar una vez en caso de error
+  });
 
   return {
-    banners,
-    loading,
-    error,
-    refetch: loadBanners,
+    banners: queryResult.data || [],
+    loading: queryResult.isLoading,
+    error: queryResult.error ? (queryResult.error as Error).message : null,
+    refetch: queryResult.refetch,
+    isRefetching: queryResult.isRefetching,
   };
 };

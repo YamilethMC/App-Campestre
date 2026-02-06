@@ -11,14 +11,17 @@ export const authService = {
    * Iniciar sesión con número de acción y contraseña
    */
   login: async (memberCode: string, password: string): Promise<{ success: boolean; user?: userProfile; token?: string; error?: string, status?: number }> => {
-      try {
+    //const email = 'vegapo2812@gmail.com'; 
+    //password = 'qwertyui'; 
+    console.log('.---------------------------el memberCode es:', memberCode);
+console.log('-----------------------------el password es:', password);
+    try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ memberCode, password }),
+        body: JSON.stringify({ username: memberCode, password }),
       });
-console.log('.---------------------------el memberCode es:', memberCode);
-console.log('-----------------------------el password es:', password);
+
       const data = await response.json();
 console.log('-----------------------------el data es:', data);
       if (!response.ok) {

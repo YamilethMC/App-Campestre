@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Dimensions, Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, Modal, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS } from '../../../shared/theme/colors';
 import { Banner } from '../interfaces/Banner';
 
@@ -9,9 +9,11 @@ interface BannerCarouselProps {
   banners: Banner[];
   loading?: boolean;
   error?: string | null;
+  onRefresh?: () => void;
+  isRefreshing?: boolean;
 }
 
-const BannerCarousel: React.FC<BannerCarouselProps> = ({ banners, loading = false, error = null }) => {
+const BannerCarousel: React.FC<BannerCarouselProps> = ({ banners, loading = false, error = null, onRefresh, isRefreshing = false }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedBanner, setSelectedBanner] = useState<Banner | null>(null);
@@ -101,10 +103,15 @@ const BannerCarousel: React.FC<BannerCarouselProps> = ({ banners, loading = fals
         snapToInterval={width}
         snapToAlignment="start"
         contentContainerStyle={styles.scrollContainer}
+        refreshControl={
+          onRefresh ? (
+            <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+          ) : undefined
+        }
       >
         {banners.map((banner, index) => (
-          <TouchableOpacity 
-            key={banner.id} 
+          <TouchableOpacity
+            key={banner.id}
             style={[styles.bannerContainer, { width }]}
             activeOpacity={0.9}
             onPress={() => handleBannerPress(banner)}
@@ -124,7 +131,7 @@ const BannerCarousel: React.FC<BannerCarouselProps> = ({ banners, loading = fals
                 <Text style={styles.placeholderText}>Imagen no disponible</Text>
               </View>
             )}
-            
+
             {/* Floating content card */}
             <View style={styles.floatingCard}>
               <View style={styles.cardContent}>
@@ -158,7 +165,7 @@ const BannerCarousel: React.FC<BannerCarouselProps> = ({ banners, loading = fals
             <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
               <Text style={styles.closeButtonText}>✕</Text>
             </TouchableOpacity>
-            
+
             {selectedBanner && (
               <>
                 {selectedBanner.image && (

@@ -75,7 +75,7 @@ export const bannerService = {
       // Transform the API response to match the expected format
       const transformedData = {
         success: true,
-        banners: data.data || [], // Extract banners from the 'data' property
+        banners: Array.isArray(data.data) ? data.data : [], // Ensure we return an array
         status: response.status
       };
 
