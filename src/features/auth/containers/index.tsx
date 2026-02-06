@@ -13,7 +13,7 @@ import { useLogin } from '../hooks/useLogin';
 import useMessages from '../hooks/useMessages';
 
 const LoginContainer = () => {
-  const { email, password, isLoading, emailError, setEmail, setPassword, handleLogin } = useLogin();
+  const { memberCode, password, isLoading, memberCodeError, setMemberCode, setPassword, handleLogin } = useLogin();
   const { messages } = useMessages();
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
@@ -37,7 +37,7 @@ const LoginContainer = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
       >
-        <ScrollView 
+        <ScrollView
           contentContainerStyle={styles.scrollContainer}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
@@ -46,13 +46,13 @@ const LoginContainer = () => {
           <Text style={styles.title}>{messages.CONTAINER.TITLE}</Text>
           <View style={styles.formContainer}>
             <LoginForm
-              email={email}
+              email={memberCode}
               password={password}
-              onEmailChange={setEmail}
+              onEmailChange={setMemberCode}
               onPasswordChange={setPassword}
               onSubmit={handleLogin}
               isLoading={isLoading}
-              emailError={emailError}
+              emailError={memberCodeError}
             />
           </View>
         </ScrollView>

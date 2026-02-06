@@ -12,11 +12,13 @@ const useMessages = () => {
       },
       LOGIN: {
         EMAIL: t('auth.login.email'),
+        NUMBER_ACTION: t('auth.login.numberAction'),
         PASSWORD: t('auth.login.password'),
         BUTTON: t('auth.login.loginButton'),
         FORGOT_PASSWORD: t('auth.login.forgotPassword'),
         LOADING: t('common.loading'),
         EXAMPLE_EMAIL: t('common.exampleEmail'),
+        EXAMPLE_NUMBER_ACTION: t('common.exampleNumberAction'),
         EXAMPLE_PASSWORD: t('common.examplePassword'),
       }, 
       ALERTS: {

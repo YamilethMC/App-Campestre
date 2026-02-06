@@ -8,18 +8,19 @@ import { handleAuthError } from '../../../shared/utils/authErrorHandler';
 
 export const authService = {
   /**
-   * Iniciar sesión con email y contraseña
+   * Iniciar sesión con número de acción y contraseña
    */
-  login: async (email: string, password: string): Promise<{ success: boolean; user?: userProfile; token?: string; error?: string, status?: number }> => {
+  login: async (memberCode: string, password: string): Promise<{ success: boolean; user?: userProfile; token?: string; error?: string, status?: number }> => {
       try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ memberCode, password }),
       });
-
+console.log('.---------------------------el memberCode es:', memberCode);
+console.log('-----------------------------el password es:', password);
       const data = await response.json();
-
+console.log('-----------------------------el data es:', data);
       if (!response.ok) {
         // Manejar códigos de error específicos
         switch (response.status) {

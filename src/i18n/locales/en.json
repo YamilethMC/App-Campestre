@@ -31,14 +31,15 @@
     "login": {
       "title": "Sign In",
       "email": "Email",
+      "numberAction": "Number Action",
       "password": "Password",
       "loginButton": "Sign In",
       "forgotPassword": "Forgot Password?"
     },
     "alert": {
       "title": "Error",
-      "message": "Invalid email or password",
-      "requiredFields": "Email and password are required",
+      "message": "Invalid number action or password",
+      "requiredFields": "Number action and password are required",
       "loginError": "Login failed. Please check your credentials",
       "connectionError": "Could not connect to server. Please check your internet connection"
     }
@@ -295,6 +296,7 @@
     "error": "Error",
     "success": "Success",
     "exampleEmail": "email@clubtampico.com",
+    "exampleNumberAction": "123456",
     "examplePassword": "MyPassword",
     "logout": "Logout",
     "active": "Active",

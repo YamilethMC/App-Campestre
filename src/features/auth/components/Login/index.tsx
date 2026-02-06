@@ -31,38 +31,38 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
+      memberCode: '',
       password: '',
     },
     mode: 'onBlur',
   });
 
   const handleFormSubmit = (data: LoginFormData) => {
-    onSubmit(data.email, data.password);
+    onSubmit(data.memberCode, data.password);
   };
 
   return (
     <View style={styles.content}>
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>{messages.LOGIN.EMAIL}</Text>
+        <Text style={styles.label}>{messages.LOGIN.NUMBER_ACTION}</Text>
         <Controller
           control={control}
-          name="email"
+          name="memberCode"
           render={({ field: { onChange, onBlur, value } }) => (
             <>
               <TextInput
-                style={errors.email ? styles.inputError : styles.input}
+                style={errors.memberCode ? styles.inputError : styles.input}
                 value={value}
                 onChangeText={onChange}
                 onBlur={onBlur}
-                placeholder={messages.LOGIN.EXAMPLE_EMAIL}
+                placeholder={messages.LOGIN.EXAMPLE_NUMBER_ACTION}
                 placeholderTextColor={styles.inputPlaceholder.color}
-                keyboardType="email-address"
+                keyboardType="numeric"
                 autoCapitalize="none"
                 editable={!isLoading}
               />
-              {errors.email && (
-                <Text style={styles.errorText}>{errors.email.message}</Text>
+              {errors.memberCode && (
+                <Text style={styles.errorText}>{errors.memberCode.message}</Text>
               )}
             </>
           )}

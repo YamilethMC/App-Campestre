@@ -35,14 +35,15 @@
     "login": {
       "title": "Inicio de Sesión",
       "email": "Correo Electrónico",
+      "numberAction": "Número de Acción",
       "password": "Contraseña",
       "loginButton": "Iniciar Sesión",
       "forgotPassword": "¿Olvidaste tu contraseña?"
     },
     "alert": {
       "title": "Error",
-      "message": "Correo electrónico o contraseña inválidos",
-      "requiredFields": "Se requieren el correo electrónico y la contraseña",
+      "message": "Número de acción o contraseña inválidos",
+      "requiredFields": "Se requieren el número de acción y la contraseña",
       "loginError": "Error al iniciar sesión. Por favor verifica tus credenciales",
       "connectionError": "No se pudo conectar con el servidor. Verifica tu conexión a internet"
     }
@@ -299,6 +300,7 @@
     "error": "Error",
     "success": "Éxito",
     "exampleEmail": "email@clubtampico.com",
+    "exampleNumberAction": "123456",
     "examplePassword": "Mi contraseña",
     "logout": "Cerrar Sesión",
     "active": "Activo",

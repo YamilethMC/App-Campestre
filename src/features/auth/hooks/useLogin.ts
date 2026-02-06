@@ -28,41 +28,41 @@ export const useLogin = () => {
   // Estado local para manejar la carga y errores
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [email, setEmail] = useState('');
+  const [memberCode, setMemberCode] = useState('');
   const [password, setPassword] = useState('');
-  const [emailError, setEmailError] = useState<boolean>(false);
+  const [memberCodeError, setMemberCodeError] = useState<boolean>(false);
   
 
   // Función para limpiar errores
   const clearError = () => setError(null);
 
   // Función para manejar el login
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (memberCode: string, password: string): Promise<boolean> => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const { success, token, user, error: authError, status } = await authService.login(email, password);
+      const { success, token, user, error: authError, status } = await authService.login(memberCode, password);
 
       if (success && user) {
         const profileData = { ...user};
-        
+
         setAuthData(user.id, token ?? '');
         setProfile(profileData as userProfile);
-        
+
         const numericUserId = typeof user.id === 'number' ? user.id : Number(user.id);
 
         if (user.mustChangePassword) {
           setPendingPasswordChange(true);
           // @ts-ignore
-          navigation.navigate('ChangePassword', { 
-            userId: numericUserId, 
-            isFirstLogin: true 
+          navigation.navigate('ChangePassword', {
+            userId: numericUserId,
+            isFirstLogin: true
           });
           return true;
         }
         setPendingPasswordChange(false);
-        
+
         return true;
       } else {
         const errorMessage = authError || messages.ALERTS.LOGIN_ERROR || 'Error en la autenticación';
@@ -78,25 +78,26 @@ export const useLogin = () => {
     }
   };
 
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const isValid = emailRegex.test(email);
-    setEmailError(!isValid);
+  const validateMemberCode = (memberCode: string) => {
+    // Validar que sea un número de acción válido (puede ser solo números o con formato específico)
+    const memberCodeRegex = /^\d+$/; // Asumiendo que es solo números
+    const isValid = memberCodeRegex.test(memberCode);
+    setMemberCodeError(!isValid);
     return isValid;
   };
 
   // Función para manejar el envío del formulario
   const handleLogin = useCallback(
-    async (email: string, password: string) => {
-      await login(email, password);
+    async (memberCode: string, password: string) => {
+      await login(memberCode, password);
     },
     [login]
   );
 
-  // Funcion para manejar el cambio del correo
-  const handleEmailChange = (email: string) => {
-    setEmail(email);
-    validateEmail(email);
+  // Funcion para manejar el cambio del número de acción
+  const handleMemberCodeChange = (memberCode: string) => {
+    setMemberCode(memberCode);
+    validateMemberCode(memberCode);
   };
 
   // Función para cerrar sesión
@@ -114,12 +115,12 @@ export const useLogin = () => {
 
 
   return {
-    email,
+    memberCode,
     password,
     isLoading,
     error,
-    emailError,
-    setEmail: handleEmailChange,
+    memberCodeError,
+    setMemberCode: handleMemberCodeChange,
     setPassword,
     login,
     logout,
