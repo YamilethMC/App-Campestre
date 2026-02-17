@@ -79,11 +79,13 @@ const styles = StyleSheet.create({
   },
   segmentButton: {
     flex: 1,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingVertical: 10,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 8,
+  },
+  segmentButtonWide: {
+    flex: 1.4,
   },
   segmentButtonFirst: {
     borderTopLeftRadius: 8,

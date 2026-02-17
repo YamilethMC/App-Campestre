@@ -4,20 +4,22 @@ import { Image, Text, View } from 'react-native';
 // Styles
 import styles from './Style';
 
-// Messages
-import useMessages from '../../hooks/useMessages';
-
 const Logo = () => {
-  const { messages } = useMessages();
   return (
     <View style={styles.logoContainer}>
-      <Text style={styles.logoText}>{messages.LOGO.TITLE}</Text>
-      <Text style={styles.subtitleText}>{messages.LOGO.SUBTITLE}</Text>
-      <Image 
-        source={require('../../../../../assets/images/auth/logo-cct-new.png')} 
-        style={styles.logoImage}
-        resizeMode="contain"
-      />
+      <View style={styles.logoCircle}>
+        <Image 
+          source={require('../../../../../assets/images/auth/SELLO.png')} 
+          style={styles.logoImage}
+          resizeMode="contain"
+        />
+      </View>
+      <Text style={styles.logoText}>CLUB CAMPESTRE</Text>
+      <View style={styles.dividerContainer}>
+        <View style={styles.divider} />
+        <Text style={styles.subtitleText}>TAMPICO</Text>
+        <View style={styles.divider} />
+      </View>
     </View>
   );
 };

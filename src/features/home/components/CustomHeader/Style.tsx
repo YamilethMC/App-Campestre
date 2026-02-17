@@ -7,6 +7,10 @@ const styles = StyleSheet.create({
     height: 250,
     width: '100%',
   },
+  containerCompact: {
+    height: 140,
+    backgroundColor: COLORS.primary,
+  },
   backgroundImage: {
     position: 'absolute',
     top: 0,
@@ -40,6 +44,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 10,
     zIndex: 2,
+  },
+  headerContentCompact: {
+    alignItems: 'center',
+    paddingBottom: 16,
   },
   leftSection: {
     flexDirection: 'row',

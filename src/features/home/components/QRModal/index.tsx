@@ -268,7 +268,6 @@ const QRModal: React.FC<QRModalProps> = ({
           paddingHorizontal: 20,
           paddingVertical: 14,
           borderRadius: 24,
-          marginTop: 20,
           marginBottom: 8,
           minWidth: 200,
           minHeight: 48,

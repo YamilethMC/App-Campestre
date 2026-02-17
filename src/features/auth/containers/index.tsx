@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Text, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, View } from 'react-native';
 
 // Styles
 import styles from './Style';
@@ -43,7 +43,6 @@ const LoginContainer = () => {
           showsVerticalScrollIndicator={false}
         >
           {!keyboardVisible && <Logo />}
-          <Text style={styles.title}>{messages.CONTAINER.TITLE}</Text>
           <View style={styles.formContainer}>
             <LoginForm
               email={memberCode}

@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { ActivityIndicator, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import { COLORS } from '../../../../shared/theme/colors';
 import useMessages from '../../hooks/useMessages';
@@ -43,8 +43,21 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
   return (
     <View style={styles.content}>
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>{messages.LOGIN.NUMBER_ACTION}</Text>
+      <View style={styles.logoTampicoContainer}>
+        <Image 
+          source={require('../../../../../assets/images/auth/Logo-Tampico.png')} 
+          style={styles.logoTampico}
+          resizeMode="contain"
+        />
+        {/*<Text style={styles.accountText}>Cuenta regresiva oficial</Text>*/}
+      </View>
+
+      <View style={styles.formCardInner}>
+        <View style={styles.inputContainer}>
+        <Text style={styles.label}>
+          <Ionicons name="card-outline" size={20} color={COLORS.primaryDark} />
+          {' '}{messages.LOGIN.NUMBER_ACTION}
+        </Text>
         <Controller
           control={control}
           name="memberCode"
@@ -98,7 +111,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                   <Ionicons
                     name={showPassword ? 'eye-outline' : 'eye-off-outline'}
                     size={20}
-                    color={COLORS.gray500}
+                    color={COLORS.primary}
                   />
                 </TouchableOpacity>
               </View>
@@ -122,16 +135,23 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         )}
       </TouchableOpacity>
 
-      <TouchableOpacity 
-        style={styles.forgotPasswordButton}
-        onPress={() => {
-          // @ts-ignore
-          navigation.navigate('ForgotPassword');
-        }}
-        disabled={isLoading}
-      >
-        <Text style={styles.linkText}>{messages.LOGIN.FORGOT_PASSWORD}</Text>
-      </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.forgotPasswordButton}
+          onPress={() => {
+            // @ts-ignore
+            navigation.navigate('ForgotPassword');
+          }}
+          disabled={isLoading}
+        >
+          <Text style={styles.linkText}>{messages.LOGIN.FORGOT_PASSWORD}</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.footerContainer}>
+        <View style={styles.footerDivider} />
+        <Text style={styles.footerText}>App Oficial · Club Campestre Tampico</Text>
+        <View style={styles.footerDivider} />
+      </View>
     </View>
   );
 };

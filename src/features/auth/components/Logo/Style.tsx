@@ -4,23 +4,45 @@ import { COLORS } from '../../../../shared/theme/colors';
 const styles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
-    marginTop: 50,
+    marginTop: 10,
     marginBottom: 40,
   },
-  logoText: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: COLORS.primaryDark,
-  },
-  subtitleText: {
-    fontSize: 16,
-    color: COLORS.black,
-    marginTop: 4,
+  logoCircle: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: COLORS.primaryDark,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
   },
   logoImage: {
     width: 120,
     height: 120,
-    marginTop: 16,
+    tintColor: COLORS.white,
+  },
+  logoText: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: COLORS.primaryDark,
+    letterSpacing: 1,
+    marginBottom: 2,
+  },
+  dividerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  divider: {
+    width: 40,
+    height: 1,
+    backgroundColor: COLORS.gray400,
+    marginHorizontal: 8,
+  },
+  subtitleText: {
+    fontSize: 14,
+    color: COLORS.primaryDark,
+    letterSpacing: 2,
+    fontWeight: '500',
   },
 });
 
