@@ -2,7 +2,7 @@
 export const COLORS = {
   // Verdes
   primary: '#10B981',
-  primaryDark: '#0D9C6E',
+  primaryDark: '#00724eff',
   primaryLight: '#34D399',
   
   // Escala de grises
