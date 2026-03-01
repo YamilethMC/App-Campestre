@@ -3,7 +3,7 @@ import * as FileSystem from 'expo-file-system';
 import * as MediaLibrary from 'expo-media-library';
 import * as Sharing from 'expo-sharing';
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 import ViewShot from 'react-native-view-shot';
 import Modal from '../../../../shared/components/Modal/Modal';
 import { COLORS } from '../../../../shared/theme/colors';
@@ -260,14 +260,14 @@ const QRModal: React.FC<QRModalProps> = ({
       </ViewShot>
 
       {/* Download QR button */}
-      <TouchableOpacity
+      {/*<TouchableOpacity
         style={{
           flexDirection: 'row',
           alignItems: 'center',
           backgroundColor: isDownloading ? COLORS.gray300 : COLORS.primary,
           paddingHorizontal: 20,
           paddingVertical: 14,
-          borderRadius: 24,
+          borderRadius: 18,
           marginBottom: 8,
           minWidth: 200,
           minHeight: 48,
@@ -289,7 +289,7 @@ const QRModal: React.FC<QRModalProps> = ({
         }}>
           {isDownloading ? 'Descargando...' : 'Descargar QR'}
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity>*/}
 
       {/* Last download date */}
       {lastDownloadDate && (
