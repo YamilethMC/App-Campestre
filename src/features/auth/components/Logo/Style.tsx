@@ -8,17 +8,17 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   logoCircle: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: 200,
+    height: 200,
+    borderRadius: 100,
     backgroundColor: COLORS.primaryDark,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
   },
   logoImage: {
-    width: 120,
-    height: 120,
+    width: 200,
+    height: 200,
     tintColor: COLORS.white,
   },
   logoText: {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, View } from 'react-native';
 
 // Styles
 import styles from './Style';
@@ -14,12 +14,12 @@ const Logo = () => {
           resizeMode="contain"
         />
       </View>
-      <Text style={styles.logoText}>CLUB CAMPESTRE</Text>
+      {/*<Text style={styles.logoText}>CLUB CAMPESTRE</Text>
       <View style={styles.dividerContainer}>
         <View style={styles.divider} />
         <Text style={styles.subtitleText}>TAMPICO</Text>
         <View style={styles.divider} />
-      </View>
+      </View>*/}
     </View>
   );
 };
