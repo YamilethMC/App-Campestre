@@ -19,6 +19,7 @@ interface CustomHeaderProps {
 const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
+  const hasBanners = banners && banners.length > 0;
   
   // Carrusel state
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -101,7 +102,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
   const lastName = memberData?.user?.lastName || '';
   const initials = getInitials(firstName, lastName);
   const profilePhotoUrl = profilePhotoFromStore || memberData?.user?.profilePhotoUrl || null;
-  const currentBanner = banners && banners.length > 0 ? banners[currentIndex] : null;
+  const currentBanner = hasBanners ? banners[currentIndex] : null;
 
   const renderAvatar = () => {
     if (profilePhotoUrl) {
@@ -115,9 +116,9 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
   };
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View style={[styles.container, !hasBanners && styles.containerCompact, { paddingTop: insets.top }]}>
       {/* Carrusel de banners de fondo */}
-      {banners && banners.length > 0 ? (
+      {hasBanners ? (
         <ScrollView
           ref={scrollViewRef}
           horizontal
@@ -150,10 +151,10 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
       )}
 
       {/* Overlay oscuro para mejor legibilidad */}
-      <View style={styles.overlay} />
+      {hasBanners && <View style={styles.overlay} />}
 
       {/* Header content */}
-      <View style={styles.headerContent}>
+      <View style={[styles.headerContent, !hasBanners && styles.headerContentCompact]}>
         {/* Sección izquierda: Iniciales y saludo */}
         <View style={styles.leftSection}>
           {renderAvatar()}

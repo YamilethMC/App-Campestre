@@ -39,6 +39,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({
                 key={status.value}
                 style={[
                   styles.segmentButton,
+                  status.value === 'completadas' && styles.segmentButtonWide,
                   isFirst && styles.segmentButtonFirst,
                   isLast && styles.segmentButtonLast,
                   isSelected && styles.segmentButtonActive,
