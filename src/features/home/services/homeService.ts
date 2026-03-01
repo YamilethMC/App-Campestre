@@ -54,6 +54,7 @@ export interface User {
   resetToken: string;
   tokenExpires: string;
   mustChangePassword: boolean;
+  profilePhotoUrl?: string | null;
   createdAt: string;
   updatedAt: string;
   roleId: number | null;

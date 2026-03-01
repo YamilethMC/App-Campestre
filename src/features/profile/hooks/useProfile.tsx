@@ -1,11 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import useLogout from '../../../hooks/useLogout';
 import { useAuthStore } from '../../../store';
 import useMessages from '../hooks/useMessages';
 import { userProfile } from '../interfaces/interfaces';
-import { memberService, updateUser } from '../services/memberService';
+import { memberService, updateUser, uploadProfilePhoto } from '../services/memberService';
 import { useProfileStore } from '../store/useProfileStore';
 
 export const useProfile = () => {
@@ -25,6 +26,7 @@ export const useProfile = () => {
       if (userId && token) {
         const response = await memberService.getMemberById(userId, token);
         if (response.success && response.data) {
+          console.log('📸 useProfile.loadMember -> photoUrl:', response.data.photoUrl);
           updateProfile(response.data);
         } else {
           // Verificar si es un error de autenticación
@@ -244,6 +246,7 @@ export const useProfile = () => {
       const response = await memberService.getMemberById(userId, token);
 
       if (response.success && response.data) {
+        console.log('📸 useProfile.refreshProfile -> photoUrl:', response.data.photoUrl);
         updateProfile(response.data);
       } else {
         // Verificar si es un error de autenticación
@@ -264,6 +267,89 @@ export const useProfile = () => {
       }
     }
   }, [userId, token, updateProfile]);
+
+  /**
+   * Handle profile photo upload
+   */
+  const handlePhotoPress = useCallback(async () => {
+    try {
+      // Request permission
+      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      
+      if (!permissionResult.granted) {
+        Alert.alert('Permiso requerido', 'Se necesita acceso a la galería para cambiar la foto de perfil.');
+        return;
+      }
+
+      // Show options: camera or gallery
+      Alert.alert(
+        'Cambiar foto de perfil',
+        'Selecciona una opción',
+        [
+          {
+            text: 'Cámara',
+            onPress: async () => {
+              const cameraPermission = await ImagePicker.requestCameraPermissionsAsync();
+              if (!cameraPermission.granted) {
+                Alert.alert('Permiso requerido', 'Se necesita acceso a la cámara.');
+                return;
+              }
+              const result = await ImagePicker.launchCameraAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [1, 1],
+                quality: 0.8,
+              });
+              if (!result.canceled && result.assets[0]) {
+                await handlePhotoUpload(result.assets[0].uri);
+              }
+            },
+          },
+          {
+            text: 'Galería',
+            onPress: async () => {
+              const result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [1, 1],
+                quality: 0.8,
+              });
+              if (!result.canceled && result.assets[0]) {
+                await handlePhotoUpload(result.assets[0].uri);
+              }
+            },
+          },
+          {
+            text: 'Cancelar',
+            style: 'cancel',
+          },
+        ]
+      );
+    } catch (error) {
+      console.error('Error selecting photo:', error);
+      Alert.alert('Error', 'No se pudo seleccionar la foto.');
+    }
+  }, [userId, token]);
+
+  const handlePhotoUpload = async (photoUri: string) => {
+    if (!userId || !token) return;
+
+    try {
+      const numericUserId = typeof userId === 'string' ? parseInt(userId, 10) : userId;
+      const response = await uploadProfilePhoto(numericUserId, photoUri, token);
+      
+      if (response.success && response.data) {
+        // Refresh profile to get updated photo URL
+        refreshProfile();
+        Alert.alert('Éxito', 'Foto de perfil actualizada correctamente.');
+      } else {
+        Alert.alert('Error', response.error || 'No se pudo actualizar la foto de perfil.');
+      }
+    } catch (error) {
+      console.error('Error uploading photo:', error);
+      Alert.alert('Error', 'No se pudo subir la foto de perfil.');
+    }
+  };
 
   return {
     // State
@@ -287,6 +373,7 @@ export const useProfile = () => {
     handleAddVehicle,
     handleAddFamilyMember,
     refreshProfile,
+    handlePhotoPress,
   };
 };
 

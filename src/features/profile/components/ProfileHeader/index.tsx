@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, Text, View, TouchableOpacity } from 'react-native';
 import useMessages from '../../hooks/useMessages';
 import { userProfile } from '../../interfaces/interfaces';
 import { styles } from './Style';
@@ -12,16 +12,23 @@ const ProfileHeader: React.FC<userProfile> = ({
   membershipType,
   isActive = true,
   photoUrl,
+  onPhotoPress,
   style,
 }) => {
   const { messages } = useMessages();
-  const avatar = photoUrl ? (
+  const avatarContent = photoUrl ? (
     <Image source={{ uri: photoUrl }} style={styles.avatarImage} />
   ) : (
     <View style={styles.avatarPlaceholder}>
       <Text style={styles.avatarText}>{name?.charAt(0) ?? '?'}</Text>
     </View>
   );
+
+  const avatar = onPhotoPress ? (
+    <TouchableOpacity onPress={onPhotoPress} activeOpacity={0.7}>
+      {avatarContent}
+    </TouchableOpacity>
+  ) : avatarContent;
 
   return (
     <View style={[styles.header, style]}>

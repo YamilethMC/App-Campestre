@@ -41,6 +41,7 @@ export interface UserProfile {
   gender?: string;
   RFC?: string;
   roleId?: number | null;
+  photoUrl?: string;
 }
 
 // Interface of emergency contact

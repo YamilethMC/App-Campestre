@@ -53,6 +53,7 @@ export interface MemberProfile {
   lastName: string;
   email?: string;
   phone?: string;
+  photoUrl?: string;
   address?: string;
   street?: string;
   externalNumber?: string;
@@ -150,6 +151,7 @@ export interface GetMemberResponse {
       createdAt: string;
       updatedAt: string;
       roleId: number | null;
+      profilePhotoUrl?: string | null;
       address: {
         id: number;
         street: string;
@@ -285,6 +287,7 @@ export const memberService = {
         roleId: data.user.roleId,
         email: data.user.email,
         phone: data.user.phone.length > 0 ? data.user.phone[0].number : undefined,
+        photoUrl: data.user.profilePhotoUrl ?? undefined,
         address: `Calle ${data.user.address.street} ${data.user.address.externalNumber}, Colonia ${data.user.address.suburb}, C.P. ${data.user.address.zipCode}, ${data.user.address.city}, ${data.user.address.state}, ${data.user.address.country}`,
         street: data.user.address.street,
         externalNumber: data.user.address.externalNumber,
@@ -555,6 +558,70 @@ export const updateUser = async (userId: number, userData: UpdateUserRequest, to
     return {
       success: false,
       error: error.message || 'Error desconocido al actualizar el perfil',
+      status: 500
+    };
+  }
+};
+
+/**
+ * Upload profile photo
+ */
+export const uploadProfilePhoto = async (
+  userId: number,
+  photoUri: string,
+  token: string,
+): Promise<{ success: boolean; data?: any; error?: string; status?: number }> => {
+  try {
+    const formData = new FormData();
+    
+    // Get file extension from URI
+    const uriParts = photoUri.split('.');
+    const fileType = uriParts[uriParts.length - 1];
+    
+    formData.append('file', {
+      uri: photoUri,
+      name: `profile-photo.${fileType}`,
+      type: `image/${fileType}`,
+    } as any);
+
+    const response = await fetch(
+      `${process.env.EXPO_PUBLIC_API_URL}/users/${userId}/profile-photo`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+        body: formData,
+      }
+    );
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        handleAuthError();
+        return {
+          success: false,
+          error: 'No autorizado: Sesión expirada',
+          status: response.status
+        };
+      }
+      return {
+        success: false,
+        error: 'Error al subir la foto de perfil',
+        status: response.status
+      };
+    }
+
+    const result = await response.json();
+    return {
+      success: true,
+      data: result,
+      status: response.status
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message || 'Error desconocido al subir la foto',
       status: 500
     };
   }

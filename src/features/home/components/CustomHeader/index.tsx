@@ -5,6 +5,7 @@ import { Dimensions, Image, Modal, ScrollView, Text, TouchableOpacity, View } fr
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '../../../../shared/theme/colors';
 import { Banner } from '../../../banner/interfaces/Banner';
+import { useProfileStore } from '../../../profile/store/useProfileStore';
 import { MemberData } from '../../services/homeService';
 import styles from './Style';
 
@@ -94,10 +95,24 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
     setSelectedBanner(null);
   };
 
+  const profilePhotoFromStore = useProfileStore(state => state.profile?.photoUrl);
+
   const firstName = memberData?.user?.name || 'Usuario';
   const lastName = memberData?.user?.lastName || '';
   const initials = getInitials(firstName, lastName);
+  const profilePhotoUrl = profilePhotoFromStore || memberData?.user?.profilePhotoUrl || null;
   const currentBanner = banners && banners.length > 0 ? banners[currentIndex] : null;
+
+  const renderAvatar = () => {
+    if (profilePhotoUrl) {
+      return <Image source={{ uri: profilePhotoUrl }} style={styles.avatarImage} />;
+    }
+    return (
+      <View style={styles.initialsCircle}>
+        <Text style={styles.initialsText}>{initials}</Text>
+      </View>
+    );
+  };
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -141,9 +156,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
       <View style={styles.headerContent}>
         {/* Sección izquierda: Iniciales y saludo */}
         <View style={styles.leftSection}>
-          <View style={styles.initialsCircle}>
-            <Text style={styles.initialsText}>{initials}</Text>
-          </View>
+          {renderAvatar()}
           <View style={styles.greetingContainer}>
             <Text style={styles.welcomeText}>BIENVENIDO</Text>
             <Text style={styles.nameText}>Hola, {firstName}</Text>
