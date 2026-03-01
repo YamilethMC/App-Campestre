@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
-import { SafeAreaView, ScrollView, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView, Text, View, Linking } from 'react-native';
+import Constants from 'expo-constants';
 import Button from '../../../shared/components/Button/Button';
 import Modal from '../../../shared/components/Modal/Modal';
 import { useAuthStore } from '../../../store';
@@ -43,6 +44,7 @@ const ProfileContainer = () => {
     handleAddVehicle,
     handleAddFamilyMember,
     refreshProfile,
+    handlePhotoPress,
   } = useProfile();
 
   const [showAddFamilyForm, setShowAddFamilyForm] = useState(false);
@@ -85,6 +87,8 @@ const ProfileContainer = () => {
           memberCode={profile?.memberCode}
           membershipType={profile?.membershipType || 'Premium'}
           isActive={true}
+          photoUrl={profile?.photoUrl}
+          onPhotoPress={handlePhotoPress}
           style={styles.profileHeader}
         />
 
@@ -224,8 +228,22 @@ const ProfileContainer = () => {
           )}
         </SectionCard>*/}
 
-        {/* Change Password Button */}
+        {/* Action Buttons */}
         <View style={styles.logoutContainer}>
+          {/* Update Data Button - Opens Portal */}
+          <Button
+            text="Actualización de Datos"
+            onPress={() => {
+              const portalUrl = Constants.expoConfig?.extra?.DEPENDENTS_PORTAL_URL || 
+                               process.env.EXPO_PUBLIC_DEPENDENTS_PORTAL_URL ||
+                               'https://portal.campestre.com/validacion';
+              Linking.openURL(portalUrl);
+            }}
+            variant="primary"
+            style={[styles.logoutButton, { marginBottom: 15 }]}
+          />
+
+          {/* Change Password Button */}
           <Button
             text="Cambiar Contraseña"
             onPress={() => {

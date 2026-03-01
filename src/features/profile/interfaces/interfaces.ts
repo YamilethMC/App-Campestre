@@ -20,6 +20,7 @@ export interface userProfile extends UserProfile {
   rightAction?: React.ReactNode;
   isActive?: boolean;
   photoUrl?: string;
+  onPhotoPress?: () => void;
 }
 
 export interface vehicle extends Vehicle {}

@@ -53,6 +53,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  avatarImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 14,
+    borderWidth: 2,
+    borderColor: COLORS.white,
+    backgroundColor: COLORS.gray200,
+  },
   initialsCircle: {
     width: 40,
     height: 40,

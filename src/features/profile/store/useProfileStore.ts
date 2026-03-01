@@ -19,7 +19,9 @@ export const useProfileStore = create<ProfileState>()(
       
       updateProfile: (updates) => 
         set((state) => ({
-          profile: state.profile ? { ...state.profile, ...updates } : null
+          profile: state.profile
+            ? { ...state.profile, ...updates }
+            : (updates ? (updates as UserProfile) : null)
         })),
         
       clearProfile: () => set({ profile: null }),
@@ -46,8 +48,8 @@ export const useProfileStore = create<ProfileState>()(
               zipCode: state.profile.zipCode,
               city: state.profile.city,
               state: state.profile.state,
-              country: state.profile.country
-
+              country: state.profile.country,
+              photoUrl: state.profile.photoUrl,
             } 
           : null
       })
