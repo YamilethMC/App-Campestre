@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
-import { SafeAreaView, ScrollView, Text, View, Linking } from 'react-native';
 import Constants from 'expo-constants';
+import { useState } from 'react';
+import { Linking, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import Button from '../../../shared/components/Button/Button';
 import Modal from '../../../shared/components/Modal/Modal';
 import { useAuthStore } from '../../../store';
@@ -15,6 +15,7 @@ import FamilyMembers from '../components/FamilyMembers';
 import PersonalInfo from '../components/PersonalInfo';
 import ProfileHeader from '../components/ProfileHeader';
 import SectionCard from '../components/SectionCard';
+import UpdateDataCTA from '../components/UpdateDataCTA';
 
 import useMessages from '../hooks/useMessages';
 import useProfile from '../hooks/useProfile';
@@ -90,6 +91,17 @@ const ProfileContainer = () => {
           photoUrl={profile?.photoUrl}
           onPhotoPress={handlePhotoPress}
           style={styles.profileHeader}
+        />
+
+        <UpdateDataCTA
+          style={styles.updateDataCard}
+          onPress={async () => {
+            const portalUrl = Constants.expoConfig?.extra?.DEPENDENTS_PORTAL_URL ||
+              process.env.EXPO_PUBLIC_DEPENDENTS_PORTAL_URL ||
+              'https://campestre-portal-tpjh.vercel.app/';
+
+            await Linking.openURL(portalUrl);
+          }}
         />
 
         {/* Información personal */}
@@ -230,19 +242,6 @@ const ProfileContainer = () => {
 
         {/* Action Buttons */}
         <View style={styles.logoutContainer}>
-          {/* Update Data Button - Opens Portal */}
-          <Button
-            text="Actualización de Datos"
-            onPress={() => {
-              const portalUrl = Constants.expoConfig?.extra?.DEPENDENTS_PORTAL_URL || 
-                               process.env.EXPO_PUBLIC_DEPENDENTS_PORTAL_URL ||
-                               'https://portal.campestre.com/validacion';
-              Linking.openURL(portalUrl);
-            }}
-            variant="primary"
-            style={[styles.logoutButton, { marginBottom: 15 }]}
-          />
-
           {/* Change Password Button */}
           <Button
             text="Cambiar Contraseña"

@@ -16,6 +16,9 @@ const styles = StyleSheet.create({
     profileHeader: {
       marginBottom: 16,
     },
+    updateDataCard: {
+      marginBottom: 16,
+    },
     logoutContainer: {
       marginTop: 8,
       marginBottom: 24,
