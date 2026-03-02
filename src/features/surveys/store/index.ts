@@ -15,7 +15,18 @@ interface SurveyStore {
     limit: number;
     total: number;
     totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
   };
+  // Cached buckets per category
+  unansweredCache: Survey[];
+  answeredCache: Survey[];
+  closedCache: Survey[];
+  unansweredMeta: any | null;
+  answeredMeta: any | null;
+  closedMeta: any | null;
+  lastLoadedCategory: SurveyCategory | null;
+  lastLoadedSearch: string;
 
   setSurveys: (surveys: Survey[]) => void;
   setActiveSurveys: (count: number) => void;
@@ -34,6 +45,18 @@ interface SurveyStore {
   updateSurveyStatus: (surveyId: string, status: 'completed' | 'active') => void;
   incrementCompletedSurveys: (surveyId: string) => void;
   resetPagination: () => void;
+  setSurveyCaches: (payload: {
+    unanswered: Survey[];
+    answered: Survey[];
+    closed: Survey[];
+    unansweredMeta?: any;
+    answeredMeta?: any;
+    closedMeta?: any;
+  }) => void;
+  setLastLoadedParams: (payload: {
+    category: SurveyCategory | null;
+    search: string;
+  }) => void;
 }
 
 export const useSurveyStore = create<SurveyStore>((set, get) => ({
@@ -43,7 +66,7 @@ export const useSurveyStore = create<SurveyStore>((set, get) => ({
   completedSurveys: 0,
   averageRating: 0,
   currentFilter: {
-    category: SurveyCategory.ALL,
+    category: SurveyCategory.SERVICES,
     status: 'abiertas', /* "abiertas"*/
   },
   loading: false,
@@ -53,7 +76,17 @@ export const useSurveyStore = create<SurveyStore>((set, get) => ({
     limit: 10,
     total: 0,
     totalPages: 1,
+    hasNextPage: false,
+    hasPreviousPage: false,
   },
+  unansweredCache: [],
+  answeredCache: [],
+  closedCache: [],
+  unansweredMeta: null,
+  answeredMeta: null,
+  closedMeta: null,
+  lastLoadedCategory: null,
+  lastLoadedSearch: '',
 
   setSurveys: (surveys) => set({ surveys }),
 
@@ -85,10 +118,26 @@ export const useSurveyStore = create<SurveyStore>((set, get) => ({
         page: 1,
         limit: get().pagination.limit,
         total: 0,
-        totalPages: 1
+        totalPages: 1,
+        hasNextPage: false,
+        hasPreviousPage: false,
       }
     });
   },
+
+  setSurveyCaches: ({ unanswered, answered, closed, unansweredMeta, answeredMeta, closedMeta }) => set({
+    unansweredCache: unanswered,
+    answeredCache: answered,
+    closedCache: closed,
+    unansweredMeta: unansweredMeta ?? null,
+    answeredMeta: answeredMeta ?? null,
+    closedMeta: closedMeta ?? null,
+  }),
+
+  setLastLoadedParams: ({ category, search }) => set({
+    lastLoadedCategory: category,
+    lastLoadedSearch: search,
+  }),
 
   fetchSurveys: async (page = 1) => {
     set({ loading: true });

@@ -1,8 +1,24 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Alert } from 'react-native';
 import { SurveyCategory, SurveyFilter } from '../interfaces';
 import { surveyService } from '../services';
 import { useSurveyStore } from '../store';
+
+const mapCategoryToParam = (category: SurveyCategory): string => {
+  switch (category) {
+    case SurveyCategory.SERVICES:
+      return 'SERVICES';
+    case SurveyCategory.RESTAURANT:
+      return 'RESTAURANT';
+    case SurveyCategory.SPORTS:
+      return 'SPORTS';
+    case SurveyCategory.EVENTS:
+      return 'EVENTS';
+    case SurveyCategory.ALL:
+    default:
+      return '';
+  }
+};
 
 export const useSurveyActions = () => {
   const [selectedSurveyId, setSelectedSurveyId] = useState<string | null>(null);
@@ -29,8 +45,36 @@ export const useSurveyActions = () => {
     setPagination,
     setActiveSurveys,
     setCompletedSurveys,
-    setAverageRating
+    setAverageRating,
+    unansweredCache,
+    answeredCache,
+    closedCache,
+    unansweredMeta,
+    answeredMeta,
+    closedMeta,
+    setSurveyCaches,
+    setLastLoadedParams,
+    lastLoadedCategory,
+    lastLoadedSearch
   } = useSurveyStore();
+
+  const hasCachedDataForCurrentCategory = useMemo(() => {
+    const hasCacheEntries = unansweredCache.length > 0 || answeredCache.length > 0 || closedCache.length > 0;
+    const hasCacheMeta = unansweredMeta !== null || answeredMeta !== null || closedMeta !== null;
+    const hasCache = hasCacheEntries || hasCacheMeta;
+    return hasCache && lastLoadedCategory === currentFilter.category && lastLoadedSearch === search;
+  }, [
+    unansweredCache.length,
+    answeredCache.length,
+    closedCache.length,
+    unansweredMeta,
+    answeredMeta,
+    closedMeta,
+    lastLoadedCategory,
+    lastLoadedSearch,
+    currentFilter.category,
+    search
+  ]);
 
   const handleSurveyResponse = (surveyId: string) => {
     setSelectedSurveyId(surveyId);
@@ -75,93 +119,106 @@ export const useSurveyActions = () => {
     }
   };
 
+  const applyDataset = useCallback((data: any[], meta?: any) => {
+    setSurveys(data);
+
+    const computedPage = meta?.page || 1;
+    const computedLimit = meta?.limit || pagination.limit;
+    const computedTotal = meta?.total ?? data.length;
+    const computedTotalPages = meta?.totalPages || Math.max(1, Math.ceil((computedTotal || data.length) / computedLimit));
+
+    setPagination({
+      page: computedPage,
+      limit: computedLimit,
+      total: computedTotal,
+      totalPages: computedTotalPages,
+      hasNextPage: computedPage < computedTotalPages,
+      hasPreviousPage: computedPage > 1,
+    });
+  }, [pagination.limit, setPagination, setSurveys]);
+
+  const getCachedDataset = useCallback((status: 'abiertas' | 'completadas' | 'cerradas') => {
+    if (status === 'abiertas') {
+      return { data: unansweredCache, meta: unansweredMeta };
+    }
+    if (status === 'completadas') {
+      return { data: answeredCache, meta: answeredMeta };
+    }
+    return { data: closedCache, meta: closedMeta };
+  }, [unansweredCache, answeredCache, closedCache, unansweredMeta, answeredMeta, closedMeta]);
+
+  const applyCachedStatusView = useCallback((status: 'abiertas' | 'completadas' | 'cerradas') => {
+    const { data, meta } = getCachedDataset(status);
+    applyDataset(data, meta);
+  }, [applyDataset, getCachedDataset]);
+
   // Cargar encuestas
-  const loadSurveys = useCallback(async (currentPage: number = 1) => {
+  const loadSurveys = useCallback(async (
+    currentPage: number = 1,
+    options: {
+      forceRefresh?: boolean;
+      categoryOverride?: SurveyCategory;
+      statusOverride?: 'abiertas' | 'completadas' | 'cerradas';
+      searchOverride?: string;
+    } = {}
+  ) => {
+    const { forceRefresh = false, categoryOverride, statusOverride, searchOverride } = options;
+    const effectiveCategory = categoryOverride ?? currentFilter.category;
+    const effectiveStatus = statusOverride ?? currentFilter.status;
+    const effectiveSearch = searchOverride ?? search;
+
+    const reuseCache = !forceRefresh &&
+      lastLoadedCategory === effectiveCategory &&
+      lastLoadedSearch === effectiveSearch &&
+      (unansweredCache.length > 0 || answeredCache.length > 0 || closedCache.length > 0);
+
+    if (reuseCache) {
+      applyCachedStatusView(effectiveStatus);
+      return;
+    }
+
     setStoreLoading(true);
     setError(null);
 
     try {
-      // Mapear categoría a string para la API
-      let category = '';
-      if (currentFilter.category !== SurveyCategory.SERVICES /*SurveyCategory.ALL*/) {
-        switch(currentFilter.category) {
-          /*case SurveyCategory.SERVICES:
-            category = 'SERVICES';
-            break;*/
-          case SurveyCategory.RESTAURANT:
-            category = 'RESTAURANT';
-            break;
-          case SurveyCategory.SPORTS:
-            category = 'SPORTS';
-            break;
-          case SurveyCategory.EVENTS:
-            category = 'EVENTS';
-            break;
-          default:
-            category = '';
-        }
-      }
-
+      const categoryParam = mapCategoryToParam(effectiveCategory);
       const order = 'asc';
       const limit = pagination.limit;
 
       const response = await surveyService.getSurveys(
         currentPage,
         limit,
-        search,
+        effectiveSearch,
         order,
-        category
+        categoryParam
       );
       if (response.success && response.data) {
-        // Usar los datos y la paginación correspondiente según el estado actual
-        let surveysData, meta;
-
         const unansweredSurveys = response.data.unansweredSurveys || [];
         const answeredSurveys = response.data.answeredSurveys || [];
         const closedSurveys = response.data.closedSurveys || [];
-        if (currentFilter.status === 'abiertas') {
-          surveysData = unansweredSurveys;
-          meta = response.data.unansweredMeta;
-        } else if (currentFilter.status === 'completadas') {
-          surveysData = answeredSurveys;
-          meta = response.data.answeredMeta;
-        } else if (currentFilter.status === 'cerradas') {
-          // Para encuestas cerradas, usar las encuestas cerradas directamente
-          surveysData = closedSurveys;
-          meta = response.data.closedMeta;
-        } else {
-          // Por defecto, usar unanswered (encuestas activas)
-          surveysData = unansweredSurveys;
-          meta = response.data.unansweredMeta;
-        }
 
-        setSurveys(surveysData);
+        setSurveyCaches({
+          unanswered: unansweredSurveys,
+          answered: answeredSurveys,
+          closed: closedSurveys,
+          unansweredMeta: response.data.unansweredMeta,
+          answeredMeta: response.data.answeredMeta,
+          closedMeta: response.data.closedMeta,
+        });
 
-        // Handle pagination safely - provide defaults if meta is undefined
-        if (meta) {
-          setPagination({
-            page: meta.page || 1,
-            limit: meta.limit || 10,
-            total: meta.total || 0,
-            totalPages: meta.totalPages || 1,
-          });
-        } else {
-          // Fallback pagination when meta is not available
-          setPagination({
-            page: 1,
-            limit: 10,
-            total: surveysData.length,
-            totalPages: 1,
-          });
-        }
+        setLastLoadedParams({ category: effectiveCategory, search: effectiveSearch });
 
-        // Calcular estadísticas usando todos los datos
-        const activeSurveysCount = response.data.unansweredSurveys?.length || 0;
-        const completedSurveysCount = response.data.answeredSurveys?.length || 0;
-
-        setActiveSurveys(activeSurveysCount);
-        setCompletedSurveys(completedSurveysCount);
+        setActiveSurveys(unansweredSurveys.length);
+        setCompletedSurveys(answeredSurveys.length);
         setAverageRating(0); // Valor por defecto, ya que la API no proporciona este dato
+
+        if (effectiveStatus === 'abiertas') {
+          applyDataset(unansweredSurveys, response.data.unansweredMeta);
+        } else if (effectiveStatus === 'completadas') {
+          applyDataset(answeredSurveys, response.data.answeredMeta);
+        } else {
+          applyDataset(closedSurveys, response.data.closedMeta);
+        }
       } else {
         // Verificar si es un error de autenticación
         if (response.status === 401) {
@@ -175,56 +232,75 @@ export const useSurveyActions = () => {
       setStoreLoading(false);
     }
   }, [
+    applyCachedStatusView,
+    applyDataset,
+    closedCache.length,
     currentFilter.category,
     currentFilter.status,
-    search,
+    lastLoadedCategory,
+    lastLoadedSearch,
     pagination.limit,
-    setSurveys,
-    setStoreLoading,
-    setError,
-    setPagination,
+    search,
     setActiveSurveys,
+    setAverageRating,
     setCompletedSurveys,
-    setAverageRating
+    setError,
+    setLastLoadedParams,
+    setStoreLoading,
+    setSurveyCaches,
+    unansweredCache.length,
+    answeredCache.length,
+    closedCache.length,
   ]);
+
+  const loadSurveysRef = useRef(loadSurveys);
+  useEffect(() => {
+    loadSurveysRef.current = loadSurveys;
+  }, [loadSurveys]);
 
   // Set up auto-refresh every 30 minutes (1800000 ms)
   useEffect(() => {
-    const autoRefreshInterval = setInterval(() => {
-      loadSurveys();
-    }, 1800000); // 30 minutes = 1800000 ms
+    const executeFetch = () => {
+      loadSurveysRef.current?.(1, { forceRefresh: true });
+    };
 
-    // Initial load
-    loadSurveys();
+    executeFetch();
+    const autoRefreshInterval = setInterval(executeFetch, 1800000); // 30 minutes
 
     // Cleanup interval on unmount
     return () => {
       clearInterval(autoRefreshInterval);
     };
-  }, [page, search, loadSurveys]);
+  }, []);
 
   // Filter handlers
   const handleFilterChange = useCallback((filter: SurveyFilter) => {
     setFilter(filter);
     setPage(1); // Reset to first page when filter changes
-    loadSurveys(1); // Reload surveys with new filter
-  }, [setFilter, loadSurveys]);
+    loadSurveys(1, { forceRefresh: true, categoryOverride: filter.category, statusOverride: filter.status });
+  }, [loadSurveys, setFilter]);
 
   const handleStatusChange = useCallback((newStatus: 'abiertas' | 'completadas' | 'cerradas') => {
     setPage(1); // Reset to first page when status changes
-    setFilter({
+    const updatedFilter: SurveyFilter = {
       ...currentFilter,
       status: newStatus,
-    });
-    loadSurveys(1); // Reload surveys with new status
-  }, [loadSurveys, setFilter, currentFilter]);
+    };
+    setFilter(updatedFilter);
+
+    if (hasCachedDataForCurrentCategory) {
+      applyCachedStatusView(newStatus);
+    } else {
+      loadSurveys(1, { forceRefresh: true, statusOverride: newStatus });
+    }
+  }, [applyCachedStatusView, currentFilter, hasCachedDataForCurrentCategory, loadSurveys, setFilter]);
 
   // Pagination handlers
   const handleNextPage = useCallback(() => {
     if (page < pagination.totalPages) {
       const nextPage = page + 1;
       setPage(nextPage);
-      loadSurveys(nextPage);
+      loadSurveys(nextPage, { forceRefresh: true });
     }
   }, [page, pagination.totalPages, loadSurveys]);
 
@@ -232,14 +308,14 @@ export const useSurveyActions = () => {
     if (page > 1) {
       const prevPage = page - 1;
       setPage(prevPage);
-      loadSurveys(prevPage);
+      loadSurveys(prevPage, { forceRefresh: true });
     }
   }, [page, loadSurveys]);
 
   const handleGoToPage = useCallback((pageNum: number) => {
     if (pageNum >= 1 && pageNum <= pagination.totalPages) {
       setPage(pageNum);
-      loadSurveys(pageNum);
+      loadSurveys(pageNum, { forceRefresh: true });
     }
   }, [pagination.totalPages, loadSurveys]);
 
@@ -247,8 +323,8 @@ export const useSurveyActions = () => {
   const handleSearch = useCallback((searchQuery: string) => {
     setSearch(searchQuery);
     setPage(1); // Reset to first page when search changes
-    loadSurveys(1); // Reload surveys with new search query
-  }, [setSearch, loadSurveys]);
+    loadSurveys(1, { forceRefresh: true, searchOverride: searchQuery });
+  }, [loadSurveys, setSearch]);
 
   // Enviar respuestas de la encuesta
   const submitSurveyResponse = async (surveyId: string, answers: any) => {
