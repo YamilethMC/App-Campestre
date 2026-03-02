@@ -74,15 +74,16 @@ export const useEvents = () => {
   const fetchEvents = useCallback(async (
     page: number = 1,
     forceRefresh: boolean = false,
-    overrideEventType?: 'Todos' | 'SOCIAL' | 'SPORT' | 'FAMILY' | 'OTHER'
+    overrideEventType?: 'Todos' | 'SOCIAL' | 'SPORT' | 'FAMILY' | 'OTHER',
+    overrideDate?: string
   ) => {
     // Evitar múltiples ejecuciones simultáneas
     if (fetchRef.current) return;
 
     // Check cache validity - if valid and not forcing refresh, skip fetch
     const cacheValid = isCacheValid();
-    if (!overrideEventType && cacheValid && !forceRefresh && events.length > 0) {
-      // Cache is valid and we have data, use cached data
+    if (!overrideEventType && cacheValid && !forceRefresh) {
+      // Cache is valid (even if empty), use cached data
       return;
     }
 
@@ -98,7 +99,7 @@ export const useEvents = () => {
     
     try {
       // Format the date as 'yyyy-mm'
-      const dateParam = selectedDate || `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}`;
+      const dateParam = overrideDate || selectedDate || `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}`;
       const requestedEventType = overrideEventType ?? selectedEventType;
       const eventTypeParam = requestedEventType === 'Todos' ? '' : requestedEventType;
 
@@ -179,7 +180,7 @@ export const useEvents = () => {
     setStoreSelectedDate(newDate);
 
     // Fetch new events for the selected month but don't reset pagination
-    fetchEvents(1);
+    fetchEvents(1, true, undefined, newDate);
   }, [currentMonth, currentYear, setSelectedDate, setStoreSelectedDate, fetchEvents]);
 
   const goToNextMonth = useCallback(() => {
@@ -195,7 +196,7 @@ export const useEvents = () => {
     setStoreSelectedDate(newDate);
 
     // Fetch new events for the selected month but don't reset pagination
-    fetchEvents(1);
+    fetchEvents(1, true, undefined, newDate);
   }, [currentMonth, currentYear, setSelectedDate, setStoreSelectedDate, fetchEvents]);
 
   // Pagination functions
