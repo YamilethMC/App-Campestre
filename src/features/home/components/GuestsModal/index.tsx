@@ -161,12 +161,6 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
             <Text style={styles.confirmationMessage}>¿Estás seguro de que deseas eliminar a este invitado?</Text>
             <View style={styles.confirmationButtonsContainer}>
               <TouchableOpacity
-                style={[styles.confirmationButton, styles.cancelButton]}
-                onPress={() => setShowConfirmation(false)}
-              >
-                <Text style={styles.confirmationButtonText}>Cancelar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
                 style={[styles.confirmationButton, styles.deleteButtonConfirm]}
                 onPress={async () => {
                   if (guestToDelete !== null && onDeleteGuest) {
@@ -178,6 +172,12 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
                 }}
               >
                 <Text style={[styles.confirmationButtonText, styles.confirmationButtonDeleteText]}>Eliminar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.confirmationButton, styles.cancelButton]}
+                onPress={() => setShowConfirmation(false)}
+              >
+                <Text style={styles.confirmationButtonText}>Cancelar</Text>
               </TouchableOpacity>
             </View>
           </View>

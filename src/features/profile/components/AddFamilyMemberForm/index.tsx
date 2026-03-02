@@ -262,19 +262,19 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
       <View style={styles.buttonContainer}>
         <View style={styles.buttonRow}>
           <Button
-            text="Cancelar"
-            variant="secondary"
-            onPress={handleCancel}
-            style={styles.cancelButton}
-            titleStyle={styles.cancelButtonText}
-          />
-          <View style={styles.buttonSpacer} />
-          <Button
             text={loading ? "Guardando..." : "Guardar"}
             variant="primary"
             onPress={handleSave}
             disabled={loading}
             style={styles.saveButton}
+          />
+          <View style={styles.buttonSpacer} />
+          <Button
+            text="Cancelar"
+            variant="secondary"
+            onPress={handleCancel}
+            style={styles.cancelButton}
+            titleStyle={styles.cancelButtonText}
           />
         </View>
       </View>
@@ -292,16 +292,16 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
             <Text style={styles.modalMessage}>¿Estás seguro de que deseas cancelar? Los cambios no guardados se perderán.</Text>
             <View style={styles.modalButtonRow}>
               <Button
-                text="Cancelar"
-                variant="secondary"
-                onPress={() => setShowCancelModal(false)}
+                text="Aceptar"
+                variant="danger"
+                onPress={handleConfirmCancel}
                 style={styles.modalButton}
               />
               <View style={styles.modalButtonSpacer} />
               <Button
-                text="Aceptar"
-                variant="danger"
-                onPress={handleConfirmCancel}
+                text="Cancelar"
+                variant="secondary"
+                onPress={() => setShowCancelModal(false)}
                 style={styles.modalButton}
               />
             </View>
@@ -398,17 +398,17 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
             <Text style={styles.modalMessage}>¿Estás seguro de que deseas guardar esta información?</Text>
             <View style={styles.modalButtonRow}>
               <Button
-                text="Cancelar"
-                variant="secondary"
-                onPress={() => setShowSubmitModal(false)}
-                style={styles.modalButton}
-              />
-              <View style={styles.modalButtonSpacer} />
-              <Button
                 text={loading ? "Guardando..." : "Guardar"}
                 variant="primary"
                 onPress={handleConfirmSubmit}
                 disabled={loading}
+                style={styles.modalButton}
+              />
+              <View style={styles.modalButtonSpacer} />
+              <Button
+                text="Cancelar"
+                variant="secondary"
+                onPress={() => setShowSubmitModal(false)}
                 style={styles.modalButton}
               />
             </View>

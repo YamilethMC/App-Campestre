@@ -161,18 +161,18 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({
                 <View style={styles.buttonContainer}>
                   <View style={styles.buttonRow}>
                     <Button
-                      text="Cancelar"
-                      variant="outline"
-                      onPress={handleClose}
-                      style={styles.cancelButton}
-                      titleStyle={styles.cancelButtonText}
-                    />
-                    <Button
                       text={`Guardar (${selectedParticipants.length})`}
                       variant="primary"
                       onPress={handleSave}
                       disabled={selectedParticipants.length === 0}
                       style={styles.saveButton}
+                    />
+                    <Button
+                      text="Cancelar"
+                      variant="outline"
+                      onPress={handleClose}
+                      style={styles.cancelButton}
+                      titleStyle={styles.cancelButtonText}
                     />
                   </View>
                 </View>
@@ -302,14 +302,14 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     flex: 1,
-    marginRight: 8,
+    marginLeft: 8,
   },
   cancelButtonText: {
     color: COLORS.gray600,
   },
   saveButton: {
     flex: 1,
-    marginLeft: 8,
+    marginRight: 8,
   },
 });
 

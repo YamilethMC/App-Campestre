@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { COLORS } from '../../theme/colors';
 
 const { width } = Dimensions.get('window');
@@ -22,7 +22,8 @@ const typography = {
     color: COLORS.gray900,
   },
   button: {
-    fontSize: 14,
+    fontSize: 16,
+    lineHeight: 20,
     fontWeight: '500' as const,
     textTransform: 'uppercase' as const,
   },

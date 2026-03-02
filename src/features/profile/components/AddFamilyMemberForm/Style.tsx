@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   buttonSpacer: {
-    width: 16,
+    //width: 5,
   },
   cancelButton: {
     flex: 1,
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   modalButtonSpacer: {
-    width: 8,
+    //width: 8,
   },
   modalButton: {
     flex: 1,

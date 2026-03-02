@@ -166,13 +166,38 @@ const ReservationsContainer = () => {
     }
   };
 
-  // Format time to show HH:MM hrs
   const formatTime = (dateString: string) => {
+    console.log('dateString', dateString);
+    try {
+    // Extrae HH:mm directamente del ISO (sin timezone)
+    const match = dateString.match(/\d{4}-\d{2}-\d{2}T(\d{2}:\d{2})/);
+
+    if (match && match[1]) {
+      return `${match[1]} hrs`;
+    }
+
+    // Fallback por si no cumple el formato esperado
     const date = new Date(dateString);
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes} hrs`;
+  } catch {
+    return '00:00 hrs';
+  }
+
+    /*const date = new Date(dateString);
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes} hrs`;*/
   };
+
+  // Format time to show HH:MM hrs
+  /*const formatTime = (dateString: string) => {
+    const date = new Date(dateString);
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes} hrs`;
+  };*/
 
   // Calculate duration in minutes
   const getDuration = (start: string, end: string) => {
@@ -486,9 +511,9 @@ const ReservationsContainer = () => {
                     'Confirmar cancelación',
                     `¿Estás seguro de que deseas cancelar la reservación para ${selectedReservation.facility.name} el día ${formatDate(selectedReservation.startTime)} a las ${formatTime(selectedReservation.startTime)}?`,
                     [
-                      { text: 'Cancelar', style: 'cancel' },
                       {
                         text: 'Aceptar',
+                        style: 'destructive',
                         onPress: async () => {
                           const success = await handleCancelReservation(
                             selectedReservation.id,
@@ -502,6 +527,7 @@ const ReservationsContainer = () => {
                           }
                         },
                       },
+                      { text: 'Cancelar' },
                     ]
                   );
                 }}
@@ -510,7 +536,7 @@ const ReservationsContainer = () => {
               <TouchableOpacity
                 style={{
                   marginTop: 10,
-                  padding: 10,
+                  padding: 14,
                   alignItems: 'center',
                   borderWidth: 1,
                   borderColor: COLORS.gray200,

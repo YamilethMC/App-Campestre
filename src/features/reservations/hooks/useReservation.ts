@@ -372,8 +372,6 @@ export const useReservation = () => {
 
               // Mostrar modal de confirmación
               setShowConfirmationModal(true);
-              resetSelection();
-              loadServices();
             } else {
               // Verificar si es un error de autenticación
               if (response.status === 401) {

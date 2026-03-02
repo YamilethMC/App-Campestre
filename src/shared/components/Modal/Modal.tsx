@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal as RNModal, View, Text, TouchableOpacity } from 'react-native';
+import { Modal as RNModal, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from './Styles';
 import { ModalProps } from './types';
 
@@ -62,6 +62,24 @@ const Modal: React.FC<ModalProps> = ({
           </View>
 
           <View style={[styles.buttonsContainer, buttonsContainerStyle]}>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                styles.confirmButton,
+                disableConfirmButton && styles.disabledButton,
+                confirmButtonStyle
+              ]}
+              onPress={onConfirm}
+              disabled={disableConfirmButton}
+            >
+              <Text style={[
+                styles.buttonText,
+                confirmButtonTextStyle
+              ]}>
+                {confirmText}
+              </Text>
+            </TouchableOpacity>
+
             {showCancelButton && (
               <TouchableOpacity
                 style={[
@@ -80,24 +98,6 @@ const Modal: React.FC<ModalProps> = ({
                 </Text>
               </TouchableOpacity>
             )}
-            
-            <TouchableOpacity
-              style={[
-                styles.button,
-                styles.confirmButton,
-                disableConfirmButton && styles.disabledButton,
-                confirmButtonStyle
-              ]}
-              onPress={onConfirm}
-              disabled={disableConfirmButton}
-            >
-              <Text style={[
-                styles.buttonText,
-                confirmButtonTextStyle
-              ]}>
-                {confirmText}
-              </Text>
-            </TouchableOpacity>
           </View>
         </TouchableOpacity>
       </TouchableOpacity>
