@@ -55,7 +55,8 @@ export const useSurveyActions = () => {
     setSurveyCaches,
     setLastLoadedParams,
     lastLoadedCategory,
-    lastLoadedSearch
+    lastLoadedSearch,
+    clearSurveyCaches
   } = useSurveyStore();
 
   const hasCachedDataForCurrentCategory = useMemo(() => {
@@ -334,8 +335,10 @@ export const useSurveyActions = () => {
       const response = await surveyService.submitSurvey(surveyId, answers);
 
       if (response.success) {
-        // Actualizar encuestas después de enviar respuestas
-        loadSurveys(page);
+        // Limpiar cache para forzar refetch fresco
+        clearSurveyCaches();
+        setPage(1);
+        await loadSurveys(1, { forceRefresh: true });
         return true;
       } else {
         // Verificar si es un error de autenticación

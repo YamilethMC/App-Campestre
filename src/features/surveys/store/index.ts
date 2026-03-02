@@ -57,6 +57,7 @@ interface SurveyStore {
     category: SurveyCategory | null;
     search: string;
   }) => void;
+  clearSurveyCaches: () => void;
 }
 
 export const useSurveyStore = create<SurveyStore>((set, get) => ({
@@ -137,6 +138,17 @@ export const useSurveyStore = create<SurveyStore>((set, get) => ({
   setLastLoadedParams: ({ category, search }) => set({
     lastLoadedCategory: category,
     lastLoadedSearch: search,
+  }),
+
+  clearSurveyCaches: () => set({
+    unansweredCache: [],
+    answeredCache: [],
+    closedCache: [],
+    unansweredMeta: null,
+    answeredMeta: null,
+    closedMeta: null,
+    lastLoadedCategory: null,
+    lastLoadedSearch: '',
   }),
 
   fetchSurveys: async (page = 1) => {

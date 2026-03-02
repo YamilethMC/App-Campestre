@@ -277,8 +277,6 @@ export const surveyService = {
         responsesShow: apiSurvey.responsesShow, // Nuevo campo para mostrar conteo de respuestas
       })) || [];
 
-      console.log('result.data.data', result.data.data);
-
       // Devolver ambos conjuntos de datos y la información de paginación
       return {
         success: true,
