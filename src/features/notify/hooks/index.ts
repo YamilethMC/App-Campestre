@@ -2,11 +2,13 @@ import { useCallback, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import { notificationService } from '../services';
 import { useNotificationStore } from '../store';
+import { Notification } from '../interfaces';
 
 // Hook to handle notification data and API calls
 export const useNotifications = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const {
     notifications,
@@ -28,54 +30,83 @@ export const useNotifications = () => {
     setError(null);
 
     try {
-      const response = await notificationService.getNotifications(
-        currentPage,
-        pagination.limit,
-        search,
-        'asc',
-        'title',
-        true
-      );
+      // Load all personal notifications (read and unread) so they stay visible until deleted
+      const personalResponse = await notificationService.getMyNotifications(false);
 
-      if (response.success && response.data) {
-        setNotifications(response.data.notifications);
-        setPagination(response.data.meta);
-      } else {
-        // Verificar si es un error de autenticación
-        if (response.status === 401) {
-          // No mostramos error aquí porque el servicio ya lo maneja
-          return;
-        }
-        Alert.alert('Error', response.error);
+      if (personalResponse.success && personalResponse.data?.notifications) {
+        const allNotifications = personalResponse.data.notifications;
+        
+        // Sort by createdAt descending
+        const sorted = allNotifications.sort((a, b) => {
+          const aDate = a.createdAt || '';
+          const bDate = b.createdAt || '';
+          return new Date(bDate).getTime() - new Date(aDate).getTime();
+        });
+
+        const unreadCount = sorted.filter(n => !n.read).length;
+
+        setNotifications(sorted);
+        setUnreadCount(unreadCount);
+        setPagination({
+          page: 1,
+          limit: sorted.length,
+          total: sorted.length,
+          totalPages: 1,
+        });
+      } else if (personalResponse.status !== 401) {
+        Alert.alert('Error', personalResponse.error || 'Error al cargar notificaciones');
       }
-    } catch (error: any) {
-      Alert.alert('Error', error.message || 'Error desconocido al obtener las notificaciones');
+    } catch (err: any) {
+      Alert.alert('Error', err.message || 'Error desconocido al obtener las notificaciones');
     } finally {
       setLoading(false);
     }
   }, [
-    search,
-    pagination.limit,
     setNotifications,
     setLoading,
     setError,
     setPagination
   ]);
 
-  // Set up auto-refresh every 30 minutes (1800000 ms)
+  const markAsRead = useCallback(async (notifyMemberId: number, removeFromList: boolean = false) => {
+    const result = await notificationService.markAsRead(notifyMemberId);
+    if (result.success) {
+      if (removeFromList) {
+        // Remove from list when explicitly deleted
+        setNotifications(notifications.filter(n => n.id !== notifyMemberId));
+      } else {
+        // Keep in list but mark as read
+        setNotifications(notifications.map(n => 
+          n.id === notifyMemberId ? { ...n, read: true, readAt: new Date().toISOString() } : n
+        ));
+      }
+      setUnreadCount(prev => Math.max(0, prev - 1));
+    }
+    return result.success;
+  }, [notifications, setNotifications]);
+
+  const markAllAsRead = useCallback(async () => {
+    const result = await notificationService.markAllAsRead();
+    if (result.success) {
+      setNotifications(notifications.map(n => ({ ...n, read: true, readAt: new Date().toISOString() })));
+      setUnreadCount(0);
+    }
+  }, [notifications, setNotifications]);
+
+  // Auto-refresh every minute to pick up new personal notifications
   useEffect(() => {
+    loadNotifications();
+
     const autoRefreshInterval = setInterval(() => {
       loadNotifications();
-    }, 1800000); // 30 minutes = 1800000 ms
-
-    // Initial load
-    loadNotifications();
+    }, 60000); // 1 minute
 
     // Cleanup interval on unmount
     return () => {
       clearInterval(autoRefreshInterval);
     };
-  }, [page, search, loadNotifications]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Pagination handlers
   const handleNextPage = useCallback(() => {
@@ -116,6 +147,7 @@ export const useNotifications = () => {
     error,
     pagination,
     search,
+    unreadCount,
 
     // Functions
     loadNotifications,
@@ -123,6 +155,8 @@ export const useNotifications = () => {
     handlePreviousPage,
     handleGoToPage,
     handleSearch,
+    markAsRead,
+    markAllAsRead,
     setPage,
     setSearch,
   };

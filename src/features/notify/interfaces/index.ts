@@ -1,15 +1,21 @@
 // Interface for notification data
 export interface Notification {
   id: number;
+  notifyId?: number;        // Present for personal (member) notifications
+  clubMemberId?: number;    // Present for personal (member) notifications
   title: string;
   message: string;
   type: string;
-  sentDate: string;
-  active: boolean;
-  visibleUntil: string;
+  sentDate?: string;
+  active?: boolean;
+  visibleUntil?: string;
+  link?: string;            // Action link for personal notifications
+  metadata?: Record<string, any>;
+  read?: boolean;           // Only for personal notifications
+  readAt?: string;          // Only for personal notifications
   createdAt: string;
-  updatedAt: string;
-  image?: string; // Nueva propiedad para la imagen
+  updatedAt?: string;
+  image?: string;
 }
 
 // Interface for pagination metadata

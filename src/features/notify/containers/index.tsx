@@ -21,14 +21,26 @@ const NotificationsScreen: React.FC = () => {
     handlePreviousPage,
     handleGoToPage,
     handleSearch,
+    markAsRead,
   } = useNotifications();
 
   const [selectedNotification, setSelectedNotification] = useState<Notification | null>(null);
   const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
 
-  const handleNotificationPress = (notification: Notification) => {
+  const handleNotificationPress = async (notification: Notification) => {
     setSelectedNotification(notification);
     setIsDetailModalVisible(true);
+    
+    // Mark as read when opening (but keep in list)
+    if (notification.notifyId && !notification.read) {
+      await markAsRead(notification.id, false);
+    }
+  };
+
+  const handleDeleteNotification = async (notification: Notification) => {
+    if (notification.notifyId) {
+      await markAsRead(notification.id, true);
+    }
   };
 
   const handleCloseDetailModal = () => {
@@ -105,9 +117,10 @@ const NotificationsScreen: React.FC = () => {
             ) : notifications.length > 0 ? (
               notifications.map((notification) => (
                 <NotificationCard
-                  key={notification.id}
+                  key={notification.notifyId ? `personal-${notification.id}` : `general-${notification.id}`}
                   notification={notification}
                   onPress={handleNotificationPress}
+                  onDelete={handleDeleteNotification}
                 />
               ))
             ) : (

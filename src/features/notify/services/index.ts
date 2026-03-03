@@ -6,7 +6,20 @@ import { ServiceResponse } from '../interfaces';
 export class NotificationService {
   private baseUrl: string = `${process.env.EXPO_PUBLIC_API_URL}/notify`;
 
-  // Fetch notifications from the API
+  private getAuthHeaders(token: string) {
+    return {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      accept: '*/*',
+    };
+  }
+
+  private handleUnauthorized(): ServiceResponse {
+    handleAuthError();
+    return { success: false, error: 'No autorizado: Sesión expirada', status: 401 };
+  }
+
+  // Fetch general broadcast notifications (for the admin/notification board)
   async getNotifications(
     page: number = 1,
     limit: number = 10,
@@ -16,78 +29,101 @@ export class NotificationService {
     active: boolean = true
   ): Promise<ServiceResponse> {
     try {
-      const {token } = useAuthStore.getState();
-        if (!token) {
-          return {
-            success: false,
-            error: 'No authentication token available',
-            status: 401
-          };
-        }
+      const { token } = useAuthStore.getState();
+      if (!token) {
+        return { success: false, error: 'No authentication token available', status: 401 };
+      }
 
       const searchParam = search ? encodeURIComponent(search) : '';
       const url = `${this.baseUrl}?page=${page}&limit=${limit}&search=${searchParam}&order=${order}&orderBy=${orderBy}&active=${active}`;
 
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-            'accept': '*/*',
-          },
-      });
+      const response = await fetch(url, { method: 'GET', headers: this.getAuthHeaders(token) });
 
       if (!response.ok) {
-        // Verificar si es un error de autenticación
-        if (response.status === 401) {
-          // Llamar a la función global para manejar el error de autenticación
-          handleAuthError();
-          return {
-            success: false,
-            error: 'No autorizado: Sesión expirada',
-            status: response.status
-          };
-        }
-
-        let errorMessage = 'Error al cargar las notificaciones';
-
-        // Manejar códigos de error específicos en el servicio
-        switch (response.status) {
-          case 401:
-            errorMessage = 'No autorizado: Por favor inicia sesión para continuar';
-            break;
-          case 403:
-            errorMessage = 'Acceso prohibido: No tienes permisos para ver notificaciones';
-            break;
-          case 500:
-            errorMessage = 'Error interno del servidor: Por favor intenta más tarde';
-            break;
-          default:
-            const errorData = await response.json().catch(() => ({}));
-            errorMessage = errorData.message || `Error en la solicitud: ${response.status}`;
-        }
-
+        if (response.status === 401) return this.handleUnauthorized();
+        const errorData = await response.json().catch(() => ({}));
         return {
           success: false,
-          error: errorMessage,
-          status: response.status
+          error: errorData.message || `Error en la solicitud: ${response.status}`,
+          status: response.status,
         };
       }
 
       const data = await response.json();
-
-      return {
-        success: true,
-        data: data.data,
-        message: 'Notificaciones cargadas exitosamente',
-        status: response.status
-      };
+      return { success: true, data: data.data, message: 'Notificaciones cargadas exitosamente', status: response.status };
     } catch (error: any) {
-      return {
-        success: false,
-        error: error.message || 'Error desconocido al obtener las notificaciones',
-        status: 500
-      };
+      return { success: false, error: error.message || 'Error desconocido', status: 500 };
+    }
+  }
+
+  // Fetch personal notifications for the authenticated member
+  async getMyNotifications(unreadOnly: boolean = false): Promise<ServiceResponse> {
+    try {
+      const { token } = useAuthStore.getState();
+      if (!token) {
+        return { success: false, error: 'No authentication token available', status: 401 };
+      }
+
+      const url = `${this.baseUrl}/me/my-notifications${unreadOnly ? '?unreadOnly=true' : ''}`;
+      const response = await fetch(url, { method: 'GET', headers: this.getAuthHeaders(token) });
+
+      if (!response.ok) {
+        if (response.status === 401) return this.handleUnauthorized();
+        const errorData = await response.json().catch(() => ({}));
+        return {
+          success: false,
+          error: errorData.message || `Error ${response.status}`,
+          status: response.status,
+        };
+      }
+
+      const data = await response.json();
+      const notifications = Array.isArray(data) ? data : data.data ?? [];
+      return { success: true, data: { notifications, meta: { total: notifications.length, page: 1, limit: notifications.length, totalPages: 1 } }, status: response.status };
+    } catch (error: any) {
+      return { success: false, error: error.message || 'Error desconocido', status: 500 };
+    }
+  }
+
+  // Mark a single personal notification as read
+  async markAsRead(notifyMemberId: number): Promise<{ success: boolean; error?: string }> {
+    try {
+      const { token } = useAuthStore.getState();
+      if (!token) return { success: false, error: 'No authentication token available' };
+
+      const response = await fetch(
+        `${this.baseUrl}/me/my-notifications/${notifyMemberId}/read`,
+        { method: 'PATCH', headers: this.getAuthHeaders(token) }
+      );
+
+      if (!response.ok) {
+        if (response.status === 401) handleAuthError();
+        return { success: false, error: `Error ${response.status}` };
+      }
+      return { success: true };
+    } catch (error: any) {
+      return { success: false, error: error.message };
+    }
+  }
+
+  // Mark all personal notifications as read
+  async markAllAsRead(): Promise<{ success: boolean; error?: string }> {
+    try {
+      const { token } = useAuthStore.getState();
+      if (!token) return { success: false, error: 'No authentication token available' };
+
+      const response = await fetch(
+        `${this.baseUrl}/me/my-notifications/read-all`,
+        { method: 'PATCH', headers: this.getAuthHeaders(token) }
+      );
+
+      if (!response.ok) {
+        if (response.status === 401) handleAuthError();
+        return { success: false, error: `Error ${response.status}` };
+      }
+      return { success: true };
+    } catch (error: any) {
+      return { success: false, error: error.message };
     }
   }
 }

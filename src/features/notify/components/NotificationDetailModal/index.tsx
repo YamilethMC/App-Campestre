@@ -18,7 +18,8 @@ const NotificationDetailModal: React.FC<NotificationDetailModalProps> = ({
 }) => {
   if (!notification) return null;
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return 'N/A';
     const [y, m, d] = dateString.substring(0, 10).split('-');
     const meses = ["ene", "feb", "mar", "abr", "may", "jun",
                  "jul", "ago", "sep", "oct", "nov", "dic"];
@@ -87,15 +88,17 @@ const NotificationDetailModal: React.FC<NotificationDetailModalProps> = ({
             <View style={styles.datesContainer}>
               <View style={styles.dateRow}>
                 <Ionicons name="time-outline" size={16} color={typeColor} />
-                <Text style={styles.dateLabel}>Enviado:</Text>
-                <Text style={styles.dateValue}>{formatDate(notification.sentDate)}</Text>
+                <Text style={styles.dateLabel}>Fecha:</Text>
+                <Text style={styles.dateValue}>{formatDate(notification.sentDate || notification.createdAt)}</Text>
               </View>
 
-              <View style={styles.dateRow}>
-                <Ionicons name="eye-outline" size={16} color={typeColor} />
-                <Text style={styles.dateLabel}>Visible hasta:</Text>
-                <Text style={styles.dateValue}>{formatDate(notification.visibleUntil)}</Text>
-              </View>
+              {notification.visibleUntil && (
+                <View style={styles.dateRow}>
+                  <Ionicons name="eye-outline" size={16} color={typeColor} />
+                  <Text style={styles.dateLabel}>Visible hasta:</Text>
+                  <Text style={styles.dateValue}>{formatDate(notification.visibleUntil)}</Text>
+                </View>
+              )}
             </View>
           </ScrollView>
         </View>

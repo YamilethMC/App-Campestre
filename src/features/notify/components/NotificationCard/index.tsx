@@ -7,9 +7,10 @@ import styles from './Style';
 
 interface NotificationCardPropsExtended extends NotificationCardProps {
   onPress: (notification: Notification) => void;
+  onDelete?: (notification: Notification) => void;
 }
 
-const NotificationCard: React.FC<NotificationCardPropsExtended> = ({ notification, onPress }) => {
+const NotificationCard: React.FC<NotificationCardPropsExtended> = ({ notification, onPress, onDelete }) => {
 
   const getTypeColor = (type: string) => {
     const lowerType = type.toLowerCase();
@@ -32,10 +33,22 @@ const NotificationCard: React.FC<NotificationCardPropsExtended> = ({ notificatio
   };
 
   const typeColor = getTypeColor(notification.type);
+  const isRead = notification.read === true;
+
+  const handleDelete = (e: any) => {
+    e.stopPropagation();
+    if (onDelete) {
+      onDelete(notification);
+    }
+  };
 
   return (
     <TouchableOpacity 
-      style={[styles.container, { borderLeftColor: typeColor }]}
+      style={[
+        styles.container, 
+        { borderLeftColor: typeColor },
+        isRead && { opacity: 0.6 }
+      ]}
       onPress={() => onPress(notification)}
       activeOpacity={0.7}
     >
@@ -49,7 +62,7 @@ const NotificationCard: React.FC<NotificationCardPropsExtended> = ({ notificatio
         </View>
         
         <View style={styles.textContainer}>
-          <Text style={styles.title} numberOfLines={10}>
+          <Text style={[styles.title, isRead && { fontWeight: '400' }]} numberOfLines={10}>
             {notification.title}
           </Text>
         </View>
@@ -61,12 +74,27 @@ const NotificationCard: React.FC<NotificationCardPropsExtended> = ({ notificatio
         </View>
       </View>
       
-      <Ionicons
-        name="chevron-forward"
-        size={20}
-        color={COLORS.gray400}
-        style={styles.chevron}
-      />
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+        {onDelete && (
+          <TouchableOpacity 
+            onPress={handleDelete}
+            style={{ padding: 8 }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Ionicons
+              name="close-circle"
+              size={24}
+              color={COLORS.error}
+            />
+          </TouchableOpacity>
+        )}
+        <Ionicons
+          name="chevron-forward"
+          size={20}
+          color={COLORS.gray400}
+          style={styles.chevron}
+        />
+      </View>
     </TouchableOpacity>
   );
 };
