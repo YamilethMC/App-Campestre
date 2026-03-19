@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   filledButton: {
-    flex: 1,
+    flex: 1.2,
     backgroundColor: COLORS.primary,
     borderWidth: 0,
     borderRadius: 10,
