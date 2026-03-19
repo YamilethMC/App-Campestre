@@ -1,16 +1,32 @@
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { SafeAreaView, ScrollView, View, Text } from 'react-native';
-import HelpCenterHeader from '../components/HelpCenterHeader';
+import { Linking, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import FAQList from '../components/FAQList';
+import HelpCenterHeader from '../components/HelpCenterHeader';
 import { useHelpCenterActions } from '../hooks/useHelpCenterActions';
 import styles from './Style';
 
 const HelpCenterContainer: React.FC = () => {
+
   const {
     faqs,
     loading,
     error
   } = useHelpCenterActions();
+
+  const handleWhatsappPress = async () => {
+    const phoneNumber = '52667';
+    const url = `https://wa.me/${phoneNumber}`;
+
+    try {
+      const supported = await Linking.canOpenURL(url);
+      if (supported) {
+        await Linking.openURL(url);
+      }
+    } catch (error) {
+      console.warn('No se pudo abrir WhatsApp:', error);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -20,6 +36,20 @@ const HelpCenterContainer: React.FC = () => {
           description="Encuentra respuestas a las preguntas más frecuentes"
           icon="help-circle-outline"
         />
+
+        <TouchableOpacity style={styles.whatsappCard} onPress={handleWhatsappPress} activeOpacity={0.9}>
+          <View style={styles.whatsappContent}>
+            <View style={styles.whatsappTextBlock}>
+              <Text style={styles.whatsappTitle}>¿Necesitas ayuda inmediata?</Text>
+              <Text style={styles.whatsappSubtitle}>Chatea con nosotros por WhatsApp</Text>
+            </View>
+          </View>
+          <View style={styles.whatsappCTAGroup}>
+            <View style={styles.whatsappIconWrapper}>
+              <Ionicons name="logo-whatsapp" size={30} color="#0bba4bff" />
+            </View>
+          </View>
+        </TouchableOpacity>
 
         <View style={styles.contentContainer}>
           {faqs.length > 0 ? (
