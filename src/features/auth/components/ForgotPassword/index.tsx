@@ -15,6 +15,7 @@ export const ForgotPasswordScreen: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   useEffect(() => {
@@ -251,15 +252,27 @@ export const ForgotPasswordScreen: React.FC = () => {
 
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Confirmar contraseña</Text>
-            <TextInput
-              style={styles.input}
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              secureTextEntry={!showPassword}
-              placeholder="Repite la nueva contraseña"
-              placeholderTextColor={COLORS.gray500}
-              autoCapitalize="none"
-            />
+            <View style={styles.passwordInputContainer}>
+              <TextInput
+                style={[styles.input, styles.passwordInput]}
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                secureTextEntry={!showConfirmPassword}
+                placeholder="Repite la nueva contraseña"
+                placeholderTextColor={COLORS.gray500}
+                autoCapitalize="none"
+              />
+              <TouchableOpacity
+                onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                style={styles.eyeIcon}
+              >
+                <Ionicons
+                  name={showConfirmPassword ? 'eye-off-outline' : 'eye-outline'}
+                  size={20}
+                  color={COLORS.gray500}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
 
           {/* Buttons container inside scroll view */}

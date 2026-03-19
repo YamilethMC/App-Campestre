@@ -109,7 +109,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                   disabled={isLoading}
                 >
                   <Ionicons
-                    name={showPassword ? 'eye-outline' : 'eye-off-outline'}
+                    name={showPassword ? 'eye-off-outline' : 'eye-outline'}
                     size={20}
                     color={COLORS.primary}
                   />
