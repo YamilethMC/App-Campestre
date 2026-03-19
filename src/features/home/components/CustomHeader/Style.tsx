@@ -215,6 +215,9 @@ bannerCard: {
   modalTextContent: {
     padding: 20,
   },
+  modalTextWrapper: {
+    maxHeight: 300,
+  },
   modalTitle: {
     fontSize: 22,
     fontWeight: 'bold',
@@ -225,7 +228,6 @@ bannerCard: {
     fontSize: 16,
     color: '#666',
     marginBottom: 16,
-    lineHeight: 24,
   },
 });
 

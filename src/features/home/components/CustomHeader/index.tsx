@@ -223,11 +223,16 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
                     resizeMode="cover"
                   />
                 )}
-                <View style={styles.modalTextContent}>
-                  <Text style={styles.modalTitle}>{selectedBanner.title}</Text>
-                  {selectedBanner.description && (
-                    <Text style={styles.modalDescription}>{selectedBanner.description}</Text>
-                  )}
+                <View style={styles.modalTextWrapper}>
+                  <ScrollView
+                    showsVerticalScrollIndicator
+                    contentContainerStyle={styles.modalTextContent}
+                  >
+                    <Text style={styles.modalTitle}>{selectedBanner.title}</Text>
+                    {selectedBanner.description && (
+                      <Text style={styles.modalDescription}>{selectedBanner.description}</Text>
+                    )}
+                  </ScrollView>
                 </View>
               </>
             )}
