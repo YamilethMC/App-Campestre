@@ -55,13 +55,13 @@ console.log('statement', statement);
             <Text style={styles.concept}>{'Estado de Cuenta ' + statement.period}</Text>
           </View>
           
-          <View style={styles.statusContainer}>
+          {/*<View style={styles.statusContainer}>
             <View style={[styles.statusBadge, { backgroundColor: getStatusColor(statement.currentBalance > 0 ? 'pending' : 'paid') + '20' }]}>
               <Text style={[styles.statusText, { color: getStatusColor(statement.currentBalance > 0 ? 'pending' : 'paid') }]}>
                 {getStatusText(statement.currentBalance > 0 ? 'pending' : 'paid')}
               </Text>
             </View>
-          </View>
+          </View>*/}
         </View>
         
         <View style={styles.details}>
