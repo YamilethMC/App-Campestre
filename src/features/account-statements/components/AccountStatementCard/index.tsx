@@ -12,7 +12,7 @@ const AccountStatementCard: React.FC<any> = ({
   onDownload,
 }) => {
   const { messages } = useMessages();
-
+console.log('statement', statement);
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('es-MX', {
       style: 'currency',
@@ -56,9 +56,9 @@ const AccountStatementCard: React.FC<any> = ({
           </View>
           
           <View style={styles.statusContainer}>
-            <View style={[styles.statusBadge, { backgroundColor: getStatusColor(statement.currentBalance > 0 ? 'overdue' : 'paid') + '20' }]}>
-              <Text style={[styles.statusText, { color: getStatusColor(statement.currentBalance > 0 ? 'overdue' : 'paid') }]}>
-                {getStatusText(statement.currentBalance > 0 ? 'overdue' : 'paid')}
+            <View style={[styles.statusBadge, { backgroundColor: getStatusColor(statement.currentBalance > 0 ? 'pending' : 'paid') + '20' }]}>
+              <Text style={[styles.statusText, { color: getStatusColor(statement.currentBalance > 0 ? 'pending' : 'paid') }]}>
+                {getStatusText(statement.currentBalance > 0 ? 'pending' : 'paid')}
               </Text>
             </View>
           </View>
