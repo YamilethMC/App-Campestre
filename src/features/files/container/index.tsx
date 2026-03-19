@@ -52,7 +52,7 @@ const FilesContainer: React.FC = () => {
             </View>
           ) : (
             <View style={styles.noFilesContainer}>
-              <Ionicons name="document-outline" size={60} color={COLORS.gray400} />
+              {/*<Ionicons name="document-outline" size={60} color={COLORS.gray400} />*/}
               <Text style={styles.noFilesText}>No se encontraron documentos</Text>
             </View>
           )}
