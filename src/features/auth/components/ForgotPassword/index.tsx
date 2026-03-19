@@ -202,7 +202,7 @@ export const ForgotPasswordScreen: React.FC = () => {
     >
       <View style={{ flex: 1 }}>
         <ScrollView
-          contentContainerStyle={styles.content}
+          contentContainerStyle={[styles.content, styles.verifyContent]}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
@@ -228,7 +228,7 @@ export const ForgotPasswordScreen: React.FC = () => {
             <Text style={styles.label}>Nueva contraseña</Text>
             <View style={styles.passwordInputContainer}>
               <TextInput
-                style={styles.input}
+                style={[styles.input, styles.passwordInput]}
                 value={newPassword}
                 onChangeText={setNewPassword}
                 secureTextEntry={!showPassword}
@@ -261,36 +261,36 @@ export const ForgotPasswordScreen: React.FC = () => {
               autoCapitalize="none"
             />
           </View>
+
+          {/* Buttons container inside scroll view */}
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={[styles.button, loading && styles.buttonDisabled]}
+              onPress={handleResetPassword}
+              disabled={loading}
+            >
+              {loading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.buttonText}>Restablecer contraseña</Text>
+              )}
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => setStep('request')}
+              style={styles.backButton}
+            >
+              <Text style={styles.backButtonText}>← Solicitar nuevo código</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={styles.cancelButton}
+            >
+              <Text style={styles.cancelButtonText}>Cancelar</Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
-
-        {/* Buttons container at the bottom */}
-        <View style={[styles.buttonContainer, { paddingBottom: keyboardHeight * 0.4 }]}>
-          <TouchableOpacity
-            style={[styles.button, loading && styles.buttonDisabled]}
-            onPress={handleResetPassword}
-            disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.buttonText}>Restablecer contraseña</Text>
-            )}
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => setStep('request')}
-            style={styles.backButton}
-          >
-            <Text style={styles.backButtonText}>← Solicitar nuevo código</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.cancelButton}
-          >
-            <Text style={styles.cancelButtonText}>Cancelar</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     </KeyboardAvoidingView>
   );
@@ -340,6 +340,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     position: 'relative',
+    width: '100%',
+  },
+  passwordInput: {
+    flex: 1,
+    paddingRight: 40,
   },
   eyeIcon: {
     position: 'absolute',
@@ -379,6 +384,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 16,
     alignItems: 'center',
+    alignSelf: 'stretch',
   },
   buttonDisabled: {
     opacity: 0.6,
@@ -391,6 +397,12 @@ const styles = StyleSheet.create({
   backButton: {
     marginTop: 16,
     alignItems: 'center',
+    backgroundColor: COLORS.white,
+    borderRadius: 8,
+    borderColor: COLORS.gray300,
+    borderWidth: 0.5,
+    padding: 16,
+    alignSelf: 'stretch',
   },
   backButtonText: {
     color: COLORS.primaryDark,
@@ -400,19 +412,24 @@ const styles = StyleSheet.create({
   buttonContainer: {
     paddingTop: 20,
     paddingBottom: 20,
+    width: '100%',
   },
   cancelButton: {
     marginTop: 16,
     alignItems: 'center',
+    alignSelf: 'stretch',
     borderColor: COLORS.error,
     borderWidth: 0.5,
     borderRadius: 8,
-    padding: 12,
+    padding: 16,
     backgroundColor: COLORS.gray50,
   },
   cancelButtonText: {
     color: 'red',
     fontSize: 16,
+  },
+  verifyContent: {
+    paddingBottom: 120,
   },
 });
 
