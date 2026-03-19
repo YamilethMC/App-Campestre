@@ -176,7 +176,6 @@ bannerCard: {
     alignItems: 'center',
     overflow: 'hidden',
     height: '100%',
-    marginRight: 8, // Espacio entre slides para peek
   },
   modalOverlay: {
     flex: 1,

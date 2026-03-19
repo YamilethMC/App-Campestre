@@ -138,7 +138,6 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
                       : `data:image/jpeg;base64,${banner.image}`
                   }}
                   style={styles.backgroundImage}
-                  resizeMode="cover"
                 />
               ) : (
                 <View style={styles.primaryBackground} />
