@@ -14,7 +14,7 @@ const HelpCenterContainer: React.FC = () => {
   } = useHelpCenterActions();
 
   const handleWhatsappPress = async () => {
-    const phoneNumber = '52667';
+    const phoneNumber = '528331086362';
     const url = `https://wa.me/${phoneNumber}`;
 
     try {
