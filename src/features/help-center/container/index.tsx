@@ -1,4 +1,3 @@
-import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Linking, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import FAQList from '../components/FAQList';
@@ -45,9 +44,7 @@ const HelpCenterContainer: React.FC = () => {
             </View>
           </View>
           <View style={styles.whatsappCTAGroup}>
-            <View style={styles.whatsappIconWrapper}>
-              <Ionicons name="logo-whatsapp" size={30} color="#0bba4bff" />
-            </View>
+            <Text style={styles.whatsappCTA}>Abrir WhatsApp</Text>
           </View>
         </TouchableOpacity>
 

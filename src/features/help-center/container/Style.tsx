@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   whatsappCTA: {
     color: '#fff',
     fontWeight: '700',
-    fontSize: 14,
+    fontSize: 13,
   },
   loadingContainer: {
     flex: 1,
