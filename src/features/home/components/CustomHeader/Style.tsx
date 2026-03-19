@@ -119,7 +119,7 @@ bannerCard: {
   width: '90%',          // 🔹 MÁS ANCHO
   alignSelf: 'center',   // 🔹 centra horizontalmente
 
-  backgroundColor: 'rgba(255,255,255,0.8)',
+  backgroundColor: 'rgba(255,255,255,0.85)',
   borderRadius: 12,
 
   shadowColor: COLORS.gray800,

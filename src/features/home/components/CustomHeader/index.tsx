@@ -116,7 +116,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
   };
 
   return (
-    <View style={[styles.container, !hasBanners && styles.containerCompact, { paddingTop: insets.top }]}>
+    <View style={[styles.container, !hasBanners && styles.containerCompact]}>
       {/* Carrusel de banners de fondo */}
       {hasBanners ? (
         <ScrollView
@@ -153,7 +153,13 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
       {hasBanners && <View style={styles.overlay} />}
 
       {/* Header content */}
-      <View style={[styles.headerContent, !hasBanners && styles.headerContentCompact]}>
+      <View
+        style={[
+          styles.headerContent,
+          !hasBanners && styles.headerContentCompact,
+          { paddingTop: insets.top + 10 }
+        ]}
+      >
         {/* Sección izquierda: Iniciales y saludo */}
         <View style={styles.leftSection}>
           {renderAvatar()}
