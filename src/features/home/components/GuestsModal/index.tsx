@@ -33,6 +33,41 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
 
   const activeGuestType = GUEST_TAB_TYPE_MAP[activeTab];
 
+  const getRelationShip = (relationship: string) => {
+    switch (relationship) {
+      case 'SPOUSE':
+        return 'CÓNYUGE';
+      case 'CHILD':
+        return 'HIJO/A';
+      case 'PARENT':
+        return 'PADRE/MADRE';
+      case 'SIBLING':
+        return 'HERMANO/A';
+      case 'FRIEND':
+        return 'AMIGO/A';
+      case 'OTHER':
+        return 'OTRO';
+      case 'WIFE':
+        return 'ESPOSA';
+      case 'HUSBAND':
+        return 'ESPOSO';
+      case 'SON':
+        return 'HIJO';
+      case 'DAUGHTER':
+        return 'HIJA';
+      case 'FATHER':
+        return 'PADRE';
+      case 'MOTHER':
+        return 'MADRE';
+      case 'BROTHER':
+        return 'HERMANO';
+      case 'SISTER':
+        return 'HERMANA';
+      default:
+        return relationship;
+    }
+  };
+
   // Filter guests by type
   const filteredGuests = guests.filter(guest => guest.user?.type === activeGuestType);
 
@@ -113,7 +148,7 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
                         </Text>
                         <Text style={styles.guestEmail}>{guest.user?.email}</Text>
                         <Text style={styles.guestRelation}>
-                          {guest.relationship}
+                          {guest.relationship ? getRelationShip(guest.relationship) : '—'}
                         </Text>
                       </View>
                       {onDeleteGuest && (
@@ -314,7 +349,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 10,
-    textTransform: 'capitalize',
     fontWeight: '600',
     borderWidth: 1,
     borderColor: COLORS.primary,
