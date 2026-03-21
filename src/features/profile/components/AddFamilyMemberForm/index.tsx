@@ -256,28 +256,28 @@ const AddFamilyMemberForm: React.FC<AddFamilyMemberFormProps> = ({
             />
           </View>
         </View>
-      </ScrollView>
 
-      {/* Botones fijos en la parte inferior */}
-      <View style={styles.buttonContainer}>
-        <View style={styles.buttonRow}>
-          <Button
-            text={loading ? "Guardando..." : "Guardar"}
-            variant="primary"
-            onPress={handleSave}
-            disabled={loading}
-            style={styles.saveButton}
-          />
-          <View style={styles.buttonSpacer} />
-          <Button
-            text="Cancelar"
-            variant="secondary"
-            onPress={handleCancel}
-            style={styles.cancelButton}
-            titleStyle={styles.cancelButtonText}
-          />
+        {/* Botones - ahora dentro del ScrollView */}
+        <View style={styles.buttonSection}>
+          <View style={styles.buttonRow}>
+            <Button
+              text={loading ? "Guardando..." : "Guardar"}
+              variant="primary"
+              onPress={handleSave}
+              disabled={loading}
+              style={styles.saveButton}
+            />
+            <View style={styles.buttonSpacer} />
+            <Button
+              text="Cancelar"
+              variant="secondary"
+              onPress={handleCancel}
+              style={styles.cancelButton}
+              titleStyle={styles.cancelButtonText}
+            />
+          </View>
         </View>
-      </View>
+      </ScrollView>
 
       {/* Modal de confirmación para cancelar */}
       <Modal

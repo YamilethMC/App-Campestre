@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     padding: 16,
     paddingTop: 20,
-    paddingBottom: 40,
+    paddingBottom: 90,
   },
   cardsContainer: {
     padding: 0,

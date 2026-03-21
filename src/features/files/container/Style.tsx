@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingBottom: 70, // Espacio suficiente para la paginación y moreOptions
+    paddingBottom: 90, // Espacio suficiente para la paginación y moreOptions
   },
   contentContainer: {
     marginTop: 16,

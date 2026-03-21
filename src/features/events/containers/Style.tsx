@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 16,
-    paddingBottom: 60,
+    paddingBottom: 90,
   },
   searchContainer: {
     backgroundColor: COLORS.primary,

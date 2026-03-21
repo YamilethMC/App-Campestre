@@ -87,9 +87,9 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
         <View style={styles.modalContainer}>
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>Lista de socios relacionados</Text>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+            {/*<TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Ionicons name="close" size={24} color={COLORS.gray600} />
-            </TouchableOpacity>
+            </TouchableOpacity>*/}
           </View>
 
           {/* Tabs for different guest types */}
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
   },
   modalHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 20,
     paddingHorizontal: 20,
@@ -258,6 +258,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     color: COLORS.gray900,
+    textAlign: 'center',
   },
   closeButton: {
     padding: 8,
