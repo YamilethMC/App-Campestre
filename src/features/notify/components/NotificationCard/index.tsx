@@ -46,7 +46,7 @@ const NotificationCard: React.FC<NotificationCardPropsExtended> = ({ notificatio
     <TouchableOpacity 
       style={[
         styles.container, 
-        { borderLeftColor: typeColor },
+        { borderLeftColor: COLORS.primary },
         isRead && { opacity: 0.6 }
       ]}
       onPress={() => onPress(notification)}
