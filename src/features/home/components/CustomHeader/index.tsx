@@ -193,7 +193,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
             <View style={styles.textContainer}>
               <Text style={styles.bannerTitle}>{currentBanner.title}</Text>
               {currentBanner.description && (
-                <Text style={styles.bannerDescription} numberOfLines={10}>
+                <Text style={styles.bannerDescription} numberOfLines={1}>
                   {currentBanner.description}
                 </Text>
               )}
