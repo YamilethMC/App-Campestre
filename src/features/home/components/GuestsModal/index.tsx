@@ -113,7 +113,7 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
                 styles.tabText,
                 activeTab === 'dependiente' ? styles.activeTabText : (hasDependientes ? styles.tabText : styles.disabledTabText)
               ]}>
-                Dependiente
+                Familiar
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -139,6 +139,8 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
                 <ScrollView
                   style={styles.guestsList}
                   contentContainerStyle={styles.guestsListContent}
+                  nestedScrollEnabled
+                  showsVerticalScrollIndicator
                 >
                   {filteredGuests.map((guest) => (
                     <View key={guest.id} style={styles.guestCard}>
@@ -170,7 +172,7 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
               <View style={styles.noGuestsContainer}>
                 <Text>
                   {activeTab === 'invitado' ? 'No hay invitados registrados' :
-                   activeTab === 'dependiente' ? 'No hay socios dependientes registrados' :
+                   activeTab === 'dependiente' ? 'No hay familiares registrados' :
                    'No hay pases temporales registrados'}
                 </Text>
               </View>
@@ -310,7 +312,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   guestsListContent: {
-    paddingBottom: 20,
+    paddingBottom: 80,
   },
   guestCard: {
     backgroundColor: COLORS.white,
