@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS } from '../../../../shared/theme/colors';
 import { Notification } from '../../interfaces';
 import styles from './Style';
@@ -60,12 +60,13 @@ const NotificationDetailModal: React.FC<NotificationDetailModalProps> = ({
           {/* Header */}
           <View style={styles.header}>
             <View style={styles.headerLeft}>
-              <Ionicons
+              {/* Icon and type commented out for cleaner UI */}
+              {/* <Ionicons
                 name={getIconName(notification.type)}
                 size={24}
                 color={typeColor}
                 style={styles.headerIcon}
-              />
+              /> */}
               <Text style={styles.title} numberOfLines={10}>
                 {notification.title}
               </Text>
@@ -75,13 +76,28 @@ const NotificationDetailModal: React.FC<NotificationDetailModalProps> = ({
             </TouchableOpacity>
           </View>
 
-          {/* Type Badge */}
-          <View style={[styles.typeBadge, { backgroundColor: typeColor }]}>
+          {/* Type Badge commented out for cleaner UI */}
+          {/* <View style={[styles.typeBadge, { backgroundColor: typeColor }]}>
             <Text style={styles.typeText}>{notification.type}</Text>
-          </View>
+          </View> */}
 
           {/* Content */}
-          <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+          <ScrollView 
+            style={styles.content} 
+            showsVerticalScrollIndicator={true}
+            nestedScrollEnabled
+          >
+            {/* Image - Show if available */}
+            {notification.image && (
+              <View style={styles.imageContainer}>
+                <Image
+                  source={{ uri: notification.image }}
+                  style={styles.notificationImage}
+                  resizeMode="cover"
+                />
+              </View>
+            )}
+
             <Text style={styles.message}>{notification.message}</Text>
 
             {/* Dates */}
