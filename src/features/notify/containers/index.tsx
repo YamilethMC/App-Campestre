@@ -5,7 +5,6 @@ import Button from '../../../shared/components/Button';
 import { COLORS } from '../../../shared/theme/colors';
 import NotificationCard from '../components/NotificationCard';
 import NotificationDetailModal from '../components/NotificationDetailModal';
-import SearchBar from '../components/SearchBar';
 import { useNotifications } from '../hooks';
 import { Notification } from '../interfaces';
 import styles from './Style';
@@ -102,11 +101,11 @@ const NotificationsScreen: React.FC = () => {
           </View>
 
           {/* Search Bar */}
-          <SearchBar
+          {/*<SearchBar
             value={search}
             onChangeText={handleSearch}
             placeholder="Buscar notificaciones..."
-          />
+          />*/}
 
           {/* Notifications List */}
           <View style={styles.notificationsList}>

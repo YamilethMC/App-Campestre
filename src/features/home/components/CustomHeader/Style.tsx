@@ -119,7 +119,7 @@ bannerCard: {
   width: '90%',          // 🔹 MÁS ANCHO
   alignSelf: 'center',   // 🔹 centra horizontalmente
 
-  backgroundColor: 'rgba(255,255,255,0.8)',
+  backgroundColor: 'rgba(255,255,255,0.85)',
   borderRadius: 12,
 
   shadowColor: COLORS.gray800,
@@ -176,7 +176,6 @@ bannerCard: {
     alignItems: 'center',
     overflow: 'hidden',
     height: '100%',
-    marginRight: 8, // Espacio entre slides para peek
   },
   modalOverlay: {
     flex: 1,
@@ -215,6 +214,9 @@ bannerCard: {
   modalTextContent: {
     padding: 20,
   },
+  modalTextWrapper: {
+    maxHeight: 300,
+  },
   modalTitle: {
     fontSize: 22,
     fontWeight: 'bold',
@@ -225,7 +227,6 @@ bannerCard: {
     fontSize: 16,
     color: '#666',
     marginBottom: 16,
-    lineHeight: 24,
   },
 });
 

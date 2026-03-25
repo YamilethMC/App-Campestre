@@ -116,7 +116,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
   };
 
   return (
-    <View style={[styles.container, !hasBanners && styles.containerCompact, { paddingTop: insets.top }]}>
+    <View style={[styles.container, !hasBanners && styles.containerCompact]}>
       {/* Carrusel de banners de fondo */}
       {hasBanners ? (
         <ScrollView
@@ -138,7 +138,6 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
                       : `data:image/jpeg;base64,${banner.image}`
                   }}
                   style={styles.backgroundImage}
-                  resizeMode="cover"
                 />
               ) : (
                 <View style={styles.primaryBackground} />
@@ -154,7 +153,13 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
       {hasBanners && <View style={styles.overlay} />}
 
       {/* Header content */}
-      <View style={[styles.headerContent, !hasBanners && styles.headerContentCompact]}>
+      <View
+        style={[
+          styles.headerContent,
+          !hasBanners && styles.headerContentCompact,
+          { paddingTop: insets.top + 10 }
+        ]}
+      >
         {/* Sección izquierda: Iniciales y saludo */}
         <View style={styles.leftSection}>
           {renderAvatar()}
@@ -188,7 +193,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
             <View style={styles.textContainer}>
               <Text style={styles.bannerTitle}>{currentBanner.title}</Text>
               {currentBanner.description && (
-                <Text style={styles.bannerDescription} numberOfLines={10}>
+                <Text style={styles.bannerDescription} numberOfLines={1}>
                   {currentBanner.description}
                 </Text>
               )}
@@ -223,11 +228,16 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
                     resizeMode="cover"
                   />
                 )}
-                <View style={styles.modalTextContent}>
-                  <Text style={styles.modalTitle}>{selectedBanner.title}</Text>
-                  {selectedBanner.description && (
-                    <Text style={styles.modalDescription}>{selectedBanner.description}</Text>
-                  )}
+                <View style={styles.modalTextWrapper}>
+                  <ScrollView
+                    showsVerticalScrollIndicator
+                    contentContainerStyle={styles.modalTextContent}
+                  >
+                    <Text style={styles.modalTitle}>{selectedBanner.title}</Text>
+                    {selectedBanner.description && (
+                      <Text style={styles.modalDescription}>{selectedBanner.description}</Text>
+                    )}
+                  </ScrollView>
                 </View>
               </>
             )}

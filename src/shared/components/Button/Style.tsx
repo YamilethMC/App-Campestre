@@ -50,6 +50,7 @@ export const styles = StyleSheet.create({
       fontSize: 17,
       fontWeight: '600',
       letterSpacing: 0.3,
+      textAlign: 'center',
     },
     primaryButtonText: {
       color: COLORS.white,

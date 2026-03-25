@@ -10,12 +10,46 @@ const FamilyMembers: React.FC<familyMembersProps> = ({
   style,
 }) => {
   const { messages } = useMessages();
+  const getRelationShip = (relationship: string) => {
+    switch (relationship) {
+      case 'SPOUSE':
+        return 'CÓNYUGE';
+      case 'CHILD':
+        return 'HIJO/A';
+      case 'PARENT':
+        return 'PADRE/MADRE';
+      case 'SIBLING':
+        return 'HERMANO/A';
+      case 'FRIEND':
+        return 'AMIGO/A';
+      case 'OTHER':
+        return 'OTRO';
+      case 'WIFE':
+        return 'ESPOSA';
+      case 'HUSBAND':
+        return 'ESPOSO';
+      case 'SON':
+        return 'HIJO';
+      case 'DAUGHTER':
+        return 'HIJA';
+      case 'FATHER':
+        return 'PADRE';
+      case 'MOTHER':
+        return 'MADRE';
+      case 'BROTHER':
+        return 'HERMANO';
+      case 'SISTER':
+        return 'HERMANA';
+      default:
+        return relationship;
+    }
+  };
   const renderItem: ListRenderItem<familyMembers> = ({ item }) => (
     <View style={styles.memberItem}>
       <View style={styles.memberInfo}>
         <Text style={styles.memberName}>{item.name} {item.lastName}</Text>
         <View style={styles.memberDetails}>
-          <Text style={styles.detailText}>{item.relationship}</Text>
+          <Text style={styles.detailText}>{getRelationShip(item.relationship)}</Text>
           {/*<Text style={styles.detailText}>• {item.age} {messages.FAMILY.AGE}</Text>*/}
         </View>
       </View>

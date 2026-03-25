@@ -33,6 +33,41 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
 
   const activeGuestType = GUEST_TAB_TYPE_MAP[activeTab];
 
+  const getRelationShip = (relationship: string) => {
+    switch (relationship) {
+      case 'SPOUSE':
+        return 'CÓNYUGE';
+      case 'CHILD':
+        return 'HIJO/A';
+      case 'PARENT':
+        return 'PADRE/MADRE';
+      case 'SIBLING':
+        return 'HERMANO/A';
+      case 'FRIEND':
+        return 'AMIGO/A';
+      case 'OTHER':
+        return 'OTRO';
+      case 'WIFE':
+        return 'ESPOSA';
+      case 'HUSBAND':
+        return 'ESPOSO';
+      case 'SON':
+        return 'HIJO';
+      case 'DAUGHTER':
+        return 'HIJA';
+      case 'FATHER':
+        return 'PADRE';
+      case 'MOTHER':
+        return 'MADRE';
+      case 'BROTHER':
+        return 'HERMANO';
+      case 'SISTER':
+        return 'HERMANA';
+      default:
+        return relationship;
+    }
+  };
+
   // Filter guests by type
   const filteredGuests = guests.filter(guest => guest.user?.type === activeGuestType);
 
@@ -52,9 +87,9 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
         <View style={styles.modalContainer}>
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>Lista de socios relacionados</Text>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+            {/*<TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Ionicons name="close" size={24} color={COLORS.gray600} />
-            </TouchableOpacity>
+            </TouchableOpacity>*/}
           </View>
 
           {/* Tabs for different guest types */}
@@ -78,7 +113,7 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
                 styles.tabText,
                 activeTab === 'dependiente' ? styles.activeTabText : (hasDependientes ? styles.tabText : styles.disabledTabText)
               ]}>
-                Dependiente
+                Familiar
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -104,6 +139,8 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
                 <ScrollView
                   style={styles.guestsList}
                   contentContainerStyle={styles.guestsListContent}
+                  nestedScrollEnabled
+                  showsVerticalScrollIndicator
                 >
                   {filteredGuests.map((guest) => (
                     <View key={guest.id} style={styles.guestCard}>
@@ -113,7 +150,7 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
                         </Text>
                         <Text style={styles.guestEmail}>{guest.user?.email}</Text>
                         <Text style={styles.guestRelation}>
-                          {guest.relationship}
+                          {guest.relationship ? getRelationShip(guest.relationship) : '—'}
                         </Text>
                       </View>
                       {onDeleteGuest && (
@@ -135,7 +172,7 @@ const GuestsModal: React.FC<GuestsModalProps> = ({
               <View style={styles.noGuestsContainer}>
                 <Text>
                   {activeTab === 'invitado' ? 'No hay invitados registrados' :
-                   activeTab === 'dependiente' ? 'No hay socios dependientes registrados' :
+                   activeTab === 'dependiente' ? 'No hay familiares registrados' :
                    'No hay pases temporales registrados'}
                 </Text>
               </View>
@@ -210,7 +247,7 @@ const styles = StyleSheet.create({
   },
   modalHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 20,
     paddingHorizontal: 20,
@@ -221,6 +258,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     color: COLORS.gray900,
+    textAlign: 'center',
   },
   closeButton: {
     padding: 8,
@@ -275,7 +313,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   guestsListContent: {
-    paddingBottom: 20,
+    paddingBottom: 80,
   },
   guestCard: {
     backgroundColor: COLORS.white,
@@ -314,7 +352,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 10,
-    textTransform: 'capitalize',
     fontWeight: '600',
     borderWidth: 1,
     borderColor: COLORS.primary,

@@ -5,7 +5,7 @@
     "owner": "j-vega",
     "version": "1.6.1",
     "orientation": "portrait",
-    "icon": "./assets/images/icon-campestre.png",
+    "icon": "./assets/images/sello-cct.png",
     "scheme": "clubcampestretampicoapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -14,14 +14,15 @@
       "bundleIdentifier": "mx.wipple.clubcampestretampico",
       "buildNumber": "20",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+    "CFBundleDisplayName": "CCT"
       }
     },
     "android": {
       "package": "mx.wipple.clubcampestretampico",
       "versionCode": 21,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/icon-campestre.png",
+        "foregroundImage": "./assets/images/sello-cct.png",
         "backgroundColor": "#1C1C1C"
       },
       "edgeToEdgeEnabled": true,
@@ -34,14 +35,14 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/icon-campestre.png"
+      "favicon": "./assets/images/sello-cct.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/icon-campestre.png",
+          "image": "./assets/images/sello-cct.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#FFFFFF",

@@ -198,8 +198,8 @@ const MainTabs = () => {
         tabBarActiveTintColor: COLORS.primary,
         tabBarInactiveTintColor: COLORS.gray500,
         tabBarStyle: {
-          height: 82,
-          paddingBottom: 8,
+          height: 98,
+          paddingBottom: 30,
           paddingTop: 8,
           backgroundColor: COLORS.gray50 + 'E6', // gray50 with transparency
           borderTopWidth: 0,

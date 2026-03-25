@@ -15,6 +15,7 @@ export const ForgotPasswordScreen: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   useEffect(() => {
@@ -129,16 +130,16 @@ export const ForgotPasswordScreen: React.FC = () => {
           >
             <Text style={styles.title}>¿Olvidaste tu contraseña?</Text>
             <Text style={styles.subtitle}>
-              Ingresa tu email o teléfono y te enviaremos un código para recuperar tu cuenta
+              Ingresa tu email y te enviaremos un código para recuperar tu cuenta
             </Text>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Email o Teléfono</Text>
+              <Text style={styles.label}>Email</Text>
               <TextInput
                 style={styles.input}
                 value={identifier}
                 onChangeText={setIdentifier}
-                placeholder="usuario@ejemplo.com o 8331234567"
+                placeholder="usuario@ejemplo.com"
                 placeholderTextColor={COLORS.gray500}
                 autoCapitalize="none"
                 keyboardType="email-address"
@@ -153,7 +154,7 @@ export const ForgotPasswordScreen: React.FC = () => {
                   onPress={() => setMethod('email')}
                 >
                   <Text style={[styles.methodButtonText, method === 'email' && styles.methodButtonTextActive]}>
-                    📧 Email
+                    Email
                   </Text>
                 </TouchableOpacity>
                 {/* <TouchableOpacity
@@ -202,7 +203,7 @@ export const ForgotPasswordScreen: React.FC = () => {
     >
       <View style={{ flex: 1 }}>
         <ScrollView
-          contentContainerStyle={styles.content}
+          contentContainerStyle={[styles.content, styles.verifyContent]}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
@@ -228,7 +229,7 @@ export const ForgotPasswordScreen: React.FC = () => {
             <Text style={styles.label}>Nueva contraseña</Text>
             <View style={styles.passwordInputContainer}>
               <TextInput
-                style={styles.input}
+                style={[styles.input, styles.passwordInput]}
                 value={newPassword}
                 onChangeText={setNewPassword}
                 secureTextEntry={!showPassword}
@@ -251,46 +252,58 @@ export const ForgotPasswordScreen: React.FC = () => {
 
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Confirmar contraseña</Text>
-            <TextInput
-              style={styles.input}
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              secureTextEntry={!showPassword}
-              placeholder="Repite la nueva contraseña"
-              placeholderTextColor={COLORS.gray500}
-              autoCapitalize="none"
-            />
+            <View style={styles.passwordInputContainer}>
+              <TextInput
+                style={[styles.input, styles.passwordInput]}
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                secureTextEntry={!showConfirmPassword}
+                placeholder="Repite la nueva contraseña"
+                placeholderTextColor={COLORS.gray500}
+                autoCapitalize="none"
+              />
+              <TouchableOpacity
+                onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                style={styles.eyeIcon}
+              >
+                <Ionicons
+                  name={showConfirmPassword ? 'eye-off-outline' : 'eye-outline'}
+                  size={20}
+                  color={COLORS.gray500}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* Buttons container inside scroll view */}
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={[styles.button, loading && styles.buttonDisabled]}
+              onPress={handleResetPassword}
+              disabled={loading}
+            >
+              {loading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.buttonText}>Restablecer contraseña</Text>
+              )}
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => setStep('request')}
+              style={styles.backButton}
+            >
+              <Text style={styles.backButtonText}>← Solicitar nuevo código</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={styles.cancelButton}
+            >
+              <Text style={styles.cancelButtonText}>Cancelar</Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
-
-        {/* Buttons container at the bottom */}
-        <View style={[styles.buttonContainer, { paddingBottom: keyboardHeight * 0.4 }]}>
-          <TouchableOpacity
-            style={[styles.button, loading && styles.buttonDisabled]}
-            onPress={handleResetPassword}
-            disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.buttonText}>Restablecer contraseña</Text>
-            )}
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => setStep('request')}
-            style={styles.backButton}
-          >
-            <Text style={styles.backButtonText}>← Solicitar nuevo código</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.cancelButton}
-          >
-            <Text style={styles.cancelButtonText}>Cancelar</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     </KeyboardAvoidingView>
   );
@@ -340,6 +353,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     position: 'relative',
+    width: '100%',
+  },
+  passwordInput: {
+    flex: 1,
+    paddingRight: 40,
   },
   eyeIcon: {
     position: 'absolute',
@@ -379,6 +397,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 16,
     alignItems: 'center',
+    alignSelf: 'stretch',
   },
   buttonDisabled: {
     opacity: 0.6,
@@ -391,6 +410,12 @@ const styles = StyleSheet.create({
   backButton: {
     marginTop: 16,
     alignItems: 'center',
+    backgroundColor: COLORS.white,
+    borderRadius: 8,
+    borderColor: COLORS.gray300,
+    borderWidth: 0.5,
+    padding: 16,
+    alignSelf: 'stretch',
   },
   backButtonText: {
     color: COLORS.primaryDark,
@@ -398,21 +423,26 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   buttonContainer: {
-    paddingTop: 20,
+    paddingTop: 5,
     paddingBottom: 20,
+    width: '100%',
   },
   cancelButton: {
     marginTop: 16,
     alignItems: 'center',
+    alignSelf: 'stretch',
     borderColor: COLORS.error,
     borderWidth: 0.5,
     borderRadius: 8,
-    padding: 12,
+    padding: 16,
     backgroundColor: COLORS.gray50,
   },
   cancelButtonText: {
     color: 'red',
     fontSize: 16,
+  },
+  verifyContent: {
+    paddingBottom: 120,
   },
 });
 

@@ -46,54 +46,54 @@ const NotificationCard: React.FC<NotificationCardPropsExtended> = ({ notificatio
     <TouchableOpacity 
       style={[
         styles.container, 
-        { borderLeftColor: typeColor },
+        { borderLeftColor: COLORS.primary },
         isRead && { opacity: 0.6 }
       ]}
       onPress={() => onPress(notification)}
       activeOpacity={0.7}
     >
       <View style={styles.content}>
-        <View style={styles.iconContainer}>
+        {/* Icon and type commented out for cleaner UI */}
+        {/* <View style={styles.iconContainer}>
           <Ionicons
             name={getIconName(notification.type)}
             size={24}
             color={typeColor}
           />
-        </View>
+        </View> */}
         
         <View style={styles.textContainer}>
-          <Text style={[styles.title, isRead && { fontWeight: '400' }]} numberOfLines={10}>
+          <Text style={[styles.title, isRead && { fontWeight: '400' }]} numberOfLines={2}>
             {notification.title}
+          </Text>
+          <Text style={[styles.message, isRead && { fontWeight: '400' }]} numberOfLines={3}>
+            {notification.message}
           </Text>
         </View>
         
-        <View style={[styles.badge, { backgroundColor: typeColor }]}>
+        {/* Type badge commented out for cleaner UI */}
+        {/* <View style={[styles.badge, { backgroundColor: typeColor }]}>
           <Text style={styles.badgeText} numberOfLines={1}>
             {notification.type}
           </Text>
-        </View>
+        </View> */}
       </View>
       
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+      <View style={styles.deleteSection}>
         {onDelete && (
           <TouchableOpacity 
             onPress={handleDelete}
-            style={{ padding: 8 }}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            style={styles.deleteButton}
+            hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
           >
             <Ionicons
-              name="close-circle"
-              size={24}
-              color={COLORS.error}
+              name="trash-outline"
+              size={20}
+              color={COLORS.white}
             />
+            <Text style={styles.deleteButtonText}>Eliminar</Text>
           </TouchableOpacity>
         )}
-        <Ionicons
-          name="chevron-forward"
-          size={20}
-          color={COLORS.gray400}
-          style={styles.chevron}
-        />
       </View>
     </TouchableOpacity>
   );
