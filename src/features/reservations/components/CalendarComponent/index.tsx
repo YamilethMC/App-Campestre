@@ -100,15 +100,18 @@ export const CalendarComponent: React.FC<CalendarComponentProps> = ({ selectedDa
     onDateChange(formattedDate);
   };
 
-  // Verificar si la fecha está en el pasado
+  // Ventana mínima de reserva: 36 horas desde ahora
+  const minBookableTime = new Date(Date.now() + 36 * 60 * 60 * 1000);
+
+  // Verificar si la fecha está en el pasado o dentro de la ventana de 36 horas
   const isPastDay = (day: number | null) => {
     if (day === null) return false;
     
-    const date = new Date(displayedYear, displayedMonth, day);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Establecer horas a 0 para comparación precisa
+    // Fin del día: medianoche del día siguiente
+    const endOfDay = new Date(displayedYear, displayedMonth, day + 1, 0, 0, 0);
     
-    return date < today;
+    // El día está bloqueado si termina antes o en el umbral de 36 horas
+    return endOfDay <= minBookableTime;
   };
 
   // Verificar si un día está seleccionado
@@ -166,7 +169,7 @@ export const CalendarComponent: React.FC<CalendarComponentProps> = ({ selectedDa
                 day !== null && isPastDay(day) && styles.pastDayButton
               ]}
               onPress={() => selectDay(day)}
-              disabled={day === null || isPastDay(day)}
+              disabled={day === null || isPastDay(day) || (day !== null && isDaySelected(day) && isPastDay(day))}
             >
               <Text style={[
                 styles.dayText,
