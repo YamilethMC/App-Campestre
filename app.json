@@ -3,7 +3,7 @@
     "name": "Club Campestre Tampico",
     "slug": "club-campestre-app",
     "owner": "j-vega",
-    "version": "1.5.1",
+    "version": "1.6.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon-campestre.png",
     "scheme": "clubcampestretampicoapp",
@@ -19,7 +19,7 @@
     },
     "android": {
       "package": "mx.wipple.clubcampestretampico",
-      "versionCode": 19,
+      "versionCode": 21,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon-campestre.png",
         "backgroundColor": "#1C1C1C"
