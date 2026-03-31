@@ -85,13 +85,13 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
   },
   deleteButton: {
-    flexDirection: 'row',
+    /*flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: COLORS.error,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 8,
-    gap: 6,
+    gap: 6,*/
   },
   deleteButtonText: {
     fontSize: 14,

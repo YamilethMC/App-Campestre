@@ -88,10 +88,10 @@ const NotificationCard: React.FC<NotificationCardPropsExtended> = ({ notificatio
           >
             <Ionicons
               name="trash-outline"
-              size={20}
-              color={COLORS.white}
+              size={25}
+              color={COLORS.error}
             />
-            <Text style={styles.deleteButtonText}>Eliminar</Text>
+            {/*<Text style={styles.deleteButtonText}>Eliminar</Text>*/}
           </TouchableOpacity>
         )}
       </View>
