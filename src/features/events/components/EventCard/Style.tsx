@@ -86,6 +86,10 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     lineHeight: 18,
   },
+  eventDescriptionContainer: {
+    maxHeight: 200, // Limit height to enable scrolling
+    marginBottom: 12,
+  },
   eventInfo: {
     flexDirection: 'column',
     marginBottom: 10,
