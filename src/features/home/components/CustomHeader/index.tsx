@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
-import { Dimensions, Image, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, Modal, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '../../../../shared/theme/colors';
 import { Banner } from '../../../banner/interfaces/Banner';
@@ -181,25 +181,36 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
 
       {/* Banner info card flotante (solo si hay banner) */}
       {currentBanner && (
-        <TouchableOpacity 
-          style={styles.bannerCard} 
-          onPress={() => handleBannerPress(currentBanner)}
-          activeOpacity={0.8}
+        <Pressable 
+          style={styles.bannerCard}
         >
-          <View style={styles.cardContent}>
-            <View style={styles.iconContainer}>
-              <Ionicons name="megaphone-outline" size={20} color={COLORS.primary} />
-            </View>
-            <View style={styles.textContainer}>
-              <Text style={styles.bannerTitle}>{currentBanner.title}</Text>
-              {currentBanner.description && (
-                <Text style={styles.bannerDescription} numberOfLines={1}>
-                  {currentBanner.description}
-                </Text>
-              )}
-            </View>
-          </View>
-        </TouchableOpacity>
+          <ScrollView 
+            style={styles.cardScrollContent}
+            showsVerticalScrollIndicator={true}
+            nestedScrollEnabled={true}
+            scrollEventThrottle={16}
+          >
+            <TouchableOpacity 
+              style={styles.cardTouchable}
+              onPress={() => handleBannerPress(currentBanner)}
+              activeOpacity={0.8}
+            >
+              <View style={styles.cardContent}>
+                <View style={styles.iconContainer}>
+                  <Ionicons name="megaphone-outline" size={20} color={COLORS.primary} />
+                </View>
+                <View style={styles.textContainer}>
+                  <Text style={styles.bannerTitle}>{currentBanner.title}</Text>
+                  {currentBanner.description && (
+                    <Text style={styles.bannerDescription}>
+                      {currentBanner.description}
+                    </Text>
+                  )}
+                </View>
+              </View>
+            </TouchableOpacity>
+          </ScrollView>
+        </Pressable>
       )}
 
       {/* Modal del banner reutilizado */}

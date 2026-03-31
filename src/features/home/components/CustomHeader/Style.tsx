@@ -131,6 +131,14 @@ bannerCard: {
   zIndex: 3,
 },
 
+cardScrollContent: {
+  maxHeight: 90,
+},
+
+cardTouchable: {
+  width: '100%',
+},
+
 
   cardContent: {
     flexDirection: 'row',
