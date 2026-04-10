@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
-import { Dimensions, Image, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, Linking, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '../../../../shared/theme/colors';
 import { Banner } from '../../../banner/interfaces/Banner';
@@ -87,8 +87,12 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
   };
 
   const handleBannerPress = (banner: Banner) => {
-    setSelectedBanner(banner);
-    setModalVisible(true);
+    if (banner.actionType === 'EXTERNAL_LINK' && banner.destination) {
+      Linking.openURL(banner.destination).catch(() => {});
+    } else {
+      setSelectedBanner(banner);
+      setModalVisible(true);
+    }
   };
 
   const closeModal = () => {

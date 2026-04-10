@@ -10,7 +10,7 @@ export interface Banner {
   createdAt: string;
   updatedAt: string;
   destination: string | null;
-  typeActionId: number;
+  actionType: 'MODAL' | 'EXTERNAL_LINK';
 }
 
 export interface GetAvailableBannersResponse {
