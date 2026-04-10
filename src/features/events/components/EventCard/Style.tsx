@@ -35,8 +35,7 @@ const styles = StyleSheet.create({
     marginLeft: -16,
   },
   imagePlaceholder: {
-    height: 200,
-    backgroundColor: COLORS.gray100,
+    height: 50,
     borderTopLeftRadius: 35,
     borderTopRightRadius: 35,
     justifyContent: 'center',

@@ -99,9 +99,7 @@ const EventCard: React.FC<EventCardProps> = ({
             resizeMode="cover"
           />
         ) : (
-          <View style={styles.imagePlaceholder}>
-            <Text style={styles.imagePlaceholderText}>Imagen del Evento</Text>
-          </View>
+          <View style={styles.imagePlaceholder} />
         )}
 
         {/* Badge sobre la imagen */}

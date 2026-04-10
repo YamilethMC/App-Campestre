@@ -11,17 +11,18 @@ interface EventsApiResponse {
       type: string;
       name: string;
       description: string;
-      date: string;
-      totalSpots: number;
-      location: string;
+      date: string | null;
+      totalSpots: number | null;
+      location: string | null;
       image?: string;
       inscritedShow?: boolean;
       progressShow?: boolean;
+      isInformative?: boolean;
       createdAt: string;
       updatedAt: string;
-      dateISO: string;
-      availableSpots: number;
-      ocupedSpots: number;
+      dateISO: string | null;
+      availableSpots: number | null;
+      ocupedSpots: number | null;
       isRegistered: boolean;
     }>;
     meta: {
@@ -326,17 +327,18 @@ export const eventsService = {
         id: apiEvent.id.toString(),
         name: apiEvent.name,
         description: apiEvent.description,
-        date: apiEvent.date, // Fecha legible
-        time: parseTime(apiEvent.dateISO), // Hora extraída de dateISO
-        location: apiEvent.location,
+        date: apiEvent.date ?? '', // Fecha legible
+        time: apiEvent.dateISO ? parseTime(apiEvent.dateISO) : '', // Hora extraída de dateISO
+        location: apiEvent.location ?? '',
         eventType: mapEventType(apiEvent.type),
-        availableSpots: apiEvent.availableSpots,
-        totalSpots: apiEvent.totalSpots,
-        isRegistered: apiEvent.isRegistered, // La API no proporciona esta información directamente
-        ocupedSpots: apiEvent.totalSpots - apiEvent.availableSpots,
+        availableSpots: apiEvent.availableSpots ?? 0,
+        totalSpots: apiEvent.totalSpots ?? 0,
+        isRegistered: apiEvent.isRegistered,
+        ocupedSpots: apiEvent.ocupedSpots ?? 0,
         image: apiEvent.image,
         inscritedShow: apiEvent.inscritedShow,
         progressShow: apiEvent.progressShow,
+        isInformative: apiEvent.isInformative ?? false,
       }));
 
       return {
