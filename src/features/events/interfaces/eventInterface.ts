@@ -13,6 +13,7 @@ export interface Event {
   image?: string;
   inscritedShow?: boolean; // Whether to show registration count
   progressShow?: boolean; // Whether to show progress bar
+  isInformative?: boolean; // Whether event is purely informational (no registration)
 }
 
 export interface EventState {

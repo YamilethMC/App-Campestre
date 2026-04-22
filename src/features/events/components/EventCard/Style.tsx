@@ -35,8 +35,7 @@ const styles = StyleSheet.create({
     marginLeft: -16,
   },
   imagePlaceholder: {
-    height: 200,
-    backgroundColor: COLORS.gray100,
+    height: 50,
     borderTopLeftRadius: 35,
     borderTopRightRadius: 35,
     justifyContent: 'center',
@@ -85,6 +84,10 @@ const styles = StyleSheet.create({
     color: COLORS.gray600,
     marginBottom: 12,
     lineHeight: 18,
+  },
+  eventDescriptionContainer: {
+    maxHeight: 200, // Limit height to enable scrolling
+    marginBottom: 12,
   },
   eventInfo: {
     flexDirection: 'column',

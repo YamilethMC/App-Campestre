@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Alert, Image, Text, View } from 'react-native';
+import { Alert, Image, ScrollView, Text, View } from 'react-native';
 import Button from '../../../../shared/components/Button/Button';
 import Card from '../../../../shared/components/Card/Card';
 import { COLORS } from '../../../../shared/theme/colors';
@@ -99,9 +99,7 @@ const EventCard: React.FC<EventCardProps> = ({
             resizeMode="cover"
           />
         ) : (
-          <View style={styles.imagePlaceholder}>
-            <Text style={styles.imagePlaceholderText}>Imagen del Evento</Text>
-          </View>
+          <View style={styles.imagePlaceholder} />
         )}
 
         {/* Badge sobre la imagen */}
@@ -118,25 +116,33 @@ const EventCard: React.FC<EventCardProps> = ({
         <Text style={styles.eventName}>{event.name}</Text>
       </View>
 
-      <Text style={styles.eventDescription} numberOfLines={10}>
-        {event.description}
-      </Text>
+      <ScrollView style={styles.eventDescriptionContainer}>
+        <Text style={styles.eventDescription}>
+          {event.description}
+        </Text>
+      </ScrollView>
 
       <View style={styles.eventInfo}>
-        <View style={styles.infoItem}>
-          <Ionicons name="calendar-outline" size={16} color={COLORS.gray500} />
-          <Text style={styles.infoText}>{event.date}</Text>
-        </View>
+        {event.date && (
+          <View style={styles.infoItem}>
+            <Ionicons name="calendar-outline" size={16} color={COLORS.gray500} />
+            <Text style={styles.infoText}>{event.date}</Text>
+          </View>
+        )}
 
-        <View style={styles.infoItem}>
-          <Ionicons name="time" size={16} color={COLORS.gray500} />
-          <Text style={styles.infoText}>{event.time} hrs.</Text>
-        </View>
+        {event.time && (
+          <View style={styles.infoItem}>
+            <Ionicons name="time" size={16} color={COLORS.gray500} />
+            <Text style={styles.infoText}>{event.time} hrs.</Text>
+          </View>
+        )}
 
-        <View style={styles.infoItem}>
-          <Ionicons name="location" size={16} color={COLORS.gray500} />
-          <Text style={styles.infoText}>{event.location}</Text>
-        </View>
+        {event.location && (
+          <View style={styles.infoItem}>
+            <Ionicons name="location" size={16} color={COLORS.gray500} />
+            <Text style={styles.infoText}>{event.location}</Text>
+          </View>
+        )}
 
         {event.inscritedShow !== false && (
           <View style={styles.infoItem}>
@@ -165,42 +171,31 @@ const EventCard: React.FC<EventCardProps> = ({
         </View>
       )}
 
-      {isRegistered ? (
-        <View style={styles.registeredContainer}>
-          <View style={styles.registeredInfo}>
-            <Ionicons name="checkmark-circle" size={18} color={COLORS.success} />
-            <Text style={styles.registeredText}>{messages.EVENTCARD.SUCCESSREGISTERED}</Text>
-          </View>
-          <Button
-            text={messages.EVENTCARD.CANCELREGISTRATION}
-            variant="outline"
-            onPress={() => onUnregister && onUnregister(event.id)}
-            style={styles.cancelButton}
-            titleStyle={styles.cancelButtonText}
-          />
-          {/*<Button
-            text={messages.EVENTCARD.ACTIVATEREMINDER}
-            variant="outline"
-            onPress={handleReminderPress}
-            style={styles.reminderButton}
-            titleStyle={styles.reminderButtonText}
-            icon={
-              <Ionicons
-                name="notifications-outline"
-                size={16}
-                color={COLORS.info}
-                style={styles.reminderIcon}
+      {!event.isInformative && (
+        <>
+          {isRegistered ? (
+            <View style={styles.registeredContainer}>
+              <View style={styles.registeredInfo}>
+                <Ionicons name="checkmark-circle" size={18} color={COLORS.success} />
+                <Text style={styles.registeredText}>{messages.EVENTCARD.SUCCESSREGISTERED}</Text>
+              </View>
+              <Button
+                text={messages.EVENTCARD.CANCELREGISTRATION}
+                variant="outline"
+                onPress={() => onUnregister && onUnregister(event.id)}
+                style={styles.cancelButton}
+                titleStyle={styles.cancelButtonText}
               />
-            }
-          />*/}
-        </View>
-      ) : (
-        <Button
-          text={messages.EVENTCARD.REGISTER}
-          variant="primary"
-          onPress={() => onOpenRegisterScreen && onOpenRegisterScreen(event.id)}
-          disabled={event.availableSpots <= 0}
-        />
+            </View>
+          ) : (
+            <Button
+              text={messages.EVENTCARD.REGISTER}
+              variant="primary"
+              onPress={() => onOpenRegisterScreen && onOpenRegisterScreen(event.id)}
+              disabled={event.availableSpots <= 0}
+            />
+          )}
+        </>
       )}
     </Card>
   );

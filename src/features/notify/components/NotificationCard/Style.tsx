@@ -54,6 +54,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: COLORS.gray900,
     lineHeight: 20,
+    marginBottom: 4,
+  },
+  message: {
+    fontSize: 14,
+    fontWeight: '400',
+    color: COLORS.gray600,
+    lineHeight: 18,
   },
   badge: {
     paddingHorizontal: 10,
@@ -71,6 +78,25 @@ const styles = StyleSheet.create({
   },
   chevron: {
     marginLeft: 8,
+  },
+  deleteSection: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingLeft: 12,
+  },
+  deleteButton: {
+    /*flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.error,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+    gap: 6,*/
+  },
+  deleteButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: COLORS.white,
   },
 });
 

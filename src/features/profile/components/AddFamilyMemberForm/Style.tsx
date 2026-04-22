@@ -5,11 +5,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.gray50,
+    paddingVertical: 20,
   },
   scrollContent: {
     flexGrow: 1,
     padding: 20,
-    paddingBottom: 150, // Espacio adicional para los botones fijos
+    paddingBottom: 90, // Reducido para que los botones no estén tan lejos del final
   },
   section: {
     backgroundColor: COLORS.white,
@@ -292,6 +293,13 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: COLORS.gray700,
     fontWeight: '500',
+  },
+  buttonSection: {
+    backgroundColor: COLORS.gray50,
+    padding: 10,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.gray200,
+    marginBottom: 20,
   },
 });
 

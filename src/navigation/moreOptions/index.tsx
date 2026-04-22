@@ -130,7 +130,7 @@ const MoreOptionsScreen = () => {
 
       {/* Version info - appears separately after the options */}
       <View style={styles.versionContainer}>
-        <Text style={styles.versionText}>VERSIÓN 1.5.1 (2026)</Text>
+        <Text style={styles.versionText}>VERSIÓN 1.6.2 (2026)</Text>
       </View>
     </View>
   );

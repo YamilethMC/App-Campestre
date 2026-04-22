@@ -66,7 +66,7 @@ console.log('statement', statement);
         
         <View style={styles.details}>
           <Text style={styles.totalLabel}>{messages.ACCOUNTSTATEMENTCARD.TOTAL}</Text>
-          <Text style={styles.totalAmount}>{formatCurrency(statement.previousBalance)}</Text>
+          <Text style={styles.totalAmount}>{formatCurrency(statement.currentBalance)}</Text>
         </View>
         
         <View style={styles.buttonsContainer}>

@@ -375,7 +375,7 @@ const ReservationsContainer = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView
-        contentContainerStyle={{ paddingBottom: 70 }}
+        contentContainerStyle={{ paddingBottom: 90 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
@@ -434,120 +434,147 @@ const ReservationsContainer = () => {
         </TouchableOpacity>
         {selectedReservation && (
           <View style={{
-            flex: 1,
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            justifyContent: 'flex-end'
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingHorizontal: 20
           }}>
             <View style={{
               backgroundColor: COLORS.white,
-              borderTopLeftRadius: 20,
-              borderTopRightRadius: 20,
-              padding: 20,
-              maxHeight: '80%'
+              borderRadius: 16,
+              padding: 24,
+              width: '100%',
+              maxWidth: 400,
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.25,
+              shadowRadius: 10,
+              elevation: 8
             }}>
-              <View style={{
-                width: 40,
-                height: 4,
-                backgroundColor: COLORS.gray300,
-                borderRadius: 2,
-                alignSelf: 'center',
-                marginBottom: 15
-              }} />
-
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
+              {/* Header */}
+              <View style={{ alignItems: 'center', marginBottom: 20 }}>
                 <View
                   style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 25,
+                    width: 60,
+                    height: 60,
+                    borderRadius: 30,
                     backgroundColor: `${getFacilityColor(selectedReservation.facility.type)}20`,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    marginRight: 15
+                    marginBottom: 12
                   }}
                 >
                   <Ionicons
                     name={getServiceIcon(selectedReservation.facility.type)}
-                    size={24}
+                    size={28}
                     color={getFacilityColor(selectedReservation.facility.type)}
                   />
                 </View>
-
-                <View>
-                  <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.gray900 }}>
-                    {selectedReservation.facility.name}
-                  </Text>
-                  <Text style={{ fontSize: 14, color: COLORS.gray600 }}>
-                    {selectedReservation.facility.type}
-                  </Text>
-                </View>
+                <Text style={{ fontSize: 20, fontWeight: '700', color: COLORS.gray900, textAlign: 'center' }}>
+                  {selectedReservation.facility.name}
+                </Text>
+                <Text style={{ fontSize: 14, color: COLORS.gray600, textAlign: 'center' }}>
+                  {selectedReservation.facility.type}
+                </Text>
               </View>
 
-              <View style={{ marginBottom: 25 }}>
-                <Text style={{ fontSize: 16, fontWeight: '600', color: COLORS.gray800, marginBottom: 5 }}>
+              {/* Divider */}
+              <View style={{ 
+                height: 1, 
+                backgroundColor: COLORS.gray200, 
+                marginBottom: 20 
+              }} />
+
+              {/* Details */}
+              <View style={{ marginBottom: 24 }}>
+                <Text style={{ fontSize: 16, fontWeight: '600', color: COLORS.gray800, marginBottom: 16 }}>
                   Detalles de la Reservación
                 </Text>
 
                 <View>
-                  <Text style={{ fontSize: 15, color: COLORS.gray700, marginBottom: 8 }}>
-                    <Text style={{ fontWeight: '600' }}>Fecha:</Text> {formatDate(selectedReservation.startTime)}
-                  </Text>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 }}>
+                    <Text style={{ fontSize: 15, color: COLORS.gray600, fontWeight: '500' }}>
+                      Fecha:
+                    </Text>
+                    <Text style={{ fontSize: 15, color: COLORS.gray900, fontWeight: '600' }}>
+                      {formatDate(selectedReservation.startTime)}
+                    </Text>
+                  </View>
 
-                  <Text style={{ fontSize: 15, color: COLORS.gray700, marginBottom: 8 }}>
-                    <Text style={{ fontWeight: '600' }}>Hora:</Text> {formatTime(selectedReservation.startTime)} - {formatTime(selectedReservation.endTime)}
-                  </Text>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 }}>
+                    <Text style={{ fontSize: 15, color: COLORS.gray600, fontWeight: '500' }}>
+                      Hora:
+                    </Text>
+                    <Text style={{ fontSize: 15, color: COLORS.gray900, fontWeight: '600' }}>
+                      {formatTime(selectedReservation.startTime)} - {formatTime(selectedReservation.endTime)}
+                    </Text>
+                  </View>
 
-                  <Text style={{ fontSize: 15, color: COLORS.gray700 }}>
-                    <Text style={{ fontWeight: '600' }}>Duración:</Text> {getDuration(selectedReservation.startTime, selectedReservation.endTime)}
-                  </Text>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={{ fontSize: 15, color: COLORS.gray600, fontWeight: '500' }}>
+                      Duración:
+                    </Text>
+                    <Text style={{ fontSize: 15, color: COLORS.gray900, fontWeight: '600' }}>
+                      {getDuration(selectedReservation.startTime, selectedReservation.endTime)}
+                    </Text>
+                  </View>
                 </View>
               </View>
 
-              <Button
-                text="Cancelar Reservación"
-                variant="danger"
-                onPress={() => {
-                  Alert.alert(
-                    'Confirmar cancelación',
-                    `¿Estás seguro de que deseas cancelar la reservación para ${selectedReservation.facility.name} el día ${formatDate(selectedReservation.startTime)} a las ${formatTime(selectedReservation.startTime)}?`,
-                    [
-                      {
-                        text: 'Aceptar',
-                        style: 'destructive',
-                        onPress: async () => {
-                          const success = await handleCancelReservation(
-                            selectedReservation.id,
-                            selectedReservation.startTime,
-                            selectedReservation.endTime
-                          );
-                          if (success) {
-                            await loadReservations();
-                            loadServices();
-                            setShowReservationModal(false);
-                          }
+              {/* Buttons */}
+              <View>
+                <Button
+                  text="Cancelar Reservación"
+                  variant="danger"
+                  onPress={() => {
+                    Alert.alert(
+                      'Confirmar cancelación',
+                      `¿Estás seguro de que deseas cancelar la reservación para ${selectedReservation.facility.name} el día ${formatDate(selectedReservation.startTime)} a las ${formatTime(selectedReservation.startTime)}?`,
+                      [
+                        {
+                          text: 'Aceptar',
+                          style: 'destructive',
+                          onPress: async () => {
+                            const success = await handleCancelReservation(
+                              selectedReservation.id,
+                              selectedReservation.startTime,
+                              selectedReservation.endTime
+                            );
+                            if (success) {
+                              await loadReservations();
+                              loadServices();
+                              setShowReservationModal(false);
+                            }
+                          },
                         },
-                      },
-                      { text: 'Cancelar' },
-                    ]
-                  );
-                }}
-              />
+                        { text: 'Cancelar' },
+                      ]
+                    );
+                  }}
+                />
 
-              <TouchableOpacity
-                style={{
-                  marginTop: 10,
-                  padding: 14,
-                  alignItems: 'center',
-                  borderWidth: 1,
-                  borderColor: COLORS.gray200,
-                  borderRadius: 8
-                }}
-                onPress={() => setShowReservationModal(false)}
-              >
-                <Text style={{ fontSize: 16, color: COLORS.gray600 }}>
-                  Cerrar
-                </Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    marginTop: 8,
+                    padding: 14,
+                    alignItems: 'center',
+                    borderWidth: 1,
+                    borderColor: COLORS.gray200,
+                    borderRadius: 8,
+                    backgroundColor: COLORS.gray50
+                  }}
+                  onPress={() => setShowReservationModal(false)}
+                >
+                  <Text style={{ fontSize: 16, color: COLORS.gray700, fontWeight: '500' }}>
+                    Cerrar
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         )}

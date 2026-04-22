@@ -1,5 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { COLORS } from '../../../../shared/theme/colors';
+
+const windowWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   overlay: {
@@ -48,6 +50,18 @@ const styles = StyleSheet.create({
   closeButton: {
     padding: 4,
   },
+  imageContainer: {
+    width: '100%',
+    height: 200,
+    alignSelf: 'center',
+    marginBottom: 16,
+  },
+  notificationImage: {
+    width: windowWidth * 0.9,
+    height: 200,
+    borderRadius: 12,
+    alignSelf: 'center',
+  },
   typeBadge: {
     alignSelf: 'flex-start',
     paddingHorizontal: 16,
@@ -79,6 +93,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     borderColor: COLORS.gray200,
+    marginBottom: 20,
   },
   dateRow: {
     flexDirection: 'row',

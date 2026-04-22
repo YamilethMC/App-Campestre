@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     padding: 16,
-    paddingBottom: 80,
+    paddingBottom: 90,
   },
   contentContainer: {
     flex: 1,

@@ -130,16 +130,16 @@ export const ForgotPasswordScreen: React.FC = () => {
           >
             <Text style={styles.title}>¿Olvidaste tu contraseña?</Text>
             <Text style={styles.subtitle}>
-              Ingresa tu email o teléfono y te enviaremos un código para recuperar tu cuenta
+              Ingresa tu email y te enviaremos un código para recuperar tu cuenta
             </Text>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Email o Teléfono</Text>
+              <Text style={styles.label}>Email</Text>
               <TextInput
                 style={styles.input}
                 value={identifier}
                 onChangeText={setIdentifier}
-                placeholder="usuario@ejemplo.com o 8331234567"
+                placeholder="usuario@ejemplo.com"
                 placeholderTextColor={COLORS.gray500}
                 autoCapitalize="none"
                 keyboardType="email-address"
@@ -154,7 +154,7 @@ export const ForgotPasswordScreen: React.FC = () => {
                   onPress={() => setMethod('email')}
                 >
                   <Text style={[styles.methodButtonText, method === 'email' && styles.methodButtonTextActive]}>
-                    📧 Email
+                    Email
                   </Text>
                 </TouchableOpacity>
                 {/* <TouchableOpacity
@@ -423,7 +423,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   buttonContainer: {
-    paddingTop: 20,
+    paddingTop: 5,
     paddingBottom: 20,
     width: '100%',
   },
