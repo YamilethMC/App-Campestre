@@ -172,8 +172,8 @@
     
   },
   "surveys": {
-    "title": "Voz del Socio",
-    "titleMenu": "voz",
+    "title": "Encuestas",
+    "titleMenu": "Encuestas",
     "subtitle": "ENCUESTAS DE CALIDAD",
     "loading": "Cargando encuesta...",
     "question": "Pregunta",
@@ -185,7 +185,7 @@
     "thankYou": "¡Gracias por responder!",
     "textInformation": "Tu encuesta ha sido enviada exitosamente.",
     "backToSurveys": "Volver a encuestas",
-    "answerSurvey": "Responder Encuesta",
+    "answerSurvey": "Responder encuesta",
     "message": "¿Estás seguro de que deseas responder esta encuesta?",
     "confirm": "Aceptar",
     "cancel": "Cancelar",
@@ -202,7 +202,7 @@
     "surveyCard": {
       "people": "personas",
       "questions": "preguntas",
-      "start": "Comenzar Encuesta"
+      "start": "Comenzar encuesta"
     }
   },
   "reservation": {

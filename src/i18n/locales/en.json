@@ -213,8 +213,8 @@
     }
   },
   "surveys": {
-    "title": "Voice of the member",
-    "titleMenu": "Voice",
+    "title": "Surveys",
+    "titleMenu": "Surveys",
     "subtitle": "QUALITY SURVEYS",
     "loading": "Loading survey...",
     "question": "Question",
@@ -226,7 +226,7 @@
     "thankYou": "Thank you for your response!",
     "textInformation": "Your survey has been successfully submitted.",
     "backToSurveys": "Back to surveys",
-    "answerSurvey": "Answer Survey",
+    "answerSurvey": "Answer survey",
     "message": "Are you sure you want to answer this survey?",
     "confirm": "Confirm",
     "cancel": "Cancel",
@@ -243,7 +243,7 @@
     "surveyCard": {
       "people": "people",
       "questions": "questions",
-      "start": "Start Survey"
+      "start": "Start survey"
     }
   },
   "accountStatements": {
