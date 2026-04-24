@@ -26,6 +26,8 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const isScrolling = useRef(false);
   const autoPlayInterval = useRef<number | NodeJS.Timeout | null>(null);
+  const [isAutoPlayPaused, setIsAutoPlayPaused] = useState(false);
+  const pauseTimeoutRef = useRef<number | NodeJS.Timeout | null>(null);
   
   // Modal state
   const [modalVisible, setModalVisible] = useState(false);
@@ -40,14 +42,14 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
 
   // Carrusel functions
   useEffect(() => {
-    if (banners.length > 1) {
+    if (banners.length > 1 && !isAutoPlayPaused) {
       autoPlayInterval.current = setInterval(() => {
         setCurrentIndex(prevIndex => {
           const nextIndex = (prevIndex + 1) % banners.length;
           scrollToIndex(nextIndex);
           return nextIndex;
         });
-      }, 7000); // 5 segundos entre banners
+      }, 7000); // 7 segundos entre banners
     }
 
     return () => {
@@ -55,7 +57,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
         clearInterval(autoPlayInterval.current);
       }
     };
-  }, [banners.length]);
+  }, [banners.length, isAutoPlayPaused]);
 
   const scrollToIndex = (index: number) => {
     if (scrollViewRef.current && banners.length > 0) {
@@ -65,6 +67,32 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
       });
       setCurrentIndex(index);
     }
+  };
+
+  const pauseAutoPlay = () => {
+    setIsAutoPlayPaused(true);
+    if (pauseTimeoutRef.current) {
+      clearTimeout(pauseTimeoutRef.current);
+    }
+    // Reanudar auto-play después de 10 segundos de inactividad
+    pauseTimeoutRef.current = setTimeout(() => {
+      setIsAutoPlayPaused(false);
+    }, 10000);
+  };
+
+  const goToBanner = (index: number) => {
+    pauseAutoPlay();
+    scrollToIndex(index);
+  };
+
+  const goToPrevious = () => {
+    const prevIndex = currentIndex === 0 ? banners.length - 1 : currentIndex - 1;
+    goToBanner(prevIndex);
+  };
+
+  const goToNext = () => {
+    const nextIndex = (currentIndex + 1) % banners.length;
+    goToBanner(nextIndex);
   };
 
   const handleScrollEnd = (event: any) => {
@@ -182,6 +210,43 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
           <Ionicons name="notifications" size={20} color={COLORS.white} />
         </TouchableOpacity>
       </View>
+
+      {/* Indicadores de página (dots) */}
+      {hasBanners && banners.length > 1 && (
+        <View style={styles.paginationContainer}>
+          {banners.map((_, index) => (
+            <TouchableOpacity
+              key={index}
+              style={[
+                styles.dot,
+                index === currentIndex ? styles.dotActive : styles.dotInactive
+              ]}
+              onPress={() => goToBanner(index)}
+              activeOpacity={0.7}
+            />
+          ))}
+        </View>
+      )}
+
+      {/* Botones de navegación lateral */}
+      {hasBanners && banners.length > 1 && (
+        <>
+          <TouchableOpacity
+            style={styles.navButtonLeft}
+            onPress={goToPrevious}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="chevron-back" size={24} color={COLORS.white} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.navButtonRight}
+            onPress={goToNext}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="chevron-forward" size={24} color={COLORS.white} />
+          </TouchableOpacity>
+        </>
+      )}
 
       {/* Banner info card flotante (solo si hay banner) */}
       {currentBanner && (
