@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { TouchableOpacity, View } from 'react-native';
 import { COLORS } from '../../../../shared/theme/colors';
 import { SurveyQuestion } from '../../interfaces';
 
@@ -8,14 +8,16 @@ interface RatingQuestionProps {
   question: SurveyQuestion;
   answer: number;
   onAnswerChange: (value: number) => void;
+  disabled?: boolean;
 }
 
 export const RatingQuestion: React.FC<RatingQuestionProps> = ({
   answer = 0,
   onAnswerChange,
+  disabled = false,
 }) => {
-  const maxRating = 5;
-  
+  const maxRating = 10;
+
   return (
     <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 8 }}>
       {[...Array(maxRating)].map((_, index) => {
@@ -25,9 +27,10 @@ export const RatingQuestion: React.FC<RatingQuestionProps> = ({
         return (
           <TouchableOpacity 
             key={index} 
-            style={{ marginHorizontal: 4 }}
-            onPress={() => onAnswerChange(ratingValue)}
-            activeOpacity={0.7}
+            style={{ marginHorizontal: 0.5 }}
+            onPress={disabled ? undefined : () => onAnswerChange(ratingValue)}
+            disabled={disabled}
+            activeOpacity={disabled ? 1 : 0.7}
           >
             <Ionicons
               name={isFilled ? 'star' : 'star-outline'}

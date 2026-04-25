@@ -67,11 +67,13 @@ export enum SurveyPriority {
 export interface SurveyFilter {
   category: SurveyCategory;
   status: 'abiertas' | 'completadas' | 'cerradas';
+  viewType?: 'grid' | 'list'; // Added viewType property
 }
 
 export interface SurveyCardProps {
   survey: Survey;
   onPress: (surveyId: string) => void;
+  onViewResponses?: (surveyId: string) => void; // Added onViewResponses property
   surveyId: string;
 }
 
@@ -79,6 +81,7 @@ export interface HeaderWithStatsProps {
   activeSurveys: number;
   completedSurveys: number;
   averageRating: number;
+  userResponses?: any; // Added userResponses property
 }
 
 export interface FilterSectionProps {

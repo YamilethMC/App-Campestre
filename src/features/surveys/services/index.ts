@@ -391,7 +391,10 @@ export const surveyService = {
           surveyId: surveyId,
           question: q.question,
           type: q.type ?? 'text',
-          options: q.options,
+          options: q.options ? q.options.map((opt: any) => ({
+            value: opt.value || opt.option,
+            label: opt.value || opt.option
+          })) : [],
           required: q.required ?? false,
         }))
       };
@@ -424,11 +427,22 @@ export const surveyService = {
     }
 
     const formattedResponses = Object.entries(answers).map(
-      ([questionId, answer]) => ({
-        questionId,
-        answer,
-      })
+      ([questionId, answer]) => {
+        // Convertir respuestas de YesNoQuestion al formato esperado por la API
+        let formattedAnswer = answer;
+        if (answer === 'yes' || answer === true) {
+          formattedAnswer = 'true';
+        } else if (answer === 'no' || answer === false) {
+          formattedAnswer = 'false';
+        }
+        
+        return {
+          questionId,
+          answer: formattedAnswer,
+        };
+      }
     );
+
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/survey/${surveyId}/club-member/${userId}/submit`, {
         method: 'POST',
@@ -453,7 +467,7 @@ export const surveyService = {
         }
 
         let errorMessage = 'Error al enviar la encuesta';
-
+        
         // Manejar códigos de error específicos en el servicio
         switch (response.status) {
           case 400:
@@ -494,6 +508,151 @@ export const surveyService = {
       return {
         success: false,
         error: error.message || 'Error desconocido al enviar la encuesta',
+        status: 500
+      };
+    }
+  },
+
+  // Obtener preguntas de un socio y de una encuesta específica
+  getQuestionsBySurveyIdAndUserId: async (surveyId: string): Promise<ServiceResponse<{
+    survey: FullSurvey;
+    userResponses: Record<string, any>;
+    surveyResponseId: number;
+    respondedAt: string;
+  }>> => {
+
+    const {token, userId } = useAuthStore.getState();
+    if (!token) {
+      return {
+        success: false,
+        error: 'No authentication token available',
+        status: 401
+      };
+    }
+
+    try {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/survey/${surveyId}/club-member/${userId}/responses`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'accept': '*/*',
+        },
+      });
+
+      if (!response.ok) {
+        // Verificar si es un error de autenticación
+        if (response.status === 401) {
+          // Llamar a la función global para manejar el error de autenticación
+          handleAuthError();
+          return {
+            success: false,
+            error: 'No autorizado: Sesión expirada',
+            status: response.status
+          };
+        }
+
+        let errorMessage = 'Error al cargar las preguntas de la encuesta';
+
+        // Manejar códigos de error específicos en el servicio
+        switch (response.status) {
+          case 400:
+            errorMessage = 'El socio no ha respondido esta encuesta.';
+            break;
+          case 404:
+            errorMessage = 'Socio o encuesta no encontrada.';
+            break;
+          case 500:
+            errorMessage = 'Error interno del servidor: Por favor intenta más tarde';
+            break;
+          default:
+            errorMessage = `Error en la solicitud: ${response.status}`;
+        }
+
+        return {
+          success: false,
+          error: errorMessage,
+          status: response.status
+        };
+      }
+
+      const data = await response.json();
+
+      if (!data.success || !data.data) {
+        return {
+          success: false,
+          error: 'No se encontraron datos de la encuesta',
+          status: response.status
+        };
+      }
+
+      const apiData = data.data;
+
+      // Mapear las respuestas del usuario a un formato más fácil de usar
+      const userResponses: Record<string, any> = {};
+      console.log('API RESPONSES DATA:', apiData.responses);
+      apiData.responses.forEach((response: any) => {
+        // Convertir la respuesta al formato correcto según el tipo
+        let value = response.response;
+        if (response.type === 'BOOLEAN') {
+          // Convertir "true"/"false" a "yes"/"no" para que coincida con el componente YesNoQuestion
+          if (response.response === 'true' || response.response === true) {
+            value = 'yes';
+          } else if (response.response === 'false' || response.response === false) {
+            value = 'no';
+          }
+        } else if (response.type === 'NUMBER') {
+          value = parseInt(response.response, 10);
+        }
+        userResponses[response.questionId.toString()] = value;
+      });
+
+      // Mapear la encuesta al formato FullSurvey
+      const fullSurvey: FullSurvey = {
+        id: apiData.survey.id,
+        title: apiData.survey.title,
+        description: apiData.survey.description,
+        category: apiData.survey.category || 'SERVICES',
+        priority: apiData.survey.priority || 'NORMAL',
+        timeStimed: apiData.survey.estimatedTime,
+        questionCount: apiData.responses.length,
+        participantCount: 0,
+        active: apiData.survey.active,
+        createdAt: apiData.survey.createdAt || new Date().toISOString(),
+        updatedAt: apiData.survey.updatedAt || new Date().toISOString(),
+        _count: {
+          responses: apiData.responses.length,
+          surveyQuestions: apiData.responses.length
+        },
+        surveyQuestions: apiData.responses.map((response: any) => ({
+          id: response.questionId.toString(),
+          surveyId: surveyId,
+          question: response.question,
+          type: response.type,
+          options: response.options ? response.options.map((opt: any) => ({
+            value: opt.value || opt.option,
+            label: opt.value || opt.option
+          })) : [],
+          required: false, // No se especifica si es requerido en la respuesta
+        }))
+      };
+
+      return {
+        success: true,
+        data: {
+          survey: fullSurvey,
+          userResponses,
+          surveyResponseId: apiData.surveyResponseId,
+          respondedAt: apiData.respondedAt
+        },
+        message: 'Preguntas de la encuesta cargadas exitosamente',
+        status: response.status
+      };
+
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.message || 'Error desconocido al cargar las preguntas',
         status: 500
       };
     }

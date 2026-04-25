@@ -1,12 +1,14 @@
 import React from 'react';
 import { View } from 'react-native';
 import Button from '../../../../shared/components/Button';
+import { COLORS } from '../../../../shared/theme/colors';
 import { OptionType, SurveyQuestion } from '../../interfaces';
 
 interface MultipleChoiceQuestionProps {
   question: SurveyQuestion;
   answer: string;
   onAnswerChange: (value: string) => void;
+  disabled?: boolean;
 }
 
 const isOptionType = (option: string | OptionType): option is OptionType => {
@@ -17,6 +19,7 @@ export const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
   question,
   answer,
   onAnswerChange,
+  disabled = false,
 }) => {
   if (!question.options) {
     return null;
@@ -34,8 +37,17 @@ export const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
             key={key}
             text={optionLabel}
             variant={answer === optionValue ? 'primary' : 'outline'}
-            onPress={() => onAnswerChange(optionValue)}
-            style={{ marginBottom: 8 }}
+            onPress={disabled ? () => {} : () => onAnswerChange(optionValue)}
+            disabled={disabled}
+            style={{
+              marginBottom: 8,
+              // Estilos personalizados para modo vista
+              ...(disabled && {
+                backgroundColor: answer === optionValue ? COLORS.primaryDark : COLORS.white,
+                borderColor: answer === optionValue ? COLORS.primaryDark : COLORS.primary,
+                opacity: 0.7,
+              })
+            }}
           />
         );
       })}

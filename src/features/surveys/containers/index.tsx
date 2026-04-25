@@ -9,10 +9,10 @@ import {
   View
 } from 'react-native';
 import Button from '../../../shared/components/Button';
-import Card from '../../../shared/components/Card/Card';
 import { COLORS } from '../../../shared/theme/colors';
 import FilterSection from '../components/FilterSection/FilterSection';
 import SurveyCard from '../components/SurveyCard/SurveyCard';
+import { SurveyForm } from '../components/SurveyForm';
 import useMessages from '../hooks/useMessage';
 import { useSurveyActions } from '../hooks/useSurveyActions';
 import { SurveyCategory } from '../interfaces';
@@ -39,6 +39,7 @@ const SurveysScreen: React.FC = () => {
 
   const {
     handleSurveyResponse,
+    handleViewResponses,
     confirmSurveyResponse,
     cancelSurveyResponse,
     selectedSurveyId,
@@ -46,11 +47,13 @@ const SurveysScreen: React.FC = () => {
     setShowSurveyForm,
     surveyData,
     questions,
+    userResponses,
     loading: hookLoading,
     loadSurveyData,
     submitSurveyResponse,
     handleFilterChange,
     handleStatusChange: handleStatusChangeHook,
+    isViewMode,
   } = useSurveyActions();
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -67,8 +70,20 @@ const SurveysScreen: React.FC = () => {
   useEffect(() => {
     if (selectedSurveyId) {
       loadSurveyData(selectedSurveyId, pagination.page, pagination.limit, currentFilter.category);
+      // Reset to first question whenever entering a survey
+      setCurrentQuestionIndex(0);
     }
-  }, [selectedSurveyId]);
+  }, [selectedSurveyId, isViewMode]);
+
+  // Update answers when user responses change (for view mode)
+  useEffect(() => {
+    if (isViewMode && userResponses) {
+      setAnswers(userResponses);
+    } else if (!isViewMode) {
+      // Reset answers when switching to answer mode
+      setAnswers({});
+    }
+  }, [userResponses, isViewMode]);
 
   const handleAnswerChange = (questionId: string, value: any) => {
     setAnswers(prev => ({
@@ -127,10 +142,16 @@ const SurveysScreen: React.FC = () => {
     setShowSurveyForm(false);
     setSubmitSuccess(false);
     setModalVisible(null);
+    // Reset to first question when closing form
+    setCurrentQuestionIndex(0);
   };
 
   const handleCardPress = (surveyId: string) => {
     handleSurveyResponse(surveyId);
+  };
+
+  const handleViewCardPress = (surveyId: string) => {
+    handleViewResponses(surveyId);
   };
 
   const { messages } = useMessages();
@@ -191,131 +212,23 @@ const SurveysScreen: React.FC = () => {
     }
 
     return (
-      <SafeAreaView style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollContent} >
-          {/* Survey Info Header */}
-          <View style={styles.headerSection}>
-            <Card style={styles.surveyCard}>
-              <Text style={styles.surveyTitle}>{surveyData.title}</Text>
-              <Text style={styles.surveyDescription}>{surveyData.description}</Text>
-            </Card>
-          </View>
-          
-          {/* Enhanced Progress Bar with ETA */}
-          <View style={styles.progressContainer}>
-            <View style={styles.progressHeader}>
-              <Text style={styles.progressText}>
-                {messages.CONTAINER.QUESTION} {currentQuestionIndex + 1} {messages.CONTAINER.OF} {questions.length}
-              </Text>
-              <Text style={styles.progressPercentage}>
-                {Math.round(progress)}%
-              </Text>
-            </View>
-            <View style={styles.progressBarContainer}>
-              <View 
-                style={[
-                  styles.progressBarFill, 
-                  { width: `${progress}%` }
-                ]} 
-              />
-            </View>
-          </View>
-          
-          {/* Question Card */}
-          {currentQuestion && (
-            <View style={styles.questionSection}>
-              <Card style={styles.questionCard}>
-                <View style={styles.questionHeader}>
-                  <Text style={styles.questionText}>{currentQuestion.question}</Text>
-                  {currentQuestion.required && (
-                    <View style={styles.requiredIndicator}>
-                      <Text style={styles.requiredText}>{messages.CONTAINER.REQUIRED}</Text>
-                    </View>
-                  )}
-                </View>
-                
-                <View style={styles.answerContainer}>
-                  {currentQuestion.type === 'SELECT' && currentQuestion.options && (
-                    <MultipleChoiceQuestion 
-                      question={currentQuestion}
-                      answer={answers[currentQuestion.id] || ''}
-                      onAnswerChange={(value) => handleAnswerChange(currentQuestion.id, value)}
-                    />
-                  )}
-                  
-                  {currentQuestion.type === 'NUMBER' && (
-                    <RatingQuestion 
-                      question={currentQuestion}
-                      answer={answers[currentQuestion.id] || 0}
-                      onAnswerChange={(value) => handleAnswerChange(currentQuestion.id, value)}
-                    />
-                  )}
-                  
-                  {currentQuestion.type === 'TEXT' && (
-                    <TextQuestion 
-                      question={currentQuestion}
-                      answer={answers[currentQuestion.id] || ''}
-                      onAnswerChange={(value) => handleAnswerChange(currentQuestion.id, value)}
-                    />
-                  )}
-                  
-                  {currentQuestion.type === 'BOOLEAN' && (
-                    <YesNoQuestion 
-                      question={currentQuestion}
-                      answer={answers[currentQuestion.id] ?? null}
-                      onAnswerChange={(value) => handleAnswerChange(currentQuestion.id, value)}
-                    />
-                  )}
-                </View>
-              </Card>
-            </View>
-          )}
-          
-          {/* Navigation Buttons */}
-          <View style={styles.navigationContainer}>
-            <View style={styles.navButtonsRow}>
-              <Button 
-                text={messages.CONTAINER.PREVIOUS} 
-                variant="outline"
-                onPress={goToPreviousQuestion}
-                disabled={currentQuestionIndex === 0}
-                style={currentQuestionIndex === 0 ? [styles.navButton, styles.disabledNavButton] : styles.navButton}
-                titleStyle={currentQuestionIndex === 0 ? styles.disabledNavButtonText : undefined}
-              />
-              
-              {currentQuestionIndex < questions.length - 1 ? (
-                <Button 
-                  text={messages.CONTAINER.NEXT}
-                  onPress={goToNextQuestion}
-                  style={styles.navButton}
-                />
-              ) : (
-                <Button 
-                  text={messages.CONTAINER.SUBMIT}
-                  onPress={handleSubmit}
-                  style={styles.navButton}
-                />
-              )}
-            </View>
-            
-            {/* Back to Surveys Button - Moved below navigation */}
-            <Button 
-              text="Volver a encuestas"
-              variant="outline"
-              onPress={() => setShowSurveyForm(false)}
-              style={styles.backToSurveysButton}
-              icon={
-                <Ionicons 
-                  name="arrow-back" 
-                  size={16} 
-                  color={COLORS.primary} 
-                  style={styles.backIcon}
-                />
-              }
-            />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
+      <SurveyForm
+        survey={{
+          title: surveyData.title,
+          description: surveyData.description,
+        }}
+        questions={questions}
+        currentQuestionIndex={currentQuestionIndex}
+        progress={progress}
+        answers={answers}
+        goToPreviousQuestion={goToPreviousQuestion}
+        goToNextQuestion={goToNextQuestion}
+        handleSubmit={handleSubmit}
+        handleAnswerChange={handleAnswerChange}
+        onBack={handleFormClose}
+        isViewMode={isViewMode}
+        messages={messages}
+      />
     );
   }
 
@@ -376,6 +289,7 @@ const SurveysScreen: React.FC = () => {
                   key={survey.id}
                   survey={survey}
                   onPress={handleCardPress}
+                  onViewResponses={handleViewCardPress}
                   surveyId={survey.id}
                 />
               ))

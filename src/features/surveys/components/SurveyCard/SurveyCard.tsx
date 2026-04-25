@@ -7,7 +7,7 @@ import useMessages from '../../hooks/useMessage';
 import { SurveyCardProps, SurveyCategory } from '../../interfaces';
 import styles from './Style';
 
-const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onPress, surveyId }) => {
+const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onPress, onViewResponses, surveyId }) => {
   const { messages } = useMessages();
   // Function to get color based on priority
   const getPriorityColor = (priority: string) => {
@@ -104,6 +104,13 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onPress, surveyId }) =>
         {survey.isActive && !survey.isAnswered && (
           <TouchableOpacity style={styles.button} onPress={() => onPress(surveyId)}>
             <Text style={styles.buttonText}>{messages.SURVEYCARD.START}</Text>
+          </TouchableOpacity>
+        )}
+
+        {/* View Responses Button - Only show for completed surveys */}
+        {survey.isAnswered && onViewResponses && (
+          <TouchableOpacity style={styles.button} onPress={() => onViewResponses(surveyId)}>
+            <Text style={styles.buttonText}>Ver Respuestas</Text>
           </TouchableOpacity>
         )}
       </View>

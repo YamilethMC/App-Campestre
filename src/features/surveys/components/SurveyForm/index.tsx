@@ -28,6 +28,7 @@ interface SurveyFormProps {
   handleSubmit: () => void;
   handleAnswerChange: (questionId: string, value: any) => void;
   onBack: () => void;
+  isViewMode?: boolean; // New prop for view-only mode
   messages: {
     CONTAINER: {
       QUESTION: string;
@@ -50,6 +51,7 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({
   handleSubmit,
   handleAnswerChange,
   onBack,
+  isViewMode = false,
   messages,
 }) => {
   const currentQuestion = questions[currentQuestionIndex];
@@ -97,35 +99,47 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({
               
               <View style={styles.answerContainer}>
                 {currentQuestion.type === 'SELECT' && currentQuestion.options && (
-                  <MultipleChoiceQuestion 
-                    question={currentQuestion}
-                    answer={answers[currentQuestion.id] || ''}
-                    onAnswerChange={(value) => handleAnswerChange(currentQuestion.id, value)}
-                  />
+                  <>
+                    <MultipleChoiceQuestion 
+                      question={currentQuestion}
+                      answer={answers[currentQuestion.id] || ''}
+                      onAnswerChange={(value) => handleAnswerChange(currentQuestion.id, value)}
+                      disabled={isViewMode}
+                    />
+                  </>
                 )}
                 
                 {currentQuestion.type === 'NUMBER' && (
-                  <RatingQuestion 
-                    question={currentQuestion}
-                    answer={answers[currentQuestion.id] || 0}
-                    onAnswerChange={(value) => handleAnswerChange(currentQuestion.id, value)}
-                  />
+                  <>
+                    <RatingQuestion 
+                      question={currentQuestion}
+                      answer={answers[currentQuestion.id] || 0}
+                      onAnswerChange={(value) => handleAnswerChange(currentQuestion.id, value)}
+                      disabled={isViewMode}
+                    />
+                  </>
                 )}
                 
                 {currentQuestion.type === 'TEXT' && (
-                  <TextQuestion 
-                    question={currentQuestion}
-                    answer={answers[currentQuestion.id] || ''}
-                    onAnswerChange={(value) => handleAnswerChange(currentQuestion.id, value)}
-                  />
+                  <>
+                    <TextQuestion 
+                      question={currentQuestion}
+                      answer={answers[currentQuestion.id] || ''}
+                      onAnswerChange={(value) => handleAnswerChange(currentQuestion.id, value)}
+                      disabled={isViewMode}
+                    />
+                  </>
                 )}
                 
                 {currentQuestion.type === 'BOOLEAN' && (
-                  <YesNoQuestion 
-                    question={currentQuestion}
-                    answer={answers[currentQuestion.id] || ''}
-                    onAnswerChange={(value) => handleAnswerChange(currentQuestion.id, value)}
-                  />
+                  <>
+                    <YesNoQuestion 
+                      question={currentQuestion}
+                      answer={answers[currentQuestion.id] || ''}
+                      onAnswerChange={(value) => handleAnswerChange(currentQuestion.id, value)}
+                      disabled={isViewMode}
+                    />
+                  </>
                 )}
               </View>
             </Card>
@@ -144,24 +158,32 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({
               titleStyle={currentQuestionIndex === 0 ? styles.disabledNavButtonText : undefined}
             />
             
-            {currentQuestionIndex < questions.length - 1 ? (
+            {!isViewMode && currentQuestionIndex < questions.length - 1 ? (
               <Button 
                 text={messages.CONTAINER.NEXT}
                 onPress={goToNextQuestion}
                 style={styles.navButton}
               />
-            ) : (
+            ) : !isViewMode ? (
               <Button 
                 text={messages.CONTAINER.SUBMIT}
                 onPress={handleSubmit}
                 style={styles.navButton}
               />
+            ) : (
+              <Button 
+                text={messages.CONTAINER.NEXT}
+                onPress={goToNextQuestion}
+                disabled={currentQuestionIndex === questions.length - 1}
+                style={currentQuestionIndex === questions.length - 1 ? [styles.navButton, styles.disabledNavButton] : styles.navButton}
+                titleStyle={currentQuestionIndex === questions.length - 1 ? styles.disabledNavButtonText : undefined}
+              />
             )}
           </View>
           
-          {/* Back to Surveys Button */}
+          {/* Back to Surveys Button - Always visible */}
           <Button 
-            text="Volver a encuestas"
+            text={isViewMode ? "Volver a encuestas" : "Volver a encuestas"}
             variant="outline"
             onPress={onBack}
             style={styles.backToSurveysButton}

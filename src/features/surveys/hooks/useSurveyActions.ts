@@ -23,8 +23,10 @@ const mapCategoryToParam = (category: SurveyCategory): string => {
 export const useSurveyActions = () => {
   const [selectedSurveyId, setSelectedSurveyId] = useState<string | null>(null);
   const [showSurveyForm, setShowSurveyForm] = useState(false);
+  const [isViewMode, setIsViewMode] = useState(false);
   const [surveyData, setSurveyData] = useState<any>(null);
   const [questions, setQuestions] = useState<any[]>([]);
+  const [userResponses, setUserResponses] = useState<Record<string, any>>({});
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
@@ -80,37 +82,63 @@ export const useSurveyActions = () => {
   const handleSurveyResponse = (surveyId: string) => {
     setSelectedSurveyId(surveyId);
     setShowSurveyForm(true);
+    setIsViewMode(false);
+  };
+
+  const handleViewResponses = (surveyId: string) => {
+    setSelectedSurveyId(surveyId);
+    setShowSurveyForm(true);
+    setIsViewMode(true);
   };
 
   const confirmSurveyResponse = (surveyId: string) => {
     setSelectedSurveyId(surveyId);
     setShowSurveyForm(true);
+    setIsViewMode(false);
   };
 
   const cancelSurveyResponse = () => {
     setSelectedSurveyId(null);
     setShowSurveyForm(false);
+    setIsViewMode(false);
   };
 
   // Cargar datos de encuesta
   const loadSurveyData = async (surveyId: string, paginationPage: number, paginationLimit: number, currentFilter: string) => {
     if (!surveyId) return;
-
     setLoading(true);
     try {
-      // Cargar preguntas de la encuesta
-      const questionsResponse = await surveyService.getQuestionsBySurveyId(surveyId);
+      let response;
+      
+      if (isViewMode) {
+        // Modo vista: cargar respuestas del usuario
+        response = await surveyService.getQuestionsBySurveyIdAndUserId(surveyId);
+      } else {
+        // Modo respuesta: cargar preguntas para responder
+        response = await surveyService.getQuestionsBySurveyId(surveyId);
+      }
 
-      if (questionsResponse.success && questionsResponse.data) {
-        setSurveyData(questionsResponse.data);
-        setQuestions(questionsResponse.data.surveyQuestions);
+      if (response.success && response.data) {
+        if (isViewMode) {
+          // En modo vista, response.data contiene { survey, userResponses, surveyResponseId, respondedAt }
+          const responseData = response.data as { survey: any; userResponses: Record<string, any>; surveyResponseId: number; respondedAt: string };
+          setSurveyData(responseData.survey);
+          setQuestions(responseData.survey.surveyQuestions);
+          setUserResponses(responseData.userResponses);
+        } else {
+          // En modo respuesta, response.data es la encuesta directamente
+          const responseData = response.data as any;
+          setSurveyData(responseData);
+          setQuestions(responseData.surveyQuestions);
+          setUserResponses({});
+        }
       } else {
         // Verificar si es un error de autenticación
-        if (questionsResponse.status === 401) {
+        if (response.status === 401) {
           // No mostramos alerta aquí porque el servicio ya la maneja
           return;
         }
-        Alert.alert('Error', questionsResponse.error || 'Error al cargar las preguntas de la encuesta');
+        Alert.alert('Error', response.error || 'Error al cargar los datos de la encuesta');
         return;
       }
     } catch (error: any) {
@@ -369,9 +397,11 @@ export const useSurveyActions = () => {
     showSurveyForm,
     surveyData,
     questions,
+    userResponses,
 
     // Functions
     handleSurveyResponse,
+    handleViewResponses,
     confirmSurveyResponse,
     cancelSurveyResponse,
     setShowSurveyForm,
@@ -388,5 +418,6 @@ export const useSurveyActions = () => {
     handleSearch,
     setPage,
     setSearch,
+    isViewMode,
   };
 };
