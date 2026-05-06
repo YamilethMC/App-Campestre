@@ -6,7 +6,7 @@ import useMessages from '../../hooks/useMessages';
 import { CalendarComponentProps } from '../../interfaces/reservationInterface';
 import styles from './Style';
 
-export const CalendarComponent: React.FC<CalendarComponentProps> = ({ selectedDate, onDateChange }) => {
+export const CalendarComponent: React.FC<CalendarComponentProps> = ({ selectedDate, onDateChange, maxBookingWindowHours = 48 }) => {
   const { messages } = useMessages();
   // Estado para manejar el mes y año actual mostrado en el calendario
   const [displayedMonth, setDisplayedMonth] = useState(new Date().getMonth());
@@ -100,18 +100,17 @@ export const CalendarComponent: React.FC<CalendarComponentProps> = ({ selectedDa
     onDateChange(formattedDate);
   };
 
-  // Ventana mínima de reserva: 36 horas desde ahora
-  const minBookableTime = new Date(Date.now() + 36 * 60 * 60 * 1000);
-
-  // Verificar si la fecha está en el pasado o dentro de la ventana de 36 horas
+  // Verificar si la fecha está en el pasado o fuera de la ventana de 48 horas
   const isPastDay = (day: number | null) => {
     if (day === null) return false;
     
-    // Fin del día: medianoche del día siguiente
-    const endOfDay = new Date(displayedYear, displayedMonth, day + 1, 0, 0, 0);
+    // Inicio del día: 00:00 de ese día
+    const startOfDay = new Date(displayedYear, displayedMonth, day, 0, 0, 0);
+    const now = new Date();
+    const maxBookableTime = new Date(now.getTime() + maxBookingWindowHours * 60 * 60 * 1000);
     
-    // El día está bloqueado si termina antes o en el umbral de 36 horas
-    return endOfDay <= minBookableTime;
+    // El día está bloqueado si está en el pasado o después de 48 horas
+    return startOfDay < now || startOfDay > maxBookableTime;
   };
 
   // Verificar si un día está seleccionado

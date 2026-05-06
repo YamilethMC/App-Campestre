@@ -1,6 +1,7 @@
 export interface CalendarComponentProps {
   selectedDate: string;
   onDateChange: (date: string) => void;
+  maxBookingWindowHours?: number;
 }
 
 export interface ConfirmationModalProps {

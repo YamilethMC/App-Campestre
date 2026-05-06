@@ -49,9 +49,6 @@ const ReservationsContainer = () => {
     partySize,
     showConfirmationModal,
     facilities,
-    availableTimeSlots,
-    loading,
-    loadingTimeSlots,
     setTime,
     setSelectedCourt,
     setSelectedCourtId,
@@ -185,19 +182,7 @@ const ReservationsContainer = () => {
     return '00:00 hrs';
   }
 
-    /*const date = new Date(dateString);
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `${hours}:${minutes} hrs`;*/
   };
-
-  // Format time to show HH:MM hrs
-  /*const formatTime = (dateString: string) => {
-    const date = new Date(dateString);
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `${hours}:${minutes} hrs`;
-  };*/
 
   // Calculate duration in minutes
   const getDuration = (start: string, end: string) => {
@@ -265,6 +250,7 @@ const ReservationsContainer = () => {
           <CalendarComponent
             selectedDate={date}
             onDateChange={handleDateChange}
+            maxBookingWindowHours={selectedCourtId ? facilities.find(f => f.id === selectedCourtId)?.maxBookingWindowHours : 0}
           />
 
           {/* Componente de canchas - Mostrar para servicios con instalaciones */}

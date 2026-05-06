@@ -226,6 +226,8 @@ export const useReservation = () => {
         setLoadingTimeSlots(true);
         const response = await facilityService.getFacilityAvailability(courtId, date);
 
+        console.log('response getFacilityAvailability', response);
+
         if (response.success && response.data) {
           // Extraer los horarios disponibles de la respuesta
           const availableSlots = response.data.availableSlots || [];
