@@ -1,37 +1,22 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Keyboard, KeyboardAvoidingView, KeyboardEvent, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Alert, Image, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { COLORS } from '../../../../shared/theme/colors';
 import { authService } from '../../services/authService';
+import styles from './Style';
 
 export const ForgotPasswordScreen: React.FC = () => {
   const navigation = useNavigation();
   const [step, setStep] = useState<'request' | 'verify'>('request');
   const [identifier, setIdentifier] = useState('');
-  const [method, setMethod] = useState<'email' | 'whatsapp'>('email');
+  const [method, setMethod] = useState<'email' | 'sms'>('email');
   const [code, setCode] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-  useEffect(() => {
-    const showSubscription = Keyboard.addListener('keyboardDidShow', (e: KeyboardEvent) => {
-      setKeyboardHeight(e.endCoordinates.height);
-    });
-
-    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
-      setKeyboardHeight(0);
-    });
-
-    return () => {
-      showSubscription?.remove();
-      hideSubscription?.remove();
-    };
-  }, []);
 
   const handleRequestCode = async () => {
     if (!identifier) {
@@ -47,7 +32,7 @@ export const ForgotPasswordScreen: React.FC = () => {
       if (result.success) {
         Alert.alert(
           'Código enviado',
-          `Hemos enviado un código de 6 dígitos a tu ${method === 'email' ? 'correo electrónico' : 'WhatsApp'}`,
+          `Hemos enviado un código de 6 dígitos a tu ${method === 'email' ? 'correo electrónico' : 'móvil'}`,
           [
             {
               text: 'OK',
@@ -128,66 +113,84 @@ export const ForgotPasswordScreen: React.FC = () => {
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
           >
-            <Text style={styles.title}>¿Olvidaste tu contraseña?</Text>
-            <Text style={styles.subtitle}>
-              Ingresa tu email y te enviaremos un código para recuperar tu cuenta
-            </Text>
-
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Email</Text>
-              <TextInput
-                style={styles.input}
-                value={identifier}
-                onChangeText={setIdentifier}
-                placeholder="usuario@ejemplo.com"
-                placeholderTextColor={COLORS.gray500}
-                autoCapitalize="none"
-                keyboardType="email-address"
+            <View style={styles.logoTampicoContainer}>
+              <Image 
+                source={require('../../../../../assets/images/auth/Logo-Tampico.png')} 
+                style={styles.logoTampico}
+                resizeMode="contain"
               />
             </View>
 
-            <View style={styles.methodContainer}>
-              <Text style={styles.label}>Enviar código por:</Text>
-              <View style={styles.methodButtons}>
-                <TouchableOpacity
-                  style={[styles.methodButton, method === 'email' && styles.methodButtonActive]}
-                  onPress={() => setMethod('email')}
-                >
-                  <Text style={[styles.methodButtonText, method === 'email' && styles.methodButtonTextActive]}>
-                    Email
-                  </Text>
-                </TouchableOpacity>
-                {/* <TouchableOpacity
-                  style={[styles.methodButton, method === 'whatsapp' && styles.methodButtonActive]}
-                  onPress={() => setMethod('whatsapp')}
-                >
-                  <Text style={[styles.methodButtonText, method === 'whatsapp' && styles.methodButtonTextActive]}>
-                    📱 WhatsApp
-                  </Text>
-                </TouchableOpacity> */}
-              </View>
-            </View>
+            <View style={styles.formCardInner}>
+              <Text style={styles.title}>¿Olvidaste tu contraseña?</Text>
+              <Text style={styles.subtitle}>
+                Ingresa tu numero de acción y te enviaremos un código para recuperar tu cuenta
+              </Text>
 
-            {/* Buttons container right after the method selection */}
-            <View style={[styles.buttonContainer, { paddingBottom: keyboardHeight * 0.4 }]}>
-              <TouchableOpacity
-                style={[styles.button, loading && styles.buttonDisabled]}
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>
+                  <Ionicons name="card-outline" size={20} color={COLORS.primaryDark} />
+                  {' '}Numero de acción
+                </Text>
+                <TextInput
+                  style={styles.input}
+                  value={identifier}
+                  onChangeText={setIdentifier}
+                  placeholder="Numero de accion"
+                  placeholderTextColor={COLORS.gray500}
+                  autoCapitalize="none"
+                  keyboardType="numeric"
+                  editable={!loading}
+                />
+              </View>
+
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>Enviar código por:</Text>
+                <View style={styles.methodButtons}>
+                  <TouchableOpacity
+                    style={[styles.methodButton, method === 'email' && styles.methodButtonActive]}
+                    onPress={() => setMethod('email')}
+                  >
+                    <Text style={[styles.methodButtonText, method === 'email' && styles.methodButtonTextActive]}>
+                      Email
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.methodButton, method === 'sms' && styles.methodButtonActive]}
+                    onPress={() => setMethod('sms')}
+                  >
+                    <Text style={[styles.methodButtonText, method === 'sms' && styles.methodButtonTextActive]}>
+                      SMS
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              <TouchableOpacity 
+                style={[styles.loginButton, loading && styles.loginButtonDisabled]} 
                 onPress={handleRequestCode}
                 disabled={loading}
               >
                 {loading ? (
-                  <ActivityIndicator color="#fff" />
+                  <ActivityIndicator color={COLORS.white} size="small" />
                 ) : (
                   <Text style={styles.buttonText}>Enviar código</Text>
                 )}
               </TouchableOpacity>
 
-              <TouchableOpacity
+              <TouchableOpacity 
+                style={styles.forgotPasswordButton}
                 onPress={() => navigation.goBack()}
-                style={styles.cancelButton}
+                disabled={loading}
               >
-                <Text style={styles.cancelButtonText}>Cancelar</Text>
+                <Text style={styles.linkText}>Cancelar</Text>
               </TouchableOpacity>
+            </View>
+
+            <View style={styles.footerContainer}>
+              <View style={styles.footerDivider} />
+              <Text style={styles.footerText}>App Oficial · Club Campestre Tampico</Text>
+              <View style={styles.footerDivider} />
             </View>
           </ScrollView>
         </View>
@@ -195,6 +198,7 @@ export const ForgotPasswordScreen: React.FC = () => {
     );
   }
 
+  // Paso de verificación del código
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -207,243 +211,124 @@ export const ForgotPasswordScreen: React.FC = () => {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <Text style={styles.title}>Ingresa el código</Text>
-          <Text style={styles.subtitle}>
-            Hemos enviado un código de 6 dígitos a tu {method === 'email' ? 'correo' : 'WhatsApp'}
-          </Text>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Código de verificación</Text>
-            <TextInput
-              style={styles.input}
-              value={code}
-              onChangeText={(text) => setCode(text.replace(/\D/g, '').slice(0, 6))}
-              placeholder="123456"
-              placeholderTextColor={COLORS.gray500}
-              keyboardType="number-pad"
-              maxLength={6}
+          <View style={styles.logoTampicoContainer}>
+            <Image 
+              source={require('../../../../../assets/images/auth/Logo-Tampico.png')} 
+              style={styles.logoTampico}
+              resizeMode="contain"
             />
           </View>
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Nueva contraseña</Text>
-            <View style={styles.passwordInputContainer}>
-              <TextInput
-                style={[styles.input, styles.passwordInput]}
-                value={newPassword}
-                onChangeText={setNewPassword}
-                secureTextEntry={!showPassword}
-                placeholder="Mínimo 8 caracteres"
-                placeholderTextColor={COLORS.gray500}
-                autoCapitalize="none"
-              />
-              <TouchableOpacity
-                onPress={() => setShowPassword(!showPassword)}
-                style={styles.eyeIcon}
-              >
-                <Ionicons
-                  name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-                  size={20}
-                  color={COLORS.gray500}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
+          <View style={styles.formCardInner}>
+            <Text style={styles.title}>Ingresa el código</Text>
+            <Text style={styles.subtitle}>
+              Hemos enviado un código de 6 dígitos a tu {method === 'email' ? 'correo' : 'móvil'}
+            </Text>
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Confirmar contraseña</Text>
-            <View style={styles.passwordInputContainer}>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Código de verificación</Text>
               <TextInput
-                style={[styles.input, styles.passwordInput]}
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                secureTextEntry={!showConfirmPassword}
-                placeholder="Repite la nueva contraseña"
+                style={styles.input}
+                value={code}
+                onChangeText={(text) => setCode(text.replace(/\D/g, '').slice(0, 6))}
+                placeholder="123456"
                 placeholderTextColor={COLORS.gray500}
-                autoCapitalize="none"
+                keyboardType="numeric"
+                maxLength={6}
+                editable={!loading}
               />
-              <TouchableOpacity
-                onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-                style={styles.eyeIcon}
-              >
-                <Ionicons
-                  name={showConfirmPassword ? 'eye-off-outline' : 'eye-outline'}
-                  size={20}
-                  color={COLORS.gray500}
-                />
-              </TouchableOpacity>
             </View>
-          </View>
 
-          {/* Buttons container inside scroll view */}
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={[styles.button, loading && styles.buttonDisabled]}
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Nueva contraseña</Text>
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  style={[styles.input, styles.passwordInput]}
+                  value={newPassword}
+                  onChangeText={setNewPassword}
+                  secureTextEntry={!showPassword}
+                  placeholder="Nueva contraseña"
+                  placeholderTextColor={COLORS.gray500}
+                  editable={!loading}
+                />
+                <TouchableOpacity
+                  onPress={() => setShowPassword(!showPassword)}
+                  style={styles.eyeIcon}
+                  disabled={loading}
+                >
+                  <Ionicons
+                    name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                    size={20}
+                    color={COLORS.primary}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Confirmar contraseña</Text>
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  style={[styles.input, styles.passwordInput]}
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                  secureTextEntry={!showConfirmPassword}
+                  placeholder="Confirmar contraseña"
+                  placeholderTextColor={COLORS.gray500}
+                  editable={!loading}
+                />
+                <TouchableOpacity
+                  onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                  style={styles.eyeIcon}
+                  disabled={loading}
+                >
+                  <Ionicons
+                    name={showConfirmPassword ? 'eye-off-outline' : 'eye-outline'}
+                    size={20}
+                    color={COLORS.primary}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <TouchableOpacity 
+              style={[styles.loginButton, loading && styles.loginButtonDisabled]} 
               onPress={handleResetPassword}
               disabled={loading}
             >
               {loading ? (
-                <ActivityIndicator color="#fff" />
+                <ActivityIndicator color={COLORS.white} size="small" />
               ) : (
                 <Text style={styles.buttonText}>Restablecer contraseña</Text>
               )}
             </TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={() => setStep('request')}
+            <TouchableOpacity 
               style={styles.backButton}
+              onPress={() => setStep('request')}
+              disabled={loading}
             >
               <Text style={styles.backButtonText}>← Solicitar nuevo código</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
+            <TouchableOpacity 
+              style={styles.forgotPasswordButton}
               onPress={() => navigation.goBack()}
-              style={styles.cancelButton}
+              disabled={loading}
             >
-              <Text style={styles.cancelButtonText}>Cancelar</Text>
+              <Text style={styles.linkText}>Cancelar</Text>
             </TouchableOpacity>
+          </View>
+
+          <View style={styles.footerContainer}>
+            <View style={styles.footerDivider} />
+            <Text style={styles.footerText}>App Oficial · Club Campestre Tampico</Text>
+            <View style={styles.footerDivider} />
           </View>
         </ScrollView>
       </View>
     </KeyboardAvoidingView>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.gray100,
-  },
-  content: {
-    flex: 1,
-    padding: 20,
-    paddingTop: 90, // Reduced top padding
-    justifyContent: 'flex-start', // Changed from 'center' to 'flex-start'
-  },
-  title: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 32,
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 8,
-  },
-  input: {
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    color: '#333', // Added text color for better visibility
-  },
-  passwordInputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    position: 'relative',
-    width: '100%',
-  },
-  passwordInput: {
-    flex: 1,
-    paddingRight: 40,
-  },
-  eyeIcon: {
-    position: 'absolute',
-    right: 12,
-    padding: 8,
-  },
-  methodContainer: {
-    marginBottom: 20,
-  },
-  methodButtons: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  methodButton: {
-    flex: 1,
-    backgroundColor: '#fff',
-    borderWidth: 2,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 12,
-    alignItems: 'center',
-  },
-  methodButtonActive: {
-    borderColor: COLORS.primaryDark,
-    backgroundColor: COLORS.gray50,
-  },
-  methodButtonText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#666',
-  },
-  methodButtonTextActive: {
-    color: COLORS.primaryDark,
-  },
-  button: {
-    backgroundColor: COLORS.primaryDark,
-    borderRadius: 8,
-    padding: 16,
-    alignItems: 'center',
-    alignSelf: 'stretch',
-  },
-  buttonDisabled: {
-    opacity: 0.6,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  backButton: {
-    marginTop: 16,
-    alignItems: 'center',
-    backgroundColor: COLORS.white,
-    borderRadius: 8,
-    borderColor: COLORS.gray300,
-    borderWidth: 0.5,
-    padding: 16,
-    alignSelf: 'stretch',
-  },
-  backButtonText: {
-    color: COLORS.primaryDark,
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  buttonContainer: {
-    paddingTop: 5,
-    paddingBottom: 20,
-    width: '100%',
-  },
-  cancelButton: {
-    marginTop: 16,
-    alignItems: 'center',
-    alignSelf: 'stretch',
-    borderColor: COLORS.error,
-    borderWidth: 0.5,
-    borderRadius: 8,
-    padding: 16,
-    backgroundColor: COLORS.gray50,
-  },
-  cancelButtonText: {
-    color: 'red',
-    fontSize: 16,
-  },
-  verifyContent: {
-    paddingBottom: 120,
-  },
-});
+}
 
 export default ForgotPasswordScreen;

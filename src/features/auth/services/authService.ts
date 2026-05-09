@@ -11,10 +11,6 @@ export const authService = {
    * Iniciar sesión con número de acción y contraseña
    */
   login: async (memberCode: string, password: string): Promise<{ success: boolean; user?: userProfile; token?: string; error?: string, status?: number }> => {
-    //const email = 'vegapo2812@gmail.com'; 
-    //password = 'qwertyui'; 
-    console.log('.---------------------------el memberCode es:', memberCode);
-console.log('-----------------------------el password es:', password);
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/login`, {
         method: 'POST',
@@ -23,7 +19,6 @@ console.log('-----------------------------el password es:', password);
       });
 
       const data = await response.json();
-console.log('-----------------------------el data es:', data);
       if (!response.ok) {
         // Manejar códigos de error específicos
         switch (response.status) {
@@ -203,7 +198,7 @@ console.log('-----------------------------el data es:', data);
   /**
    * Solicitar código de recuperación de contraseña
    */
-  forgotPassword: async (identifier: string, method: 'email' | 'whatsapp'): Promise<{ success: boolean; message?: string; error?: string, status?: number }> => {
+  forgotPassword: async (identifier: string, method: 'email' | 'sms'): Promise<{ success: boolean; message?: string; error?: string, status?: number }> => {
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/forgot-password`, {
         method: 'POST',
