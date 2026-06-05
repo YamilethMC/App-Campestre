@@ -259,12 +259,9 @@ export const facilityService = {
         status: 401
       };
     }
-    const fecha = new Date(`${date}T00:00:00`);
-    fecha.setDate(fecha.getDate() - 1);
-    const dateG = fecha.toISOString().split("T")[0];
     // Verify date format is YYYY-MM-DD
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateRegex.test(dateG)) {
+    if (!dateRegex.test(date)) {
       return {
         success: false,
         error: 'Formato de fecha inválido. Use YYYY-MM-DD',
@@ -272,7 +269,7 @@ export const facilityService = {
       };
     }
 
-    const url = `${process.env.EXPO_PUBLIC_API_URL}/facilities/${facilityId}?date=${dateG}`;
+    const url = `${process.env.EXPO_PUBLIC_API_URL}/facilities/${facilityId}?date=${date}`;
 
     try {
       const response = await fetch(url, {

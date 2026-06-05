@@ -95,8 +95,9 @@ export const CalendarComponent: React.FC<CalendarComponentProps> = ({ selectedDa
   const selectDay = (day: number | null) => {
     if (day === null) return;
     
-    const date = new Date(displayedYear, displayedMonth, day + 1);
-    const formattedDate = date.toISOString().split('T')[0]; // YYYY-MM-DD
+    const month = String(displayedMonth + 1).padStart(2, '0');
+    const dayStr = String(day).padStart(2, '0');
+    const formattedDate = `${displayedYear}-${month}-${dayStr}`;
     onDateChange(formattedDate);
   };
 
@@ -104,25 +105,21 @@ export const CalendarComponent: React.FC<CalendarComponentProps> = ({ selectedDa
   const isPastDay = (day: number | null) => {
     if (day === null) return false;
     
-    // Inicio del día: 00:00 de ese día
+    const todayStart = new Date(currentYear, currentMonth, currentDay, 0, 0, 0);
     const startOfDay = new Date(displayedYear, displayedMonth, day, 0, 0, 0);
     const now = new Date();
     const maxBookableTime = new Date(now.getTime() + maxBookingWindowHours * 60 * 60 * 1000);
     
-    // El día está bloqueado si está en el pasado o después de 48 horas
-    return startOfDay < now || startOfDay > maxBookableTime;
+    // El día está bloqueado si es anterior a hoy o después de la ventana de reservas
+    return startOfDay < todayStart || startOfDay > maxBookableTime;
   };
 
   // Verificar si un día está seleccionado
   const isDaySelected = (day: number | null) => {
     if (!selectedDate || day === null) return false;
     
-    const selectedDateObj = new Date(selectedDate);
-    return (
-      selectedDateObj.getDate() === day && 
-      selectedDateObj.getMonth() === displayedMonth && 
-      selectedDateObj.getFullYear() === displayedYear
-    );
+    const [year, month, d] = selectedDate.split('-').map(Number);
+    return d === day && (month - 1) === displayedMonth && year === displayedYear;
   };
 
   return (
