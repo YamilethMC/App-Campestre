@@ -232,19 +232,15 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
       {hasBanners && banners.length > 1 && (
         <>
           <TouchableOpacity
-            style={styles.navButtonLeft}
+            style={[styles.navButtonLeft, { backgroundColor: 'transparent' }]}
             onPress={goToPrevious}
             activeOpacity={0.7}
-          >
-            <Ionicons name="chevron-back" size={24} color={COLORS.white} />
-          </TouchableOpacity>
+          />
           <TouchableOpacity
-            style={styles.navButtonRight}
+            style={[styles.navButtonRight, { backgroundColor: 'transparent' }]}
             onPress={goToNext}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="chevron-forward" size={24} color={COLORS.white} />
-          </TouchableOpacity>
+            activeOpacity={0.5}
+          />
         </>
       )}
 
