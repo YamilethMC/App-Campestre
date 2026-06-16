@@ -109,18 +109,22 @@ export const useReservation = () => {
       const handleDateChange = (newDate: string) => {
         // Si hay una cancha seleccionada y la nueva fecha es hoy, verificar si la cancha ya cerró
         if (selectedCourtId && selectedCourt) {
-          const selectedDateObj = new Date(newDate);
+          // Parsear como fecha LOCAL (no UTC) para evitar problemas de timezone
+          const [ndYear, ndMonth, ndDay] = newDate.split('-').map(Number);
+          const selectedDateObj = new Date(ndYear, ndMonth - 1, ndDay);
           const today = new Date();
-          today.setHours(0, 0, 0, 0); // Establecer horas a 0 para comparación precisa
+          
+          // Crear fecha de hoy sin hora para comparación precisa (manejo de timezone)
+          const todayWithoutTime = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
           const isToday =
-            selectedDateObj.getDate() === today.getDate() &&
-            selectedDateObj.getMonth() === today.getMonth() &&
-            selectedDateObj.getFullYear() === today.getFullYear();
+            selectedDateObj.getDate() === todayWithoutTime.getDate() &&
+            selectedDateObj.getMonth() === todayWithoutTime.getMonth() &&
+            selectedDateObj.getFullYear() === todayWithoutTime.getFullYear();
 
           // Si es hoy, necesitamos verificar si la cancha ya cerró
           if (isToday) {
-            // Buscar la cancha seleccionada para ver su hora de cierre
+            // Buscar la cancha seleccionada para ver su hora de cierresetDate
             const facility = facilities.find(f => f.id === selectedCourtId);
             if (facility && facility.closeTime) {
               const closeTime = facility.closeTime.substring(0, 5); // HH:MM format
@@ -161,14 +165,18 @@ export const useReservation = () => {
         }
 
         // Si hay fecha seleccionada, verificar si es hoy y si ya pasó la hora de cierre
-        const selectedDateObj = new Date(date);
+        // Parsear como fecha LOCAL (no UTC) para evitar problemas de timezone
+        const [dateYear, dateMonth, dateDay] = date.split('-').map(Number);
+        const selectedDateObj = new Date(dateYear, dateMonth - 1, dateDay);
         const today = new Date();
-        today.setHours(0, 0, 0, 0); // Establecer horas a 0 para comparación precisa
+        
+        // Crear fecha de hoy sin hora para comparación precisa (manejo de timezone)
+        const todayWithoutTime = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
         const isToday =
-          selectedDateObj.getDate() === today.getDate() &&
-          selectedDateObj.getMonth() === today.getMonth() &&
-          selectedDateObj.getFullYear() === today.getFullYear();
+          selectedDateObj.getDate() === todayWithoutTime.getDate() &&
+          selectedDateObj.getMonth() === todayWithoutTime.getMonth() &&
+          selectedDateObj.getFullYear() === todayWithoutTime.getFullYear();
 
         // Si es hoy, deshabilitar las canchas que ya cerraron
         if (isToday) {
@@ -233,6 +241,9 @@ export const useReservation = () => {
           const availableSlots = response.data.availableSlots || [];
           const reservedSlots = response.data.reservedSlots || [];
 
+          console.log('Horarios disponibles', availableSlots, 'del dia', date);
+          console.log('Horarios reservados', reservedSlots, 'del dia', date);
+
           // Convertir horarios disponibles a strings
           const availableTimeSlots = availableSlots.map((slot: any) =>
             `${slot.startTime.substring(0, 5)}-${slot.endTime.substring(0, 5)}`
@@ -254,14 +265,21 @@ export const useReservation = () => {
           }
 
           // Si es la fecha actual, filtrar también por hora actual
-          const selectedDateObj = new Date(date);
+          // Parsear como fecha LOCAL (no UTC) para evitar problemas de timezone
+          const [selYear, selMonth, selDay] = date.split('-').map(Number);
+          const selectedDateObj = new Date(selYear, selMonth - 1, selDay);
+          console.log('selectedDateObj', selectedDateObj);
           const today = new Date();
-          today.setHours(0, 0, 0, 0); // Establecer horas a 0 para comparación precisa
+          console.log('today', today);
+          
+          // Crear fecha de hoy sin hora para comparación precisa (manejo de timezone)
+          const todayWithoutTime = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+          console.log('todayWithoutTime', todayWithoutTime);
 
           const isToday =
-            selectedDateObj.getDate() === today.getDate() &&
-            selectedDateObj.getMonth() === today.getMonth() &&
-            selectedDateObj.getFullYear() === today.getFullYear();
+            selectedDateObj.getDate() === todayWithoutTime.getDate() &&
+            selectedDateObj.getMonth() === todayWithoutTime.getMonth() &&
+            selectedDateObj.getFullYear() === todayWithoutTime.getFullYear();
 
           if (isToday) {
             const currentTime = new Date();
@@ -328,11 +346,9 @@ export const useReservation = () => {
           Alert.alert('Formato de hora inválido');
           return;
         }
-        const fixedDate = new Date(date);
-        fixedDate.setDate(fixedDate.getDate() - 1);
         const [startTimePart, endTimePart] = time.split('-');
-        const startTimeISO = `${fixedDate.toISOString().split('T')[0]}T${startTimePart}:00Z`; 
-        const endTimeISO = `${fixedDate.toISOString().split('T')[0]}T${endTimePart}:00Z`;
+        const startTimeISO = `${date}T${startTimePart}:00Z`; 
+        const endTimeISO = `${date}T${endTimePart}:00Z`;
 
         try {
           // Obtener el ID del miembro del store de autenticación

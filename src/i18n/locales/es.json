@@ -234,7 +234,7 @@
       "unavailableMessage": "No hay canchas disponibles"
     },
     "summaryCard":{
-      "title": "Resumen de reserva",
+      "title": "Resumen de reservación",
       "service": "Servicio",
       "date": "Fecha",
       "time": "Hora",

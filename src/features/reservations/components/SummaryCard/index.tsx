@@ -15,14 +15,14 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
   const {messages} = useMessages();
   // Formatear la fecha
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
+    // Parsear como fecha LOCAL (no UTC) para evitar problemas de timezone
+    const [year, month, day] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
     const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
     const dayName = dayNames[date.getDay()];
-    const day = date.getDate();
     const monthNames = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
                         'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
     const monthName = monthNames[date.getMonth()];
-    const year = date.getFullYear();
     
     return `${dayName}, ${day} de ${monthName} de ${year}`;
   };

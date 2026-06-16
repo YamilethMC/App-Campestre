@@ -143,23 +143,26 @@ const ReservationsContainer = () => {
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    const reservationDate = new Date(dateString);
+    // Parsear como fecha LOCAL (no UTC) para evitar problemas de timezone
+    // Soporta tanto 'YYYY-MM-DD' como ISO con hora (e.g. '2026-06-16T07:00:00Z')
+    const datePart = dateString.split('T')[0];
+    const [year, month, day] = datePart.split('-').map(Number);
+    const reservationDate = new Date(year, month - 1, day);
 
     // Set time to 00:00 to compare dates only
-    today.setHours(0, 0, 0, 0);
-    tomorrow.setHours(0, 0, 0, 0);
-    reservationDate.setHours(0, 0, 0, 0);
+    const todayWithoutTime = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const tomorrowWithoutTime = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate());
 
-    if (reservationDate.getTime() === today.getTime()) {
+    if (reservationDate.getTime() === todayWithoutTime.getTime()) {
       return 'Hoy';
-    } else if (reservationDate.getTime() === tomorrow.getTime()) {
+    } else if (reservationDate.getTime() === tomorrowWithoutTime.getTime()) {
       return 'Mañana';
     } else {
       // Format as DD/MM/YYYY
-      const day = reservationDate.getDate().toString().padStart(2, '0');
-      const month = (reservationDate.getMonth() + 1).toString().padStart(2, '0');
-      const year = reservationDate.getFullYear();
-      return `${day}/${month}/${year}`;
+      const d = reservationDate.getDate().toString().padStart(2, '0');
+      const m = (reservationDate.getMonth() + 1).toString().padStart(2, '0');
+      const y = reservationDate.getFullYear();
+      return `${d}/${m}/${y}`;
     }
   };
 
