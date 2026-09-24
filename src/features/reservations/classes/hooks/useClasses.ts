@@ -1,128 +1,179 @@
-import { useCallback } from 'react';
-import { Discipline, Professional, Weekday } from '../interfaces';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Alert } from 'react-native';
+
+import { useAuthStore } from '../../../auth/store/useAuthStore';
 import {
-  DISCIPLINES,
-  MAX_PARTY_SIZE,
-  MIN_PARTY_SIZE,
-  PRICE_RULES,
-  PROFESSIONALS,
-} from '../mocks';
-import { useClassBookingStore } from '../store/useClassBookingStore';
-
-/** Convierte 'YYYY-MM-DD' en Date local, sin que el huso horario recorra el día. */
-const parseLocalDate = (date: string): Date => {
-  const [year, month, day] = date.split('-').map(Number);
-  return new Date(year, month - 1, day);
-};
-
-const isSameDay = (a: Date, b: Date): boolean =>
-  a.getFullYear() === b.getFullYear() &&
-  a.getMonth() === b.getMonth() &&
-  a.getDate() === b.getDate();
+  Availability,
+  ClassBooking,
+  CreateBookingPayload,
+  Discipline,
+  Professional,
+  ProfessionalDetail,
+} from '../interfaces';
+import { classesService } from '../services';
 
 /**
- * Reglas de negocio del módulo de Clases.
+ * Hooks del módulo de Clases.
  *
- * La disponibilidad implementa §8 literal: "horario recurrente PARTICULAR +
- * fecha futura + profesional activo + disciplina activa + sin excepción de
- * bloqueo + sin reserva activa para ese slot". Las excepciones de bloqueo
- * (ScheduleException) llegan con el backend; aquí aún no hay origen para ellas.
+ * Usan React Query, que ya está montado en la app (ver app/_layout.tsx y
+ * features/banner/hooks/useBanners.ts). Eso nos da caché, reintentos y refresco
+ * al volver a la app sin escribirlo a mano.
+ *
+ * La disponibilidad es el caso delicado: un horario que estaba libre hace un
+ * minuto puede estar tomado ahora, así que no se cachea.
  */
-export const useClasses = () => {
-  const isSlotTaken = useClassBookingStore((state) => state.isSlotTaken);
 
-  /**
-   * Todas las disciplinas del catálogo, activas e inactivas.
-   * La pantalla pinta apagadas las que aún no tienen profesionales del Club,
-   * para que la cuadrícula se vea como la pantalla 2 de la infografía.
-   */
-  const getDisciplines = useCallback((): Discipline[] => DISCIPLINES, []);
+/** Claves de caché del módulo, en un solo lugar para poder invalidarlas. */
+export const classesKeys = {
+  disciplines: ['classes', 'disciplines'] as const,
+  professionals: (disciplineId: number) => ['classes', 'professionals', disciplineId] as const,
+  professional: (professionalId: number) => ['classes', 'professional', professionalId] as const,
+  availability: (professionalId: number, date: string) =>
+    ['classes', 'availability', professionalId, date] as const,
+  myBookings: ['classes', 'my-bookings'] as const,
+};
 
-  const getDisciplineById = useCallback(
-    (disciplineId: string): Discipline | undefined => DISCIPLINES.find((d) => d.id === disciplineId),
-    [],
-  );
+/** Desempaca la respuesta del servicio y avisa al socio si algo salió mal. */
+async function unwrap<T>(
+  call: Promise<{ success: boolean; data?: T; error?: string; status?: number }>,
+  fallback: T,
+): Promise<T> {
+  const response = await call;
 
-  const getProfessionalsByDiscipline = useCallback(
-    (disciplineId: string): Professional[] =>
-      PROFESSIONALS.filter((p) => p.disciplineId === disciplineId && p.active),
-    [],
-  );
+  if (!response.success) {
+    // El 401 ya lo maneja el servicio: manda al socio al login.
+    if (response.status !== 401 && response.error) {
+      Alert.alert('Error', response.error);
+    }
+    return fallback;
+  }
 
-  const getProfessionalById = useCallback(
-    (professionalId: string): Professional | undefined =>
-      PROFESSIONALS.find((p) => p.id === professionalId),
-    [],
-  );
+  return response.data ?? fallback;
+}
 
-  /**
-   * Horarios "Particulares" del profesional para esa fecha, ya tomados o no.
-   *
-   * Deja fuera las fechas pasadas y, si la fecha es hoy, las horas que ya pasaron.
-   * Los que están reservados SÍ se devuelven: la pantalla los pinta apagados con
-   * la leyenda "Ocupado" en vez de esconderlos, para que el socio entienda que el
-   * horario existe pero alguien llegó antes.
-   */
-  const getScheduleSlots = useCallback(
-    (professional: Professional | undefined, date: string): string[] => {
-      if (!professional || !professional.active || !date) return [];
+export const useDisciplines = () => {
+  const { token, isAuthenticated } = useAuthStore();
 
-      const discipline = DISCIPLINES.find((d) => d.id === professional.disciplineId);
-      if (!discipline || !discipline.active) return [];
-
-      const selectedDate = parseLocalDate(date);
-      const now = new Date();
-      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-      // No se permite reservar en fechas pasadas (§8).
-      if (selectedDate < today) return [];
-
-      const weekday = selectedDate.getDay() as Weekday;
-      const slots = professional.weeklySchedule[weekday] ?? [];
-
-      // Si la fecha es hoy, las horas que ya pasaron dejan de ofrecerse.
-      if (!isSameDay(selectedDate, now)) return slots;
-
-      return slots.filter((slot) => {
-        const [hours, minutes] = slot.split(':').map(Number);
-        const slotDate = new Date(selectedDate);
-        slotDate.setHours(hours, minutes, 0, 0);
-        return slotDate > now;
-      });
-    },
-    [],
-  );
-
-  /**
-   * De esos horarios, los que ya tienen una reserva activa (§2, "Doble reserva").
-   * Hoy sale de la tienda local; con el backend vendrá del servidor.
-   */
-  const getTakenSlots = useCallback(
-    (professional: Professional | undefined, date: string): string[] => {
-      if (!professional || !date) return [];
-      return getScheduleSlots(professional, date).filter((slot) =>
-        isSlotTaken(professional.id, date, slot),
-      );
-    },
-    [getScheduleSlots, isSlotTaken],
-  );
-
-  /** Precio según número de personas: $400 / $500 / $600 (§2). */
-  const getPrice = useCallback((partySize: number): number => {
-    const rule = PRICE_RULES.find((r) => r.partySize === partySize);
-    return rule ? rule.price : 0;
-  }, []);
+  const query = useQuery({
+    queryKey: classesKeys.disciplines,
+    queryFn: () => unwrap<Discipline[]>(classesService.getDisciplines(), []),
+    enabled: !!token && !!isAuthenticated,
+  });
 
   return {
-    priceRules: PRICE_RULES,
-    minPartySize: MIN_PARTY_SIZE,
-    maxPartySize: MAX_PARTY_SIZE,
-    getDisciplines,
-    getDisciplineById,
-    getProfessionalsByDiscipline,
-    getProfessionalById,
-    getScheduleSlots,
-    getTakenSlots,
-    getPrice,
+    disciplines: query.data ?? [],
+    loading: query.isLoading,
+    refetch: query.refetch,
+  };
+};
+
+export const useProfessionals = (disciplineId: number) => {
+  const { token, isAuthenticated } = useAuthStore();
+
+  const query = useQuery({
+    queryKey: classesKeys.professionals(disciplineId),
+    queryFn: () => unwrap<Professional[]>(classesService.getProfessionals(disciplineId), []),
+    enabled: !!token && !!isAuthenticated && !!disciplineId,
+  });
+
+  return {
+    professionals: query.data ?? [],
+    loading: query.isLoading,
+    refetch: query.refetch,
+  };
+};
+
+/**
+ * Ficha del profesional y su tarifa.
+ *
+ * Va aparte de la disponibilidad a propósito: la pantalla necesita mostrar al
+ * profesional y los precios apenas entra, sin esperar a que el socio elija fecha.
+ */
+export const useProfessional = (professionalId: number) => {
+  const { token, isAuthenticated } = useAuthStore();
+
+  const query = useQuery({
+    queryKey: classesKeys.professional(professionalId),
+    queryFn: () =>
+      unwrap<ProfessionalDetail | null>(classesService.getProfessional(professionalId), null),
+    enabled: !!token && !!isAuthenticated && !!professionalId,
+  });
+
+  return {
+    professional: query.data ?? null,
+    prices: query.data?.prices ?? [],
+    loading: query.isLoading,
+  };
+};
+
+export const useAvailability = (professionalId: number, date: string) => {
+  const { token, isAuthenticated } = useAuthStore();
+
+  const query = useQuery({
+    queryKey: classesKeys.availability(professionalId, date),
+    queryFn: () => unwrap<Availability | null>(classesService.getAvailability(professionalId, date), null),
+    enabled: !!token && !!isAuthenticated && !!professionalId && !!date,
+    // Un horario libre puede dejar de estarlo en cualquier momento: siempre se
+    // pregunta al servidor, nunca se sirve de caché.
+    staleTime: 0,
+    gcTime: 0,
+  });
+
+  return {
+    availability: query.data ?? null,
+    slots: query.data?.slots ?? [],
+    prices: query.data?.prices ?? [],
+    loading: query.isLoading || query.isFetching,
+    refetch: query.refetch,
+  };
+};
+
+export const useMyClassBookings = () => {
+  const { token, isAuthenticated } = useAuthStore();
+
+  const query = useQuery({
+    queryKey: classesKeys.myBookings,
+    queryFn: () => unwrap<ClassBooking[]>(classesService.getMyBookings(), []),
+    enabled: !!token && !!isAuthenticated,
+  });
+
+  return {
+    bookings: query.data ?? [],
+    loading: query.isLoading,
+    refetch: query.refetch,
+  };
+};
+
+/**
+ * Crea la reserva.
+ *
+ * Al confirmar se invalidan las listas que quedaron desactualizadas: las clases
+ * del socio y la disponibilidad de ese profesional, para que el horario recién
+ * tomado aparezca como ocupado sin que nadie tenga que recargar a mano.
+ */
+export const useCreateBooking = () => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async (payload: CreateBookingPayload) => {
+      const response = await classesService.createBooking(payload);
+
+      if (!response.success) {
+        throw new Error(response.error ?? 'No se pudo crear la reserva');
+      }
+
+      return response.data as ClassBooking;
+    },
+    onSuccess: (_booking, payload) => {
+      queryClient.invalidateQueries({ queryKey: classesKeys.myBookings });
+      queryClient.invalidateQueries({
+        queryKey: classesKeys.availability(payload.professionalId, payload.date),
+      });
+    },
+  });
+
+  return {
+    createBooking: mutation.mutateAsync,
+    creating: mutation.isPending,
   };
 };

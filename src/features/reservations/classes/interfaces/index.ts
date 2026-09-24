@@ -1,37 +1,41 @@
 /**
  * Tipos del módulo de Clases.
  *
- * Siguen el "Modelo mínimo de datos sugerido" (§6 de la Especificación de Datos
- * y Reglas Funcionales v1.0): Discipline, Professional, RecurringSchedule,
- * PriceRule y Booking. En esta etapa viven en el cliente con datos simulados;
- * al conectar el backend (Fase 2) se sustituye el origen, no la forma.
+ * Son el reflejo de lo que devuelve el backend (`/classes/...`), no una
+ * estructura propia: si el contrato cambia, se cambia aquí y el compilador
+ * señala todo lo que hay que ajustar.
  */
 
-/** Día de la semana tal como lo devuelve Date.getDay(): 0 = domingo. */
-export type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;
-
-/** Horas reservables ("Particulares") por día de la semana, en formato HH:MM. */
-export type WeeklySchedule = Record<Weekday, string[]>;
-
 export interface Discipline {
-  id: string;
+  id: number;
   name: string;
   /** Nombre de ícono de @expo/vector-icons (Ionicons). */
   icon: string;
-  /** Inactiva = el Club aún no entrega profesionales ni horarios para ella. */
-  active: boolean;
 }
 
 export interface Professional {
-  id: string;
-  disciplineId: string;
+  id: number;
   displayName: string;
-  /** Credencial o especialidad; opcional según §3 de la infografía. */
-  credential?: string;
-  /** Foto oficial: pendiente de entrega del Club (§10). Sin ella se muestran iniciales. */
-  photoUrl?: string;
-  active: boolean;
-  weeklySchedule: WeeklySchedule;
+  /** Pendiente de entrega del Club; sin foto se muestran las iniciales. */
+  photoUrl: string | null;
+  /** Credencial o especialidad, opcional. */
+  shortBio: string | null;
+  discipline: { id: number; name: string };
+}
+
+/** Por qué un horario no se puede reservar. */
+export type SlotUnavailableReason = 'BOOKED' | 'BLOCKED' | 'PAST';
+
+export interface AvailabilitySlot {
+  /** "HH:MM" en hora del club. */
+  startTime: string;
+  available: boolean;
+  reason?: SlotUnavailableReason;
+}
+
+/** Ficha del profesional con su tarifa, sin depender de una fecha. */
+export interface ProfessionalDetail extends Professional {
+  prices: PriceRule[];
 }
 
 export interface PriceRule {
@@ -39,21 +43,43 @@ export interface PriceRule {
   price: number;
 }
 
-export interface ClassBooking {
-  id: string;
-  disciplineId: string;
-  disciplineName: string;
-  professionalId: string;
-  professionalName: string;
-  /** Fecha local en formato YYYY-MM-DD. */
+export interface Availability {
+  /** "YYYY-MM-DD". */
   date: string;
-  /** Hora de inicio en formato HH:MM. */
+  professional: {
+    id: number;
+    displayName: string;
+    discipline: { id: number; name: string };
+  };
+  slots: AvailabilitySlot[];
+  prices: PriceRule[];
+}
+
+export interface ClassBooking {
+  id: number;
+  /** Instante en el marco del club, tal como lo guarda el backend. */
+  startsAt: string;
+  partySize: number;
+  /** Precio congelado al momento de reservar. */
+  priceSnapshot: string | number;
+  status: string;
+  professional: { id: number; displayName: string; photoUrl: string | null };
+  discipline: { id: number; name: string; icon: string };
+}
+
+export interface CreateBookingPayload {
+  professionalId: number;
+  /** "YYYY-MM-DD". */
+  date: string;
+  /** "HH:MM". */
   startTime: string;
   partySize: number;
-  /**
-   * Precio congelado al momento de reservar (§9: "guardar price_snapshot"),
-   * para que un cambio de tarifa no altere reservas ya creadas.
-   */
-  priceSnapshot: number;
-  createdAt: string;
+}
+
+/** Lo que devuelve cada llamada del servicio. */
+export interface ServiceResult<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+  status?: number;
 }

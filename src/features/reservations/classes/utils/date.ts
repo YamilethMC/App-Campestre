@@ -13,3 +13,15 @@ export const formatShortDate = (date: string): string => {
   const parsed = new Date(year, month - 1, day);
   return `${DAY_NAMES[parsed.getDay()]}, ${day} ${MONTH_NAMES[month - 1]} ${year}`;
 };
+
+/**
+ * Saca la fecha "YYYY-MM-DD" de un instante del backend.
+ *
+ * Se corta la cadena en vez de construir un Date: el backend guarda la hora de
+ * pared del club dentro de un campo UTC, así que leerla con los métodos locales
+ * de Date la recorrería según el huso del teléfono.
+ */
+export const dateFromInstant = (isoInstant: string): string => isoInstant.substring(0, 10);
+
+/** Saca la hora "HH:MM" de un instante del backend, por la misma razón. */
+export const timeFromInstant = (isoInstant: string): string => isoInstant.substring(11, 16);
