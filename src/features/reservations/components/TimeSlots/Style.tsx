@@ -35,6 +35,11 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.gray50,
     borderColor: COLORS.gray300,
   },
+  takenLabel: {
+    fontSize: 11,
+    color: COLORS.gray500,
+    marginTop: 2,
+  },
   unavailableSlot: {
     backgroundColor: COLORS.gray100,
     borderColor: COLORS.gray300,

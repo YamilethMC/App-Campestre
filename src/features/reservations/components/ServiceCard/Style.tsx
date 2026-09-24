@@ -73,6 +73,12 @@ const styles = StyleSheet.create({
     color: COLORS.gray900,
     textAlign: 'center',
   },
+  gridServiceSubtitle: {
+    fontSize: 12,
+    color: COLORS.gray500,
+    textAlign: 'center',
+    marginTop: 2,
+  },
 });
 
 export default styles;

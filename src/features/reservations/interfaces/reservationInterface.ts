@@ -2,6 +2,8 @@ export interface CalendarComponentProps {
   selectedDate: string;
   onDateChange: (date: string) => void;
   maxBookingWindowHours?: number;
+  /** Oculta el encabezado "Fecha" cuando el calendario ya va dentro de otro campo. */
+  showHeader?: boolean;
 }
 
 export interface ConfirmationModalProps {
@@ -31,6 +33,8 @@ export interface ServiceCardProps {
     color: string;
   };
   onPress: () => void;
+  /** Línea chica bajo el nombre, para aclarar qué se aparta ("Canchas", "Con profesional"). */
+  subtitle?: string;
 }
 
 export interface SummaryCardProps {
@@ -71,6 +75,10 @@ export interface TimeSlotsProps {
   availableTimes: string[];
   selectedDate?: string; // Fecha seleccionada para deshabilitar horarios pasados
   unavailableMessage?: string;
+  /** Horarios que se pintan apagados y no se pueden elegir (p. ej. ya reservados). */
+  unavailableTimes?: string[];
+  /** Texto chico bajo la hora de esos horarios, p. ej. "Ocupado". */
+  unavailableLabel?: string;
 }
 
 export interface Reservation {
