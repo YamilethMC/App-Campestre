@@ -10,12 +10,12 @@ import { COLORS } from '../../shared/theme/colors';
 // Importar tipos de navegación
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
-import { MoreStackParamList, RootStackParamList } from '../types';
+import { MainTabsParamList, MoreStackParamList } from '../types';
 
 // Tipo para la navegación del stack de More
 type MoreOptionsScreenNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<MoreStackParamList, 'MoreOptions'>,
-  BottomTabNavigationProp<RootStackParamList>
+  BottomTabNavigationProp<MainTabsParamList>
 >;
 
 const MoreOptionsScreen = () => {
@@ -44,6 +44,14 @@ const MoreOptionsScreen = () => {
       icon: 'calendar-outline' as const,
       onPress: () => navigation.navigate('MyReservations')
     },*/
+    {
+      // Acceso secundario a Clases (§1: "Como acceso secundario, puede existir
+      // 'Clases' dentro de 'Más'"). Salta a la pestaña Reserva y abre el flujo
+      // en su primera pantalla, la de disciplinas.
+      title: t('reservation.classes.title'),
+      icon: 'school' as const,
+      onPress: () => navigation.navigate('Reservation', { screen: 'ClassesDisciplines' })
+    },
     { 
       title: t('accountStatements.title'), 
       icon: 'document-text' as const,

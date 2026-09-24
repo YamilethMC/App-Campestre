@@ -1,4 +1,4 @@
-import { NavigationProp, RouteProp } from '@react-navigation/native';
+import { NavigationProp, NavigatorScreenParams, RouteProp } from '@react-navigation/native';
 
 // Tipos para el Stack Navigator principal
 export type RootStackParamList = {
@@ -18,9 +18,27 @@ export type MainTabsParamList = {
   Home: undefined;
   Events: undefined;
   Restaurant: undefined;
+  // La pestaña Reserva contiene su propio stack, así que desde fuera se puede
+  // navegar a una de sus pantallas (p. ej. Más > Clases).
+  Reservation: NavigatorScreenParams<ReservationStackParamList>;
   Surveys: undefined;
   AccountStatements: undefined;
   More: undefined;
+};
+
+// Tipos para el stack de Reserva (incluye el flujo de Clases)
+export type ReservationStackParamList = {
+  ReservationScreen: undefined;
+  ClassesDisciplines: undefined;
+  ClassesProfessionals: { disciplineId: string };
+  ClassesSchedule: { disciplineId: string; professionalId: string };
+  ClassesConfirm: {
+    disciplineId: string;
+    professionalId: string;
+    date: string;
+    startTime: string;
+    partySize: number;
+  };
 };
 
 // Tipos para el stack de More

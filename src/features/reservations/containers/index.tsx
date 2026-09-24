@@ -8,6 +8,8 @@ import { ConfirmationModal } from '../components/ConfirmationModal';
 import { CourtSelector } from '../components/CourtSelector';
 import MyReservationsSection from '../components/MyReservationsSection';
 import { ServiceCard } from '../components/ServiceCard';
+import { ClassBookingCard } from '../classes/components/ClassBookingCard';
+import { useClassBookingStore } from '../classes/store/useClassBookingStore';
 import { SummaryCard } from '../components/SummaryCard';
 import { TableSelector } from '../components/TableSelector';
 import { TimeSlots } from '../components/TimeSlots';
@@ -27,13 +29,21 @@ import { useMyReservations } from '../../../features/my-reservations/hooks';
 import { Reservation } from '../../../features/my-reservations/interfaces';
 
 // Store
+import { ReservationStackParamList } from '../../../navigation/types';
 import { COLORS } from '../../../shared/theme/colors';
 
 // Icons
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import MainHeader from '../../../shared/components/MainHeader/Container';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+type ReservationsNavigation = NativeStackNavigationProp<ReservationStackParamList, 'ReservationScreen'>;
 
 const ReservationsContainer = () => {
   const { messages } = useMessages();
+  const navigation = useNavigation<ReservationsNavigation>();
+  const classBookings = useClassBookingStore((state) => state.bookings);
   const { userId } = useAuthStore.getState();
   const { getReservations, cancelReservation } = useMyReservations();
   const {
@@ -77,6 +87,25 @@ const ReservationsContainer = () => {
   useEffect(() => {
     loadServices();
   }, []);
+
+  // El encabezado de la pestaña muestra flecha de regreso mientras se está
+  // reservando una instalación. Antes sólo se podía salir con el botón
+  // "Seleccionar otro servicio", hasta abajo de la pantalla.
+  useEffect(() => {
+    const parent = navigation.getParent();
+    if (!parent) return;
+
+    parent.setOptions({
+      header: () => (
+        <MainHeader
+          title={messages.CONTAINER.TITLE}
+          subtitle="CLUB CAMPESTRE"
+          onBack={selectedService ? resetSelection : undefined}
+          showNotifications={!selectedService}
+        />
+      ),
+    });
+  }, [selectedService, messages.CONTAINER.TITLE]);
 
   useEffect(() => {
     if (!selectedService) {
@@ -377,6 +406,18 @@ const ReservationsContainer = () => {
           refreshing={refreshing}
           onRefresh={handleRefresh}
           onReservationPress={openReservationModal}
+          groupTitle={messages.CONTAINER.GROUP_COURTS}
+          extraTitle={messages.CONTAINER.GROUP_CLASSES}
+          extraCount={classBookings.length}
+          extraItems={classBookings.map((booking) => (
+            <ClassBookingCard
+              key={booking.id}
+              booking={booking}
+              personLabel={messages.CLASSES.PERSON}
+              peopleLabel={messages.CLASSES.PEOPLE}
+              formatDate={formatDate}
+            />
+          ))}
         />
 
         {/* Nueva Reserva Section */}
@@ -390,19 +431,33 @@ const ReservationsContainer = () => {
             <View style={{ padding: 20, alignItems: 'center' }}>
               <Text style={{ color: COLORS.gray600 }}>Cargando servicios...</Text>
             </View>
-          ) : !services || services.length === 0 ? (
-            <View style={{ padding: 20, alignItems: 'center' }}>
-              <Text style={{ color: COLORS.gray600 }}>No hay servicios disponibles</Text>
-            </View>
           ) : (
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-              {services.map((service: any) => (
+              {(services || []).map((service: any) => (
                 <ServiceCard
                   key={service.id}
                   service={service}
+                  // Aclara que esa tarjeta aparta una instalación, no una clase:
+                  // "Pádel" a secas se confunde con la disciplina de Clases.
+                  subtitle={messages.CONTAINER.COURTS_LABEL}
                   onPress={() => handleSelectService(service)}
                 />
               ))}
+
+              {/* Clases: nueva categoría dentro de Nueva Reservación. Vive junto a
+                  las instalaciones y no dentro de su estado vacío, porque existe
+                  aunque el Club no tenga canchas cargadas. */}
+              <ServiceCard
+                service={{
+                  id: 'clases',
+                  name: messages.CLASSES.TITLE,
+                  description: '',
+                  icon: 'school-outline',
+                  color: COLORS.primary,
+                }}
+                subtitle={messages.CONTAINER.CLASSES_LABEL}
+                onPress={() => navigation.navigate('ClassesDisciplines')}
+              />
             </View>
           )}
         </View>
