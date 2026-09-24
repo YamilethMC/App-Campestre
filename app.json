@@ -15,6 +15,7 @@
       "buildNumber": "20",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
+        "NSFaceIDUsageDescription": "Usamos Face ID para que entres a la app sin escribir tu contraseña cada vez.",
     "CFBundleDisplayName": "CCT"
       }
     },
