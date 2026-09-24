@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Modal, RefreshControl, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 // Components
@@ -9,7 +9,7 @@ import { CourtSelector } from '../components/CourtSelector';
 import MyReservationsSection from '../components/MyReservationsSection';
 import { ServiceCard } from '../components/ServiceCard';
 import { ClassBookingCard } from '../classes/components/ClassBookingCard';
-import { useClassBookingStore } from '../classes/store/useClassBookingStore';
+import { useMyClassBookings } from '../classes/hooks/useClasses';
 import { SummaryCard } from '../components/SummaryCard';
 import { TableSelector } from '../components/TableSelector';
 import { TimeSlots } from '../components/TimeSlots';
@@ -43,7 +43,7 @@ type ReservationsNavigation = NativeStackNavigationProp<ReservationStackParamLis
 const ReservationsContainer = () => {
   const { messages } = useMessages();
   const navigation = useNavigation<ReservationsNavigation>();
-  const classBookings = useClassBookingStore((state) => state.bookings);
+  const { bookings: classBookings, refetch: refetchClassBookings } = useMyClassBookings();
   const { userId } = useAuthStore.getState();
   const { getReservations, cancelReservation } = useMyReservations();
   const {
@@ -88,6 +88,11 @@ const ReservationsContainer = () => {
     loadServices();
   }, []);
 
+  // resetSelection se recrea en cada render, así que se guarda en una ref: si
+  // fuera dependencia del efecto, el encabezado se reconstruiría sin parar.
+  const resetSelectionRef = useRef(resetSelection);
+  resetSelectionRef.current = resetSelection;
+
   // El encabezado de la pestaña muestra flecha de regreso mientras se está
   // reservando una instalación. Antes sólo se podía salir con el botón
   // "Seleccionar otro servicio", hasta abajo de la pantalla.
@@ -100,12 +105,12 @@ const ReservationsContainer = () => {
         <MainHeader
           title={messages.CONTAINER.TITLE}
           subtitle="CLUB CAMPESTRE"
-          onBack={selectedService ? resetSelection : undefined}
+          onBack={selectedService ? () => resetSelectionRef.current() : undefined}
           showNotifications={!selectedService}
         />
       ),
     });
-  }, [selectedService, messages.CONTAINER.TITLE]);
+  }, [selectedService, messages.CONTAINER.TITLE, navigation]);
 
   useEffect(() => {
     if (!selectedService) {
@@ -143,7 +148,8 @@ const ReservationsContainer = () => {
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    await loadReservations();
+    // Las dos listas de "Mis Reservas": instalaciones y clases.
+    await Promise.all([loadReservations(), refetchClassBookings()]);
     setRefreshing(false);
   };
 

@@ -3,6 +3,7 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import { COLORS } from '../../../../../shared/theme/colors';
 import { ClassBooking } from '../../interfaces';
+import { dateFromInstant, timeFromInstant } from '../../utils/date';
 import styles from './Style';
 
 interface ClassBookingCardProps {
@@ -15,14 +16,13 @@ interface ClassBookingCardProps {
 /**
  * Tarjeta de una clase reservada, dentro de "Mis Reservas".
  *
- * Vive en el mismo apartado que las reservas de cancha porque el §7 lo pide
- * ("La reserva aparece en Mis Reservas"), pero con su propia tarjeta: una clase
- * tiene profesional, personas y precio; una cancha tiene instalación y rango de
- * horas. Son datos distintos y forzarlos a la misma tarjeta escondería la mitad.
+ * Vive en el mismo apartado que las reservas de cancha porque el §7 lo pide,
+ * pero con su propia tarjeta: una clase tiene profesional, personas y precio, y
+ * una cancha tiene instalación y rango de horas.
  *
  * Muestra los mismos seis datos que la pantalla de confirmación, así que no hace
- * falta abrir un detalle para verlos. Cuando el Club defina la política de
- * cancelación (§10, pendiente) tendrá sentido darle un detalle con esa acción.
+ * falta abrir un detalle. Cuando el Club defina la política de cancelación (§10)
+ * tendrá sentido darle uno con esa acción.
  */
 export const ClassBookingCard: React.FC<ClassBookingCardProps> = ({
   booking,
@@ -37,16 +37,16 @@ export const ClassBookingCard: React.FC<ClassBookingCardProps> = ({
 
     <View style={styles.info}>
       <Text style={styles.cardTitle}>
-        {booking.disciplineName} · {booking.professionalName}
+        {booking.discipline.name} · {booking.professional.displayName}
       </Text>
       <Text style={styles.cardDetail}>
-        {formatDate(booking.date)} · {booking.startTime} hrs
+        {formatDate(dateFromInstant(booking.startsAt))} · {timeFromInstant(booking.startsAt)} hrs
       </Text>
       <Text style={styles.cardDetail}>
         {booking.partySize} {booking.partySize === 1 ? personLabel : peopleLabel}
       </Text>
     </View>
 
-    <Text style={styles.price}>${booking.priceSnapshot}</Text>
+    <Text style={styles.price}>${Number(booking.priceSnapshot)}</Text>
   </View>
 );

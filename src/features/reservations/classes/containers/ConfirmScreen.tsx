@@ -1,14 +1,13 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
-import { SafeAreaView, ScrollView, View } from 'react-native';
+import { Alert, SafeAreaView, ScrollView, View } from 'react-native';
 import { ReservationStackParamList } from '../../../../navigation/types';
 import Button from '../../../../shared/components/Button/Button';
 import { ConfirmationModal } from '../../components/ConfirmationModal';
 import useMessages from '../../hooks/useMessages';
 import { ClassSummary } from '../components/ClassSummary';
-import { useClasses } from '../hooks/useClasses';
-import { useClassBookingStore } from '../store/useClassBookingStore';
+import { useCreateBooking } from '../hooks/useClasses';
 import styles from './Style';
 
 type Navigation = NativeStackNavigationProp<ReservationStackParamList, 'ClassesConfirm'>;
@@ -17,42 +16,31 @@ type Route = RouteProp<ReservationStackParamList, 'ClassesConfirm'>;
 /**
  * Pantalla 5 del flujo: resumen y confirmación.
  *
- * El resumen usa ClassSummary, que sigue el diseño entregado (ícono en círculo,
- * etiqueta arriba y valor abajo); el SummaryCard de Reservas tiene otra estructura
- * y se deja intacto. El precio se guarda congelado en la reserva (price_snapshot,
- * §9) para que un cambio de tarifa posterior no altere lo ya reservado. Al
- * confirmar, la clase queda registrada y su horario deja de ofrecerse.
+ * Quien decide si la reserva se puede hacer es el backend: vuelve a validar el
+ * horario antes de escribir y, si otro socio se adelantó por milisegundos, la
+ * base lo impide y responde 409. Aquí ese caso se le explica al socio en vez de
+ * dejarlo con un error suelto.
  */
 const ConfirmScreen = () => {
   const navigation = useNavigation<Navigation>();
   const { params } = useRoute<Route>();
   const { messages } = useMessages();
-  const { getDisciplineById, getProfessionalById, getPrice } = useClasses();
-  const addBooking = useClassBookingStore((state) => state.addBooking);
+  const { createBooking, creating } = useCreateBooking();
 
   const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false);
 
-  const discipline = getDisciplineById(params.disciplineId);
-  const professional = getProfessionalById(params.professionalId);
-  const price = getPrice(params.partySize);
-
-  const disciplineName = discipline ? discipline.name : '';
-  const professionalName = professional ? professional.displayName : '';
-
-  const handleConfirm = () => {
-    addBooking({
-      id: `${params.professionalId}-${params.date}-${params.startTime}`,
-      disciplineId: params.disciplineId,
-      disciplineName,
-      professionalId: params.professionalId,
-      professionalName,
-      date: params.date,
-      startTime: params.startTime,
-      partySize: params.partySize,
-      priceSnapshot: price,
-      createdAt: new Date().toISOString(),
-    });
-    setShowConfirmationModal(true);
+  const handleConfirm = async () => {
+    try {
+      await createBooking({
+        professionalId: params.professionalId,
+        date: params.date,
+        startTime: params.startTime,
+        partySize: params.partySize,
+      });
+      setShowConfirmationModal(true);
+    } catch (error) {
+      Alert.alert('Error', (error as Error).message);
+    }
   };
 
   const handleCloseModal = () => {
@@ -76,16 +64,20 @@ const ConfirmScreen = () => {
           }}
           personLabel={messages.CLASSES.PERSON}
           peopleLabel={messages.CLASSES.PEOPLE}
-          disciplineName={disciplineName}
-          professionalName={professionalName}
+          disciplineName={params.disciplineName}
+          professionalName={params.professionalName}
           date={params.date}
           startTime={params.startTime}
           partySize={params.partySize}
-          price={price}
+          price={params.price}
         />
 
         <View style={styles.actionContainer}>
-          <Button text={messages.CLASSES.CONFIRM_RESERVATION} onPress={handleConfirm} />
+          <Button
+            text={messages.CLASSES.CONFIRM_RESERVATION}
+            onPress={handleConfirm}
+            disabled={creating}
+          />
         </View>
 
         <ConfirmationModal visible={showConfirmationModal} onClose={handleCloseModal} />

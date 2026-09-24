@@ -30,14 +30,16 @@ export type MainTabsParamList = {
 export type ReservationStackParamList = {
   ReservationScreen: undefined;
   ClassesDisciplines: undefined;
-  ClassesProfessionals: { disciplineId: string };
-  ClassesSchedule: { disciplineId: string; professionalId: string };
+  ClassesProfessionals: { disciplineId: number; disciplineName: string };
+  ClassesSchedule: { professionalId: number };
   ClassesConfirm: {
-    disciplineId: string;
-    professionalId: string;
+    professionalId: number;
+    disciplineName: string;
+    professionalName: string;
     date: string;
     startTime: string;
     partySize: number;
+    price: number;
   };
 };
 

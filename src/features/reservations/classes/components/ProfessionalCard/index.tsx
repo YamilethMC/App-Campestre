@@ -37,8 +37,8 @@ export const ProfessionalCard: React.FC<ProfessionalCardProps> = ({
     <View style={styles.info}>
       <Text style={styles.name}>{professional.displayName}</Text>
       <Text style={styles.discipline}>{disciplineName}</Text>
-      {professional.credential ? (
-        <Text style={styles.credential}>{professional.credential}</Text>
+      {professional.shortBio ? (
+        <Text style={styles.credential}>{professional.shortBio}</Text>
       ) : null}
 
       <View style={styles.actionButton}>

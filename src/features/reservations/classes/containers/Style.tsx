@@ -33,6 +33,9 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
+  loader: {
+    marginTop: 30,
+  },
   emptyBox: {
     backgroundColor: COLORS.gray100,
     borderRadius: 12,
