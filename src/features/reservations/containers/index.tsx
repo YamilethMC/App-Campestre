@@ -148,8 +148,10 @@ const ReservationsContainer = () => {
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    // Las dos listas de "Mis Reservas": instalaciones y clases.
-    await Promise.all([loadReservations(), refetchClassBookings()]);
+    // Las dos listas de "Mis Reservas" y también los servicios: antes sólo se
+    // recargaban las reservas, así que si el Club daba de alta una cancha el
+    // socio no la veía hasta cerrar y volver a abrir la app.
+    await Promise.all([loadReservations(), refetchClassBookings(), loadServices()]);
     setRefreshing(false);
   };
 
