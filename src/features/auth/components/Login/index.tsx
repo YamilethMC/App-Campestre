@@ -101,6 +101,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                   placeholder={messages.LOGIN.EXAMPLE_PASSWORD}
                   placeholderTextColor={styles.inputPlaceholder.color}
                   secureTextEntry={!showPassword}
+                  // Sin esto, el teclado de Android capitaliza la primera letra
+                  // y sugiere palabras: cualquier socio con contraseña en
+                  // minúsculas no podía entrar, y el espacio que mete el
+                  // autocorrector tampoco se ve en pantalla.
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  textContentType="password"
                   editable={!isLoading}
                 />
                 <TouchableOpacity
