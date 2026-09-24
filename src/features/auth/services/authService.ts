@@ -3,6 +3,7 @@ import { userProfile } from "../interfaces";
 
 // Servicio de autenticación
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuthStore } from '../store/useAuthStore';
 import { handleAuthError } from '../../../shared/utils/authErrorHandler';
 
 
@@ -10,7 +11,7 @@ export const authService = {
   /**
    * Iniciar sesión con número de acción y contraseña
    */
-  login: async (memberCode: string, password: string): Promise<{ success: boolean; user?: userProfile; token?: string; error?: string, status?: number }> => {
+  login: async (memberCode: string, password: string): Promise<{ success: boolean; user?: userProfile; token?: string; refreshToken?: string; expiresIn?: number; error?: string, status?: number }> => {
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/login`, {
         method: 'POST',
@@ -52,6 +53,8 @@ export const authService = {
       return {
         success: true,
         token: data.data.access_token,
+        refreshToken: data.data.refresh_token,
+        expiresIn: data.data.expires_in,
         user: data.data.user,
       };
 
@@ -91,7 +94,32 @@ export const authService = {
   /**
    * Cerrar sesión
    */
+  /**
+   * Cierra la sesión.
+   *
+   * Avisa al servidor para que revoque el refresh token de este dispositivo: sin
+   * eso, borrar el token del teléfono no impediría que esa sesión se reabriera.
+   * Si el aviso falla (sin red, por ejemplo) igual se limpia el teléfono: es
+   * preferible quedar fuera aquí que dejar la sesión abierta en pantalla.
+   */
   logout: async (): Promise<void> => {
+    const { token, refreshToken } = useAuthStore.getState();
+
+    if (token && refreshToken) {
+      try {
+        await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/logout`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ refresh_token: refreshToken }),
+        });
+      } catch {
+        // Sin conexión no se puede revocar; se limpia el dispositivo de todos modos.
+      }
+    }
+
     await AsyncStorage.removeItem('authToken');
   },
 
