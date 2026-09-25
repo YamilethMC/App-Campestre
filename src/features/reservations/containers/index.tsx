@@ -49,6 +49,7 @@ const ReservationsContainer = () => {
     cancelar: cancelClass,
     cancelando,
     mandarSustituto,
+    responderPropuesta,
   } = useCancelClassBooking();
   const { userId } = useAuthStore.getState();
   const { getReservations, cancelReservation } = useMyReservations();
@@ -434,6 +435,7 @@ const ReservationsContainer = () => {
               onCancel={cancelClass}
               canceling={cancelando}
               onSubstitute={mandarSustituto}
+              onReschedule={responderPropuesta}
             />
           ))}
         />

@@ -89,6 +89,10 @@ export interface ClassBooking {
   /** Quién viene en lugar del socio, si mandó a alguien (§3). */
   substituteName?: string | null;
   substitutePhone?: string | null;
+  /** Si viene, esta clase es la reprogramación que propuso el profesor (§2). */
+  rescheduledFromId?: number | null;
+  /** Hasta cuándo se le aparta el horario mientras decide. */
+  holdUntil?: string | null;
 }
 
 export interface CreateBookingPayload {

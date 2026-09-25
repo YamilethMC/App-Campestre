@@ -73,6 +73,13 @@ const useMessages = () => {
         SUMMARY_PRICE: t('reservation.classes.summaryPrice'),
         CONFIRM_TITLE: t('reservation.classes.confirmTitle'),
         CONFIRM_RESERVATION: t('reservation.classes.confirmReservation'),
+        // Las reglas que el Club fija y el socio tiene que conocer ANTES de
+        // reservar, no cuando ya no pueda hacer nada (§1 y §2 del encargo).
+        POLICY_TITLE: t('reservation.classes.policyTitle'),
+        POLICY_PAYMENT: t('reservation.classes.policyPayment'),
+        POLICY_CANCELLATION: t('reservation.classes.policyCancellation'),
+        POLICY_NO_SHOW: t('reservation.classes.policyNoShow'),
+        POLICY_LATE: t('reservation.classes.policyLate'),
         MY_CLASSES: t('reservation.classes.myClasses'),
         ACTIVE: t('reservation.classes.active'),
     },

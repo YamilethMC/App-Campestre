@@ -22,6 +22,8 @@ interface ClassBookingCardProps {
     name: string,
     phone: string,
   ) => Promise<{ success: boolean; error?: string }>;
+  /** Responder la reprogramación que propuso el profesor (§2). */
+  onReschedule?: (bookingId: number, acepta: boolean) => Promise<{ success: boolean; error?: string }>;
 }
 
 /**
@@ -48,8 +50,25 @@ export const ClassBookingCard: React.FC<ClassBookingCardProps> = ({
   onCancel,
   canceling,
   onSubstitute,
+  onReschedule,
 }) => {
   const [pidiendoSustituto, setPidiendoSustituto] = useState(false);
+  const [respondiendo, setRespondiendo] = useState(false);
+
+  // §2: la propuesta del profesor tras cancelar por mal clima. Es una reserva
+  // en espera, con el horario ya apartado para el socio.
+  const esPropuesta = Boolean(booking.rescheduledFromId) && booking.status === 'PENDING';
+
+  const responder = async (acepta: boolean) => {
+    setRespondiendo(true);
+    const resultado = onReschedule ? await onReschedule(booking.id, acepta) : null;
+    setRespondiendo(false);
+    if (resultado && !resultado.success) {
+      Alert.alert('No se pudo', resultado.error ?? 'Intenta de nuevo');
+    } else if (acepta) {
+      Alert.alert('Listo', 'Tu clase quedó reprogramada.');
+    }
+  };
   const preguntarYCancelar = async () => {
     const aviso = onPreviewCancel ? await onPreviewCancel(booking.id) : null;
 
@@ -108,6 +127,34 @@ export const ClassBookingCard: React.FC<ClassBookingCardProps> = ({
     <Text style={styles.price}>${Number(booking.priceSnapshot)}</Text>
     </View>
 
+    {esPropuesta && onReschedule && (
+      <View style={styles.piePropuesta}>
+        <Text style={styles.tituloPropuesta}>El profesor propone este horario</Text>
+        <Text style={styles.textoPropuesta}>
+          Tu clase se canceló por mal clima. Este lugar está apartado para ti; si no te acomoda,
+          puedes reservar el horario que prefieras sin costo.
+        </Text>
+        <View style={styles.botonesPropuesta}>
+          <TouchableOpacity
+            style={styles.rechazar}
+            onPress={() => responder(false)}
+            disabled={respondiendo}
+          >
+            <Text style={styles.textoRechazar}>No me acomoda</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.aceptar}
+            onPress={() => responder(true)}
+            disabled={respondiendo}
+          >
+            <Text style={styles.textoAceptar}>
+              {respondiendo ? 'Un momento...' : 'Aceptar'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    )}
+
     {booking.substituteName && (
       <View style={styles.pieSustituto}>
         <Text style={styles.textoSustituto}>
@@ -124,7 +171,7 @@ export const ClassBookingCard: React.FC<ClassBookingCardProps> = ({
       />
     )}
 
-    {onCancel && (
+    {onCancel && !esPropuesta && (
       <View style={styles.pieCancelar}>
         <TouchableOpacity
           style={styles.botonCancelar}

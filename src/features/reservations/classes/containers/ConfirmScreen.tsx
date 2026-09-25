@@ -7,7 +7,8 @@ import Button from '../../../../shared/components/Button/Button';
 import { ConfirmationModal } from '../../components/ConfirmationModal';
 import useMessages from '../../hooks/useMessages';
 import { ClassSummary } from '../components/ClassSummary';
-import { useCreateBooking } from '../hooks/useClasses';
+import { PolicyNotice } from '../components/PolicyNotice';
+import { useCreateBooking, useProfessional } from '../hooks/useClasses';
 import styles from './Style';
 
 type Navigation = NativeStackNavigationProp<ReservationStackParamList, 'ClassesConfirm'>;
@@ -26,6 +27,8 @@ const ConfirmScreen = () => {
   const { params } = useRoute<Route>();
   const { messages } = useMessages();
   const { createBooking, creating } = useCreateBooking();
+  // Las reglas del Club viajan con la ficha; se enseñan antes de confirmar.
+  const { policy } = useProfessional(params.professionalId);
 
   const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false);
 
@@ -70,6 +73,17 @@ const ConfirmScreen = () => {
           startTime={params.startTime}
           partySize={params.partySize}
           price={params.price}
+        />
+
+        <PolicyNotice
+          policy={policy}
+          labels={{
+            title: messages.CLASSES.POLICY_TITLE,
+            payment: messages.CLASSES.POLICY_PAYMENT,
+            cancellation: messages.CLASSES.POLICY_CANCELLATION,
+            noShow: messages.CLASSES.POLICY_NO_SHOW,
+            late: messages.CLASSES.POLICY_LATE,
+          }}
         />
 
         <View style={styles.actionContainer}>

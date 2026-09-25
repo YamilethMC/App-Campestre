@@ -199,7 +199,7 @@
     "classesLabel": "With a pro",
     "groupCourts": "COURTS",
     "groupClasses": "CLASSES",
-    "classes":{
+    "classes": {
       "title": "Classes",
       "subtitle": "CLUB CAMPESTRE",
       "selectDate": "Select date",
@@ -228,7 +228,12 @@
       "confirmTitle": "Confirm your booking",
       "confirmReservation": "Confirm booking",
       "myClasses": "My Classes",
-      "active": "ACTIVE"
+      "active": "ACTIVE",
+      "policyTitle": "Before you confirm",
+      "policyPayment": "Payment is in cash, directly to the instructor.",
+      "policyCancellation": "You can cancel free of charge up to {{hours}} hours before. After that, {{percent}}% of the class is charged.",
+      "policyNoShow": "If you do not show up, {{percent}}% is charged.",
+      "policyLate": "If you arrive late, the class still ends at its scheduled time."
     },
     "summaryCard": {
       "title": "Reservation Summary",

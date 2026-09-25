@@ -209,7 +209,27 @@ export const useCancelClassBooking = () => {
     [queryClient],
   );
 
-  return { preview, cancelar, cancelando, mandarSustituto, quitarSustituto };
+  const responderPropuesta = useCallback(
+    async (bookingId: number, acepta: boolean) => {
+      const respuesta = acepta
+        ? await classesService.acceptReschedule(bookingId)
+        : await classesService.declineReschedule(bookingId);
+      if (respuesta.success) {
+        await queryClient.invalidateQueries({ queryKey: ['classes'] });
+      }
+      return respuesta;
+    },
+    [queryClient],
+  );
+
+  return {
+    preview,
+    cancelar,
+    cancelando,
+    mandarSustituto,
+    quitarSustituto,
+    responderPropuesta,
+  };
 };
 
 /**
