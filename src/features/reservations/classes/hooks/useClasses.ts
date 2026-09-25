@@ -97,6 +97,12 @@ export const useProfessional = (professionalId: number) => {
     queryFn: () =>
       unwrap<ProfessionalDetail | null>(classesService.getProfessional(professionalId), null),
     enabled: !!token && !!isAuthenticated && !!professionalId,
+    // La ficha ya no es sólo el nombre y la foto: trae las reglas de operación,
+    // que el Club cambia desde el panel. Se pide siempre al servidor, igual que
+    // la disponibilidad, para que un cambio de regla llegue al abrir la
+    // pantalla y no cuando venza una caché.
+    staleTime: 0,
+    gcTime: 0,
   });
 
   return {
