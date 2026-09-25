@@ -33,9 +33,28 @@ export interface AvailabilitySlot {
   reason?: SlotUnavailableReason;
 }
 
+/**
+ * Reglas de operación que manda el servidor.
+ *
+ * Vienen del Club, que las cambia desde el panel: la app las obedece y no
+ * guarda copia propia de ninguna.
+ */
+export interface ClassPolicy {
+  /** Cuánto dura la clase, en minutos. */
+  durationMinutes: number;
+  /** Con cuánta anticipación máxima se puede reservar, en días. */
+  maxAdvanceDays: number;
+  /** Horas antes de la clase en que cancelar todavía no cuesta. */
+  cancellationWindowHours: number;
+  lateCancelChargePercent: number;
+  noShowChargePercent: number;
+  substituteWindowHours: number;
+}
+
 /** Ficha del profesional con su tarifa, sin depender de una fecha. */
 export interface ProfessionalDetail extends Professional {
   prices: PriceRule[];
+  policy: ClassPolicy;
 }
 
 export interface PriceRule {

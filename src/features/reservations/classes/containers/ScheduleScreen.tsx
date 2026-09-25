@@ -16,13 +16,14 @@ type Navigation = NativeStackNavigationProp<ReservationStackParamList, 'ClassesS
 type Route = RouteProp<ReservationStackParamList, 'ClassesSchedule'>;
 
 /**
- * Ventana de reserva del calendario, en horas.
+ * Ventana del calendario mientras la ficha del profesional carga.
  *
- * El horario de los profesionales es semanal, así que la ventana de 48 h que usa
- * la reserva de canchas dejaría fuera casi todos los días. Se abre a 30 días
- * mientras el Club define la anticipación máxima real, que sigue pendiente (§10).
+ * La anticipación real la manda el servidor con la ficha (`policy.maxAdvanceDays`),
+ * porque es algo que el Club configura desde el panel. Esto es sólo el hueco de
+ * un instante, y es el valor más corto de los que el Club suele usar, así que
+ * antes de conocer la regla nunca se ofrece de más.
  */
-const CLASS_BOOKING_WINDOW_HOURS = 30 * 24;
+const VENTANA_MIENTRAS_CARGA_DIAS = 7;
 
 const MIN_PARTY_SIZE = 1;
 const MAX_PARTY_SIZE = 3;
@@ -54,8 +55,12 @@ const ScheduleScreen = () => {
 
   // La ficha no depende de la fecha, así que el profesional y los precios se ven
   // desde que entra a la pantalla. La disponibilidad sí la necesita.
-  const { professional, prices } = useProfessional(params.professionalId);
+  const { professional, prices, policy } = useProfessional(params.professionalId);
   const { slots, loading } = useAvailability(params.professionalId, date);
+
+  // La regla del Club manda. Si todavía no llegó la ficha, se usa el valor de
+  // arranque, que es el más corto: mejor ofrecer de menos un instante que de más.
+  const ventanaEnHoras = (policy?.maxAdvanceDays ?? VENTANA_MIENTRAS_CARGA_DIAS) * 24;
 
   const professionalName = professional?.displayName ?? '';
   const disciplineName = professional?.discipline.name ?? '';
@@ -103,7 +108,7 @@ const ScheduleScreen = () => {
           label={messages.CLASSES.SELECT_DATE}
           placeholder={messages.CLASSES.DATE_PLACEHOLDER}
           selectedDate={date}
-          maxBookingWindowHours={CLASS_BOOKING_WINDOW_HOURS}
+          maxBookingWindowHours={ventanaEnHoras}
           onDateChange={handleDateChange}
         />
 

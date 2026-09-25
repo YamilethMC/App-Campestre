@@ -102,6 +102,7 @@ export const useProfessional = (professionalId: number) => {
   return {
     professional: query.data ?? null,
     prices: query.data?.prices ?? [],
+    policy: query.data?.policy ?? null,
     loading: query.isLoading,
   };
 };
