@@ -2,6 +2,7 @@ import { useAuthStore } from '../../../auth/store/useAuthStore';
 import { handleAuthError } from '../../../../shared/utils/authErrorHandler';
 import {
   Availability,
+  CancellationPreview,
   ClassBooking,
   CreateBookingPayload,
   Discipline,
@@ -95,4 +96,14 @@ export const classesService = {
     }),
 
   getMyBookings: () => request<ClassBooking[]>('/bookings/me'),
+
+  /** Qué costaría cancelar. Se pregunta antes de enseñarle el aviso al socio. */
+  getCancellationPreview: (bookingId: number) =>
+    request<CancellationPreview>(`/bookings/${bookingId}/cancellation-preview`),
+
+  cancelBooking: (bookingId: number, reason?: string) =>
+    request<ClassBooking>(`/bookings/${bookingId}/cancel`, {
+      method: 'PATCH',
+      body: JSON.stringify({ reason }),
+    }),
 };

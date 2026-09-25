@@ -2,15 +2,37 @@ import { StyleSheet } from 'react-native';
 import { COLORS } from '../../../../../shared/theme/colors';
 
 const styles = StyleSheet.create({
+  contenedor: {
+    backgroundColor: COLORS.white,
+    borderRadius: 12,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: COLORS.gray200,
+    overflow: 'hidden',
+  },
+  pieCancelar: {
+    borderTopWidth: 1,
+    borderTopColor: COLORS.gray200,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  botonCancelar: {
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+  },
+  textoCancelar: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: COLORS.error,
+  },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: COLORS.white,
     borderRadius: 12,
     padding: 16,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: COLORS.gray200,
   },
   iconContainer: {
     width: 48,

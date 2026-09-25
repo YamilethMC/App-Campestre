@@ -102,3 +102,15 @@ export interface ServiceResult<T> {
   error?: string;
   status?: number;
 }
+
+/** Lo que costaría cancelar una clase, consultado antes de hacerlo. */
+export interface CancellationPreview {
+  bookingId: number;
+  startsAt: string;
+  /** true cuando todavía cabe en la ventana que fija el Club. */
+  sinCosto: boolean;
+  horasFaltantes: number;
+  cancellationWindowHours: number;
+  chargePercent: number;
+  chargeAmount: number;
+}

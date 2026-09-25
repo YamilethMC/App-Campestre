@@ -9,7 +9,7 @@ import { CourtSelector } from '../components/CourtSelector';
 import MyReservationsSection from '../components/MyReservationsSection';
 import { ServiceCard } from '../components/ServiceCard';
 import { ClassBookingCard } from '../classes/components/ClassBookingCard';
-import { useMyClassBookings } from '../classes/hooks/useClasses';
+import { useCancelClassBooking, useMyClassBookings } from '../classes/hooks/useClasses';
 import { SummaryCard } from '../components/SummaryCard';
 import { TableSelector } from '../components/TableSelector';
 import { TimeSlots } from '../components/TimeSlots';
@@ -44,6 +44,7 @@ const ReservationsContainer = () => {
   const { messages } = useMessages();
   const navigation = useNavigation<ReservationsNavigation>();
   const { bookings: classBookings, refetch: refetchClassBookings } = useMyClassBookings();
+  const { preview: previewCancel, cancelar: cancelClass, cancelando } = useCancelClassBooking();
   const { userId } = useAuthStore.getState();
   const { getReservations, cancelReservation } = useMyReservations();
   const {
@@ -424,6 +425,9 @@ const ReservationsContainer = () => {
               personLabel={messages.CLASSES.PERSON}
               peopleLabel={messages.CLASSES.PEOPLE}
               formatDate={formatDate}
+              onPreviewCancel={previewCancel}
+              onCancel={cancelClass}
+              canceling={cancelando}
             />
           ))}
         />

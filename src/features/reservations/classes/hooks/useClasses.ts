@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCallback, useState } from 'react';
 import { Alert } from 'react-native';
 
 import { useAuthStore } from '../../../auth/store/useAuthStore';
@@ -149,6 +150,44 @@ export const useMyClassBookings = () => {
     loading: query.isLoading,
     refetch: query.refetch,
   };
+};
+
+/**
+ * Cancela una clase del socio.
+ *
+ * Se invalidan las mismas listas que al reservar, más una: la disponibilidad
+ * del profesional, porque el horario que se acaba de soltar tiene que volver a
+ * ofrecerse enseguida.
+ *
+ * El aviso de si cuesta o no se pide aparte (`getCancellationPreview`) y **antes**
+ * de que el socio confirme: enterarse del cargo después sería una emboscada.
+ */
+export const useCancelClassBooking = () => {
+  const queryClient = useQueryClient();
+  const [cancelando, setCancelando] = useState(false);
+
+  const preview = useCallback(async (bookingId: number) => {
+    const respuesta = await classesService.getCancellationPreview(bookingId);
+    return respuesta.success ? respuesta.data ?? null : null;
+  }, []);
+
+  const cancelar = useCallback(
+    async (bookingId: number, reason?: string) => {
+      setCancelando(true);
+      const respuesta = await classesService.cancelBooking(bookingId, reason);
+      if (respuesta.success) {
+        await queryClient.invalidateQueries({ queryKey: classesKeys.myBookings });
+        // Todo lo de clases: el horario que se soltó tiene que volver a
+        // ofrecerse sin que nadie recargue a mano.
+        await queryClient.invalidateQueries({ queryKey: ['classes'] });
+      }
+      setCancelando(false);
+      return respuesta;
+    },
+    [queryClient],
+  );
+
+  return { preview, cancelar, cancelando };
 };
 
 /**
