@@ -187,7 +187,29 @@ export const useCancelClassBooking = () => {
     [queryClient],
   );
 
-  return { preview, cancelar, cancelando };
+  const mandarSustituto = useCallback(
+    async (bookingId: number, name: string, phone: string) => {
+      const respuesta = await classesService.registerSubstitute(bookingId, name, phone);
+      if (respuesta.success) {
+        await queryClient.invalidateQueries({ queryKey: classesKeys.myBookings });
+      }
+      return respuesta;
+    },
+    [queryClient],
+  );
+
+  const quitarSustituto = useCallback(
+    async (bookingId: number) => {
+      const respuesta = await classesService.removeSubstitute(bookingId);
+      if (respuesta.success) {
+        await queryClient.invalidateQueries({ queryKey: classesKeys.myBookings });
+      }
+      return respuesta;
+    },
+    [queryClient],
+  );
+
+  return { preview, cancelar, cancelando, mandarSustituto, quitarSustituto };
 };
 
 /**

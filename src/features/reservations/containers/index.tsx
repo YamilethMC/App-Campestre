@@ -44,7 +44,12 @@ const ReservationsContainer = () => {
   const { messages } = useMessages();
   const navigation = useNavigation<ReservationsNavigation>();
   const { bookings: classBookings, refetch: refetchClassBookings } = useMyClassBookings();
-  const { preview: previewCancel, cancelar: cancelClass, cancelando } = useCancelClassBooking();
+  const {
+    preview: previewCancel,
+    cancelar: cancelClass,
+    cancelando,
+    mandarSustituto,
+  } = useCancelClassBooking();
   const { userId } = useAuthStore.getState();
   const { getReservations, cancelReservation } = useMyReservations();
   const {
@@ -428,6 +433,7 @@ const ReservationsContainer = () => {
               onPreviewCancel={previewCancel}
               onCancel={cancelClass}
               canceling={cancelando}
+              onSubstitute={mandarSustituto}
             />
           ))}
         />

@@ -1,9 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import React, { useState } from 'react';
 import { Alert, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS } from '../../../../../shared/theme/colors';
 import { CancellationPreview, ClassBooking } from '../../interfaces';
 import { dateFromInstant, timeFromInstant } from '../../utils/date';
+import { SubstituteModal } from '../SubstituteModal';
 import styles from './Style';
 
 interface ClassBookingCardProps {
@@ -15,6 +16,12 @@ interface ClassBookingCardProps {
   onPreviewCancel?: (bookingId: number) => Promise<CancellationPreview | null>;
   onCancel?: (bookingId: number) => Promise<{ success: boolean; error?: string }>;
   canceling?: boolean;
+  /** Mandar a alguien en su lugar cuando cancelar ya cuesta (§3). */
+  onSubstitute?: (
+    bookingId: number,
+    name: string,
+    phone: string,
+  ) => Promise<{ success: boolean; error?: string }>;
 }
 
 /**
@@ -40,7 +47,9 @@ export const ClassBookingCard: React.FC<ClassBookingCardProps> = ({
   onPreviewCancel,
   onCancel,
   canceling,
+  onSubstitute,
 }) => {
+  const [pidiendoSustituto, setPidiendoSustituto] = useState(false);
   const preguntarYCancelar = async () => {
     const aviso = onPreviewCancel ? await onPreviewCancel(booking.id) : null;
 
@@ -51,20 +60,31 @@ export const ClassBookingCard: React.FC<ClassBookingCardProps> = ({
         : `Faltan menos de ${aviso.cancellationWindowHours} horas, así que se te cobrará ` +
           `$${aviso.chargeAmount} (${aviso.chargePercent}% de la clase).`;
 
-    Alert.alert('Cancelar la clase', mensaje, [
-      { text: 'Mejor no', style: 'cancel' },
-      {
-        text: 'Sí, cancelar',
-        style: 'destructive',
-        onPress: async () => {
-          const resultado = onCancel ? await onCancel(booking.id) : null;
-          if (resultado && !resultado.success) {
-            Alert.alert('No se pudo cancelar', resultado.error ?? 'Intenta de nuevo');
-          }
-        },
+    const cancelar = {
+      text: 'Sí, cancelar',
+      style: 'destructive' as const,
+      onPress: async () => {
+        const resultado = onCancel ? await onCancel(booking.id) : null;
+        if (resultado && !resultado.success) {
+          Alert.alert('No se pudo cancelar', resultado.error ?? 'Intenta de nuevo');
+        }
       },
-    ]);
+    };
+
+    // §3: cuando cancelar ya cuesta, mandar a alguien en su lugar es la salida
+    // sin penalización. Se le ofrece justo ahí, que es cuando le sirve.
+    const opciones =
+      aviso && !aviso.sinCosto && onSubstitute && !booking.substituteName
+        ? [
+            { text: 'Mejor no', style: 'cancel' as const },
+            { text: 'Mandar a alguien', onPress: () => setPidiendoSustituto(true) },
+            cancelar,
+          ]
+        : [{ text: 'Mejor no', style: 'cancel' as const }, cancelar];
+
+    Alert.alert('Cancelar la clase', mensaje, opciones);
   };
+
 
   return (
   <View style={styles.contenedor}>
@@ -87,6 +107,22 @@ export const ClassBookingCard: React.FC<ClassBookingCardProps> = ({
 
     <Text style={styles.price}>${Number(booking.priceSnapshot)}</Text>
     </View>
+
+    {booking.substituteName && (
+      <View style={styles.pieSustituto}>
+        <Text style={styles.textoSustituto}>
+          Viene en tu lugar: {booking.substituteName}
+        </Text>
+      </View>
+    )}
+
+    {onSubstitute && (
+      <SubstituteModal
+        visible={pidiendoSustituto}
+        onClose={() => setPidiendoSustituto(false)}
+        onSubmit={(nombre, telefono) => onSubstitute(booking.id, nombre, telefono)}
+      />
+    )}
 
     {onCancel && (
       <View style={styles.pieCancelar}>

@@ -101,6 +101,15 @@ export const classesService = {
   getCancellationPreview: (bookingId: number) =>
     request<CancellationPreview>(`/bookings/${bookingId}/cancellation-preview`),
 
+  registerSubstitute: (bookingId: number, name: string, phone: string) =>
+    request<ClassBooking>(`/bookings/${bookingId}/substitute`, {
+      method: 'POST',
+      body: JSON.stringify({ name, phone }),
+    }),
+
+  removeSubstitute: (bookingId: number) =>
+    request<{ bookingId: number }>(`/bookings/${bookingId}/substitute`, { method: 'DELETE' }),
+
   cancelBooking: (bookingId: number, reason?: string) =>
     request<ClassBooking>(`/bookings/${bookingId}/cancel`, {
       method: 'PATCH',

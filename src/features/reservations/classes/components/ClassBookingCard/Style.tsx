@@ -10,6 +10,18 @@ const styles = StyleSheet.create({
     borderColor: COLORS.gray200,
     overflow: 'hidden',
   },
+  pieSustituto: {
+    borderTopWidth: 1,
+    borderTopColor: COLORS.gray200,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: '#FFFBEB',
+  },
+  textoSustituto: {
+    fontSize: 13,
+    color: '#92400E',
+    fontWeight: '500',
+  },
   pieCancelar: {
     borderTopWidth: 1,
     borderTopColor: COLORS.gray200,

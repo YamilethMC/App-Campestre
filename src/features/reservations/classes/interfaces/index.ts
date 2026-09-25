@@ -84,6 +84,9 @@ export interface ClassBooking {
   status: string;
   professional: { id: number; displayName: string; photoUrl: string | null };
   discipline: { id: number; name: string; icon: string };
+  /** Quién viene en lugar del socio, si mandó a alguien (§3). */
+  substituteName?: string | null;
+  substitutePhone?: string | null;
 }
 
 export interface CreateBookingPayload {
