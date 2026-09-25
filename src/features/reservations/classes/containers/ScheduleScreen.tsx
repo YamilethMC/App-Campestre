@@ -1,7 +1,7 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
-import { ActivityIndicator, SafeAreaView, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Image, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { ReservationStackParamList } from '../../../../navigation/types';
 import Button from '../../../../shared/components/Button/Button';
 import { COLORS } from '../../../../shared/theme/colors';
@@ -94,9 +94,13 @@ const ScheduleScreen = () => {
       <ScrollView contentContainerStyle={styles.scrollContentFlush} showsVerticalScrollIndicator={false}>
         {professionalName ? (
           <View style={styles.professionalHeader}>
-            <View style={styles.professionalAvatar}>
-              <Text style={styles.professionalInitials}>{getInitials(professionalName)}</Text>
-            </View>
+            {professional?.photoUrl ? (
+              <Image source={{ uri: professional.photoUrl }} style={styles.professionalAvatar} />
+            ) : (
+              <View style={styles.professionalAvatar}>
+                <Text style={styles.professionalInitials}>{getInitials(professionalName)}</Text>
+              </View>
+            )}
             <View>
               <Text style={styles.professionalName}>{professionalName}</Text>
               <Text style={styles.professionalDiscipline}>{disciplineName}</Text>

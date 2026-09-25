@@ -18,6 +18,8 @@ export interface Professional {
   displayName: string;
   /** Pendiente de entrega del Club; sin foto se muestran las iniciales. */
   photoUrl: string | null;
+  /** Ficha de muestra mientras el Club entrega la real (§5). */
+  isDemo?: boolean;
   /** Credencial o especialidad, opcional. */
   shortBio: string | null;
   discipline: { id: number; name: string };
