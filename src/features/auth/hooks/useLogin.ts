@@ -1,5 +1,5 @@
 // Navigation
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from 'expo-router/react-navigation';
 import { useCallback, useState } from 'react';
 
 // Alert

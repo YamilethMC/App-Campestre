@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
-import { CompositeNavigationProp, useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { CompositeNavigationProp, useNavigation } from 'expo-router/react-navigation';
+import { NativeStackNavigationProp } from 'expo-router/native-stack';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
@@ -9,7 +9,7 @@ import useLogout from '../../hooks/useLogout';
 import { COLORS } from '../../shared/theme/colors';
 
 // Importar tipos de navegación
-import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { BottomTabNavigationProp } from 'expo-router/js-tabs';
 
 import { MainTabsParamList, MoreStackParamList } from '../types';
 

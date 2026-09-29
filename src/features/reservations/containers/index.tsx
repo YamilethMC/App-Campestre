@@ -34,9 +34,9 @@ import { COLORS } from '../../../shared/theme/colors';
 
 // Icons
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from 'expo-router/react-navigation';
 import MainHeader from '../../../shared/components/MainHeader/Container';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { NativeStackNavigationProp } from 'expo-router/native-stack';
 
 type ReservationsNavigation = NativeStackNavigationProp<ReservationStackParamList, 'ReservationScreen'>;
 

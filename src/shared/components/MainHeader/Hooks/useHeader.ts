@@ -1,5 +1,5 @@
-import { DrawerActions, useNavigation } from '@react-navigation/native';
-import { CommonActions } from '@react-navigation/native';
+import { DrawerActions, useNavigation } from 'expo-router/react-navigation';
+import { CommonActions } from 'expo-router/react-navigation';
 
 export const useHeader = () => {
   const navigation = useNavigation();

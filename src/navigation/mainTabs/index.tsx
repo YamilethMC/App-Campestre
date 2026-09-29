@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from 'expo-router/js-tabs';
+import { getFocusedRouteNameFromRoute } from 'expo-router/react-navigation';
+import { createNativeStackNavigator } from 'expo-router/native-stack';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';

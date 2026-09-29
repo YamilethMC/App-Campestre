@@ -1,4 +1,4 @@
-import { NavigationProp, NavigatorScreenParams, RouteProp } from '@react-navigation/native';
+import { NavigationProp, NavigatorScreenParams, RouteProp } from 'expo-router/react-navigation';
 
 // Tipos para el Stack Navigator principal
 export type RootStackParamList = {

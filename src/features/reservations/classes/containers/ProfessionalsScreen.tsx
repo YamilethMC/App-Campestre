@@ -1,5 +1,5 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp, useNavigation, useRoute } from 'expo-router/react-navigation';
+import { NativeStackNavigationProp } from 'expo-router/native-stack';
 import React from 'react';
 import { ActivityIndicator, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { ReservationStackParamList } from '../../../../navigation/types';
