@@ -25,9 +25,9 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollViewRef = useRef<ScrollView>(null);
   const isScrolling = useRef(false);
-  const autoPlayInterval = useRef<number | NodeJS.Timeout | null>(null);
+  const autoPlayInterval = useRef<ReturnType<typeof setInterval> | null>(null);
   const [isAutoPlayPaused, setIsAutoPlayPaused] = useState(false);
-  const pauseTimeoutRef = useRef<number | NodeJS.Timeout | null>(null);
+  const pauseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   // Modal state
   const [modalVisible, setModalVisible] = useState(false);

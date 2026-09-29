@@ -19,7 +19,7 @@ const BannerCarousel: React.FC<BannerCarouselProps> = ({ banners, loading = fals
   const [selectedBanner, setSelectedBanner] = useState<Banner | null>(null);
   const scrollViewRef = useRef<ScrollView>(null);
   const isScrolling = useRef(false);
-  const autoPlayInterval = useRef<number | NodeJS.Timeout | null>(null);
+  const autoPlayInterval = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     if (banners.length > 0) {
