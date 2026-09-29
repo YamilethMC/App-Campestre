@@ -62,7 +62,8 @@
       "expo-localization",
       "expo-sharing",
       "expo-status-bar",
-      "expo-web-browser"
+      "expo-web-browser",
+      "./plugins/withXcode27"
     ],
     "experiments": {
       "typedRoutes": true,
