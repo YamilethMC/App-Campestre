@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from 'expo-router/react-navigation';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,

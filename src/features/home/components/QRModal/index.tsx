@@ -1,10 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
-import * as FileSystem from 'expo-file-system';
-import * as MediaLibrary from 'expo-media-library';
+import * as FileSystem from 'expo-file-system/legacy';
+import * as MediaLibrary from 'expo-media-library/legacy';
 import * as Sharing from 'expo-sharing';
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Text, View } from 'react-native';
-import ViewShot from 'react-native-view-shot';
+import ViewShot, { type ViewShotRef } from 'react-native-view-shot';
 import Modal from '../../../../shared/components/Modal/Modal';
 import { COLORS } from '../../../../shared/theme/colors';
 import { MemberData } from '../../services/homeService';
@@ -26,7 +26,7 @@ const QRModal: React.FC<QRModalProps> = ({
   const [cachedData, setCachedData] = useState<CachedQRData | null>(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const [lastDownloadDate, setLastDownloadDate] = useState<string | null>(null);
-  const viewShotRef = useRef<ViewShot>(null);
+  const viewShotRef = useRef<ViewShotRef>(null);
 
   const dateOfAdmission = memberData?.dateOfAdmission
     ? new Date(memberData.dateOfAdmission).getUTCFullYear()

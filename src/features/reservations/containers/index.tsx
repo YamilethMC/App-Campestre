@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Modal, RefreshControl, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 // Components
@@ -8,6 +8,8 @@ import { ConfirmationModal } from '../components/ConfirmationModal';
 import { CourtSelector } from '../components/CourtSelector';
 import MyReservationsSection from '../components/MyReservationsSection';
 import { ServiceCard } from '../components/ServiceCard';
+import { ClassBookingCard } from '../classes/components/ClassBookingCard';
+import { useCancelClassBooking, useMyClassBookings } from '../classes/hooks/useClasses';
 import { SummaryCard } from '../components/SummaryCard';
 import { TableSelector } from '../components/TableSelector';
 import { TimeSlots } from '../components/TimeSlots';
@@ -27,13 +29,28 @@ import { useMyReservations } from '../../../features/my-reservations/hooks';
 import { Reservation } from '../../../features/my-reservations/interfaces';
 
 // Store
+import { ReservationStackParamList } from '../../../navigation/types';
 import { COLORS } from '../../../shared/theme/colors';
 
 // Icons
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from 'expo-router/react-navigation';
+import MainHeader from '../../../shared/components/MainHeader/Container';
+import { NativeStackNavigationProp } from 'expo-router/native-stack';
+
+type ReservationsNavigation = NativeStackNavigationProp<ReservationStackParamList, 'ReservationScreen'>;
 
 const ReservationsContainer = () => {
   const { messages } = useMessages();
+  const navigation = useNavigation<ReservationsNavigation>();
+  const { bookings: classBookings, refetch: refetchClassBookings } = useMyClassBookings();
+  const {
+    preview: previewCancel,
+    cancelar: cancelClass,
+    cancelando,
+    mandarSustituto,
+    responderPropuesta,
+  } = useCancelClassBooking();
   const { userId } = useAuthStore.getState();
   const { getReservations, cancelReservation } = useMyReservations();
   const {
@@ -78,6 +95,30 @@ const ReservationsContainer = () => {
     loadServices();
   }, []);
 
+  // resetSelection se recrea en cada render, así que se guarda en una ref: si
+  // fuera dependencia del efecto, el encabezado se reconstruiría sin parar.
+  const resetSelectionRef = useRef(resetSelection);
+  resetSelectionRef.current = resetSelection;
+
+  // El encabezado de la pestaña muestra flecha de regreso mientras se está
+  // reservando una instalación. Antes sólo se podía salir con el botón
+  // "Seleccionar otro servicio", hasta abajo de la pantalla.
+  useEffect(() => {
+    const parent = navigation.getParent();
+    if (!parent) return;
+
+    parent.setOptions({
+      header: () => (
+        <MainHeader
+          title={messages.CONTAINER.TITLE}
+          subtitle="CLUB CAMPESTRE"
+          onBack={selectedService ? () => resetSelectionRef.current() : undefined}
+          showNotifications={!selectedService}
+        />
+      ),
+    });
+  }, [selectedService, messages.CONTAINER.TITLE, navigation]);
+
   useEffect(() => {
     if (!selectedService) {
       loadReservations();
@@ -114,7 +155,10 @@ const ReservationsContainer = () => {
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    await loadReservations();
+    // Las dos listas de "Mis Reservas" y también los servicios: antes sólo se
+    // recargaban las reservas, así que si el Club daba de alta una cancha el
+    // socio no la veía hasta cerrar y volver a abrir la app.
+    await Promise.all([loadReservations(), refetchClassBookings(), loadServices()]);
     setRefreshing(false);
   };
 
@@ -377,6 +421,23 @@ const ReservationsContainer = () => {
           refreshing={refreshing}
           onRefresh={handleRefresh}
           onReservationPress={openReservationModal}
+          groupTitle={messages.CONTAINER.GROUP_COURTS}
+          extraTitle={messages.CONTAINER.GROUP_CLASSES}
+          extraCount={classBookings.length}
+          extraItems={classBookings.map((booking) => (
+            <ClassBookingCard
+              key={booking.id}
+              booking={booking}
+              personLabel={messages.CLASSES.PERSON}
+              peopleLabel={messages.CLASSES.PEOPLE}
+              formatDate={formatDate}
+              onPreviewCancel={previewCancel}
+              onCancel={cancelClass}
+              canceling={cancelando}
+              onSubstitute={mandarSustituto}
+              onReschedule={responderPropuesta}
+            />
+          ))}
         />
 
         {/* Nueva Reserva Section */}
@@ -390,19 +451,33 @@ const ReservationsContainer = () => {
             <View style={{ padding: 20, alignItems: 'center' }}>
               <Text style={{ color: COLORS.gray600 }}>Cargando servicios...</Text>
             </View>
-          ) : !services || services.length === 0 ? (
-            <View style={{ padding: 20, alignItems: 'center' }}>
-              <Text style={{ color: COLORS.gray600 }}>No hay servicios disponibles</Text>
-            </View>
           ) : (
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-              {services.map((service: any) => (
+              {(services || []).map((service: any) => (
                 <ServiceCard
                   key={service.id}
                   service={service}
+                  // Aclara que esa tarjeta aparta una instalación, no una clase:
+                  // "Pádel" a secas se confunde con la disciplina de Clases.
+                  subtitle={messages.CONTAINER.COURTS_LABEL}
                   onPress={() => handleSelectService(service)}
                 />
               ))}
+
+              {/* Clases: nueva categoría dentro de Nueva Reservación. Vive junto a
+                  las instalaciones y no dentro de su estado vacío, porque existe
+                  aunque el Club no tenga canchas cargadas. */}
+              <ServiceCard
+                service={{
+                  id: 'clases',
+                  name: messages.CLASSES.TITLE,
+                  description: '',
+                  icon: 'school-outline',
+                  color: COLORS.primary,
+                }}
+                subtitle={messages.CONTAINER.CLASSES_LABEL}
+                onPress={() => navigation.navigate('ClassesDisciplines')}
+              />
             </View>
           )}
         </View>

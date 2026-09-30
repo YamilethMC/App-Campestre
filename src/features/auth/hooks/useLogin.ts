@@ -1,5 +1,5 @@
 // Navigation
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from 'expo-router/react-navigation';
 import { useCallback, useState } from 'react';
 
 // Alert
@@ -42,12 +42,12 @@ export const useLogin = () => {
     setError(null);
 
     try {
-      const { success, token, user, error: authError, status } = await authService.login(memberCode, password);
+      const { success, token, refreshToken, expiresIn, user, error: authError, status } = await authService.login(memberCode, password);
 
       if (success && user) {
         const profileData = { ...user};
 
-        setAuthData(user.id, token ?? '');
+        setAuthData(user.id, token ?? '', refreshToken ?? null, expiresIn);
         setProfile(profileData as userProfile);
 
         const numericUserId = typeof user.id === 'number' ? user.id : Number(user.id);

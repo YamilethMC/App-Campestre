@@ -1,27 +1,52 @@
 import { Ionicons } from '@expo/vector-icons';
-import { CompositeNavigationProp, useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { CompositeNavigationProp, useNavigation } from 'expo-router/react-navigation';
+import { NativeStackNavigationProp } from 'expo-router/native-stack';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { useBiometrics } from '../../features/auth/hooks/useBiometrics';
 import useLogout from '../../hooks/useLogout';
 import { COLORS } from '../../shared/theme/colors';
 
 // Importar tipos de navegación
-import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { BottomTabNavigationProp } from 'expo-router/js-tabs';
 
-import { MoreStackParamList, RootStackParamList } from '../types';
+import { MainTabsParamList, MoreStackParamList } from '../types';
 
 // Tipo para la navegación del stack de More
 type MoreOptionsScreenNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<MoreStackParamList, 'MoreOptions'>,
-  BottomTabNavigationProp<RootStackParamList>
+  BottomTabNavigationProp<MainTabsParamList>
 >;
 
 const MoreOptionsScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<MoreOptionsScreenNavigationProp>();
   const { handleLogout } = useLogout();
+  const biometrics = useBiometrics();
+
+  /**
+   * Enciende o apaga la entrada con Face ID o huella.
+   *
+   * Al encenderla se pide una confirmación de inmediato: si el sensor no
+   * responde en ese aparato, es mejor enterarse aquí que la próxima vez que el
+   * socio abra la app.
+   */
+  const toggleBiometrics = async () => {
+    if (biometrics.enabled) {
+      biometrics.disable();
+      return;
+    }
+
+    const activated = await biometrics.enable();
+
+    if (!activated) {
+      Alert.alert(
+        'No se pudo activar',
+        `No pudimos confirmar tu ${biometrics.label}. Revisa que esté configurada en tu teléfono e inténtalo de nuevo.`,
+      );
+    }
+  };
 
   const menuItems = [
     { 
@@ -44,6 +69,26 @@ const MoreOptionsScreen = () => {
       icon: 'calendar-outline' as const,
       onPress: () => navigation.navigate('MyReservations')
     },*/
+    {
+      // Acceso secundario a Clases (§1: "Como acceso secundario, puede existir
+      // 'Clases' dentro de 'Más'"). Salta a la pestaña Reserva y abre el flujo
+      // en su primera pantalla, la de disciplinas.
+      title: t('reservation.classes.title'),
+      icon: 'school' as const,
+      onPress: () => navigation.navigate('Reservation', { screen: 'ClassesDisciplines' })
+    },
+    // Sólo aparece si el aparato tiene el sensor Y el socio ya lo configuró:
+    // ofrecerlo cuando no se puede usar sólo genera frustración.
+    ...(biometrics.available
+      ? [
+          {
+            title: `Entrar con ${biometrics.label}`,
+            icon: 'finger-print' as const,
+            onPress: toggleBiometrics,
+            toggle: true,
+          },
+        ]
+      : []),
     { 
       title: t('accountStatements.title'), 
       icon: 'document-text' as const,
@@ -119,11 +164,20 @@ const MoreOptionsScreen = () => {
             >
               {item.title}
             </Text>
-            <Ionicons
-              name="chevron-forward"
-              size={20}
-              color={COLORS.gray200} // Lighter color for chevron
-            />
+            {(item as any).toggle ? (
+              <Switch
+                value={biometrics.enabled}
+                onValueChange={toggleBiometrics}
+                trackColor={{ false: COLORS.gray200, true: COLORS.primaryLight }}
+                thumbColor={biometrics.enabled ? COLORS.primary : COLORS.gray100}
+              />
+            ) : (
+              <Ionicons
+                name="chevron-forward"
+                size={20}
+                color={COLORS.gray200} // Lighter color for chevron
+              />
+            )}
           </TouchableOpacity>
         ))}
       </View>

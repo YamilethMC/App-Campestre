@@ -11,17 +11,41 @@ interface MyReservationsSectionProps {
   refreshing: boolean;
   onRefresh: () => void;
   onReservationPress: (reservation: Reservation) => void;
+  /** Título del apartado de instalaciones. Sólo se pinta si hay alguna reservada. */
+  groupTitle?: string;
+  /** Tarjetas de otro tipo que viven en esta misma sección (hoy, las clases). */
+  extraItems?: React.ReactNode;
+  /** Cuántas son, para el contador de activas y para el estado vacío. */
+  extraCount?: number;
+  /** Título de ese segundo apartado. */
+  extraTitle?: string;
 }
+
+const groupTitleStyle = {
+  fontSize: 13,
+  fontWeight: '600' as const,
+  color: COLORS.gray500,
+  letterSpacing: 0.5,
+  marginBottom: 8,
+  marginTop: 4,
+};
 
 const MyReservationsSection: React.FC<MyReservationsSectionProps> = ({
   reservations,
   loading,
   refreshing,
   onRefresh,
-  onReservationPress
+  onReservationPress,
+  groupTitle,
+  extraItems,
+  extraCount = 0,
+  extraTitle
 }) => {
   const { t } = useTranslation();
-  const activeReservationsCount = reservations.length;
+  // El contador suma todo lo que el socio tiene reservado, sea del tipo que sea.
+  const activeReservationsCount = reservations.length + extraCount;
+  const hasReservations = reservations.length > 0;
+  const hasExtras = extraCount > 0;
   // Format date to show "Hoy", "Mañana" or the actual date
   const formatDate = (dateString: string) => {
     const today = new Date();
@@ -79,16 +103,35 @@ const MyReservationsSection: React.FC<MyReservationsSectionProps> = ({
         </View>
       </View>
 
-      {/* Reservations List */}
-      {reservations.length > 0 ? (
-        reservations.map((reservation) => (
-          <ReservationCard
-            key={reservation.id}
-            reservation={reservation}
-            onPress={() => onReservationPress(reservation)}
-          />
-        ))
-      ) : (
+      {/* Instalaciones. El encabezado del apartado sólo aparece si hay algo debajo
+          y si además hay otro apartado con el que confundirse. */}
+      {hasReservations && (
+        <>
+          {groupTitle && hasExtras && (
+            <Text style={groupTitleStyle}>{groupTitle}</Text>
+          )}
+          {reservations.map((reservation) => (
+            <ReservationCard
+              key={reservation.id}
+              reservation={reservation}
+              onPress={() => onReservationPress(reservation)}
+            />
+          ))}
+        </>
+      )}
+
+      {/* Segundo apartado: hoy las clases. */}
+      {hasExtras && (
+        <>
+          {extraTitle && hasReservations && (
+            <Text style={groupTitleStyle}>{extraTitle}</Text>
+          )}
+          {extraItems}
+        </>
+      )}
+
+      {/* Sin nada de nada */}
+      {!hasReservations && !hasExtras && (
         <View style={{ 
           backgroundColor: COLORS.gray100, 
           borderRadius: 12, 

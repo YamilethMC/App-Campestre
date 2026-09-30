@@ -6,7 +6,7 @@ import useMessages from '../../hooks/useMessages';
 import { CalendarComponentProps } from '../../interfaces/reservationInterface';
 import styles from './Style';
 
-export const CalendarComponent: React.FC<CalendarComponentProps> = ({ selectedDate, onDateChange, maxBookingWindowHours = 48 }) => {
+export const CalendarComponent: React.FC<CalendarComponentProps> = ({ selectedDate, onDateChange, maxBookingWindowHours = 48, showHeader = true }) => {
   const { messages } = useMessages();
   // Estado para manejar el mes y año actual mostrado en el calendario
   const [displayedMonth, setDisplayedMonth] = useState(new Date().getMonth());
@@ -124,10 +124,12 @@ export const CalendarComponent: React.FC<CalendarComponentProps> = ({ selectedDa
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Ionicons name="calendar-outline" size={24} color={COLORS.primary} />
-        <Text style={styles.label}>{messages.CALENDARCOMPONENT.DATE}</Text>
-      </View>
+      {showHeader && (
+        <View style={styles.header}>
+          <Ionicons name="calendar-outline" size={24} color={COLORS.primary} />
+          <Text style={styles.label}>{messages.CALENDARCOMPONENT.DATE}</Text>
+        </View>
+      )}
       
       <View style={styles.calendarContainer}>
         <View style={styles.monthYearHeader}>

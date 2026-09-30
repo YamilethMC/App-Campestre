@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from 'expo-router/react-navigation';
 import Constants from 'expo-constants';
 import { useState } from 'react';
 import { Linking, SafeAreaView, ScrollView, Text, View } from 'react-native';

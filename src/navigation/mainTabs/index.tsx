@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from 'expo-router/js-tabs';
+import { getFocusedRouteNameFromRoute } from 'expo-router/react-navigation';
+import { createNativeStackNavigator } from 'expo-router/native-stack';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
@@ -15,6 +16,10 @@ import MyReservationsScreen from '../../features/my-reservations';
 import NotificationsScreen from '../../features/notify';
 import ProfileScreen from '../../features/profile/containers';
 import ReservationScreen from '../../features/reservations';
+import ClassesConfirmScreen from '../../features/reservations/classes/containers/ConfirmScreen';
+import ClassesDisciplinesScreen from '../../features/reservations/classes/containers/DisciplinesScreen';
+import ClassesProfessionalsScreen from '../../features/reservations/classes/containers/ProfessionalsScreen';
+import ClassesScheduleScreen from '../../features/reservations/classes/containers/ScheduleScreen';
 import SurveysScreen from '../../features/surveys';
 import MainHeader from '../../shared/components/MainHeader/Container';
 import { COLORS } from '../../shared/theme/colors';
@@ -94,6 +99,27 @@ const ReservationStack = () => (
       name="ReservationScreen" 
       component={ReservationScreen} 
       options={{ headerShown: false }}
+    />
+    {/* Flujo de Clases: disciplina -> profesional -> horario -> confirmación */}
+    <Stack.Screen
+      name="ClassesDisciplines"
+      component={ClassesDisciplinesScreen}
+      options={headerOptions('Clases', 'CLUB CAMPESTRE', true)}
+    />
+    <Stack.Screen
+      name="ClassesProfessionals"
+      component={ClassesProfessionalsScreen}
+      options={headerOptions('Clases', 'CLUB CAMPESTRE', true)}
+    />
+    <Stack.Screen
+      name="ClassesSchedule"
+      component={ClassesScheduleScreen}
+      options={headerOptions('Clases', 'CLUB CAMPESTRE', true)}
+    />
+    <Stack.Screen
+      name="ClassesConfirm"
+      component={ClassesConfirmScreen}
+      options={headerOptions('Clases', 'CLUB CAMPESTRE', true)}
     />
   </Stack.Navigator>
 );
@@ -244,7 +270,7 @@ const MainTabs = () => {
       <Tab.Screen 
         name="Reservation" 
         component={ReservationStack} 
-        options={{
+        options={({ route }) => ({
           title: t('reservation.titleMenu'),
           tabBarIcon: ({ color, size, focused }) => (
             <View style={{
@@ -265,7 +291,10 @@ const MainTabs = () => {
             </View>
           ),
           ...headerOptions(t('reservation.title'), 'CLUB CAMPESTRE'),
-        }} 
+          // Dentro del flujo de Clases manda el encabezado del stack, que sí trae
+          // flecha de regreso; si no, se verían dos encabezados encimados.
+          headerShown: !(getFocusedRouteNameFromRoute(route) ?? '').startsWith('Classes'),
+        })} 
       />
       <Tab.Screen 
         name="Surveys" 

@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from 'expo-router/react-navigation';
 import React, { useEffect, useRef, useState } from 'react';
 import { Dimensions, Image, Linking, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -25,9 +25,9 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ memberData, banners }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollViewRef = useRef<ScrollView>(null);
   const isScrolling = useRef(false);
-  const autoPlayInterval = useRef<number | NodeJS.Timeout | null>(null);
+  const autoPlayInterval = useRef<ReturnType<typeof setInterval> | null>(null);
   const [isAutoPlayPaused, setIsAutoPlayPaused] = useState(false);
-  const pauseTimeoutRef = useRef<number | NodeJS.Timeout | null>(null);
+  const pauseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   // Modal state
   const [modalVisible, setModalVisible] = useState(false);

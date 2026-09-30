@@ -1,4 +1,4 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from 'expo-router/native-stack';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import LoginScreen from '../../features/auth';

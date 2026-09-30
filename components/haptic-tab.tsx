@@ -1,8 +1,17 @@
-import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
-import { PlatformPressable } from '@react-navigation/elements';
 import * as Haptics from 'expo-haptics';
+import type { Tabs } from 'expo-router';
+import { PlatformPressable } from 'expo-router/react-navigation';
+import type { ComponentProps } from 'react';
 
-export function HapticTab(props: BottomTabBarButtonProps) {
+// Desde expo-router 57, Tabs usa su propia copia de React Navigation: el tipo de
+// las props del botón y el Pressable salen de esa misma copia para que coincidan.
+type TabScreenOptions = Exclude<
+  NonNullable<ComponentProps<typeof Tabs.Screen>['options']>,
+  (...args: never[]) => unknown
+>;
+type HapticTabProps = Parameters<NonNullable<TabScreenOptions['tabBarButton']>>[0];
+
+export function HapticTab(props: HapticTabProps) {
   return (
     <PlatformPressable
       {...props}

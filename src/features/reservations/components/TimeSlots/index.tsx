@@ -11,15 +11,21 @@ export const TimeSlots: React.FC<TimeSlotsProps> = ({
   onTimeChange, 
   availableTimes, 
   selectedDate,
-  unavailableMessage = "No hay horarios disponibles" 
+  unavailableMessage = "No hay horarios disponibles",
+  unavailableTimes = [],
+  unavailableLabel
 }) => {
   const { messages } = useMessages(); 
   // Función para verificar si un horario ya pasó
   const isTimePassed = (time: string, selectedDate?: string): boolean => {
     if (!selectedDate) return false; // Si no hay fecha seleccionada, ningún horario ha pasado
     
-    // Convertir la fecha seleccionada a un objeto Date
-    const selectedDateObj = new Date(selectedDate);
+    // Parsear como fecha LOCAL (no UTC) para evitar problemas de timezone.
+    // new Date('2026-09-24') se interpreta como medianoche UTC, que en UTC-6 cae
+    // el día anterior: el componente creía que mañana era hoy y deshabilitaba
+    // todos los horarios previos a la hora actual.
+    const [year, month, day] = selectedDate.split('-').map(Number);
+    const selectedDateObj = new Date(year, month - 1, day);
     const today = new Date();
     
     // Comparar solo las fechas (día, mes, año) sin la hora
@@ -39,11 +45,16 @@ export const TimeSlots: React.FC<TimeSlotsProps> = ({
     return selectedTime < currentTime; // Si el horario es anterior a la hora actual, ya pasó
   };
 
-  // Convertir los horarios disponibles en el formato con disponibilidad
-  const timeSlots = availableTimes.map(time => ({
-    time,
-    available: !isTimePassed(time, selectedDate)
-  }));
+  // Convertir los horarios disponibles en el formato con disponibilidad.
+  // Un horario queda fuera de juego si ya pasó o si viene marcado como tomado.
+  const timeSlots = availableTimes.map(time => {
+    const taken = unavailableTimes.includes(time);
+    return {
+      time,
+      taken,
+      available: !taken && !isTimePassed(time, selectedDate)
+    };
+  });
 
   return (
     <View style={styles.container}>
@@ -72,6 +83,9 @@ export const TimeSlots: React.FC<TimeSlotsProps> = ({
               ]}>
                 {slot.time}
               </Text>
+              {slot.taken && unavailableLabel ? (
+                <Text style={styles.takenLabel}>{unavailableLabel}</Text>
+              ) : null}
             </TouchableOpacity>
           ))}
         </View>
