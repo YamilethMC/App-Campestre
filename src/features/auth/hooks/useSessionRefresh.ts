@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { AppState } from 'react-native';
 
 import { attemptSessionRefresh } from '../../../shared/utils/authErrorHandler';
@@ -12,6 +12,13 @@ const REFRESH_MARGIN_MS = 60 * 1000;
  * esperando: arranca y, si algo falla, `handleAuthError` sigue de respaldo.
  */
 const STARTUP_REFRESH_TIMEOUT_MS = 5 * 1000;
+
+/**
+ * Si la renovación falla por señal o por el servidor, se vuelve a intentar a los
+ * 20 s. Así cae dentro del margen de 2 minutos que la API le da a una tarjeta
+ * recién cambiada, por si el servidor sí renovó y la respuesta se perdió.
+ */
+const RETRY_AFTER_FAILURE_MS = 20 * 1000;
 
 const needsRefresh = (): boolean => {
   const { isAuthenticated, refreshToken, expiresAt } = useAuthStore.getState();
@@ -41,17 +48,25 @@ const waitForHydration = (): Promise<void> => {
  * 1. Al abrir la app, antes de mostrar las pantallas.
  * 2. Al volver a la app desde segundo plano.
  * 3. Mientras se usa, un minuto antes de que venza.
+ * 4. Si una de esas renovaciones falló por señal o por el servidor, a los 20 s.
  *
- * `attemptSessionRefresh` comparte la renovación en curso, así que estos tres y
- * un 401 al mismo tiempo nunca mandan dos refresh (el backend lo tomaría como
- * robo y cerraría todas las sesiones).
+ * `attemptSessionRefresh` comparte la renovación en curso, así que estos y un
+ * 401 al mismo tiempo nunca mandan dos refresh.
  *
  * Devuelve false mientras hace la renovación inicial.
  */
 export const useSessionRefresh = (): boolean => {
   const [ready, setReady] = useState(false);
+  const [failedRefreshes, setFailedRefreshes] = useState(0);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const expiresAt = useAuthStore((state) => state.expiresAt);
+
+  // Toda renovación de este hook pasa por aquí: si falla, se cuenta y (4) la reintenta.
+  const renew = useCallback(async () => {
+    if ((await attemptSessionRefresh()) === 'failed') {
+      setFailedRefreshes((count) => count + 1);
+    }
+  }, []);
 
   // 1. Al abrir.
   useEffect(() => {
@@ -61,7 +76,7 @@ export const useSessionRefresh = (): boolean => {
       await waitForHydration();
       if (needsRefresh()) {
         await Promise.race([
-          attemptSessionRefresh(),
+          renew(),
           new Promise((resolve) => setTimeout(resolve, STARTUP_REFRESH_TIMEOUT_MS)),
         ]);
       }
@@ -73,18 +88,18 @@ export const useSessionRefresh = (): boolean => {
     return () => {
       active = false;
     };
-  }, []);
+  }, [renew]);
 
   // 2. Al volver del segundo plano.
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (state) => {
       if (state === 'active' && needsRefresh()) {
-        attemptSessionRefresh();
+        renew();
       }
     });
 
     return () => subscription.remove();
-  }, []);
+  }, [renew]);
 
   // 3. Mientras se usa. Cada renovación cambia `expiresAt` y se vuelve a programar.
   useEffect(() => {
@@ -93,12 +108,26 @@ export const useSessionRefresh = (): boolean => {
     const delay = Math.max(0, expiresAt - REFRESH_MARGIN_MS - Date.now());
     const timer = setTimeout(() => {
       if (AppState.currentState === 'active' && needsRefresh()) {
-        attemptSessionRefresh();
+        renew();
       }
     }, delay);
 
     return () => clearTimeout(timer);
-  }, [isAuthenticated, expiresAt]);
+  }, [isAuthenticated, expiresAt, renew]);
+
+  // 4. Después de una falla, otra vez a los 20 s. En segundo plano no se
+  // reintenta: al volver, (2) renueva.
+  useEffect(() => {
+    if (failedRefreshes === 0) return;
+
+    const timer = setTimeout(() => {
+      if (AppState.currentState === 'active' && needsRefresh()) {
+        renew();
+      }
+    }, RETRY_AFTER_FAILURE_MS);
+
+    return () => clearTimeout(timer);
+  }, [failedRefreshes, renew]);
 
   return ready;
 };
